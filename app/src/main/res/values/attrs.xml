@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="CircleTextProgressbar">
+        <attr name="in_circle_color" format="color" />
+    </declare-styleable>
+
+    <declare-styleable name="PageStateLayout">
+        <attr name="loadingView" format="reference" />
+        <attr name="errorView" format="reference" />
+        <attr name="netErrorView" format="reference" />
+        <attr name="emptyView" format="reference" />
+    </declare-styleable>
+
+    <declare-styleable name="LoadingView">
+        <attr name="loading_renderer">
+            <!--circle rotate-->
+            <enum name="MaterialLoadingRenderer" value="0" />
+            <enum name="LevelLoadingRenderer" value="1" />
+            <enum name="WhorlLoadingRenderer" value="2" />
+            <enum name="GearLoadingRenderer" value="3" />
+            <!--circle jump-->
+            <enum name="SwapLoadingRenderer" value="4" />
+            <enum name="GuardLoadingRenderer" value="5" />
+            <enum name="DanceLoadingRenderer" value="6" />
+            <enum name="CollisionLoadingRenderer" value="7" />
+            <!--Scenery-->
+            <enum name="DayNightLoadingRenderer" value="8" />
+            <enum name="ElectricFanLoadingRenderer" value="9" />
+            <!--Animal-->
+            <enum name="FishLoadingRenderer" value="10" />
+            <enum name="GhostsEyeLoadingRenderer" value="11" />
+            <!--Goods-->
+            <enum name="BalloonLoadingRenderer" value="12" />
+            <enum name="WaterBottleLoadingRenderer" value="13" />
+            <!--ShapeChange-->
+            <enum name="CircleBroodLoadingRenderer" value="14" />
+            <enum name="CoolWaitLoadingRenderer" value="15" />
+        </attr>
+    </declare-styleable>
+
+    <declare-styleable name="SlantedTextView">
+        <attr name="slantedTextSize" format="dimension" />
+        <attr name="slantedBackgroundColor" format="color" />
+        <attr name="slantedText" format="string" />
+        <attr name="slantedTextColor" format="color" />
+        <attr name="slantedLength" format="dimension" />
+        <attr name="slantedMode" format="enum">
+            <enum name="left" value="0"></enum>
+            <enum name="right" value="1"></enum>
+            <enum name="left_bottom" value="2"></enum>
+            <enum name="right_bottom" value="3"></enum>
+            <enum name="left_triangle" value="4"></enum>
+            <enum name="right_triangle" value="5"></enum>
+            <enum name="left_bottom_triangle" value="6"></enum>
+            <enum name="right_bottom_triangle" value="7"></enum>
+        </attr>
+    </declare-styleable>
+
+    <!--process button-->
+    <declare-styleable name="ProcessButton">
+        <attr name="pb_textProgress" format="string" />
+        <attr name="pb_textComplete" format="string" />
+        <attr name="pb_textError" format="string" />
+        <attr name="pb_colorProgress" format="color" />
+        <attr name="pb_colorComplete" format="color" />
+        <attr name="pb_colorError" format="color" />
+    </declare-styleable>
+
+    <declare-styleable name="FlatButton">
+        <attr name="pb_colorPressed" format="color" />
+        <attr name="pb_colorNormal" format="color" />
+        <attr name="pb_cornerRadius" format="dimension" />
+    </declare-styleable>
+
+</resources>

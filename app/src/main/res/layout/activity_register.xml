@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:custom="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true">
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/cv_register_activity"
+        android:layout_width="320dp"
+        android:layout_height="300dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="25dp"
+        android:visibility="invisible"
+        app:cardBackgroundColor="@color/base_color"
+        app:cardCornerRadius="6dp"
+        app:cardElevation="3dp"
+        app:cardUseCompatPadding="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:layout_marginTop="10dp">
+
+                <View
+                    android:layout_width="8dp"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentStart="true"
+                    android:background="#ff0" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="50dp"
+                    android:text="@string/register"
+                    android:textColor="#fff"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+            </RelativeLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:layout_marginTop="10dp"
+                android:paddingEnd="50dp"
+                android:paddingStart="50dp">
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/et_machine_code_register_activity"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColorHint="#f0f7f4"
+                    android:theme="@style/TextLabel">
+
+                    <EditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/selector_bg_edit_2"
+                        android:enabled="false"
+                        android:hint="@string/machine_code"
+                        android:paddingBottom="2dp"
+                        android:textColor="#f0f7f4"
+                        android:textCursorDrawable="@drawable/bg_input_cursor_2" />
+                </android.support.design.widget.TextInputLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:orientation="horizontal"
+                android:paddingEnd="50dp"
+                android:paddingStart="50dp">
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/et_register_code_register_activity"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColorHint="#f0f7f4"
+                    android:theme="@style/TextLabel">
+
+                    <EditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/selector_bg_edit_2"
+                        android:hint="@string/register_code"
+                        android:paddingBottom="2dp"
+                        android:textColor="#f0f7f4"
+                        android:textCursorDrawable="@drawable/bg_input_cursor_2" />
+                </android.support.design.widget.TextInputLayout>
+            </LinearLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:gravity="center">
+
+                <com.shtoone.chenjiang.widget.processbutton.iml.ActionProcessButton
+                    android:id="@+id/bt_register_activity"
+                    android:layout_width="240dp"
+                    android:layout_height="45dp"
+                    android:text="@string/register"
+                    android:textColor="@android:color/white"
+                    android:textSize="15sp"
+                    custom:pb_colorComplete="@color/green_complete"
+                    custom:pb_colorError="#f00"
+                    custom:pb_colorNormal="@color/blue_normal"
+                    custom:pb_colorPressed="@color/blue_pressed"
+                    custom:pb_colorProgress="@color/purple_progress"
+                    custom:pb_textComplete="@string/register_success"
+                    custom:pb_textError="@string/register_fail"
+                    custom:pb_textProgress="@string/registering" />
+            </RelativeLayout>
+        </LinearLayout>
+    </android.support.v7.widget.CardView>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab_register_activity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_close"
+        android:visibility="invisible"
+        app:fabSize="normal"
+        app:layout_anchor="@id/cv_register_activity"
+        app:layout_anchorGravity="top|center" />
+</android.support.design.widget.CoordinatorLayout>
