@@ -5,10 +5,11 @@ import android.support.annotation.UiThread;
 
 import com.shtoone.chenjiang.common.RxManager;
 import com.shtoone.chenjiang.mvp.contract.base.BaseContract;
-import com.socks.library.KLog;
 
 import java.lang.ref.Reference;
 import java.lang.ref.WeakReference;
+
+import rx.Subscriber;
 
 /**
  * Author：leguang on 2016/10/9 0009 10:31
@@ -43,8 +44,36 @@ public abstract class BasePresenter<V extends BaseContract.View> {
         mRxManager.clear();
         if (mViewReference != null) {
             mViewReference.clear();
-            KLog.e("detachView");
             mViewReference = null;
         }
+    }
+
+    public abstract class RxSubscriber<T> extends Subscriber<T> {
+
+        @Override
+        public void onCompleted() {
+            getView().showContent();
+        }
+
+        @Override
+        public void onStart() {
+            super.onStart();
+            getView().showLoading();
+        }
+
+
+        @Override
+        public void onNext(T t) {
+            _onNext(t);
+        }
+
+        @Override
+        public void onError(Throwable e) {
+            //此处不考虑错误类型，笼统的以错误来介绍
+            getView().showError();
+        }
+
+        public abstract void _onNext(T t);
+
     }
 }

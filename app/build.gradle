@@ -63,6 +63,9 @@ dependencies {
     //筛选器
     compile 'com.github.dongjunkun:DropDownMenu:1.0.3'
 
+    //数据库
+    compile 'org.litepal.android:core:1.3.2'
+
     //监测内存泄漏
     debugCompile 'com.squareup.leakcanary:leakcanary-android:1.4-beta2'
 }

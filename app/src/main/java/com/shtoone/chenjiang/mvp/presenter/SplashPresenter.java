@@ -86,4 +86,9 @@ public class SplashPresenter extends BasePresenter<SplashContract.View> implemen
 //        BaseApplication.mDepartmentBean.departmentID = mUserInfoBean.getDepartId();
 //        BaseApplication.mDepartmentBean.departmentName = mUserInfoBean.getDepartName();
     }
+
+    @Override
+    public void start() {
+
+    }
 }

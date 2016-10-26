@@ -121,4 +121,19 @@ public class SplashFragment extends BaseFragment<SplashContract.Presenter> imple
         isExit = true;
         super.onDestroy();
     }
+
+    @Override
+    public void showContent() {
+
+    }
+
+    @Override
+    public void showError() {
+
+    }
+
+    @Override
+    public void showLoading() {
+
+    }
 }

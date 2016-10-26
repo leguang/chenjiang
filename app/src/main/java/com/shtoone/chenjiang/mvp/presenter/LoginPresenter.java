@@ -73,4 +73,9 @@ public class LoginPresenter extends BasePresenter<LoginContract.View> implements
 //        BaseApplication.mDepartmentBean.departmentID = mUserInfoBean.getDepartId();
 //        BaseApplication.mDepartmentBean.departmentName = mUserInfoBean.getDepartName();
     }
+
+    @Override
+    public void start() {
+
+    }
 }

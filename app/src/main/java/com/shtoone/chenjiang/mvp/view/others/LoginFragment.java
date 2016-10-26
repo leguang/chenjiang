@@ -225,6 +225,21 @@ public class LoginFragment extends BaseFragment<LoginContract.Presenter> impleme
         //返回到看见此fragment时，fab显示
         fab.show();
     }
+
+    @Override
+    public void showContent() {
+
+    }
+
+    @Override
+    public void showError() {
+
+    }
+
+    @Override
+    public void showLoading() {
+
+    }
 }
 
 

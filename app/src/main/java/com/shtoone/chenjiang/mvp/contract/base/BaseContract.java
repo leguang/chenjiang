@@ -8,12 +8,20 @@ import android.support.annotation.UiThread;
  */
 public interface BaseContract {
     interface View {
+        void showContent();
+
+        void showError();
+
+        void showLoading();
     }
 
     interface Presenter {
 
         @UiThread
         void detachView();
+
+        void start();
+
     }
 
     interface Model {

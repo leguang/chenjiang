@@ -14,8 +14,10 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.shtoone.chenjiang.R;
+import com.shtoone.chenjiang.common.Constants;
 import com.shtoone.chenjiang.mvp.view.base.BaseActivity;
 import com.shtoone.chenjiang.utils.AnimationUtils;
+import com.shtoone.chenjiang.utils.ToastUtils;
 
 public class MainActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener {
     private DrawerLayout drawer;
@@ -26,6 +28,9 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     private FloatingActionButton fab;
     private LinearLayout llNavHeader;
     private ActionBarDrawerToggle toggle;
+    // 再点一次退出程序时间设置
+    private static final long WAIT_TIME = 2000L;
+    private long TOUCH_TIME = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -136,5 +141,16 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     @Override
     public boolean swipeBackPriority() {
         return false;
+    }
+
+    @Override
+    public void onBackPressedSupport() {
+
+        if (System.currentTimeMillis() - TOUCH_TIME < WAIT_TIME) {
+            finish();
+        } else {
+            TOUCH_TIME = System.currentTimeMillis();
+            ToastUtils.showInfoToast(getApplicationContext(), Constants.PRESS_AGAIN);
+        }
     }
 }

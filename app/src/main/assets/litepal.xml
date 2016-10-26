@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<litepal>
+    <dbname value="chenjiang"></dbname>
+
+    <version value="1"></version>
+
+    <storage value="external"></storage>
+
+    <list>
+        <mapping class="com.shtoone.chenjiang.mvp.model.bean.LevelLineData"></mapping>
+        <mapping class="com.shtoone.chenjiang.mvp.model.bean.GongdianData"></mapping>
+
+    </list>
+</litepal>
