@@ -57,7 +57,7 @@ public abstract class BaseFragment<P extends BaseContract.Presenter> extends Swi
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                _mActivity.onBackPressedSupport();
+               _mActivity.onBackPressedSupport();
             }
         });
     }

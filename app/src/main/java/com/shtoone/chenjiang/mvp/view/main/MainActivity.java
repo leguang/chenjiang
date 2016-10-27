@@ -16,6 +16,7 @@ import android.widget.TextView;
 import com.shtoone.chenjiang.R;
 import com.shtoone.chenjiang.mvp.view.base.BaseActivity;
 import com.shtoone.chenjiang.utils.AnimationUtils;
+import com.socks.library.KLog;
 
 import me.yokeyword.fragmentation.SupportFragment;
 
@@ -45,7 +46,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         drawer.post(new Runnable() {
             @Override
             public void run() {
-                AnimationUtils.show(drawer, 0, 6000);
+                AnimationUtils.show(drawer, 0, 3000);
 
             }
         });
@@ -126,17 +127,24 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         } else if (id == R.id.download) {
 
         } else if (id == R.id.setting) {
+            KLog.e("11111111");
             SettingFragment fragment = findFragment(SettingFragment.class);
             if (fragment == null) {
+                KLog.e("222222");
+
                 popTo(MainFragment.class, false, new Runnable() {
                     @Override
                     public void run() {
+                        KLog.e("333333");
+
                         start(SettingFragment.newInstance());
                     }
                 });
             } else {
                 // 如果已经在栈内,则以SingleTask模式start
                 start(fragment, SupportFragment.SINGLETASK);
+                KLog.e("44444");
+
             }
 
         } else if (id == R.id.about) {

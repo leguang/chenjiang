@@ -15,6 +15,7 @@ import com.shtoone.chenjiang.mvp.contract.SettingContract;
 import com.shtoone.chenjiang.mvp.presenter.SettingPresenter;
 import com.shtoone.chenjiang.mvp.view.adapter.SettingFragmentVPAdapter;
 import com.shtoone.chenjiang.mvp.view.base.BaseFragment;
+import com.socks.library.KLog;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -56,6 +57,7 @@ public class SettingFragment extends BaseFragment<SettingContract.Presenter> imp
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        KLog.e("onViewCreated");
         initData();
     }
 
@@ -63,7 +65,7 @@ public class SettingFragment extends BaseFragment<SettingContract.Presenter> imp
         initToolbarBackNavigation(toolbar);
         toolbar.setTitle("系统设置");
 
-        vp.setAdapter(new SettingFragmentVPAdapter(_mActivity.getSupportFragmentManager()));
+        vp.setAdapter(new SettingFragmentVPAdapter(getChildFragmentManager()));
         tablayout.setupWithViewPager(vp);
     }
 
@@ -86,6 +88,7 @@ public class SettingFragment extends BaseFragment<SettingContract.Presenter> imp
     public void onDestroyView() {
         super.onDestroyView();
         //开启抽屉菜单，使其可以滑动弹出。
+        KLog.e("onDestroyView");
         ((MainActivity) _mActivity).openDrawer();
     }
 

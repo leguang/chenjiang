@@ -135,6 +135,7 @@ public class VersionFragment extends BaseFragment<VersionContract.Presenter> imp
     public void showForceUpdateDialog(final CheckUpdateBean.UpdateInfoBean mUpdateInfoBean) {
         btUpdate.setCompleteText("检测到新版本");
         btUpdate.setProgress(100);
+
         btUpdate.postDelayed(new Runnable() {
             @Override
             public void run() {
