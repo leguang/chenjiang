@@ -28,11 +28,14 @@ import com.shtoone.chenjiang.utils.NetworkUtils;
 import com.shtoone.chenjiang.utils.SharedPreferencesUtils;
 import com.shtoone.chenjiang.widget.processbutton.iml.ActionProcessButton;
 
+import java.net.ConnectException;
+import java.net.SocketTimeoutException;
 import java.security.GeneralSecurityException;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import retrofit2.adapter.rxjava.HttpException;
 
 /**
  * Author：leguang on 2016/10/9 0009 15:49
@@ -232,8 +235,16 @@ public class LoginFragment extends BaseFragment<LoginContract.Presenter> impleme
     }
 
     @Override
-    public void showError() {
-
+    public void showError(Throwable t) {
+        if (t instanceof ConnectException) {
+            setErrorMessage("网络异常");
+        } else if (t instanceof HttpException) {
+            setErrorMessage("服务器异常");
+        } else if (t instanceof SocketTimeoutException) {
+            setErrorMessage("连接超时");
+        } else {
+            setErrorMessage("数据异常");
+        }
     }
 
     @Override

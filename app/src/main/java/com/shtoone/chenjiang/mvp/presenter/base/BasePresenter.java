@@ -40,7 +40,6 @@ public abstract class BasePresenter<V extends BaseContract.View> {
 
     @UiThread
     public void detachView() {
-
         mRxManager.clear();
         if (mViewReference != null) {
             mViewReference.clear();
@@ -70,7 +69,7 @@ public abstract class BasePresenter<V extends BaseContract.View> {
         @Override
         public void onError(Throwable e) {
             //此处不考虑错误类型，笼统的以错误来介绍
-            getView().showError();
+            getView().showError(e);
         }
 
         public abstract void _onNext(T t);

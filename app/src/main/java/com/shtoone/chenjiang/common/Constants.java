@@ -21,7 +21,8 @@ public class Constants {
 
     //SD卡路径
     public static final String PATH_DATA = DirectoryUtils.getDiskCacheDirectory(BaseApplication.mContext, "data").getAbsolutePath();
-    public static final String PATH_CACHE = PATH_DATA + File.separator + "NetCache";
+    public static final String PATH_NET_CACHE = PATH_DATA + File.separator + "NetCache";
+    public static final String PATH_APK_CACHE = PATH_DATA + File.separator + "ApkCache";
 
     //基地址
     public static final String BASE_URL = "http://192.168.10.35:8081/ljcjqms/";
@@ -38,6 +39,8 @@ public class Constants {
     public static final String PASSWORD = "password";
 
     public static final int DEFAULT_TIMEOUT = 5;
+
+    public static final int CHECKUPDATE = 0;
 
 
     //作为登录的参数，固定这个写法

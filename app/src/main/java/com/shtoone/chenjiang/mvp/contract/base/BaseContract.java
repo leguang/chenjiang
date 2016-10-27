@@ -10,7 +10,7 @@ public interface BaseContract {
     interface View {
         void showContent();
 
-        void showError();
+        void showError(Throwable t);
 
         void showLoading();
     }

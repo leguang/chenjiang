@@ -14,10 +14,10 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.shtoone.chenjiang.R;
-import com.shtoone.chenjiang.common.Constants;
 import com.shtoone.chenjiang.mvp.view.base.BaseActivity;
 import com.shtoone.chenjiang.utils.AnimationUtils;
-import com.shtoone.chenjiang.utils.ToastUtils;
+
+import me.yokeyword.fragmentation.SupportFragment;
 
 public class MainActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener {
     private DrawerLayout drawer;
@@ -45,7 +45,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         drawer.post(new Runnable() {
             @Override
             public void run() {
-                AnimationUtils.show(drawer, 0, 1000);
+                AnimationUtils.show(drawer, 0, 6000);
 
             }
         });
@@ -119,18 +119,41 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     public boolean onNavigationItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
+        if (id == R.id.search) {
 
-        } else if (id == R.id.nav_gallery) {
+        } else if (id == R.id.update) {
 
-        } else if (id == R.id.nav_slideshow) {
+        } else if (id == R.id.download) {
 
-        } else if (id == R.id.nav_manage) {
+        } else if (id == R.id.setting) {
+            SettingFragment fragment = findFragment(SettingFragment.class);
+            if (fragment == null) {
+                popTo(MainFragment.class, false, new Runnable() {
+                    @Override
+                    public void run() {
+                        start(SettingFragment.newInstance());
+                    }
+                });
+            } else {
+                // 如果已经在栈内,则以SingleTask模式start
+                start(fragment, SupportFragment.SINGLETASK);
+            }
 
-        } else if (id == R.id.nav_share) {
+        } else if (id == R.id.about) {
 
-        } else if (id == R.id.nav_send) {
-
+        } else if (id == R.id.version) {
+            VersionFragment fragment = findFragment(VersionFragment.class);
+            if (fragment == null) {
+                popTo(MainFragment.class, false, new Runnable() {
+                    @Override
+                    public void run() {
+                        start(VersionFragment.newInstance());
+                    }
+                });
+            } else {
+                // 如果已经在栈内,则以SingleTask模式start
+                start(fragment, SupportFragment.SINGLETASK);
+            }
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -138,19 +161,17 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         return true;
     }
 
+
     @Override
     public boolean swipeBackPriority() {
         return false;
     }
 
-    @Override
-    public void onBackPressedSupport() {
+    public void closeDrawer() {
+        drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+    }
 
-        if (System.currentTimeMillis() - TOUCH_TIME < WAIT_TIME) {
-            finish();
-        } else {
-            TOUCH_TIME = System.currentTimeMillis();
-            ToastUtils.showInfoToast(getApplicationContext(), Constants.PRESS_AGAIN);
-        }
+    public void openDrawer() {
+        drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
     }
 }

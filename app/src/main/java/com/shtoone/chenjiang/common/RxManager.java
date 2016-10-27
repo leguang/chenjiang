@@ -18,13 +18,19 @@ public class RxManager {
      */
     public void add(Subscription m) {
         /*订阅管理*/
+        if (mCompositeSubscription == null) {
+            mCompositeSubscription = new CompositeSubscription();
+        }
         mCompositeSubscription.add(m);
     }
 
     /**
-     * 单个presenter生命周期结束，取消订阅和所有rxbus观察
+     * 单个presenter生命周期结束，取消订阅
      */
     public void clear() {
-        mCompositeSubscription.unsubscribe();// 取消所有订阅
+        if (mCompositeSubscription != null && mCompositeSubscription.hasSubscriptions()) {
+            // 取消所有订阅
+            mCompositeSubscription.unsubscribe();
+        }
     }
 }

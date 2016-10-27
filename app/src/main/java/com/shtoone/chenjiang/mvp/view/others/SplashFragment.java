@@ -84,6 +84,7 @@ public class SplashFragment extends BaseFragment<SplashContract.Presenter> imple
         isFirstentry = (boolean) SharedPreferencesUtils.get(BaseApplication.mContext, Constants.ISFIRSTENTRY, true);
         //严格按照流程来，Presenter层的代码应该在View层代码的必要数据加载完成之后才调用
         mPresenter.checkLogin();
+        mPresenter.checkUpdate();
     }
 
     @OnClick(R.id.ctp_skip)
@@ -119,6 +120,8 @@ public class SplashFragment extends BaseFragment<SplashContract.Presenter> imple
     @Override
     public void onDestroy() {
         isExit = true;
+        ctpSkip = null;
+
         super.onDestroy();
     }
 
@@ -128,7 +131,7 @@ public class SplashFragment extends BaseFragment<SplashContract.Presenter> imple
     }
 
     @Override
-    public void showError() {
+    public void showError(Throwable t) {
 
     }
 
@@ -136,4 +139,5 @@ public class SplashFragment extends BaseFragment<SplashContract.Presenter> imple
     public void showLoading() {
 
     }
+
 }

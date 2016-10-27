@@ -1,6 +1,7 @@
 package com.shtoone.chenjiang.mvp.view.main;
 
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
@@ -17,16 +18,25 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.qiangxi.checkupdatelibrary.bean.CheckUpdateInfo;
+import com.qiangxi.checkupdatelibrary.dialog.ForceUpdateDialog;
+import com.qiangxi.checkupdatelibrary.dialog.UpdateDialog;
 import com.shtoone.chenjiang.R;
+import com.shtoone.chenjiang.common.Constants;
+import com.shtoone.chenjiang.event.EventData;
 import com.shtoone.chenjiang.mvp.contract.MainContract;
 import com.shtoone.chenjiang.mvp.model.bean.LevelLineData;
 import com.shtoone.chenjiang.mvp.presenter.MainPresenter;
 import com.shtoone.chenjiang.mvp.view.adapter.ListDropDownAdapter;
-import com.shtoone.chenjiang.mvp.view.adapter.YaLiJiFragmentViewPagerFragmentRecyclerViewAdapter;
+import com.shtoone.chenjiang.mvp.view.adapter.MainFragmentRVAdapter;
 import com.shtoone.chenjiang.mvp.view.base.BaseFragment;
 import com.shtoone.chenjiang.utils.ToastUtils;
 import com.shtoone.chenjiang.widget.PageStateLayout;
 import com.yyydjk.library.DropDownMenu;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -45,6 +55,9 @@ import jp.wasabeef.recyclerview.adapters.SlideInLeftAnimationAdapter;
 public class MainFragment extends BaseFragment<MainContract.Presenter> implements MainContract.View {
 
     private static final String TAG = MainFragment.class.getSimpleName();
+    // 再点一次退出程序时间设置
+    private static final long WAIT_TIME = 2000L;
+    private long TOUCH_TIME = 0;
     @BindView(R.id.toolbar_toolbar)
     Toolbar toolbar;
     @BindView(R.id.dropDownMenu)
@@ -57,7 +70,9 @@ public class MainFragment extends BaseFragment<MainContract.Presenter> implement
     private ScaleInAnimationAdapter mScaleInAnimationAdapter;
     private int lastVisibleItemPosition;
     private boolean isLoading;
-    private YaLiJiFragmentViewPagerFragmentRecyclerViewAdapter mAdapter;
+    private MainFragmentRVAdapter mAdapter;
+    private CheckUpdateInfo mCheckUpdateInfo;
+
 
     private String headers[] = {"工点", "测量", "时间"};
     private String citys[] = {"不限", "武汉武汉武汉武汉武汉武汉武汉武汉武汉武汉武汉武汉武汉武汉武汉武汉武汉武汉武汉武汉武汉武汉武汉武汉武汉武汉", "北京北京北京北京北京北京北京北京北京北京北京北京北京北京北京北京北京北京北京北京北京北京北京北京北京北京北京北京", "上海上海上海上海上海上海上海上海上海上海上海上海上海上海上海上海上海上海上海上海上海", "成都", "广州", "深圳", "重庆", "天津", "西安", "南京", "杭州", "不限", "武汉", "北京", "上海", "成都", "广州", "深圳", "重庆", "天津", "西安", "南京", "杭州"};
@@ -211,6 +226,29 @@ public class MainFragment extends BaseFragment<MainContract.Presenter> implement
         initPtrFrameLayout(ptrframelayout);
     }
 
+    @Override
+    public boolean isCanDoRefresh() {
+        //判断是哪种状态的页面，都让其可下拉
+        if (pagestatelayout.isShowContent) {
+            //判断RecyclerView是否在在顶部，在顶部则允许滑动下拉刷新
+            if (null != recyclerview) {
+                if (recyclerview.getLayoutManager() instanceof LinearLayoutManager) {
+                    LinearLayoutManager lm = (LinearLayoutManager) recyclerview.getLayoutManager();
+                    int position = lm.findFirstVisibleItemPosition();
+                    if (position >= 0) {
+                        if (lm.findViewByPosition(position).getTop() >= 0 && position == 0) {
+                            return true;
+                        }
+                    }
+                }
+            } else {
+                return true;
+            }
+            return false;
+        } else {
+            return true;
+        }
+    }
 
     @Override
     public void showContent() {
@@ -218,7 +256,7 @@ public class MainFragment extends BaseFragment<MainContract.Presenter> implement
     }
 
     @Override
-    public void showError() {
+    public void showError(Throwable t) {
         pagestatelayout.showError();
     }
 
@@ -230,11 +268,97 @@ public class MainFragment extends BaseFragment<MainContract.Presenter> implement
     @Override
     public void refresh(List<LevelLineData> levelLineDatas) {
         //设置动画与适配器
-        SlideInLeftAnimationAdapter mSlideInLeftAnimationAdapter = new SlideInLeftAnimationAdapter(mAdapter = new YaLiJiFragmentViewPagerFragmentRecyclerViewAdapter(_mActivity, levelLineDatas));
+        SlideInLeftAnimationAdapter mSlideInLeftAnimationAdapter = new SlideInLeftAnimationAdapter(mAdapter = new MainFragmentRVAdapter(_mActivity, levelLineDatas));
         mSlideInLeftAnimationAdapter.setDuration(500);
         mSlideInLeftAnimationAdapter.setInterpolator(new OvershootInterpolator(.5f));
         mScaleInAnimationAdapter = new ScaleInAnimationAdapter(mSlideInLeftAnimationAdapter);
         recyclerview.setAdapter(mScaleInAnimationAdapter);
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
+    public void onMessageEvent(EventData event) {
+
+//        if (event.position == Constants.CHECKUPDATE) {
+//
+//            mCheckUpdateInfo = new CheckUpdateInfo();
+//            mCheckUpdateInfo.setAppName("android检查更新库")
+//                    .setIsForceUpdate(1)//设置是否强制更新,该方法的参数只要和服务端商定好什么数字代表强制更新即可
+//                    .setNewAppReleaseTime("2016-10-14 12:37")//软件发布时间
+//                    .setNewAppSize(12.3f)//单位为M
+//                    .setNewAppUrl("http://shouji.360tpcdn.com/160914/c5164dfbbf98a443f72f32da936e1379/com.tencent.mobileqq_410.apk")
+//                    .setNewAppVersionCode(20)//新app的VersionCode
+//                    .setNewAppVersionName("1.0.2")
+//                    .setNewAppUpdateDesc("1,优化下载逻辑\n2,修复一些bug\n3,完全实现强制更新与非强制更新逻辑\n4,非强制更新状态下进行下载,默认在后台进行下载\n5,当下载成功时,会在通知栏显示一个通知,点击该通知,进入安装应用界面\n6,当下载失败时,会在通知栏显示一个通知,点击该通知,会重新下载该应用\n7,当下载中,会在通知栏显示实时下载进度,但前提要dialog.setShowProgress(true).");
+//
+//            UpdateDialogClick();
+//
+//        }
+    }
+
+
+    /**
+     * 强制更新,checkupdatelibrary中提供的默认强制更新Dialog,您完全可以自定义自己的Dialog,
+     */
+    public void forceUpdateDialogClick() {
+        mCheckUpdateInfo.setIsForceUpdate(0);
+        if (mCheckUpdateInfo.getIsForceUpdate() == 0) {
+            ForceUpdateDialog dialog = new ForceUpdateDialog(_mActivity);
+            dialog.setAppSize(mCheckUpdateInfo.getNewAppSize())
+                    .setDownloadUrl(mCheckUpdateInfo.getNewAppUrl())
+                    .setTitle(mCheckUpdateInfo.getAppName() + "有更新啦")
+                    .setReleaseTime(mCheckUpdateInfo.getNewAppReleaseTime())
+                    .setVersionName(mCheckUpdateInfo.getNewAppVersionName())
+                    .setUpdateDesc(mCheckUpdateInfo.getNewAppUpdateDesc())
+                    .setFileName("这是QQ.apk")
+                    .setFilePath(Environment.getExternalStorageDirectory().getPath() + "/checkupdatelib").show();
+        }
+    }
+
+    /**
+     * 非强制更新,checkupdatelibrary中提供的默认非强制更新Dialog,您完全可以自定义自己的Dialog
+     */
+    public void UpdateDialogClick() {
+        mCheckUpdateInfo.setIsForceUpdate(1);
+        if (mCheckUpdateInfo.getIsForceUpdate() == 1) {
+            UpdateDialog dialog = new UpdateDialog(_mActivity);
+            dialog.setAppSize(mCheckUpdateInfo.getNewAppSize())
+                    .setDownloadUrl(mCheckUpdateInfo.getNewAppUrl())
+                    .setTitle(mCheckUpdateInfo.getAppName() + "有更新啦")
+                    .setReleaseTime(mCheckUpdateInfo.getNewAppReleaseTime())
+                    .setVersionName(mCheckUpdateInfo.getNewAppVersionName())
+                    .setUpdateDesc(mCheckUpdateInfo.getNewAppUpdateDesc())
+                    .setFileName("这是QQ.apk")
+                    .setFilePath(Environment.getExternalStorageDirectory().getPath() + "/checkupdatelib")
+                    //该方法需设为true,才会在通知栏显示下载进度,默认为false,即不显示
+                    //该方法只会控制下载进度的展示,当下载完成或下载失败时展示的通知不受该方法影响
+                    //即不管该方法是置为false还是true,当下载完成或下载失败时都会在通知栏展示一个通知
+                    .setShowProgress(true)
+                    .setIconResId(R.mipmap.ic_launcher)
+                    .setAppName(mCheckUpdateInfo.getAppName()).show();
+        }
+    }
+
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Override
+    public boolean onBackPressedSupport() {
+        if (System.currentTimeMillis() - TOUCH_TIME < WAIT_TIME) {
+            _mActivity.finish();
+        } else {
+            TOUCH_TIME = System.currentTimeMillis();
+            ToastUtils.showInfoToast(_mActivity, Constants.PRESS_AGAIN);
+        }
+        return true;
+    }
 }

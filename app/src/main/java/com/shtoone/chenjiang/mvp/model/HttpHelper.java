@@ -63,7 +63,7 @@ public class HttpHelper {
                 builder.interceptors().clear();
             }
 
-            File cacheFile = new File(Constants.PATH_CACHE);
+            File cacheFile = new File(Constants.PATH_NET_CACHE);
             Cache cache = new Cache(cacheFile, 1024 * 1024 * 50);
 
 

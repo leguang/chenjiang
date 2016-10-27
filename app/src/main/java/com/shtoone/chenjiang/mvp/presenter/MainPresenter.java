@@ -33,7 +33,7 @@ public class MainPresenter extends BasePresenter<MainContract.View> implements M
 
 
     public void requestGongdianData() {
-        Observable.create(new Observable.OnSubscribe<List<LevelLineData>>() {
+        mRxManager.add(Observable.create(new Observable.OnSubscribe<List<LevelLineData>>() {
             @Override
             public void call(Subscriber<? super List<LevelLineData>> subscriber) {
                 try {
@@ -54,19 +54,18 @@ public class MainPresenter extends BasePresenter<MainContract.View> implements M
 
                                }
                            }
-                );
-
+                ));
     }
 
 
     public void requestLevelLineData() {
-        Observable.create(new Observable.OnSubscribe<List<LevelLineData>>() {
+        mRxManager.add(Observable.create(new Observable.OnSubscribe<List<LevelLineData>>() {
             @Override
             public void call(Subscriber<? super List<LevelLineData>> subscriber) {
                 try {
                     List<LevelLineData> mLevelLineData = DataSupport.findAll(LevelLineData.class);
                     KLog.e("call::" + mLevelLineData.size());
-
+                    KLog.e("map method in thread: " + Thread.currentThread().getName());
 
                     subscriber.onNext(mLevelLineData);
                 } catch (Exception ex) {
@@ -82,15 +81,14 @@ public class MainPresenter extends BasePresenter<MainContract.View> implements M
                                public void _onNext(List<LevelLineData> levelLineDatas) {
                                    KLog.e("_onNext::" + levelLineDatas.size());
                                    getView().refresh(levelLineDatas);
+                                   KLog.e("map method in thread: " + Thread.currentThread().getName());
                                }
                            }
-                );
+                ));
     }
 
     @Override
     public void start() {
-        getView().showLoading();
-        KLog.e("presenter::start");
         requestLevelLineData();
     }
 }

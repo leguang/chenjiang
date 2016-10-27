@@ -1,12 +1,12 @@
 package com.shtoone.chenjiang.mvp.view.adapter;
 
 import android.content.Context;
-import android.content.res.Resources;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.ViewHolder;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.shtoone.chenjiang.R;
@@ -16,22 +16,20 @@ import com.shtoone.chenjiang.mvp.view.adapter.base.OnItemClickListener;
 import java.util.List;
 
 
-public class YaLiJiFragmentViewPagerFragmentRecyclerViewAdapter extends RecyclerView.Adapter<ViewHolder> {
-    private static final String TAG = YaLiJiFragmentViewPagerFragmentRecyclerViewAdapter.class.getSimpleName();
+public class MainFragmentRVAdapter extends RecyclerView.Adapter<ViewHolder> {
+    private static final String TAG = MainFragmentRVAdapter.class.getSimpleName();
     private Context context;
     private OnItemClickListener mOnItemClickListener;
     private List<LevelLineData> itemsData;
-    private Resources mResources;
 
     public enum ITEM_TYPE {
         TYPE_ITEM, TYPE_FOOTER
     }
 
-    public YaLiJiFragmentViewPagerFragmentRecyclerViewAdapter(Context context, List<LevelLineData> itemsData) {
+    public MainFragmentRVAdapter(Context context, List<LevelLineData> itemsData) {
         super();
         this.context = context;
         this.itemsData = itemsData;
-        mResources = context.getResources();
     }
 
     public void setOnItemClickListener(OnItemClickListener mOnItemClickListener) {
@@ -64,8 +62,10 @@ public class YaLiJiFragmentViewPagerFragmentRecyclerViewAdapter extends Recycler
     public void onBindViewHolder(final ViewHolder holder, int position) {
         if (holder instanceof ItemViewHolder) {
             ItemViewHolder mItemViewHolder = (ItemViewHolder) holder;
-            mItemViewHolder.tv.setText(itemsData.get(position).getId() + "");
-
+            mItemViewHolder.tv_bianhao.setText("编      号：" + itemsData.get(position).getId() + "");
+            mItemViewHolder.tv_route.setText("路线类型：" + itemsData.get(position).getRouteType() + "");
+            mItemViewHolder.tv_observe.setText("观测类型：" + itemsData.get(position).getObserveType() + "");
+            mItemViewHolder.tv_date.setText("观测时间：" + itemsData.get(position).getObserveDate() + "");
         }
     }
 
@@ -80,12 +80,21 @@ public class YaLiJiFragmentViewPagerFragmentRecyclerViewAdapter extends Recycler
     }
 
     static class ItemViewHolder extends RecyclerView.ViewHolder {
-        TextView tv;
+        ImageView iv_left;
+        ImageView iv_right;
+        TextView tv_bianhao;
+        TextView tv_route;
+        TextView tv_observe;
+        TextView tv_date;
 
         public ItemViewHolder(View view) {
             super(view);
-            tv = (TextView) view.findViewById(R.id.tv);
-
+            iv_left = (ImageView) view.findViewById(R.id.iv_left_item_rv_main_fragment);
+            iv_right = (ImageView) view.findViewById(R.id.iv_right_item_rv_main_fragment);
+            tv_bianhao = (TextView) view.findViewById(R.id.tv_bianhao_item_rv_main_fragment);
+            tv_route = (TextView) view.findViewById(R.id.tv_route_type_item_rv_main_fragment);
+            tv_observe = (TextView) view.findViewById(R.id.tv_observe_type_item_rv_main_fragment);
+            tv_date = (TextView) view.findViewById(R.id.tv_date_item_rv_main_fragment);
         }
     }
 

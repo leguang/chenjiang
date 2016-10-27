@@ -1,6 +1,7 @@
 package com.shtoone.chenjiang.mvp.model;
 
 
+import com.shtoone.chenjiang.mvp.model.bean.CheckUpdateBean;
 import com.shtoone.chenjiang.mvp.model.bean.UserInfoBean;
 
 import retrofit2.Call;
@@ -15,5 +16,8 @@ public interface ApiService {
 
     @GET("app.do?AppLogin")
     Call<UserInfoBean> login(@Query("userName") String userName, @Query("userPwd") String userPwd, @Query("OSType") String OSType, @Query("machineCode") String machineCode);
+
+    @GET("app.do?checkUpdate")
+    Call<CheckUpdateBean> checkUpdate();
 
 }

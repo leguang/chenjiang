@@ -3,33 +3,33 @@
 
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/nav_camera"
-            android:icon="@drawable/ic_menu_camera"
-            android:title="Import" />
+            android:id="@+id/search"
+            android:icon="@drawable/ic_search_red_300_18dp"
+            android:title="查看项目" />
         <item
-            android:id="@+id/nav_gallery"
-            android:icon="@drawable/ic_menu_gallery"
-            android:title="Gallery" />
+            android:id="@+id/update"
+            android:icon="@drawable/ic_backup_purple_300_18dp"
+            android:title="上传数据" />
         <item
-            android:id="@+id/nav_slideshow"
-            android:icon="@drawable/ic_menu_slideshow"
-            android:title="Slideshow" />
+            android:id="@+id/download"
+            android:icon="@drawable/ic_file_download_blue_300_18dp"
+            android:title="下载数据" />
         <item
-            android:id="@+id/nav_manage"
-            android:icon="@drawable/ic_menu_manage"
-            android:title="Tools" />
+            android:id="@+id/setting"
+            android:icon="@drawable/ic_settings_teal_300_18dp"
+            android:title="系统设置" />
     </group>
 
-    <item android:title="Communicate">
+    <item android:title="About">
         <menu>
             <item
-                android:id="@+id/nav_share"
+                android:id="@+id/about"
                 android:icon="@drawable/ic_menu_share"
-                android:title="Share" />
+                android:title="关于" />
             <item
-                android:id="@+id/nav_send"
+                android:id="@+id/version"
                 android:icon="@drawable/ic_menu_send"
-                android:title="Send" />
+                android:title="版本" />
         </menu>
     </item>
 

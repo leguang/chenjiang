@@ -4,6 +4,7 @@ import android.text.TextUtils;
 
 import com.shtoone.chenjiang.BaseApplication;
 import com.shtoone.chenjiang.common.Constants;
+import com.shtoone.chenjiang.event.EventData;
 import com.shtoone.chenjiang.mvp.contract.SplashContract;
 import com.shtoone.chenjiang.mvp.model.HttpHelper;
 import com.shtoone.chenjiang.mvp.model.bean.UserInfoBean;
@@ -11,6 +12,8 @@ import com.shtoone.chenjiang.mvp.presenter.base.BasePresenter;
 import com.shtoone.chenjiang.utils.AESCryptUtils;
 import com.shtoone.chenjiang.utils.SharedPreferencesUtils;
 import com.socks.library.KLog;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.security.GeneralSecurityException;
 
@@ -55,7 +58,7 @@ public class SplashPresenter extends BasePresenter<SplashContract.View> implemen
 
         if (!TextUtils.isEmpty(username) && !TextUtils.isEmpty(password)) {
 
-            HttpHelper.getInstance().initService().login(username, password, Constants.OSTYPE,"aaaaa").enqueue(new Callback<UserInfoBean>() {
+            HttpHelper.getInstance().initService().login(username, password, Constants.OSTYPE, "aaaaa").enqueue(new Callback<UserInfoBean>() {
                 @Override
                 public void onResponse(Call<UserInfoBean> call, Response<UserInfoBean> response) {
                     if (response.isSuccessful()) {
@@ -81,6 +84,24 @@ public class SplashPresenter extends BasePresenter<SplashContract.View> implemen
         }
     }
 
+    @Override
+    public void checkUpdate() {
+        EventBus.getDefault().postSticky(new EventData(Constants.CHECKUPDATE));
+        KLog.e("checkUpdatecheckUpdate");
+//        Q.checkUpdate("get", "checkUpdateUrl", new CheckUpdateCallback2() {
+//            @Override
+//            public void onCheckUpdateSuccess(String result) {
+//                //result:服务端返回的json,需要自己判断有无更新,解析成自己的实体类进行判断是否有版本更新
+//
+//            }
+//
+//            @Override
+//            public void onCheckUpdateFailure(String failureMessage) {
+//
+//            }
+//        });
+    }
+
     private void initParameters() {
 //        BaseApplication.mParametersBean.userGroupID = mUserInfoBean.getDepartId();
 //        BaseApplication.mDepartmentBean.departmentID = mUserInfoBean.getDepartId();
@@ -91,4 +112,5 @@ public class SplashPresenter extends BasePresenter<SplashContract.View> implemen
     public void start() {
 
     }
+
 }

@@ -8,13 +8,9 @@ import com.shtoone.chenjiang.mvp.model.HttpHelper;
 import com.shtoone.chenjiang.mvp.model.bean.UserInfoBean;
 import com.shtoone.chenjiang.mvp.presenter.base.BasePresenter;
 
-import java.net.ConnectException;
-import java.net.SocketTimeoutException;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.adapter.rxjava.HttpException;
 
 /**
  * Author：leguang on 2016/10/14 0014 13:17
@@ -54,15 +50,7 @@ public class LoginPresenter extends BasePresenter<LoginContract.View> implements
 
             @Override
             public void onFailure(Call<UserInfoBean> call, Throwable t) {
-                if (t instanceof ConnectException) {
-                    getView().setErrorMessage("网络异常");
-                } else if (t instanceof HttpException) {
-                    getView().setErrorMessage("服务器异常");
-                } else if (t instanceof SocketTimeoutException) {
-                    getView().setErrorMessage("连接超时");
-                } else {
-                    getView().setErrorMessage("数据异常");
-                }
+                getView().showError(t);
             }
         });
 

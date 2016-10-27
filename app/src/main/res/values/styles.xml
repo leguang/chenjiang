@@ -39,4 +39,12 @@
         <!-- Label color in TRUE state and bar color FALSE and TRUE State -->
         <item name="colorControlActivated">#FFCC00</item>
     </style>
+
+    <!--版本更新模块-->
+    <style name="VersionTextTheme">
+        <item name="android:textColor">@color/black</item>
+        <item name="android:padding">1dp</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:lines">2</item>
+    </style>
 </resources>

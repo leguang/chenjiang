@@ -28,6 +28,12 @@ public class LaunchActivity extends BaseActivity {
         if (savedInstanceState == null) {
             loadRootFragment(R.id.fl_launch_activity, SplashFragment.newInstance());
         }
+
+        checkUpdate();
+    }
+
+    private void checkUpdate() {
+
     }
 
     @Override

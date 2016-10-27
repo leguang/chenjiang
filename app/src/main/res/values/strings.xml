@@ -27,4 +27,9 @@
 
     <string name="loading">加载中……</string>
 
+    <!--版本更新模块-->
+    <string name="company">上海同望信息技术有限公司</string>
+    <string name="check_update">检测更新</string>
+    <string name="update">更新</string>
+
 </resources>
