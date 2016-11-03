@@ -69,7 +69,9 @@ dependencies {
     compile 'org.greenrobot:eventbus:3.0.0'
     //检测更新
     compile 'com.qiangxi.checkupdatelibrary:checkupdatelibrary:1.0.3'
-
+    //spinner
+    compile 'com.jaredrummler:material-spinner:1.1.0'
     //监测内存泄漏
     debugCompile 'com.squareup.leakcanary:leakcanary-android:1.4-beta2'
+    compile 'com.github.markzhai:blockcanary-android:1.3.1'
 }

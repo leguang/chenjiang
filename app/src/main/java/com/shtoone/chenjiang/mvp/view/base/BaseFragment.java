@@ -34,6 +34,9 @@ public abstract class BaseFragment<P extends BaseContract.Presenter> extends Swi
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mPresenter = createPresenter();
+
+        //打印fragment栈
+        _mActivity.logFragmentStackHierarchy("SHTW");
     }
 
     @NonNull
@@ -57,7 +60,7 @@ public abstract class BaseFragment<P extends BaseContract.Presenter> extends Swi
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               _mActivity.onBackPressedSupport();
+                _mActivity.onBackPressedSupport();
             }
         });
     }

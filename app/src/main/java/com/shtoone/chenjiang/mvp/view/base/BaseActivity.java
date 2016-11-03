@@ -3,6 +3,7 @@ package com.shtoone.chenjiang.mvp.view.base;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.view.View;
 import android.view.WindowManager;
@@ -32,10 +33,11 @@ public abstract class BaseActivity<P extends BaseContract.Presenter> extends Swi
         super.onCreate(savedInstanceState);
         initActivity();
         netWorkTips();
-        initPresenter();
+        mPresenter = createPresenter();
     }
 
-    public abstract void initPresenter();
+    @NonNull
+    protected abstract P createPresenter();
 
     private void initActivity() {
         //把每一个Activity加入栈中

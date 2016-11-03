@@ -44,7 +44,7 @@ public class SplashPresenter extends BasePresenter<SplashContract.View> implemen
         //进行解密
         String username = null;
         String password = null;
-        if (!(TextUtils.isEmpty(usernameEncrypted) && TextUtils.isEmpty(passwordEncrypted))) {
+        if (!TextUtils.isEmpty(usernameEncrypted) && !TextUtils.isEmpty(passwordEncrypted)) {
             try {
                 username = AESCryptUtils.decrypt(Constants.ENCRYPT_KEY, usernameEncrypted);
                 password = AESCryptUtils.decrypt(Constants.ENCRYPT_KEY, passwordEncrypted);
@@ -55,6 +55,9 @@ public class SplashPresenter extends BasePresenter<SplashContract.View> implemen
 
         KLog.e("username解密:" + username);
         KLog.e("password解密:" + password);
+
+        username = "test";
+        password = "123456";
 
         if (!TextUtils.isEmpty(username) && !TextUtils.isEmpty(password)) {
 

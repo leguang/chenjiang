@@ -2,9 +2,11 @@ package com.shtoone.chenjiang.mvp.view.others;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 
 import com.shtoone.chenjiang.R;
 import com.shtoone.chenjiang.common.Constants;
+import com.shtoone.chenjiang.mvp.contract.base.BaseContract;
 import com.shtoone.chenjiang.mvp.view.base.BaseActivity;
 import com.shtoone.chenjiang.utils.ToastUtils;
 
@@ -32,12 +34,14 @@ public class LaunchActivity extends BaseActivity {
         checkUpdate();
     }
 
-    private void checkUpdate() {
-
+    @NonNull
+    @Override
+    protected BaseContract.Presenter createPresenter() {
+        return null;
     }
 
-    @Override
-    public void initPresenter() {
+
+    private void checkUpdate() {
 
     }
 

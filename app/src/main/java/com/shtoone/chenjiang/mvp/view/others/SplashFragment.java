@@ -95,6 +95,7 @@ public class SplashFragment extends BaseFragment<SplashContract.Presenter> imple
 
     @Override
     public void go2LoginOrGuide() {
+        //目的是为了判断网络请求时，用户是否退出
         if (isExit) {
             return;
         }
@@ -121,7 +122,6 @@ public class SplashFragment extends BaseFragment<SplashContract.Presenter> imple
     public void onDestroy() {
         isExit = true;
         ctpSkip = null;
-
         super.onDestroy();
     }
 

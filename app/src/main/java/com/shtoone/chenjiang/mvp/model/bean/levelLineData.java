@@ -8,7 +8,6 @@ import org.litepal.crud.DataSupport;
  */
 public class LevelLineData extends DataSupport {
     private int id;
-
     private String biaoDuan;
     private String routeType;
     private String observeType;

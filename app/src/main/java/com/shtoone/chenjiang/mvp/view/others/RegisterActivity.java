@@ -3,27 +3,44 @@ package com.shtoone.chenjiang.mvp.view.others;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.widget.CardView;
-import android.text.Editable;
 import android.text.TextUtils;
-import android.text.TextWatcher;
 import android.view.View;
 import android.view.ViewAnimationUtils;
 import android.view.animation.AccelerateDecelerateInterpolator;
 
+import com.shtoone.chenjiang.BaseApplication;
 import com.shtoone.chenjiang.R;
+import com.shtoone.chenjiang.common.Constants;
+import com.shtoone.chenjiang.event.EventData;
+import com.shtoone.chenjiang.mvp.contract.RegisterContract;
+import com.shtoone.chenjiang.mvp.model.bean.RegisterBean;
+import com.shtoone.chenjiang.mvp.presenter.RegisterPresenter;
 import com.shtoone.chenjiang.mvp.view.base.BaseActivity;
+import com.shtoone.chenjiang.utils.AESCryptUtils;
 import com.shtoone.chenjiang.utils.DeviceUtils;
 import com.shtoone.chenjiang.utils.KeyBoardUtils;
+import com.shtoone.chenjiang.utils.SharedPreferencesUtils;
+import com.shtoone.chenjiang.utils.ToastUtils;
 import com.shtoone.chenjiang.widget.processbutton.iml.ActionProcessButton;
+import com.socks.library.KLog;
+
+import org.greenrobot.eventbus.EventBus;
+import org.json.JSONException;
+
+import java.net.ConnectException;
+import java.net.SocketTimeoutException;
+import java.security.GeneralSecurityException;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import retrofit2.adapter.rxjava.HttpException;
 
-public class RegisterActivity extends BaseActivity {
+public class RegisterActivity extends BaseActivity<RegisterContract.Presenter> implements RegisterContract.View {
 
     @BindView(R.id.et_machine_code_register_activity)
     TextInputLayout etMachineCode;
@@ -45,6 +62,13 @@ public class RegisterActivity extends BaseActivity {
         initData();
 
     }
+
+    @NonNull
+    @Override
+    protected RegisterContract.Presenter createPresenter() {
+        return new RegisterPresenter(this);
+    }
+
 
     private void revealClose() {
         cv.post(new Runnable() {
@@ -91,28 +115,23 @@ public class RegisterActivity extends BaseActivity {
     private void initData() {
         etMachineCode.getEditText().setText(DeviceUtils.getIMEI(getApplicationContext()));
 
-        etRegisterCode.getEditText().addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+        String strRegisterCode = (String) SharedPreferencesUtils.get(BaseApplication.mContext, Constants.REGISTER_CODE, "");
+        KLog.e("strRegisterCode::" + strRegisterCode);
+        if (!TextUtils.isEmpty(strRegisterCode)) {
+            try {
+                strRegisterCode = AESCryptUtils.decrypt(Constants.ENCRYPT_KEY, strRegisterCode);
+                KLog.e("decode::" + strRegisterCode);
+            } catch (GeneralSecurityException e) {
+                e.printStackTrace();
             }
 
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                bt.setProgress(0);
-                if (TextUtils.isEmpty(s)) {
-                    etRegisterCode.setError("注册码不能为空");
-                    etRegisterCode.setErrorEnabled(true);
-                } else {
-                    etRegisterCode.setError("");
-                    etRegisterCode.setErrorEnabled(false);
-                }
-            }
+            etRegisterCode.getEditText().setText(strRegisterCode);
+            bt.setText("您已注册");
+            bt.setEnabled(false);
 
-            @Override
-            public void afterTextChanged(Editable s) {
-            }
-        });
-
+        } else {
+            bt.setEnabled(true);
+        }
     }
 
     private void revealShow() {
@@ -155,30 +174,28 @@ public class RegisterActivity extends BaseActivity {
         });
     }
 
-    @Override
-    public void initPresenter() {
-    }
-
 
     @OnClick({R.id.bt_register_activity, R.id.fab_register_activity})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.bt_register_activity:
                 KeyBoardUtils.hideKeybord(bt, this);
-                String strRegisterCode = etRegisterCode.getEditText().getText().toString().trim();
-                if (!TextUtils.isEmpty(strRegisterCode)) {
-                    bt.setProgress(50);
-                    bt.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            bt.setProgress(100);
-                            onBackPressedSupport();
-                        }
-                    }, 3500);
-                } else if (TextUtils.isEmpty(strRegisterCode)) {
-                    etRegisterCode.setErrorEnabled(true);
-                    etRegisterCode.setError("");
-                    etRegisterCode.setError("用户名不能为空");
+                String strMachineCode = etMachineCode.getEditText().getText().toString();
+                String strphoneBrand = DeviceUtils.getPhoneBrand();
+                String strphoneSysVersion = DeviceUtils.getOSVersion();
+                String strphoneModel = DeviceUtils.getPhoneType();
+
+                KLog.e(strMachineCode);
+                KLog.e(strphoneBrand);
+                KLog.e(strphoneSysVersion);
+                KLog.e(strphoneModel);
+
+                if (!TextUtils.isEmpty(strMachineCode)) {
+                    mPresenter.register(strMachineCode, strphoneBrand, strphoneSysVersion, strphoneModel);
+                } else {
+                    etMachineCode.setErrorEnabled(true);
+                    etMachineCode.setError("");
+                    etMachineCode.setError("机器码获取失败");
                 }
                 break;
             case R.id.fab_register_activity:
@@ -190,5 +207,69 @@ public class RegisterActivity extends BaseActivity {
     @Override
     public void onBackPressedSupport() {
         revealClose();
+    }
+
+    @Override
+    public void showContent() {
+
+    }
+
+    @Override
+    public void showError(Throwable t) {
+
+        if (t instanceof ConnectException) {
+            setErrorMessage("网络异常");
+        } else if (t instanceof HttpException) {
+            setErrorMessage("服务器异常");
+        } else if (t instanceof SocketTimeoutException) {
+            setErrorMessage("连接超时");
+        } else if (t instanceof JSONException) {
+            setErrorMessage("解析异常");
+        } else {
+            setErrorMessage("数据异常");
+        }
+    }
+
+    public void setErrorMessage(String message) {
+        bt.setErrorText(message);
+        bt.setProgress(-1);
+    }
+
+    @Override
+    public void showLoading() {
+        bt.setProgress(50);
+    }
+
+    @Override
+    public void registerSuccessfully(RegisterBean mRegisterBean) {
+
+        etRegisterCode.getEditText().setText(mRegisterBean.getRegCode());
+        bt.setProgress(100);
+        bt.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                revealClose();
+            }
+        }, 618);
+
+        ToastUtils.showSuccessToast(getApplicationContext(), "恭喜！注册成功请登录");
+
+        //保存注册码到本地
+        String strRegisterCode = "";
+        try {
+            strRegisterCode = AESCryptUtils.encrypt(Constants.ENCRYPT_KEY, mRegisterBean.getRegCode());
+        } catch (GeneralSecurityException e) {
+            e.printStackTrace();
+        }
+        SharedPreferencesUtils.put(getApplicationContext(), Constants.REGISTER_CODE, strRegisterCode);
+
+
+        EventBus.getDefault().post(new EventData(Constants.HIDE_LOGIN_FAB));
+
+    }
+
+    @Override
+    public void registerFailed() {
+        setErrorMessage("已申请，请等待审核");
     }
 }

@@ -57,6 +57,11 @@
             android:name=".mvp.view.others.RegisterActivity"
             android:launchMode="singleTop"
             android:theme="@style/AppTheme.Register" />
+
+        <activity
+            android:name=".mvp.view.main.project.ProjectActivity"
+            android:launchMode="singleTop"
+            android:theme="@style/AppTheme.Transparent" />
     </application>
 
 </manifest>

@@ -3,13 +3,18 @@ package com.shtoone.chenjiang.mvp.view.main;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.jaredrummler.materialspinner.MaterialSpinner;
 import com.shtoone.chenjiang.R;
 import com.shtoone.chenjiang.mvp.contract.base.BaseContract;
 import com.shtoone.chenjiang.mvp.view.base.BaseFragment;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 /**
  * Author：leguang on 2016/10/9 0009 15:49
@@ -18,6 +23,8 @@ import com.shtoone.chenjiang.mvp.view.base.BaseFragment;
 public class DeviceSettingFragment extends BaseFragment {
 
     private static final String TAG = DeviceSettingFragment.class.getSimpleName();
+    @BindView(R.id.spinner_device_setting_fragment)
+    MaterialSpinner spinner;
 
 
     public static DeviceSettingFragment newInstance() {
@@ -29,6 +36,7 @@ public class DeviceSettingFragment extends BaseFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_device_setting, container, false);
+        ButterKnife.bind(this, view);
         return view;
     }
 
@@ -39,6 +47,15 @@ public class DeviceSettingFragment extends BaseFragment {
     }
 
     private void initData() {
+        String[] arr = {"请选择设备", "1", "2", "3", "4", "5"};
+        spinner.setItems(arr);
+        spinner.setOnItemSelectedListener(new MaterialSpinner.OnItemSelectedListener<String>() {
+
+            @Override
+            public void onItemSelected(MaterialSpinner view, int position, long id, String item) {
+                Snackbar.make(view, item, Snackbar.LENGTH_LONG).show();
+            }
+        });
     }
 
     @NonNull

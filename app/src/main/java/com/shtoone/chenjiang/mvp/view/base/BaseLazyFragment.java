@@ -3,11 +3,13 @@ package com.shtoone.chenjiang.mvp.view.base;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 
+import com.shtoone.chenjiang.mvp.contract.base.BaseContract;
+
 /**
  * Author：leguang on 2016/10/9 0009 15:49
  * Email：langmanleguang@qq.com
  */
-public abstract class BaseLazyFragment extends BaseFragment {
+public abstract class BaseLazyFragment<P extends BaseContract.Presenter> extends BaseFragment<P> {
     private static final String TAG = BaseLazyFragment.class.getSimpleName();
     private boolean mInited = false;
     private Bundle mSavedInstanceState;

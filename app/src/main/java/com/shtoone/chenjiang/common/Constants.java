@@ -37,10 +37,15 @@ public class Constants {
     public static final String ISFIRSTGUIDE = "is_first_guide";
     public static final String USERNAME = "username";
     public static final String PASSWORD = "password";
+    public static final String REGISTER_CODE = "password";
 
     public static final int DEFAULT_TIMEOUT = 5;
 
+    //检测App升级
     public static final int CHECKUPDATE = 0;
+
+    //隐藏注册成功后，登陆界面fab的隐藏
+    public static final int HIDE_LOGIN_FAB = 1;
 
 
     //作为登录的参数，固定这个写法

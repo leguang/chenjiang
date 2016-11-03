@@ -5,6 +5,7 @@ import android.support.annotation.UiThread;
 
 import com.shtoone.chenjiang.common.RxManager;
 import com.shtoone.chenjiang.mvp.contract.base.BaseContract;
+import com.socks.library.KLog;
 
 import java.lang.ref.Reference;
 import java.lang.ref.WeakReference;
@@ -69,6 +70,8 @@ public abstract class BasePresenter<V extends BaseContract.View> {
         @Override
         public void onError(Throwable e) {
             //此处不考虑错误类型，笼统的以错误来介绍
+            KLog.e(e);
+            KLog.e("22222222222");
             getView().showError(e);
         }
 

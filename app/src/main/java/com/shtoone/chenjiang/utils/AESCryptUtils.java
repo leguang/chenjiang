@@ -163,12 +163,12 @@ public class AESCryptUtils {
 
     private static void log(String what, byte[] bytes) {
         if (DEBUG_LOG_ENABLED)
-            Log.d(TAG, what + "[" + bytes.length + "] [" + bytesToHex(bytes) + "]");
+            Log.e(TAG, what + "[" + bytes.length + "] [" + bytesToHex(bytes) + "]");
     }
 
     private static void log(String what, String value) {
         if (DEBUG_LOG_ENABLED)
-            Log.d(TAG, what + "[" + value.length() + "] [" + value + "]");
+            Log.e(TAG, what + "[" + value.length() + "] [" + value + "]");
     }
 
 

@@ -32,4 +32,15 @@
     <string name="check_update">检测更新</string>
     <string name="update">更新</string>
 
+    <!--设置模块-->
+    <string name="communicate_test">通讯调试</string>
+    <string name="level_line">水准线路</string>
+    <string name="measurel_station">测站</string>
+
+    <!--项目模块-->
+    <string name="gongdian">工点</string>
+    <string name="renyuan">人员</string>
+    <string name="jidian">基点</string>
+
+
 </resources>

@@ -91,6 +91,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@drawable/selector_bg_edit_2"
+                        android:enabled="false"
                         android:hint="@string/register_code"
                         android:paddingBottom="2dp"
                         android:textColor="#f0f7f4"
@@ -129,6 +130,7 @@
         android:layout_height="wrap_content"
         android:src="@drawable/ic_close"
         android:visibility="invisible"
+        app:backgroundTint="@color/fab_background_color"
         app:fabSize="normal"
         app:layout_anchor="@id/cv_register_activity"
         app:layout_anchorGravity="top|center" />

@@ -1,5 +1,7 @@
 package com.shtoone.chenjiang.mvp.view.others;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -7,26 +9,28 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TextInputLayout;
-import android.support.v7.widget.CardView;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewAnimationUtils;
 import android.view.ViewGroup;
+import android.view.animation.AccelerateDecelerateInterpolator;
 
 import com.shtoone.chenjiang.R;
 import com.shtoone.chenjiang.common.Constants;
 import com.shtoone.chenjiang.mvp.contract.LoginContract;
 import com.shtoone.chenjiang.mvp.presenter.LoginPresenter;
-import com.shtoone.chenjiang.mvp.view.main.MainActivity;
 import com.shtoone.chenjiang.mvp.view.base.BaseFragment;
+import com.shtoone.chenjiang.mvp.view.main.MainActivity;
 import com.shtoone.chenjiang.utils.AESCryptUtils;
-import com.shtoone.chenjiang.utils.AnimationUtils;
 import com.shtoone.chenjiang.utils.KeyBoardUtils;
 import com.shtoone.chenjiang.utils.NetworkUtils;
 import com.shtoone.chenjiang.utils.SharedPreferencesUtils;
 import com.shtoone.chenjiang.widget.processbutton.iml.ActionProcessButton;
+
+import org.json.JSONException;
 
 import java.net.ConnectException;
 import java.net.SocketTimeoutException;
@@ -50,8 +54,6 @@ public class LoginFragment extends BaseFragment<LoginContract.Presenter> impleme
     TextInputLayout etPassword;
     @BindView(R.id.bt_login_fragment)
     ActionProcessButton btLogin;
-    @BindView(R.id.cv)
-    CardView cv;
     @BindView(R.id.fab_login_fragment)
     FloatingActionButton fab;
     @BindView(R.id.cl_login_fragment)
@@ -92,17 +94,13 @@ public class LoginFragment extends BaseFragment<LoginContract.Presenter> impleme
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-        cl.post(new Runnable() {
-            @Override
-            public void run() {
-                AnimationUtils.show(cl, 0, 1000);
-            }
-        });
+        //进场动画
+        revealShow();
         initData();
     }
 
     private void initData() {
+
         etUsername.getEditText().addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -149,8 +147,6 @@ public class LoginFragment extends BaseFragment<LoginContract.Presenter> impleme
 
             }
         });
-
-
     }
 
     @OnClick(R.id.bt_login_fragment)
@@ -222,6 +218,12 @@ public class LoginFragment extends BaseFragment<LoginContract.Presenter> impleme
         _mActivity.startActivity(new Intent(_mActivity, RegisterActivity.class));
     }
 
+
+    @Override
+    public void showContent() {
+
+    }
+
     @Override
     public void onResume() {
         super.onResume();
@@ -230,8 +232,10 @@ public class LoginFragment extends BaseFragment<LoginContract.Presenter> impleme
     }
 
     @Override
-    public void showContent() {
-
+    public void onPause() {
+        super.onPause();
+        //防止屏幕旋转后重画时fab显示
+        fab.hide();
     }
 
     @Override
@@ -242,6 +246,8 @@ public class LoginFragment extends BaseFragment<LoginContract.Presenter> impleme
             setErrorMessage("服务器异常");
         } else if (t instanceof SocketTimeoutException) {
             setErrorMessage("连接超时");
+        } else if (t instanceof JSONException) {
+            setErrorMessage("解析异常");
         } else {
             setErrorMessage("数据异常");
         }
@@ -250,6 +256,47 @@ public class LoginFragment extends BaseFragment<LoginContract.Presenter> impleme
     @Override
     public void showLoading() {
 
+    }
+
+    private void revealShow() {
+        cl.post(new Runnable() {
+            @Override
+            public void run() {
+                fab.show();
+                if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.LOLLIPOP) {
+                    cl.setVisibility(View.VISIBLE);
+                    return;
+                }
+
+                int cx = (cl.getLeft() + cl.getRight()) / 2;
+                int cy = (cl.getTop() + cl.getBottom()) / 2;
+
+                int w = cl.getWidth();
+                int h = cl.getHeight();
+
+                // 勾股定理 & 进一法
+                int finalRadius = (int) Math.hypot(w, h);
+
+                Animator anim = ViewAnimationUtils.createCircularReveal(cl, cx, cy, 0, finalRadius);
+                anim.addListener(new AnimatorListenerAdapter() {
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        super.onAnimationEnd(animation);
+                        fab.show();
+                    }
+
+                    @Override
+                    public void onAnimationStart(Animator animation) {
+                        super.onAnimationStart(animation);
+                        fab.hide();
+
+                    }
+                });
+                anim.setInterpolator(new AccelerateDecelerateInterpolator());
+                anim.setDuration(1000);
+                anim.start();
+            }
+        });
     }
 }
 

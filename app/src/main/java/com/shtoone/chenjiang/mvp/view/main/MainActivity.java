@@ -1,6 +1,8 @@
 package com.shtoone.chenjiang.mvp.view.main;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -14,9 +16,10 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.shtoone.chenjiang.R;
+import com.shtoone.chenjiang.mvp.contract.base.BaseContract;
 import com.shtoone.chenjiang.mvp.view.base.BaseActivity;
+import com.shtoone.chenjiang.mvp.view.main.project.ProjectActivity;
 import com.shtoone.chenjiang.utils.AnimationUtils;
-import com.socks.library.KLog;
 
 import me.yokeyword.fragmentation.SupportFragment;
 
@@ -52,6 +55,13 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         });
     }
 
+    @NonNull
+    @Override
+    protected BaseContract.Presenter createPresenter() {
+        return null;
+    }
+
+
     private void initView() {
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         navigationView = (NavigationView) findViewById(R.id.nav_view);
@@ -80,11 +90,6 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
-    }
-
-    @Override
-    public void initPresenter() {
-
     }
 
     @Override
@@ -117,58 +122,62 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
-        int id = item.getItemId();
-
-        if (id == R.id.search) {
-
-        } else if (id == R.id.update) {
-
-        } else if (id == R.id.download) {
-
-        } else if (id == R.id.setting) {
-            KLog.e("11111111");
-            SettingFragment fragment = findFragment(SettingFragment.class);
-            if (fragment == null) {
-                KLog.e("222222");
-
-                popTo(MainFragment.class, false, new Runnable() {
-                    @Override
-                    public void run() {
-                        KLog.e("333333");
-
-                        start(SettingFragment.newInstance());
-                    }
-                });
-            } else {
-                // 如果已经在栈内,则以SingleTask模式start
-                start(fragment, SupportFragment.SINGLETASK);
-                KLog.e("44444");
-
-            }
-
-        } else if (id == R.id.about) {
-
-        } else if (id == R.id.version) {
-            VersionFragment fragment = findFragment(VersionFragment.class);
-            if (fragment == null) {
-                popTo(MainFragment.class, false, new Runnable() {
-                    @Override
-                    public void run() {
-                        start(VersionFragment.newInstance());
-                    }
-                });
-            } else {
-                // 如果已经在栈内,则以SingleTask模式start
-                start(fragment, SupportFragment.SINGLETASK);
-            }
-        }
-
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+    public boolean onNavigationItemSelected(final MenuItem item) {
+        final DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
+
+        //延迟启动Fragment，先让侧滑控件关闭，避免看上去卡顿一下。
+        drawer.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                int id = item.getItemId();
+                if (id == R.id.search) {
+                    go2Project();
+
+                } else if (id == R.id.update) {
+
+                } else if (id == R.id.download) {
+
+                } else if (id == R.id.setting) {
+                    SettingFragment fragment = findFragment(SettingFragment.class);
+                    if (fragment == null) {
+
+                        popTo(MainFragment.class, false, new Runnable() {
+                            @Override
+                            public void run() {
+
+                                start(SettingFragment.newInstance());
+                            }
+                        });
+                    } else {
+                        // 如果已经在栈内,则以SingleTask模式start
+                        start(fragment, SupportFragment.SINGLETASK);
+                    }
+
+                } else if (id == R.id.about) {
+
+                } else if (id == R.id.version) {
+                    VersionFragment fragment = findFragment(VersionFragment.class);
+                    if (fragment == null) {
+                        popTo(MainFragment.class, false, new Runnable() {
+                            @Override
+                            public void run() {
+                                start(VersionFragment.newInstance());
+                            }
+                        });
+                    } else {
+                        // 如果已经在栈内,则以SingleTask模式start
+                        start(fragment, SupportFragment.SINGLETASK);
+                    }
+                }
+            }
+        }, 250);
         return true;
     }
 
+    private void go2Project() {
+        startActivity(new Intent(this, ProjectActivity.class));
+    }
 
     @Override
     public boolean swipeBackPriority() {
