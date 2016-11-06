@@ -10,6 +10,7 @@ public class StaffData extends DataSupport {
     private int id;
     private String name;
     private String type;
+    private String phtoneNumber;
 
     public String getPhtoneNumber() {
         return phtoneNumber;
@@ -18,8 +19,6 @@ public class StaffData extends DataSupport {
     public void setPhtoneNumber(String phtoneNumber) {
         this.phtoneNumber = phtoneNumber;
     }
-
-    private String phtoneNumber;
 
     public int getId() {
         return id;

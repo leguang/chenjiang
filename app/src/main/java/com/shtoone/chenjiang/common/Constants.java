@@ -60,4 +60,7 @@ public class Constants {
     public static final String ABOUTAPP = "http://note.youdao.com/share/?id=37e5d8602c49af15d7589d7f91bd548b&type=note";
     public static final String ABOUTCOMPANY = "http://en.ccccltd.cn/ccccltd/";
 
+    //分页查询
+    public static final int PAGE_SIZE = 20;
+
 }

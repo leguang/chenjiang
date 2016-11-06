@@ -37,6 +37,11 @@ public class SplashPresenter extends BasePresenter<SplashContract.View> implemen
 
     @Override
     public void checkLogin() {
+        //调试的时候用
+        getView().go2Main();
+
+
+
         String usernameEncrypted = (String) SharedPreferencesUtils.get(BaseApplication.mContext, Constants.USERNAME, "");
         String passwordEncrypted = (String) SharedPreferencesUtils.get(BaseApplication.mContext, Constants.PASSWORD, "");
         KLog.e("username加密从sp中:" + usernameEncrypted);
@@ -67,7 +72,6 @@ public class SplashPresenter extends BasePresenter<SplashContract.View> implemen
                     if (response.isSuccessful()) {
                         if (response.body().isSuccess()) {
                             BaseApplication.mUserInfoBean = mUserInfoBean = response.body();
-                            initParameters();
                             //进入管理层界面
                             getView().go2Main();
                         } else {
@@ -105,11 +109,6 @@ public class SplashPresenter extends BasePresenter<SplashContract.View> implemen
 //        });
     }
 
-    private void initParameters() {
-//        BaseApplication.mParametersBean.userGroupID = mUserInfoBean.getDepartId();
-//        BaseApplication.mDepartmentBean.departmentID = mUserInfoBean.getDepartId();
-//        BaseApplication.mDepartmentBean.departmentName = mUserInfoBean.getDepartName();
-    }
 
     @Override
     public void start() {

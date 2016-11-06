@@ -10,6 +10,7 @@
         <mapping class="com.shtoone.chenjiang.mvp.model.bean.LevelLineData"></mapping>
         <mapping class="com.shtoone.chenjiang.mvp.model.bean.GongdianData"></mapping>
         <mapping class="com.shtoone.chenjiang.mvp.model.bean.MeasureSpecificationData"></mapping>
+        <mapping class="com.shtoone.chenjiang.mvp.model.bean.StaffData"></mapping>
 
     </list>
 </litepal>

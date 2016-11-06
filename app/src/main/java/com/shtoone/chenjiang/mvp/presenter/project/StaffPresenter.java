@@ -1,9 +1,8 @@
 package com.shtoone.chenjiang.mvp.presenter.project;
 
-
-import com.shtoone.chenjiang.mvp.contract.StaffContract;
+import com.shtoone.chenjiang.common.Constants;
+import com.shtoone.chenjiang.mvp.contract.project.StaffContract;
 import com.shtoone.chenjiang.mvp.model.bean.StaffData;
-import com.shtoone.chenjiang.mvp.model.bean.UserInfoBean;
 import com.shtoone.chenjiang.mvp.presenter.base.BasePresenter;
 import com.socks.library.KLog;
 
@@ -23,7 +22,6 @@ import rx.schedulers.Schedulers;
 public class StaffPresenter extends BasePresenter<StaffContract.View> implements StaffContract.Presenter {
 
     private static final String TAG = StaffPresenter.class.getSimpleName();
-    private UserInfoBean mUserInfoBean;
 
     public StaffPresenter(StaffContract.View mView) {
         super(mView);
@@ -31,14 +29,29 @@ public class StaffPresenter extends BasePresenter<StaffContract.View> implements
 
     @Override
     public void start() {
+        KLog.e("start^^^^^^^^^^^^^^^^^^^");
+        queryData(0);
+    }
 
+    @Override
+    public void queryData(final int pagination) {
         mRxManager.add(Observable.create(new Observable.OnSubscribe<List<StaffData>>() {
                     @Override
                     public void call(Subscriber<? super List<StaffData>> subscriber) {
                         try {
-                            List<StaffData> mStaffData = DataSupport.findAll(StaffData.class);
+                            try {
+                                Thread.sleep(1000);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+
+                            List<StaffData> mStaffData = DataSupport.select("*")
+                                    .order("id").limit(Constants.PAGE_SIZE).offset(pagination * Constants.PAGE_SIZE)
+                                    .find(StaffData.class);
                             subscriber.onNext(mStaffData);
+
                             KLog.e("mStaffData::" + mStaffData.size());
+
                         } catch (Exception ex) {
                             subscriber.onError(ex);
 
@@ -50,10 +63,9 @@ public class StaffPresenter extends BasePresenter<StaffContract.View> implements
                         .observeOn(AndroidSchedulers.mainThread()).subscribe(new RxSubscriber<List<StaffData>>() {
                             @Override
                             public void _onNext(List<StaffData> staffDatas) {
-                                getView().refresh(staffDatas);
+                                getView().refresh(staffDatas,pagination);
                             }
                         })
         );
-
     }
 }

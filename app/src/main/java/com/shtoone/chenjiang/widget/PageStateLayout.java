@@ -95,6 +95,9 @@ public class PageStateLayout extends FrameLayout {
     }
 
     public void showEmpty() {
+        if (isShowEmpty) {
+            return;
+        }
         for (int i = 0; i < this.getChildCount(); i++) {
             View child = this.getChildAt(i);
             if (i == 0) {
@@ -111,6 +114,9 @@ public class PageStateLayout extends FrameLayout {
     }
 
     public void showError() {
+        if (isShowError) {
+            return;
+        }
         for (int i = 0; i < this.getChildCount(); i++) {
             View child = this.getChildAt(i);
             if (i == 1) {
@@ -127,6 +133,9 @@ public class PageStateLayout extends FrameLayout {
     }
 
     public void showNetError() {
+        if (isShowNetError) {
+            return;
+        }
         for (int i = 0; i < this.getChildCount(); i++) {
             View child = this.getChildAt(i);
             if (i == 2) {
@@ -143,6 +152,9 @@ public class PageStateLayout extends FrameLayout {
     }
 
     public void showLoading() {
+        if (isShowLoading) {
+            return;
+        }
         for (int i = 0; i < this.getChildCount(); i++) {
             View child = this.getChildAt(i);
             if (i == 3) {
@@ -159,6 +171,9 @@ public class PageStateLayout extends FrameLayout {
     }
 
     public void showContent() {
+        if (isShowContent) {
+            return;
+        }
         for (int i = 0; i < this.getChildCount(); i++) {
             View child = this.getChildAt(i);
             if (i == 4) {

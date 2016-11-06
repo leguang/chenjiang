@@ -70,8 +70,7 @@ public abstract class BasePresenter<V extends BaseContract.View> {
         @Override
         public void onError(Throwable e) {
             //此处不考虑错误类型，笼统的以错误来介绍
-            KLog.e(e);
-            KLog.e("22222222222");
+            KLog.e("出错啦…………………………" + e);
             getView().showError(e);
         }
 

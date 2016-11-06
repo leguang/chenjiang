@@ -3,18 +3,27 @@ package com.shtoone.chenjiang.mvp.view.main.project;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.chad.library.adapter.base.listener.OnItemClickListener;
+import com.shtoone.chenjiang.BaseApplication;
 import com.shtoone.chenjiang.R;
-import com.shtoone.chenjiang.mvp.contract.StaffContract;
+import com.shtoone.chenjiang.common.Constants;
+import com.shtoone.chenjiang.mvp.contract.project.StaffContract;
 import com.shtoone.chenjiang.mvp.model.bean.StaffData;
 import com.shtoone.chenjiang.mvp.presenter.project.StaffPresenter;
+import com.shtoone.chenjiang.mvp.view.adapter.StaffAdapter;
 import com.shtoone.chenjiang.mvp.view.base.BaseLazyFragment;
+import com.shtoone.chenjiang.utils.DensityUtils;
+import com.shtoone.chenjiang.utils.ToastUtils;
 import com.shtoone.chenjiang.widget.PageStateLayout;
+import com.socks.library.KLog;
 
 import java.util.List;
 
@@ -37,7 +46,14 @@ public class StaffFragment extends BaseLazyFragment<StaffContract.Presenter> imp
     PageStateLayout pagestatelayout;
     @BindView(R.id.ptrframelayout)
     PtrFrameLayout ptrframelayout;
-
+    private int pagination = 0;
+    private StaffAdapter mAdapter;
+    private LinearLayoutManager mLinearLayoutManager;
+    private int lastVisibleItemPosition;
+    private View mFooterLoading;
+    private View mFooterNotLoading;
+    private View mFooterError;
+    private boolean isLoading;
 
     public static StaffFragment newInstance() {
         return new StaffFragment();
@@ -63,6 +79,7 @@ public class StaffFragment extends BaseLazyFragment<StaffContract.Presenter> imp
         toolbar.setTitle("项目查看");
         initToolbarBackNavigation(toolbar);
         initPageStateLayout(pagestatelayout);
+        pagestatelayout.setPadding(0, 0, 0, DensityUtils.dp2px(_mActivity, 56));
     }
 
     /**
@@ -73,14 +90,72 @@ public class StaffFragment extends BaseLazyFragment<StaffContract.Presenter> imp
     @Override
     protected void initLazyView(@Nullable Bundle savedInstanceState) {
         if (savedInstanceState == null) {
-            initData();
+            initData(savedInstanceState);
         }
     }
 
-    private void initData() {
+    private void initData(Bundle savedInstanceState) {
         //下拉刷新必须得在懒加载里设置，因为下拉刷新是一进来就刷新，启动start()。
+        mLinearLayoutManager = new LinearLayoutManager(_mActivity);
+        recyclerview.setLayoutManager(mLinearLayoutManager);
+        mFooterLoading = getLayoutInflater(savedInstanceState).inflate(R.layout.item_footer_loading, (ViewGroup) recyclerview.getParent(), false);
+        mFooterNotLoading = getLayoutInflater(savedInstanceState).inflate(R.layout.item_footer_not_loading, (ViewGroup) recyclerview.getParent(), false);
+        mFooterError = getLayoutInflater(savedInstanceState).inflate(R.layout.item_footer_error, (ViewGroup) recyclerview.getParent(), false);
+        mFooterError.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mAdapter.removeAllFooterView();
+                mAdapter.addFooterView(mFooterLoading);
+                mPresenter.queryData(pagination);
+                BaseApplication.temp++;
+            }
+        });
+        setAdapter();
+        setLoadMore();
+        recyclerview.addOnItemTouchListener(new OnItemClickListener() {
+            @Override
+            public void SimpleOnItemClick(BaseQuickAdapter adapter, View view, int position) {
+                ToastUtils.showToast(_mActivity, Integer.toString(position));
+            }
+        });
+
+        recyclerview.setAdapter(mAdapter);
+        initPageStateLayout(pagestatelayout);
         initPtrFrameLayout(ptrframelayout);
     }
+
+
+    private void setAdapter() {
+        mAdapter = new StaffAdapter();
+        mAdapter.removeAllFooterView();
+    }
+
+    private void setLoadMore() {
+        recyclerview.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                if (newState == RecyclerView.SCROLL_STATE_IDLE
+                        && lastVisibleItemPosition + 1 == mAdapter.getItemCount()
+                        //目的是判断第一页数据条数是否满足一整页。
+                        && mAdapter.getItemCount() >= Constants.PAGE_SIZE) {
+                    if (!isLoading) {
+                        isLoading = true;
+                        pagination += 1;
+                        mPresenter.queryData(pagination);
+                        KLog.e("进来了…………………………");
+                    }
+                }
+            }
+
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                lastVisibleItemPosition = mLinearLayoutManager.findLastVisibleItemPosition();
+            }
+        });
+    }
+
 
     @Override
     public void showContent() {
@@ -89,16 +164,75 @@ public class StaffFragment extends BaseLazyFragment<StaffContract.Presenter> imp
 
     @Override
     public void showError(Throwable t) {
-        pagestatelayout.showError();
+        if (pagination == 0) {
+            pagestatelayout.showError();
+        } else {
+            mAdapter.removeAllFooterView();
+            mAdapter.addFooterView(mFooterError);
+        }
     }
 
     @Override
     public void showLoading() {
-        pagestatelayout.showLoading();
+        if (pagination == 0) {
+            pagestatelayout.showLoading();
+        }
     }
 
     @Override
-    public void refresh(List<StaffData> mStaffData) {
+    public void refresh(List<StaffData> mStaffData, int pagination) {
+        KLog.e("mGongdianData::" + mStaffData.size());
+        KLog.e("refresh_pagination::" + pagination);
+        if (mStaffData.size() > 0) {
+            if (pagination == 0) {
+                //刷明是第一页，或者是刷新,把页码重置为0，代表第一页。
+                if (mStaffData.size() >= Constants.PAGE_SIZE) {
+                    mAdapter.removeAllFooterView();
+                    mAdapter.addFooterView(mFooterLoading);
+                }
+                this.pagination = 0;
+                mAdapter.setNewData(mStaffData);
+                //设置一下会重新刷新整个item的位置，即使不是第一个item位置刷新，也会重新刷新定位到第一个。
+                recyclerview.setAdapter(mAdapter);
+            } else {
+                mAdapter.addData(mStaffData);
+            }
+            //靠这个参数控制最后不需要请求数据
+            isLoading = false;
+        } else {
+            //此处一定要先清楚之前加载的FooterView，否则会报错。
+            mAdapter.removeAllFooterView();
+            mAdapter.addFooterView(mFooterNotLoading);
+        }
+    }
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        recyclerview.setAdapter(mAdapter = null);
+    }
+
+    @Override
+    public boolean isCanDoRefresh() {
+        //判断是哪种状态的页面，都让其可下拉
+        if (pagestatelayout.isShowContent) {
+            //判断RecyclerView是否在在顶部，在顶部则允许滑动下拉刷新
+            if (null != recyclerview) {
+                if (recyclerview.getLayoutManager() instanceof LinearLayoutManager) {
+                    LinearLayoutManager lm = (LinearLayoutManager) recyclerview.getLayoutManager();
+                    int position = lm.findFirstVisibleItemPosition();
+                    if (position >= 0) {
+                        if (lm.findViewByPosition(position).getTop() >= 0 && position >= 0) {
+                            return true;
+                        }
+                    }
+                }
+            } else {
+                return true;
+            }
+            return false;
+        } else {
+            return true;
+        }
     }
 }

@@ -2,6 +2,7 @@ package com.shtoone.chenjiang.mvp.view.main.project;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.widget.FrameLayout;
 
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigation;
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigationItem;
@@ -19,6 +20,8 @@ public class ProjectActivity extends BaseActivity {
     private static final String TAG = ProjectActivity.class.getSimpleName();
     @BindView(R.id.bottom_navigation_project_activity)
     AHBottomNavigation bottomNavigation;
+    @BindView(R.id.fl_container_project_activity)
+    FrameLayout flContainer;
     private ArrayList<AHBottomNavigationItem> bottomNavigationItems = new ArrayList<>();
     private int bottomNavigationPreposition = 0;
     private SupportFragment[] mFragments = new SupportFragment[3];
@@ -39,7 +42,6 @@ public class ProjectActivity extends BaseActivity {
             mFragments[1] = findFragment(StaffFragment.class);
             mFragments[2] = findFragment(GongdianFragment.class);
         }
-
         initView();
         initData();
     }

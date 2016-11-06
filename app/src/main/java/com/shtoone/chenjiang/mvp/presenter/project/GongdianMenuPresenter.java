@@ -1,10 +1,12 @@
 package com.shtoone.chenjiang.mvp.presenter.project;
 
 
+import com.shtoone.chenjiang.BaseApplication;
+import com.shtoone.chenjiang.common.Constants;
 import com.shtoone.chenjiang.mvp.contract.project.GongdianMenuContract;
 import com.shtoone.chenjiang.mvp.model.bean.GongdianData;
-import com.shtoone.chenjiang.mvp.model.bean.UserInfoBean;
 import com.shtoone.chenjiang.mvp.presenter.base.BasePresenter;
+import com.socks.library.KLog;
 
 import org.litepal.crud.DataSupport;
 
@@ -22,26 +24,49 @@ import rx.schedulers.Schedulers;
 public class GongdianMenuPresenter extends BasePresenter<GongdianMenuContract.View> implements GongdianMenuContract.Presenter {
 
     private static final String TAG = GongdianMenuPresenter.class.getSimpleName();
-    private UserInfoBean mUserInfoBean;
 
     public GongdianMenuPresenter(GongdianMenuContract.View mView) {
         super(mView);
     }
 
-
     @Override
     public void start() {
+        KLog.e("start^^^^^^^^^^^^^^^^^^^");
+        queryData(0);
+    }
 
+    @Override
+    public void queryData(final int pagination) {
+        KLog.e("queryData中的pagination：："+pagination);
         mRxManager.add(Observable.create(new Observable.OnSubscribe<List<GongdianData>>() {
                     @Override
                     public void call(Subscriber<? super List<GongdianData>> subscriber) {
                         try {
-                            List<GongdianData> mGongdianData = DataSupport.findAll(GongdianData.class);
+                            //分页查询每次查询PAGE_SIZE条，从0开始。
+
+                            try {
+                                Thread.sleep(1000);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+
+                            if (BaseApplication.temp == 1) {
+                                String s = null;
+                                s.split("1");
+                            }
+
+
+                            List<GongdianData> mGongdianData = DataSupport.select("*")
+                                    .order("id").limit(Constants.PAGE_SIZE).offset(pagination * Constants.PAGE_SIZE)
+                                    .find(GongdianData.class);
+
+                            KLog.e("list_size::" + mGongdianData.size());
+
                             subscriber.onNext(mGongdianData);
 
+                            BaseApplication.temp++;
                         } catch (Exception ex) {
                             subscriber.onError(ex);
-
                         }
                         subscriber.onCompleted();
                     }
@@ -50,13 +75,10 @@ public class GongdianMenuPresenter extends BasePresenter<GongdianMenuContract.Vi
                         .subscribe(new RxSubscriber<List<GongdianData>>() {
                             @Override
                             public void _onNext(List<GongdianData> gongdianDatas) {
-                                getView().refresh(gongdianDatas);
+                                getView().refresh(gongdianDatas, pagination);
                             }
                         })
 
         );
-
     }
-
-
 }

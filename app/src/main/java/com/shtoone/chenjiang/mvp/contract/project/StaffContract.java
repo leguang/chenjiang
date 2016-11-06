@@ -1,4 +1,4 @@
-package com.shtoone.chenjiang.mvp.contract;
+package com.shtoone.chenjiang.mvp.contract.project;
 
 
 import com.shtoone.chenjiang.mvp.contract.base.BaseContract;
@@ -12,10 +12,11 @@ import java.util.List;
  */
 public interface StaffContract {
     interface View extends BaseContract.View {
-        void refresh(List<StaffData> mStaffData);
+        void refresh(List<StaffData> mStaffData, int pagination);
 
     }
 
     interface Presenter extends BaseContract.Presenter {
+        void queryData(int pagination);
     }
 }

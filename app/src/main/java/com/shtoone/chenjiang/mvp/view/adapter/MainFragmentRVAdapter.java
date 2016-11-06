@@ -74,7 +74,7 @@ public class MainFragmentRVAdapter extends RecyclerView.Adapter<ViewHolder> {
         if (viewType == ITEM_TYPE.TYPE_ITEM.ordinal()) {
             return new ItemViewHolder(LayoutInflater.from(context).inflate(R.layout.item_rv_main_fragment, parent, false));
         } else if (viewType == ITEM_TYPE.TYPE_FOOTER.ordinal()) {
-            return new FootViewHolder(LayoutInflater.from(context).inflate(R.layout.item_foot_recyclerview, parent, false));
+            return new FootViewHolder(LayoutInflater.from(context).inflate(R.layout.item_footer_loading, parent, false));
         }
         return null;
     }

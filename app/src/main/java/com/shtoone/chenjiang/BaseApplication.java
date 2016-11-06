@@ -4,7 +4,6 @@ import android.content.Context;
 
 import com.github.moduth.blockcanary.BlockCanary;
 import com.shtoone.chenjiang.common.AppContext;
-import com.shtoone.chenjiang.mvp.model.bean.StaffData;
 import com.shtoone.chenjiang.mvp.model.bean.UserInfoBean;
 import com.socks.library.KLog;
 import com.squareup.leakcanary.LeakCanary;
@@ -22,6 +21,8 @@ public class BaseApplication extends LitePalApplication {
     private static final String TAG = BaseApplication.class.getSimpleName();
     public static Context mContext;
     public static UserInfoBean mUserInfoBean;
+    public static int temp = 0;
+
     public RefWatcher mRefWatcher;
 
 
@@ -45,21 +46,21 @@ public class BaseApplication extends LitePalApplication {
 //        for (int i = 0; i < 50; i++) {
 //
 //            GongdianData gongdianData = new GongdianData();
-//            gongdianData.setName("KD1111~kd@@@@");
+//            gongdianData.setName("@" + (i + 1));
 //            boolean is = gongdianData.save();
 //            KLog.e(is);
 //        }
 
-        for (int i = 0; i < 50; i++) {
-
-            StaffData mStaffData = new StaffData();
-            mStaffData.setName("哎我");
-            mStaffData.setType("司镜人员");
-            mStaffData.setPhtoneNumber("13888888888");
-
-            boolean is = mStaffData.save();
-            KLog.e(is);
-        }
+//        for (int i = 0; i < 50; i++) {
+//
+//            StaffData mStaffData = new StaffData();
+//            mStaffData.setName("哎我");
+//            mStaffData.setType("司镜人员");
+//            mStaffData.setPhtoneNumber("13888888888");
+//
+//            boolean is = mStaffData.save();
+//            KLog.e(is);
+//        }
 
 
 //        for (int i = 0; i < 100; i++) {

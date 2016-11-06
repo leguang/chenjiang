@@ -18,21 +18,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class ProjectMenuFragmentRVAdapter extends RecyclerView.Adapter<ViewHolder> {
-    private static final String TAG = ProjectMenuFragmentRVAdapter.class.getSimpleName();
+public class GongdianMenuFragmentRVAdapter extends RecyclerView.Adapter<ViewHolder> {
+    private static final String TAG = GongdianMenuFragmentRVAdapter.class.getSimpleName();
     private Context mContext;
     private OnItemClickListener mOnItemClickListener;
     private List<GongdianData> itemsData = new ArrayList<GongdianData>();
     private SparseBooleanArray mBooleanArray;
     private int mLastCheckedPosition = -1;
-    private int mPreCheckedPosition = 0;
 
 
     public enum ITEM_TYPE {
         TYPE_ITEM, TYPE_FOOTER
     }
 
-    public ProjectMenuFragmentRVAdapter(Context mContext) {
+    public GongdianMenuFragmentRVAdapter(Context mContext) {
         super();
         this.mContext = mContext;
     }
@@ -104,7 +103,7 @@ public class ProjectMenuFragmentRVAdapter extends RecyclerView.Adapter<ViewHolde
         if (viewType == ITEM_TYPE.TYPE_ITEM.ordinal()) {
             return new ItemViewHolder(LayoutInflater.from(mContext).inflate(R.layout.item_rv_project_menu_fragment, parent, false));
         } else if (viewType == ITEM_TYPE.TYPE_FOOTER.ordinal()) {
-            return new FootViewHolder(LayoutInflater.from(mContext).inflate(R.layout.item_foot_recyclerview, parent, false));
+            return new FootViewHolder(LayoutInflater.from(mContext).inflate(R.layout.item_footer_loading, parent, false));
         }
         return null;
     }

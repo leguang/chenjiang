@@ -16,8 +16,8 @@ import rx.Observable;
  */
 public interface ApiService {
 
-    @GET("app.do?AppLogin")
-    Call<UserInfoBean> login(@Query("userName") String userName, @Query("userPwd") String userPwd, @Query("OSType") String OSType, @Query("machineCode") String machineCode);
+    @GET("app.do?appLogin")
+    Call<UserInfoBean> login(@Query("account") String account, @Query("userPwd") String userPwd, @Query("OSType") String OSType, @Query("machineCode") String machineCode);
 
     @GET("app.do?checkUpdate")
     Call<CheckUpdateBean> checkUpdate();

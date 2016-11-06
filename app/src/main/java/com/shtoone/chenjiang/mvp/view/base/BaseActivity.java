@@ -32,8 +32,16 @@ public abstract class BaseActivity<P extends BaseContract.Presenter> extends Swi
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         initActivity();
+        initStateBar();
         netWorkTips();
         mPresenter = createPresenter();
+    }
+
+    private void initStateBar() {
+        if (Build.VERSION_CODES.KITKAT <= Build.VERSION.SDK_INT) {
+            // 透明状态栏
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        }
     }
 
     @NonNull
@@ -50,7 +58,7 @@ public abstract class BaseActivity<P extends BaseContract.Presenter> extends Swi
         getSwipeBackLayout().setEdgeOrientation(SwipeBackLayout.EDGE_LEFT);
     }
 
-    private void netWorkTips() {
+    public void netWorkTips() {
         if (!NetworkUtils.isConnected(getApplicationContext())) {
             View view = getWindow().getDecorView();
             Snackbar mSnackbar = Snackbar.make(view, "当前网络已断开！", Snackbar.LENGTH_LONG)
@@ -64,10 +72,6 @@ public abstract class BaseActivity<P extends BaseContract.Presenter> extends Swi
             View v = mSnackbar.getView();
             v.setBackgroundColor(Color.parseColor("#FFCC00"));
             mSnackbar.show();
-        }
-        if (Build.VERSION_CODES.KITKAT <= Build.VERSION.SDK_INT) {
-            // 透明状态栏
-            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         }
     }
 

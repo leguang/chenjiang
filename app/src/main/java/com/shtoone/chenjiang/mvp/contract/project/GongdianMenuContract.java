@@ -12,11 +12,11 @@ import java.util.List;
  */
 public interface GongdianMenuContract {
     interface View extends BaseContract.View {
-        void refresh(List<GongdianData> mGongdianData);
-
+        void refresh(List<GongdianData> mGongdianData,int pagination);
     }
 
     interface Presenter extends BaseContract.Presenter {
+        void queryData(int pagination);
     }
 
 }
