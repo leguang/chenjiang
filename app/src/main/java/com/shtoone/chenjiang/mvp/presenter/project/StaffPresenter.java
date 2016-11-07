@@ -4,7 +4,6 @@ import com.shtoone.chenjiang.common.Constants;
 import com.shtoone.chenjiang.mvp.contract.project.StaffContract;
 import com.shtoone.chenjiang.mvp.model.bean.StaffData;
 import com.shtoone.chenjiang.mvp.presenter.base.BasePresenter;
-import com.socks.library.KLog;
 
 import org.litepal.crud.DataSupport;
 
@@ -29,7 +28,6 @@ public class StaffPresenter extends BasePresenter<StaffContract.View> implements
 
     @Override
     public void start() {
-        KLog.e("start^^^^^^^^^^^^^^^^^^^");
         queryData(0);
     }
 
@@ -38,32 +36,27 @@ public class StaffPresenter extends BasePresenter<StaffContract.View> implements
         mRxManager.add(Observable.create(new Observable.OnSubscribe<List<StaffData>>() {
                     @Override
                     public void call(Subscriber<? super List<StaffData>> subscriber) {
+                        List<StaffData> mStaffData = null;
                         try {
-                            try {
-                                Thread.sleep(1000);
-                            } catch (InterruptedException e) {
-                                e.printStackTrace();
-                            }
-
-                            List<StaffData> mStaffData = DataSupport.select("*")
-                                    .order("id").limit(Constants.PAGE_SIZE).offset(pagination * Constants.PAGE_SIZE)
+                            Thread.sleep(1000);
+                            mStaffData = DataSupport.select("*")
+                                    .order("id").limit(Constants.PAGE_SIZE)
+                                    .offset(pagination * Constants.PAGE_SIZE)
                                     .find(StaffData.class);
                             subscriber.onNext(mStaffData);
-
-                            KLog.e("mStaffData::" + mStaffData.size());
-
                         } catch (Exception ex) {
                             subscriber.onError(ex);
-
                         }
-                        subscriber.onCompleted();
-
+                        //做此判断的目的是为了不让最后onCompleted()调用的showContent()遮住了showEmpty()的显示。
+                        if (mStaffData != null && mStaffData.size() > 0) {
+                            subscriber.onCompleted();
+                        }
                     }
                 }).subscribeOn(Schedulers.computation())
                         .observeOn(AndroidSchedulers.mainThread()).subscribe(new RxSubscriber<List<StaffData>>() {
                             @Override
                             public void _onNext(List<StaffData> staffDatas) {
-                                getView().refresh(staffDatas,pagination);
+                                getView().refresh(staffDatas, pagination);
                             }
                         })
         );

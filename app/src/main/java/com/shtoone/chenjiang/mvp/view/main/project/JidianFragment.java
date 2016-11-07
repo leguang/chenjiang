@@ -14,15 +14,14 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.shtoone.chenjiang.R;
 import com.shtoone.chenjiang.common.Constants;
-import com.shtoone.chenjiang.mvp.contract.project.StaffContract;
-import com.shtoone.chenjiang.mvp.model.bean.StaffData;
-import com.shtoone.chenjiang.mvp.presenter.project.StaffPresenter;
-import com.shtoone.chenjiang.mvp.view.adapter.StaffAdapter;
+import com.shtoone.chenjiang.mvp.contract.project.JidianContract;
+import com.shtoone.chenjiang.mvp.model.bean.JidianData;
+import com.shtoone.chenjiang.mvp.presenter.project.JidianPresenter;
+import com.shtoone.chenjiang.mvp.view.adapter.JidianAdapter;
 import com.shtoone.chenjiang.mvp.view.base.BaseLazyFragment;
 import com.shtoone.chenjiang.utils.DensityUtils;
 import com.shtoone.chenjiang.utils.ToastUtils;
 import com.shtoone.chenjiang.widget.PageStateLayout;
-import com.socks.library.KLog;
 
 import java.net.ConnectException;
 import java.util.List;
@@ -35,9 +34,9 @@ import in.srain.cube.views.ptr.PtrFrameLayout;
  * Author：leguang on 2016/10/9 0009 15:49
  * Email：langmanleguang@qq.com
  */
-public class StaffFragment extends BaseLazyFragment<StaffContract.Presenter> implements StaffContract.View {
+public class JidianFragment extends BaseLazyFragment<JidianContract.Presenter> implements JidianContract.View {
 
-    private static final String TAG = StaffFragment.class.getSimpleName();
+    private static final String TAG = JidianFragment.class.getSimpleName();
     @BindView(R.id.toolbar_toolbar)
     Toolbar toolbar;
     @BindView(R.id.recyclerview)
@@ -47,7 +46,7 @@ public class StaffFragment extends BaseLazyFragment<StaffContract.Presenter> imp
     @BindView(R.id.ptrframelayout)
     PtrFrameLayout ptrframelayout;
     private int pagination = 0;
-    private StaffAdapter mAdapter;
+    private JidianAdapter mAdapter;
     private LinearLayoutManager mLinearLayoutManager;
     private int lastVisibleItemPosition;
     private View mFooterLoading;
@@ -55,14 +54,14 @@ public class StaffFragment extends BaseLazyFragment<StaffContract.Presenter> imp
     private View mFooterError;
     private boolean isLoading;
 
-    public static StaffFragment newInstance() {
-        return new StaffFragment();
+    public static JidianFragment newInstance() {
+        return new JidianFragment();
     }
 
     @NonNull
     @Override
-    protected StaffContract.Presenter createPresenter() {
-        return new StaffPresenter(this);
+    protected JidianContract.Presenter createPresenter() {
+        return new JidianPresenter(this);
     }
 
     @Nullable
@@ -125,7 +124,7 @@ public class StaffFragment extends BaseLazyFragment<StaffContract.Presenter> imp
 
 
     private void setAdapter() {
-        mAdapter = new StaffAdapter();
+        mAdapter = new JidianAdapter();
         mAdapter.removeAllFooterView();
     }
 
@@ -142,7 +141,6 @@ public class StaffFragment extends BaseLazyFragment<StaffContract.Presenter> imp
                         isLoading = true;
                         pagination += 1;
                         mPresenter.queryData(pagination);
-                        KLog.e("进来了…………………………");
                     }
                 }
             }
@@ -184,20 +182,20 @@ public class StaffFragment extends BaseLazyFragment<StaffContract.Presenter> imp
     }
 
     @Override
-    public void refresh(List<StaffData> mStaffData, int pagination) {
-        if (mStaffData.size() > 0) {
+    public void refresh(List<JidianData> mJidianData, int pagination) {
+        if (mJidianData.size() > 0) {
             if (pagination == 0) {
                 //刷明是第一页，或者是刷新,把页码重置为0，代表第一页。
-                if (mStaffData.size() >= Constants.PAGE_SIZE) {
+                if (mJidianData.size() >= Constants.PAGE_SIZE) {
                     mAdapter.removeAllFooterView();
                     mAdapter.addFooterView(mFooterLoading);
                 }
                 this.pagination = 0;
-                mAdapter.setNewData(mStaffData);
+                mAdapter.setNewData(mJidianData);
                 //设置一下会重新刷新整个item的位置，即使不是第一个item位置刷新，也会重新刷新定位到第一个。
                 recyclerview.setAdapter(mAdapter);
             } else {
-                mAdapter.addData(mStaffData);
+                mAdapter.addData(mJidianData);
             }
             //靠这个参数控制最后不需要请求数据
             isLoading = false;

@@ -51,17 +51,30 @@ public class BaseApplication extends LitePalApplication {
 //            KLog.e(is);
 //        }
 
-//        for (int i = 0; i < 50; i++) {
+//        for (int i = 0; i < 45; i++) {
 //
 //            StaffData mStaffData = new StaffData();
-//            mStaffData.setName("哎我");
-//            mStaffData.setType("司镜人员");
+//            mStaffData.setName("哎我" + i);
+//            mStaffData.setType("司镜人员" + i);
 //            mStaffData.setPhtoneNumber("13888888888");
 //
 //            boolean is = mStaffData.save();
 //            KLog.e(is);
 //        }
 
+
+//        for (int i = 0; i < 45; i++) {
+//
+//            JidianData mJidianData = new JidianData();
+//            mJidianData.setBianhao("SWLFJJKDK16511");
+//            mJidianData.setName("CP181");
+//            mJidianData.setXiuzhenghougaochengzhi("75.2655");
+//            mJidianData.setLichengguanhao("DK");
+//            mJidianData.setLichengzhi("6646.1616");
+//
+//            boolean is = mJidianData.save();
+//            KLog.e(is);
+//        }
 
 //        for (int i = 0; i < 100; i++) {
 //

@@ -35,12 +35,12 @@ public class ProjectActivity extends BaseActivity {
         if (savedInstanceState == null) {
             mFragments[0] = GongdianFragment.newInstance();
             mFragments[1] = StaffFragment.newInstance();
-            mFragments[2] = GongdianFragment.newInstance();
+            mFragments[2] = JidianFragment.newInstance();
             loadMultipleRootFragment(R.id.fl_container_project_activity, 0, mFragments[0], mFragments[1], mFragments[2]);
         } else {
             mFragments[0] = findFragment(GongdianFragment.class);
             mFragments[1] = findFragment(StaffFragment.class);
-            mFragments[2] = findFragment(GongdianFragment.class);
+            mFragments[2] = findFragment(JidianFragment.class);
         }
         initView();
         initData();
@@ -81,8 +81,6 @@ public class ProjectActivity extends BaseActivity {
 
             }
         });
-
-
         bottomNavigation.setCurrentItem(0);
     }
 }

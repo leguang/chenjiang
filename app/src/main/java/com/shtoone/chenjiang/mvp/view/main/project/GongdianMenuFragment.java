@@ -24,6 +24,7 @@ import com.shtoone.chenjiang.utils.ToastUtils;
 import com.shtoone.chenjiang.widget.PageStateLayout;
 import com.socks.library.KLog;
 
+import java.net.ConnectException;
 import java.util.List;
 
 import butterknife.BindView;
@@ -143,8 +144,6 @@ public class GongdianMenuFragment extends BaseFragment<GongdianMenuContract.Pres
 
     @Override
     public void refresh(List<GongdianData> mGongdianData, int pagination) {
-        KLog.e("mGongdianData::" + mGongdianData.size());
-        KLog.e("refresh_pagination::" + pagination);
         if (mGongdianData.size() > 0) {
             if (pagination == 0) {
                 //刷明是第一页，或者是刷新,把页码重置为0，代表第一页。
@@ -166,9 +165,13 @@ public class GongdianMenuFragment extends BaseFragment<GongdianMenuContract.Pres
             //靠这个参数控制最后不需要请求数据
             isLoading = false;
         } else {
-            //此处一定要先清楚之前加载的FooterView，否则会报错。
-            mAdapter.removeAllFooterView();
-            mAdapter.addFooterView(mFooterNotLoading);
+            if (pagination == 0) {
+                pagestatelayout.showEmpty();
+            } else {
+                //此处一定要先清除之前加载的FooterView，否则会报错。
+                mAdapter.removeAllFooterView();
+                mAdapter.addFooterView(mFooterNotLoading);
+            }
         }
     }
 
@@ -186,7 +189,11 @@ public class GongdianMenuFragment extends BaseFragment<GongdianMenuContract.Pres
     @Override
     public void showError(Throwable t) {
         if (pagination == 0) {
-            pagestatelayout.showError();
+            if (t instanceof ConnectException) {
+                pagestatelayout.showNetError();
+            } else {
+                pagestatelayout.showError();
+            }
         } else {
             mAdapter.removeAllFooterView();
             mAdapter.addFooterView(mFooterError);

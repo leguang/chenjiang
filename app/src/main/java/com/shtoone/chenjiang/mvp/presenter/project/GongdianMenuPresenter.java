@@ -6,7 +6,6 @@ import com.shtoone.chenjiang.common.Constants;
 import com.shtoone.chenjiang.mvp.contract.project.GongdianMenuContract;
 import com.shtoone.chenjiang.mvp.model.bean.GongdianData;
 import com.shtoone.chenjiang.mvp.presenter.base.BasePresenter;
-import com.socks.library.KLog;
 
 import org.litepal.crud.DataSupport;
 
@@ -31,44 +30,35 @@ public class GongdianMenuPresenter extends BasePresenter<GongdianMenuContract.Vi
 
     @Override
     public void start() {
-        KLog.e("start^^^^^^^^^^^^^^^^^^^");
         queryData(0);
     }
 
     @Override
     public void queryData(final int pagination) {
-        KLog.e("queryData中的pagination：："+pagination);
         mRxManager.add(Observable.create(new Observable.OnSubscribe<List<GongdianData>>() {
                     @Override
                     public void call(Subscriber<? super List<GongdianData>> subscriber) {
+                        List<GongdianData> mGongdianData = null;
                         try {
                             //分页查询每次查询PAGE_SIZE条，从0开始。
-
-                            try {
-                                Thread.sleep(1000);
-                            } catch (InterruptedException e) {
-                                e.printStackTrace();
-                            }
-
+                            Thread.sleep(1000);
                             if (BaseApplication.temp == 1) {
                                 String s = null;
                                 s.split("1");
                             }
-
-
-                            List<GongdianData> mGongdianData = DataSupport.select("*")
-                                    .order("id").limit(Constants.PAGE_SIZE).offset(pagination * Constants.PAGE_SIZE)
+                            mGongdianData = DataSupport.select("*")
+                                    .order("id").limit(Constants.PAGE_SIZE)
+                                    .offset(pagination * Constants.PAGE_SIZE)
                                     .find(GongdianData.class);
-
-                            KLog.e("list_size::" + mGongdianData.size());
-
                             subscriber.onNext(mGongdianData);
-
                             BaseApplication.temp++;
                         } catch (Exception ex) {
                             subscriber.onError(ex);
                         }
-                        subscriber.onCompleted();
+                        //做此判断的目的是为了不让最后onCompleted()调用的showContent()遮住了showEmpty()的显示。
+                        if (mGongdianData != null && mGongdianData.size() > 0) {
+                            subscriber.onCompleted();
+                        }
                     }
                 }).subscribeOn(Schedulers.computation())
                         .observeOn(AndroidSchedulers.mainThread())

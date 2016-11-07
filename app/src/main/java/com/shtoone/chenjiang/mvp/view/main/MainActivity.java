@@ -133,11 +133,10 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                 int id = item.getItemId();
                 if (id == R.id.search) {
                     go2Project();
-
                 } else if (id == R.id.update) {
-
+                    start(UploadFragment.newInstance());
                 } else if (id == R.id.download) {
-
+                    start(DownloadFragment.newInstance());
                 } else if (id == R.id.setting) {
                     SettingFragment fragment = findFragment(SettingFragment.class);
                     if (fragment == null) {

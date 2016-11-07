@@ -52,25 +52,28 @@ public abstract class BasePresenter<V extends BaseContract.View> {
 
         @Override
         public void onCompleted() {
+            KLog.e("onCompleted");
             getView().showContent();
         }
 
         @Override
         public void onStart() {
             super.onStart();
+            KLog.e("onStart");
             getView().showLoading();
         }
 
 
         @Override
         public void onNext(T t) {
+            KLog.e("onNext");
             _onNext(t);
         }
 
         @Override
         public void onError(Throwable e) {
             //此处不考虑错误类型，笼统的以错误来介绍
-            KLog.e("出错啦…………………………" + e);
+            KLog.e("onError");
             getView().showError(e);
         }
 
