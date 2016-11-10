@@ -1,12 +1,18 @@
 package com.shtoone.chenjiang.mvp.presenter;
 
 
+import android.text.TextUtils;
+
 import com.shtoone.chenjiang.BaseApplication;
 import com.shtoone.chenjiang.common.Constants;
 import com.shtoone.chenjiang.mvp.contract.LoginContract;
 import com.shtoone.chenjiang.mvp.model.HttpHelper;
 import com.shtoone.chenjiang.mvp.model.bean.UserInfoBean;
 import com.shtoone.chenjiang.mvp.presenter.base.BasePresenter;
+import com.shtoone.chenjiang.utils.AESCryptUtils;
+import com.shtoone.chenjiang.utils.SharedPreferencesUtils;
+
+import java.security.GeneralSecurityException;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -28,20 +34,32 @@ public class LoginPresenter extends BasePresenter<LoginContract.View> implements
 
     @Override
     public void login(String username, String password) {
-        HttpHelper.getInstance().initService().login(username, password, Constants.OSTYPE, "aaaaa").enqueue(new Callback<UserInfoBean>() {
+        String encryptRegisterCode = (String) SharedPreferencesUtils.get(BaseApplication.mContext, Constants.REGISTER_CODE, "");
+
+        //进行解密
+        if (TextUtils.isEmpty(encryptRegisterCode)) {
+            getView().setErrorMessage("注册码丢失，请重新注册");
+            return;
+        }
+
+        String registerCode = "";
+        try {
+            registerCode = AESCryptUtils.decrypt(Constants.ENCRYPT_KEY, encryptRegisterCode);
+        } catch (GeneralSecurityException e) {
+            e.printStackTrace();
+        }
+        HttpHelper.getInstance().initService().login(username, password, Constants.OSTYPE, registerCode).enqueue(new Callback<UserInfoBean>() {
             @Override
             public void onResponse(Call<UserInfoBean> call, Response<UserInfoBean> response) {
                 if (response.isSuccessful()) {
-                    if (response.body().isSuccess()) {
+                    if (response.body().getStatus() == 0) {
                         BaseApplication.mUserInfoBean = mUserInfoBean = response.body();
-                        getView().savaData();
-                        initParameters();
+                        getView().savaData(mUserInfoBean);
                         getView().setSuccessMessage();
                         //进入管理层界面
                         getView().go2Main();
-
                     } else {
-                        getView().setErrorMessage("用户名或密码错误");
+                        getView().setErrorMessage(response.body().getDescription());
                     }
                 } else {
                     getView().setErrorMessage("服务器异常");
@@ -53,13 +71,6 @@ public class LoginPresenter extends BasePresenter<LoginContract.View> implements
                 getView().showError(t);
             }
         });
-
-    }
-
-    private void initParameters() {
-//        BaseApplication.mParametersBean.userGroupID = mUserInfoBean.getDepartId();
-//        BaseApplication.mDepartmentBean.departmentID = mUserInfoBean.getDepartId();
-//        BaseApplication.mDepartmentBean.departmentName = mUserInfoBean.getDepartName();
     }
 
     @Override

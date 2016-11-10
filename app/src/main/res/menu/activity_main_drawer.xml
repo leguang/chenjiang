@@ -18,6 +18,11 @@
             android:id="@+id/setting"
             android:icon="@drawable/ic_settings_teal_300_18dp"
             android:title="系统设置" />
+
+        <item
+            android:id="@+id/relogin"
+            android:icon="@drawable/ic_exit_to_app_yellow_300_18dp"
+            android:title="系统设置" />
     </group>
 
     <item android:title="About">

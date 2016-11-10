@@ -39,7 +39,7 @@ public class GongdianMenuAdapter extends BaseQuickAdapter<GongdianData, BaseView
                     .setTextColor(R.id.tv_item_rv_project_menu_fragment, R.color.colorAccent);
             holder.itemView.setBackgroundColor(Color.WHITE);
         }
-        holder.setText(R.id.tv_item_rv_project_menu_fragment, item.getName());
+        holder.setText(R.id.tv_item_rv_project_menu_fragment, item.getGdmc());
     }
 
     public void setItemChecked(int position) {

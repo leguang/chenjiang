@@ -38,57 +38,58 @@ public class SplashPresenter extends BasePresenter<SplashContract.View> implemen
     @Override
     public void checkLogin() {
         //调试的时候用
-        getView().go2Main();
-
-
+//        getView().go2Main();
 
         String usernameEncrypted = (String) SharedPreferencesUtils.get(BaseApplication.mContext, Constants.USERNAME, "");
         String passwordEncrypted = (String) SharedPreferencesUtils.get(BaseApplication.mContext, Constants.PASSWORD, "");
+        String registerCodeEncrypted = (String) SharedPreferencesUtils.get(BaseApplication.mContext, Constants.REGISTER_CODE, "");
+
         KLog.e("username加密从sp中:" + usernameEncrypted);
         KLog.e("password加密从sp中:" + passwordEncrypted);
+        KLog.e("registerCode加密从sp中:" + registerCodeEncrypted);
         //进行解密
-        String username = null;
-        String password = null;
-        if (!TextUtils.isEmpty(usernameEncrypted) && !TextUtils.isEmpty(passwordEncrypted)) {
-            try {
-                username = AESCryptUtils.decrypt(Constants.ENCRYPT_KEY, usernameEncrypted);
-                password = AESCryptUtils.decrypt(Constants.ENCRYPT_KEY, passwordEncrypted);
-            } catch (GeneralSecurityException e) {
-                e.printStackTrace();
-            }
+        String username = "";
+        String password = "";
+        String registerCode = "";
+        if (TextUtils.isEmpty(usernameEncrypted) || TextUtils.isEmpty(passwordEncrypted) || TextUtils.isEmpty(registerCodeEncrypted)) {
+            getView().go2LoginOrGuide();
+            KLog.e("1111111111");
+            return;
         }
+        KLog.e("2222222222222");
 
+        try {
+            username = AESCryptUtils.decrypt(Constants.ENCRYPT_KEY, usernameEncrypted);
+            password = AESCryptUtils.decrypt(Constants.ENCRYPT_KEY, passwordEncrypted);
+            registerCode = AESCryptUtils.decrypt(Constants.ENCRYPT_KEY, registerCodeEncrypted);
+        } catch (GeneralSecurityException e) {
+            e.printStackTrace();
+            getView().go2LoginOrGuide();
+            return;
+        }
         KLog.e("username解密:" + username);
         KLog.e("password解密:" + password);
+        KLog.e("registerCode解密:" + registerCode);
 
-        username = "test";
-        password = "123456";
-
-        if (!TextUtils.isEmpty(username) && !TextUtils.isEmpty(password)) {
-
-            HttpHelper.getInstance().initService().login(username, password, Constants.OSTYPE, "aaaaa").enqueue(new Callback<UserInfoBean>() {
-                @Override
-                public void onResponse(Call<UserInfoBean> call, Response<UserInfoBean> response) {
-                    if (response.isSuccessful()) {
-                        if (response.body().isSuccess()) {
-                            BaseApplication.mUserInfoBean = mUserInfoBean = response.body();
-                            //进入管理层界面
-                            getView().go2Main();
-                        } else {
-                            getView().go2LoginOrGuide();
-                        }
+        HttpHelper.getInstance().initService().login(username, password, Constants.OSTYPE, registerCode).enqueue(new Callback<UserInfoBean>() {
+            @Override
+            public void onResponse(Call<UserInfoBean> call, Response<UserInfoBean> response) {
+                if (response.isSuccessful()) {
+                    if (response.body().getStatus() == 0) {
+                        BaseApplication.mUserInfoBean = mUserInfoBean = response.body();
+                        //进入管理层界面
+                        getView().go2Main();
+                    } else {
+                        getView().go2LoginOrGuide();
                     }
                 }
+            }
 
-                @Override
-                public void onFailure(Call<UserInfoBean> call, Throwable t) {
-                    getView().go2LoginOrGuide();
-                }
-            });
-
-        } else {
-            getView().go2LoginOrGuide();
-        }
+            @Override
+            public void onFailure(Call<UserInfoBean> call, Throwable t) {
+                getView().go2LoginOrGuide();
+            }
+        });
     }
 
     @Override

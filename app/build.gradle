@@ -77,5 +77,5 @@ dependencies {
 
     compile 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.4.5'
     compile 'com.daimajia.numberprogressbar:library:1.2@aar'
-    compile 'com.robinhood.ticker:ticker:1.1.0'
+    compile 'com.robinhood.ticker:ticker:1.1.1'
 }

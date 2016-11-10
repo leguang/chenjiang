@@ -18,7 +18,6 @@
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:layout_toRightOf="@id/view_line_item_rv_project_menu_fragment"
-        android:text="KD1525423"
         android:textColor="@android:color/black" />
 
     <View

@@ -153,6 +153,8 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                         start(fragment, SupportFragment.SINGLETASK);
                     }
 
+                } else if (id == R.id.relogin) {
+
                 } else if (id == R.id.about) {
 
                 } else if (id == R.id.version) {

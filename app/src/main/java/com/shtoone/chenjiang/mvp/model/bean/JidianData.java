@@ -7,35 +7,108 @@ import org.litepal.crud.DataSupport;
  * Email：langmanleguang@qq.com
  */
 public class JidianData extends DataSupport {
-    private int id;
-    private String bianhao;
+    private long id;
+    private String chushigaocheng;
+    private String nzuobiao;
+    private String banbenhao;
+    private String cishu;
+    private String beizhu;
+    private String licheng;
+    private String bencixiuzheng;
+    private String jdid;
+    private String changduanlian;
+    private String ezuobiao;
     private String name;
-    private String xiuzhenghougaochengzhi;
-    private String lichengguanhao;
-    private String lichengzhi;
+    private String bianhao;
+    private String guanhao;
+    private String xiuzhenghou;
 
-    public String getBianhao() {
-        return bianhao;
-    }
-
-    public void setBianhao(String bianhao) {
-        this.bianhao = bianhao;
-    }
-
-    public String getLichengzhi() {
-        return lichengzhi;
-    }
-
-    public void setLichengzhi(String lichengzhi) {
-        this.lichengzhi = lichengzhi;
-    }
-
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
+    }
+
+    public String getJdid() {
+        return jdid;
+    }
+
+    public void setJdid(String jdid) {
+        this.jdid = jdid;
+    }
+
+    public String getChushigaocheng() {
+        return chushigaocheng;
+    }
+
+    public void setChushigaocheng(String chushigaocheng) {
+        this.chushigaocheng = chushigaocheng;
+    }
+
+    public String getNzuobiao() {
+        return nzuobiao;
+    }
+
+    public void setNzuobiao(String nzuobiao) {
+        this.nzuobiao = nzuobiao;
+    }
+
+    public String getBanbenhao() {
+        return banbenhao;
+    }
+
+    public void setBanbenhao(String banbenhao) {
+        this.banbenhao = banbenhao;
+    }
+
+    public String getCishu() {
+        return cishu;
+    }
+
+    public void setCishu(String cishu) {
+        this.cishu = cishu;
+    }
+
+    public String getBeizhu() {
+        return beizhu;
+    }
+
+    public void setBeizhu(String beizhu) {
+        this.beizhu = beizhu;
+    }
+
+    public String getLicheng() {
+        return licheng;
+    }
+
+    public void setLicheng(String licheng) {
+        this.licheng = licheng;
+    }
+
+    public String getBencixiuzheng() {
+        return bencixiuzheng;
+    }
+
+    public void setBencixiuzheng(String bencixiuzheng) {
+        this.bencixiuzheng = bencixiuzheng;
+    }
+
+    public String getChangduanlian() {
+        return changduanlian;
+    }
+
+    public void setChangduanlian(String changduanlian) {
+        this.changduanlian = changduanlian;
+    }
+
+    public String getEzuobiao() {
+        return ezuobiao;
+    }
+
+    public void setEzuobiao(String ezuobiao) {
+        this.ezuobiao = ezuobiao;
     }
 
     public String getName() {
@@ -46,19 +119,27 @@ public class JidianData extends DataSupport {
         this.name = name;
     }
 
-    public String getXiuzhenghougaochengzhi() {
-        return xiuzhenghougaochengzhi;
+    public String getBianhao() {
+        return bianhao;
     }
 
-    public void setXiuzhenghougaochengzhi(String xiuzhenghougaochengzhi) {
-        this.xiuzhenghougaochengzhi = xiuzhenghougaochengzhi;
+    public void setBianhao(String bianhao) {
+        this.bianhao = bianhao;
     }
 
-    public String getLichengguanhao() {
-        return lichengguanhao;
+    public String getGuanhao() {
+        return guanhao;
     }
 
-    public void setLichengguanhao(String lichengguanhao) {
-        this.lichengguanhao = lichengguanhao;
+    public void setGuanhao(String guanhao) {
+        this.guanhao = guanhao;
+    }
+
+    public String getXiuzhenghou() {
+        return xiuzhenghou;
+    }
+
+    public void setXiuzhenghou(String xiuzhenghou) {
+        this.xiuzhenghou = xiuzhenghou;
     }
 }

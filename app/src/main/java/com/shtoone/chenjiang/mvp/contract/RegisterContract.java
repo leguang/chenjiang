@@ -12,7 +12,7 @@ public interface RegisterContract {
     interface View extends BaseContract.View {
         void registerSuccessfully(RegisterBean mRegisterBean);
 
-        void registerFailed();
+        void registerFailed(String message);
 
     }
 

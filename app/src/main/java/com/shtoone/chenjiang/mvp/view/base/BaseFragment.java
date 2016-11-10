@@ -35,8 +35,6 @@ public abstract class BaseFragment<P extends BaseContract.Presenter> extends Swi
         super.onCreate(savedInstanceState);
         mPresenter = createPresenter();
 
-        //打印fragment栈
-        _mActivity.logFragmentStackHierarchy("SHTW");
     }
 
     @NonNull

@@ -100,12 +100,12 @@ public class SplashFragment extends BaseFragment<SplashContract.Presenter> imple
             return;
         }
         if (isFirstentry) {
-//            start(GuideFragment.newInstance());
-            _mActivity.startActivity(new Intent(_mActivity, MainActivity.class));
+            start(GuideFragment.newInstance());
+//            _mActivity.startActivity(new Intent(_mActivity, MainActivity.class));
 
         } else {
-//            start(LoginFragment.newInstance());
-            _mActivity.startActivity(new Intent(_mActivity, MainActivity.class));
+            start(LoginFragment.newInstance());
+//            _mActivity.startActivity(new Intent(_mActivity, MainActivity.class));
 
         }
     }

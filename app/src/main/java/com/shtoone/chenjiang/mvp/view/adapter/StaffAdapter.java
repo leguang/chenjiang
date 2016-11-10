@@ -16,8 +16,8 @@ public class StaffAdapter extends BaseQuickAdapter<StaffData, BaseViewHolder> {
 
     @Override
     protected void convert(BaseViewHolder holder, StaffData staffData) {
-        holder.setText(R.id.tv_name_item_rv_project_staff_fragment, "姓名：" + staffData.getName())
-                .setText(R.id.tv_type_item_rv_project_staff_fragment, Html.fromHtml("类别：<font color=black>" + staffData.getType() + "</font>"))
-                .setText(R.id.tv_phone_number_item_rv_project_staff_fragment, Html.fromHtml("电话：<font color=black>" + staffData.getPhtoneNumber() + "</font>"));
+        holder.setText(R.id.tv_name_item_rv_project_staff_fragment, "姓名：" + staffData.getUserName())
+                .setText(R.id.tv_type_item_rv_project_staff_fragment, Html.fromHtml("类别：<font color=black>" + "司镜人员" + "</font>"))
+                .setText(R.id.tv_phone_number_item_rv_project_staff_fragment, Html.fromHtml("电话：<font color=black>" + staffData.getUserPhone() + "</font>"));
     }
 }

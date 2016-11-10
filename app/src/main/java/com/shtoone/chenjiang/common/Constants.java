@@ -37,7 +37,8 @@ public class Constants {
     public static final String ISFIRSTGUIDE = "is_first_guide";
     public static final String USERNAME = "username";
     public static final String PASSWORD = "password";
-    public static final String REGISTER_CODE = "password";
+    public static final String REGISTER_CODE = "register_code";
+    public static final String USER_ID = "user_id";
 
     public static final int DEFAULT_TIMEOUT = 5;
 

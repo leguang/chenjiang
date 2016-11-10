@@ -7,12 +7,14 @@ package com.shtoone.chenjiang.mvp.model.bean;
 public class RegisterBean {
 
     /**
-     * regCode : aaaaa
-     * status : 1
+     * regCode : 938ca82642658b1a
+     * status : 0
+     * description : 注册成功
      */
 
     private String regCode;
     private int status;
+    private String description;
 
     public String getRegCode() {
         return regCode;
@@ -28,6 +30,14 @@ public class RegisterBean {
 
     public void setStatus(int status) {
         this.status = status;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 }
 

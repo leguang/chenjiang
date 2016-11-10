@@ -21,12 +21,12 @@ import android.view.animation.AccelerateDecelerateInterpolator;
 import com.shtoone.chenjiang.R;
 import com.shtoone.chenjiang.common.Constants;
 import com.shtoone.chenjiang.mvp.contract.LoginContract;
+import com.shtoone.chenjiang.mvp.model.bean.UserInfoBean;
 import com.shtoone.chenjiang.mvp.presenter.LoginPresenter;
 import com.shtoone.chenjiang.mvp.view.base.BaseFragment;
 import com.shtoone.chenjiang.mvp.view.main.MainActivity;
 import com.shtoone.chenjiang.utils.AESCryptUtils;
 import com.shtoone.chenjiang.utils.KeyBoardUtils;
-import com.shtoone.chenjiang.utils.NetworkUtils;
 import com.shtoone.chenjiang.utils.SharedPreferencesUtils;
 import com.shtoone.chenjiang.widget.processbutton.iml.ActionProcessButton;
 
@@ -170,12 +170,16 @@ public class LoginFragment extends BaseFragment<LoginContract.Presenter> impleme
     }
 
     @Override
-    public void savaData() {
+    public void savaData(UserInfoBean mUserInfoBean) {
         try {
             String usernameEncrypted = AESCryptUtils.encrypt(Constants.ENCRYPT_KEY, username);
             String passwordEncrypted = AESCryptUtils.encrypt(Constants.ENCRYPT_KEY, password);
+            String userIdEncrypted = AESCryptUtils.encrypt(Constants.ENCRYPT_KEY, mUserInfoBean.getUserId());
+
             SharedPreferencesUtils.put(_mActivity, Constants.USERNAME, usernameEncrypted);
             SharedPreferencesUtils.put(_mActivity, Constants.PASSWORD, passwordEncrypted);
+            SharedPreferencesUtils.put(_mActivity, Constants.USER_ID, userIdEncrypted);
+
         } catch (GeneralSecurityException e) {
             e.printStackTrace();
         }
@@ -183,14 +187,7 @@ public class LoginFragment extends BaseFragment<LoginContract.Presenter> impleme
 
     @Override
     public void setErrorMessage(String message) {
-        //提示网络数据异常。1.可能是本机网络机场。2.可能是服务器异常。
-        if (!NetworkUtils.isConnected(_mActivity)) {
-            //提示网络异常
-            btLogin.setErrorText("网络异常");
-        } else {
-            //服务器异常
-            btLogin.setErrorText(message);
-        }
+        btLogin.setErrorText(message);
         btLogin.setProgress(-1);
     }
 

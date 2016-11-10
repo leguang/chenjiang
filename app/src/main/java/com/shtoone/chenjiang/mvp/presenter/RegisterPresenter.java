@@ -41,9 +41,9 @@ public class RegisterPresenter extends BasePresenter<RegisterContract.View> impl
                                 if (0 == registerBean.getStatus()) {
                                     getView().registerSuccessfully(registerBean);
 
-                                    KLog.e(registerBean.getRegCode());
+                                    KLog.e("register::" + registerBean.getRegCode());
                                 } else {
-                                    getView().registerFailed();
+                                    getView().registerFailed(registerBean.getDescription());
                                 }
 
                             }

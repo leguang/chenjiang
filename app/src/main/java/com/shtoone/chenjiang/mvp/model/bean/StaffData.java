@@ -7,41 +7,40 @@ import org.litepal.crud.DataSupport;
  * Email：langmanleguang@qq.com
  */
 public class StaffData extends DataSupport {
-    private int id;
-    private String name;
-    private String type;
-    private String phtoneNumber;
+    private long id;
+    private String staffid;
+    private String userName;
+    private String userPhone;
 
-    public String getPhtoneNumber() {
-        return phtoneNumber;
-    }
-
-    public void setPhtoneNumber(String phtoneNumber) {
-        this.phtoneNumber = phtoneNumber;
-    }
-
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getStaffid() {
+        return staffid;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setStaffid(String staffid) {
+        this.staffid = staffid;
     }
 
-    public String getType() {
-        return type;
+    public String getUserName() {
+        return userName;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
+    public String getUserPhone() {
+        return userPhone;
+    }
+
+    public void setUserPhone(String userPhone) {
+        this.userPhone = userPhone;
+    }
 }

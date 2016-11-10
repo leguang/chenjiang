@@ -115,17 +115,17 @@ public class RegisterActivity extends BaseActivity<RegisterContract.Presenter> i
     private void initData() {
         etMachineCode.getEditText().setText(DeviceUtils.getIMEI(getApplicationContext()));
 
-        String strRegisterCode = (String) SharedPreferencesUtils.get(BaseApplication.mContext, Constants.REGISTER_CODE, "");
-        KLog.e("strRegisterCode::" + strRegisterCode);
-        if (!TextUtils.isEmpty(strRegisterCode)) {
+        String encryptRegisterCode = (String) SharedPreferencesUtils.get(BaseApplication.mContext, Constants.REGISTER_CODE, "");
+        KLog.e("encryptRegisterCode::" + encryptRegisterCode);
+        if (!TextUtils.isEmpty(encryptRegisterCode)) {
             try {
-                strRegisterCode = AESCryptUtils.decrypt(Constants.ENCRYPT_KEY, strRegisterCode);
-                KLog.e("decode::" + strRegisterCode);
+                encryptRegisterCode = AESCryptUtils.decrypt(Constants.ENCRYPT_KEY, encryptRegisterCode);
+                KLog.e("decode::" + encryptRegisterCode);
             } catch (GeneralSecurityException e) {
                 e.printStackTrace();
             }
 
-            etRegisterCode.getEditText().setText(strRegisterCode);
+            etRegisterCode.getEditText().setText(encryptRegisterCode);
             bt.setText("您已注册");
             bt.setEnabled(false);
 
@@ -255,21 +255,17 @@ public class RegisterActivity extends BaseActivity<RegisterContract.Presenter> i
         ToastUtils.showSuccessToast(getApplicationContext(), "恭喜！注册成功请登录");
 
         //保存注册码到本地
-        String strRegisterCode = "";
+        String encryptRegisterCode = "";
         try {
-            strRegisterCode = AESCryptUtils.encrypt(Constants.ENCRYPT_KEY, mRegisterBean.getRegCode());
+            encryptRegisterCode = AESCryptUtils.encrypt(Constants.ENCRYPT_KEY, mRegisterBean.getRegCode());
         } catch (GeneralSecurityException e) {
             e.printStackTrace();
         }
-        SharedPreferencesUtils.put(getApplicationContext(), Constants.REGISTER_CODE, strRegisterCode);
-
-
-        EventBus.getDefault().post(new EventData(Constants.HIDE_LOGIN_FAB));
-
+        SharedPreferencesUtils.put(getApplicationContext(), Constants.REGISTER_CODE, encryptRegisterCode);
     }
 
     @Override
-    public void registerFailed() {
-        setErrorMessage("已申请，请等待审核");
+    public void registerFailed(String message) {
+        setErrorMessage(message);
     }
 }

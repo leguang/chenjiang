@@ -42,7 +42,7 @@ public class GongdianMenuPresenter extends BasePresenter<GongdianMenuContract.Vi
                         try {
                             //分页查询每次查询PAGE_SIZE条，从0开始。
                             Thread.sleep(1000);
-                            if (BaseApplication.temp == 1) {
+                            if (BaseApplication.temp == 2) {
                                 String s = null;
                                 s.split("1");
                             }

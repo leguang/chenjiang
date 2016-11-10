@@ -83,7 +83,7 @@ public class GongdianMenuFragmentRVAdapter extends RecyclerView.Adapter<ViewHold
                 mItemViewHolder.tv.setTextColor(mContext.getResources().getColor(R.color.colorAccent));
             }
 
-            mItemViewHolder.tv.setText(itemsData.get(position).getName());
+//            mItemViewHolder.tv.setText(itemsData.get(position).getName());
 
             if (mOnItemClickListener != null) {
                 mItemViewHolder.itemView.setOnClickListener(new View.OnClickListener() {

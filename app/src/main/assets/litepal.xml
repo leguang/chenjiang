@@ -12,5 +12,8 @@
         <mapping class="com.shtoone.chenjiang.mvp.model.bean.MeasureSpecificationData"></mapping>
         <mapping class="com.shtoone.chenjiang.mvp.model.bean.StaffData"></mapping>
         <mapping class="com.shtoone.chenjiang.mvp.model.bean.JidianData"></mapping>
+        <mapping class="com.shtoone.chenjiang.mvp.model.bean.DuanmianData"></mapping>
+        <mapping class="com.shtoone.chenjiang.mvp.model.bean.CedianData"></mapping>
+        <mapping class="com.shtoone.chenjiang.mvp.model.bean.YusheshuizhunxianData"></mapping>
     </list>
 </litepal>
