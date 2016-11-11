@@ -38,7 +38,6 @@ public class StaffPresenter extends BasePresenter<StaffContract.View> implements
                     public void call(Subscriber<? super List<StaffData>> subscriber) {
                         List<StaffData> mStaffData = null;
                         try {
-                            Thread.sleep(1000);
                             mStaffData = DataSupport.select("*")
                                     .order("id").limit(Constants.PAGE_SIZE)
                                     .offset(pagination * Constants.PAGE_SIZE)

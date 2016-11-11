@@ -11,7 +11,6 @@ import android.view.ViewGroup;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.listener.OnItemClickListener;
-import com.shtoone.chenjiang.BaseApplication;
 import com.shtoone.chenjiang.R;
 import com.shtoone.chenjiang.common.Constants;
 import com.shtoone.chenjiang.mvp.contract.project.GongdianMenuContract;
@@ -82,7 +81,6 @@ public class GongdianMenuFragment extends BaseFragment<GongdianMenuContract.Pres
                 mAdapter.removeAllFooterView();
                 mAdapter.addFooterView(mFooterLoading);
                 mPresenter.queryData(pagination);
-                BaseApplication.temp++;
             }
         });
         setAdapter();

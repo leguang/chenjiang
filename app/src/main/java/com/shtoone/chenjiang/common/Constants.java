@@ -40,7 +40,8 @@ public class Constants {
     public static final String REGISTER_CODE = "register_code";
     public static final String USER_ID = "user_id";
 
-    public static final int DEFAULT_TIMEOUT = 5;
+    //网络链接超时时间
+    public static final int DEFAULT_TIMEOUT = 20;
 
     //检测App升级
     public static final int CHECKUPDATE = 0;
@@ -63,5 +64,9 @@ public class Constants {
 
     //分页查询
     public static final int PAGE_SIZE = 20;
+
+    //下载页面
+    public static final String UPDATA_TIME = "updata_time";
+
 
 }

@@ -12,7 +12,6 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.TextView;
 
 import com.daimajia.numberprogressbar.NumberProgressBar;
@@ -20,11 +19,13 @@ import com.robinhood.ticker.TickerUtils;
 import com.robinhood.ticker.TickerView;
 import com.shtoone.chenjiang.BaseApplication;
 import com.shtoone.chenjiang.R;
+import com.shtoone.chenjiang.common.Constants;
 import com.shtoone.chenjiang.mvp.contract.DownloadContract;
 import com.shtoone.chenjiang.mvp.model.bean.DuanmianData;
 import com.shtoone.chenjiang.mvp.model.bean.GongdianData;
 import com.shtoone.chenjiang.mvp.presenter.DownloadPresenter;
 import com.shtoone.chenjiang.mvp.view.base.BaseFragment;
+import com.shtoone.chenjiang.utils.SharedPreferencesUtils;
 import com.socks.library.KLog;
 
 import org.json.JSONException;
@@ -32,6 +33,9 @@ import org.litepal.crud.DataSupport;
 
 import java.net.ConnectException;
 import java.net.SocketTimeoutException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import butterknife.BindView;
@@ -49,7 +53,7 @@ public class DownloadFragment extends BaseFragment<DownloadContract.Presenter> i
     @BindView(R.id.tv_date_download_fragment)
     TickerView tvDate;
     @BindView(R.id.bt_download_all_download_fragment)
-    Button btDownloadAll;
+    TextView tvDownloadAll;
     @BindView(R.id.toolbar)
     Toolbar toolbar;
     @BindView(R.id.toolbar_layout)
@@ -87,6 +91,8 @@ public class DownloadFragment extends BaseFragment<DownloadContract.Presenter> i
     private String progress;
     private TextView messageTextView;
     private TextView downloadTextView;
+    private boolean isDownloadAll;
+    private View[] arrayTextView = new View[7];
 
     @Nullable
     @Override
@@ -125,9 +131,26 @@ public class DownloadFragment extends BaseFragment<DownloadContract.Presenter> i
         initToolbarBackNavigation(toolbar);
         Typeface tf = Typeface.createFromAsset(_mActivity.getAssets(), "fonts/OpenSans-Light.ttf");
         tvDate.setTypeface(tf);
-
         tvDate.setCharacterList(TickerUtils.getDefaultNumberList());
-        tvDate.setText("08-08 04:65");
+
+        arrayTextView[0] = tvGongdianDownload;
+        arrayTextView[1] = tvDuanmianDownload;
+        arrayTextView[2] = tvCedianDownload;
+        arrayTextView[3] = tvYusheshuizhunxianDownload;
+        arrayTextView[4] = tvJidianDownload;
+        arrayTextView[5] = tvStaffDownload;
+        arrayTextView[6] = tvDownloadAll;
+
+        String strUpdateTime = (String) SharedPreferencesUtils.get(BaseApplication.mContext, Constants.UPDATA_TIME, "");
+
+        if (TextUtils.isEmpty(strUpdateTime)) {
+            DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+            strUpdateTime = df.format(new Date());
+            tvDate.setText(strUpdateTime);
+            SharedPreferencesUtils.put(BaseApplication.mContext, Constants.UPDATA_TIME, strUpdateTime);
+        } else {
+            tvDate.setText(strUpdateTime);
+        }
 
         appBar.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
             @Override
@@ -143,7 +166,6 @@ public class DownloadFragment extends BaseFragment<DownloadContract.Presenter> i
                 }
             }
         });
-
     }
 
     @Override
@@ -158,7 +180,6 @@ public class DownloadFragment extends BaseFragment<DownloadContract.Presenter> i
         }
         downloadTextView.setText("下载");
         downloadTextView.setBackgroundResource(R.drawable.rect_bg_stroke);
-        downloadTextView.setEnabled(true);
         messageTextView.setTextColor(Color.RED);
         if (t instanceof ConnectException) {
             messageTextView.setText("网络异常,请检测网络");
@@ -170,6 +191,15 @@ public class DownloadFragment extends BaseFragment<DownloadContract.Presenter> i
             messageTextView.setText("解析异常，请重新下载");
         } else {
             messageTextView.setText("数据异常，请重新下载");
+        }
+
+        for (int i = 0; i < arrayTextView.length; i++) {
+            arrayTextView[i].setEnabled(true);
+        }
+        if (isDownloadAll) {
+            tvDownloadAll.setBackgroundResource(R.drawable.rect_bg_down_all);
+            tvDownloadAll.setText("全部下载");
+            progressBar.setVisibility(View.GONE);
         }
     }
 
@@ -185,116 +215,172 @@ public class DownloadFragment extends BaseFragment<DownloadContract.Presenter> i
     public void onClick(View view) {
         //因为下载是只能单个下载，所以这个失败统计只要每次调用就行。
         intFailedSum = 0;
-        KLog.e("intFailedSum::" + intFailedSum);
+        KLog.e("onClick::intFailedSum::" + intFailedSum);
+        for (int i = 0; i < arrayTextView.length; i++) {
+            arrayTextView[i].setEnabled(false);
+        }
         switch (view.getId()) {
             case R.id.bt_download_all_download_fragment:
-                tvDate.setText("01-01 01:01");
-
-                tvDate.setEnabled(false);
+                downloadAll();
                 break;
             case R.id.tv_gongdian_download_download_fragment:
-                if (BaseApplication.mUserInfoBean == null || TextUtils.isEmpty(BaseApplication.mUserInfoBean.getUserId())) {
-                    tvGongdianMessage.setTextColor(Color.RED);
-                    tvGongdianMessage.setText("缺少参数：userid");
-                    return;
-                }
-                tvGongdianDownload.setEnabled(false);
-                tvGongdianDownload.setText("0%");
-                tvGongdianDownload.setBackgroundResource(R.drawable.oval_bg_with_stroke_only);
-                tvGongdianMessage.setText("开始下载……");
-                tvGongdianMessage.setTextColor(_mActivity.getResources().getColor(R.color.base_color));
-                //这行代码必须在最底部。
-                mPresenter.downloadGongdian(BaseApplication.mUserInfoBean.getUserId());
-                messageTextView = tvGongdianMessage;
-                downloadTextView = tvGongdianDownload;
-                KLog.e("点工点………………");
+                downloadGongdian();
                 break;
 
             case R.id.tv_duanmian_download_download_fragment:
-                List<GongdianData> mGongdianData = DataSupport.findAll(GongdianData.class);
-                if (mGongdianData.size() <= 0) {
-                    tvDuanmianMessage.setTextColor(Color.RED);
-                    tvDuanmianMessage.setText("缺少参数：工点ID，请先下载工点信息");
-                    return;
-                }
-                tvDuanmianDownload.setEnabled(false);
-                tvDuanmianDownload.setText("0%");
-                tvDuanmianDownload.setBackgroundResource(R.drawable.oval_bg_with_stroke_only);
-                tvDuanmianMessage.setText("开始下载……");
-                tvDuanmianMessage.setTextColor(_mActivity.getResources().getColor(R.color.base_color));
-                //这行代码必须在最底部。
-                mPresenter.downloadDuanmian();
-                messageTextView = tvDuanmianMessage;
-                downloadTextView = tvDuanmianDownload;
-                KLog.e("点断面……………");
+                downloadDuanmian();
                 break;
 
             case R.id.tv_cedian_download_download_fragment:
-                KLog.e("点击测点………………………………");
-                List<DuanmianData> mDuanmianData = DataSupport.findAll(DuanmianData.class);
-                if (mDuanmianData.size() <= 0) {
-                    tvCedianMessage.setTextColor(Color.RED);
-                    tvCedianMessage.setText("缺少参数：断面ID，请先下载断面信息");
-                    return;
-                }
-                tvCedianDownload.setEnabled(false);
-                tvCedianDownload.setText("0%");
-                tvCedianDownload.setBackgroundResource(R.drawable.oval_bg_with_stroke_only);
-                tvCedianMessage.setText("开始下载……");
-                tvCedianMessage.setTextColor(_mActivity.getResources().getColor(R.color.base_color));
-                //这行代码必须在最底部。
-                mPresenter.downloadCedian();
-                messageTextView = tvCedianMessage;
-                downloadTextView = tvCedianDownload;
-                KLog.e("点测点………………");
+                downloadCedian();
                 break;
 
             case R.id.tv_yusheshuizhunxian_download_download_fragment:
-                KLog.e("点击预设水准线………………………………");
-                if (BaseApplication.mUserInfoBean == null || TextUtils.isEmpty(BaseApplication.mUserInfoBean.getDept().getOrgId())) {
-                    tvYusheshuizhunxianMessage.setTextColor(Color.RED);
-                    tvYusheshuizhunxianMessage.setText("缺少参数：部门ID");
-                    return;
-                }
-                tvYusheshuizhunxianDownload.setEnabled(false);
-                tvYusheshuizhunxianDownload.setText("0%");
-                tvYusheshuizhunxianDownload.setBackgroundResource(R.drawable.oval_bg_with_stroke_only);
-                tvYusheshuizhunxianMessage.setText("开始下载……");
-                tvYusheshuizhunxianMessage.setTextColor(_mActivity.getResources().getColor(R.color.base_color));
-                //这行代码必须在最底部。
-                mPresenter.downloadYusheshuizhunxian(BaseApplication.mUserInfoBean.getDept().getOrgId());
-                messageTextView = tvYusheshuizhunxianMessage;
-                downloadTextView = tvYusheshuizhunxianDownload;
-                KLog.e("点预设水准线………………");
+                downloadYusheshuizhunxian();
                 break;
 
             case R.id.tv_jidian_download_download_fragment:
-                tvJidianDownload.setEnabled(false);
-                tvJidianDownload.setText("0%");
-                tvJidianDownload.setBackgroundResource(R.drawable.oval_bg_with_stroke_only);
-                tvJidianMessage.setText("开始下载……");
-                tvJidianMessage.setTextColor(_mActivity.getResources().getColor(R.color.base_color));
-                //这行代码必须在最底部。
-                mPresenter.downloadJidian();
-                messageTextView = tvJidianMessage;
-                downloadTextView = tvJidianDownload;
-                KLog.e("点基点………………");
+                downloadJidian();
                 break;
 
             case R.id.tv_staff_download_download_fragment:
-
-                tvStaffDownload.setEnabled(false);
-                tvStaffDownload.setText("0%");
-                tvStaffDownload.setBackgroundResource(R.drawable.oval_bg_with_stroke_only);
-                tvStaffMessage.setText("开始下载……");
-                tvStaffMessage.setTextColor(_mActivity.getResources().getColor(R.color.base_color));
-                //这行代码必须在最底部。
-                mPresenter.downloadStaff();
-                messageTextView = tvStaffMessage;
-                downloadTextView = tvStaffDownload;
-                KLog.e("点人员………………");
+                downloadStaff();
                 break;
         }
+    }
+
+    private void downloadAll() {
+        KLog.e("点击开始下载所有………………");
+
+        isDownloadAll = true;
+        tvDownloadAll.setText("正在下载…");
+        tvDownloadAll.setBackgroundResource(R.drawable.rect_bg_downing_all);
+        progressBar.setVisibility(View.VISIBLE);
+        progressBar.setProgress(1);
+        DateFormat df = new SimpleDateFormat("MM-dd HH:mm");
+        String strUpdateTime = df.format(new Date());
+        tvDate.setText(strUpdateTime);
+        SharedPreferencesUtils.put(BaseApplication.mContext, Constants.UPDATA_TIME, strUpdateTime);
+        downloadGongdian();
+        KLog.e("点击下载所有末尾………………");
+    }
+
+    private void downloadGongdian() {
+        KLog.e("点击进入下载工点………………");
+
+        if (BaseApplication.mUserInfoBean == null || TextUtils.isEmpty(BaseApplication.mUserInfoBean.getUserId())) {
+            tvGongdianMessage.setTextColor(Color.RED);
+            tvGongdianMessage.setText("缺少参数：userid");
+            for (int i = 0; i < arrayTextView.length; i++) {
+                tvGongdianDownload.setEnabled(true);
+            }
+            progressBar.setVisibility(View.GONE);
+            return;
+        }
+        tvGongdianDownload.setText("0%");
+        tvGongdianDownload.setBackgroundResource(R.drawable.oval_bg_with_stroke_only);
+        tvGongdianMessage.setText("开始下载……");
+        tvGongdianMessage.setTextColor(_mActivity.getResources().getColor(R.color.base_color));
+        //这行代码必须在最底部。
+        mPresenter.downloadGongdian(BaseApplication.mUserInfoBean.getUserId());
+        messageTextView = tvGongdianMessage;
+        downloadTextView = tvGongdianDownload;
+        KLog.e("点击进入下载工点末尾………………");
+    }
+
+    private void downloadDuanmian() {
+        KLog.e("点击开始下载断面……………");
+
+        List<GongdianData> mGongdianData = DataSupport.findAll(GongdianData.class);
+        if (mGongdianData.size() <= 0) {
+            tvDuanmianMessage.setTextColor(Color.RED);
+            tvDuanmianMessage.setText("缺少参数：工点ID，请先下载工点信息");
+            for (int i = 0; i < arrayTextView.length; i++) {
+                arrayTextView[i].setEnabled(true);
+            }
+            progressBar.setVisibility(View.GONE);
+            return;
+        }
+        tvDuanmianDownload.setText("0%");
+        tvDuanmianDownload.setBackgroundResource(R.drawable.oval_bg_with_stroke_only);
+        tvDuanmianMessage.setText("开始下载……");
+        tvDuanmianMessage.setTextColor(_mActivity.getResources().getColor(R.color.base_color));
+        //这行代码必须在最底部。
+        mPresenter.downloadDuanmian();
+        messageTextView = tvDuanmianMessage;
+        downloadTextView = tvDuanmianDownload;
+        KLog.e("点断面……………末尾");
+    }
+
+    private void downloadCedian() {
+        KLog.e("点击测点下载开始………………………………");
+        List<DuanmianData> mDuanmianData = DataSupport.findAll(DuanmianData.class);
+        if (mDuanmianData.size() <= 0) {
+            tvCedianMessage.setTextColor(Color.RED);
+            tvCedianMessage.setText("缺少参数：断面ID，请先下载断面信息");
+            for (int i = 0; i < arrayTextView.length; i++) {
+                arrayTextView[i].setEnabled(true);
+            }
+            progressBar.setVisibility(View.GONE);
+            return;
+        }
+        tvCedianDownload.setText("0%");
+        tvCedianDownload.setBackgroundResource(R.drawable.oval_bg_with_stroke_only);
+        tvCedianMessage.setText("开始下载……");
+        tvCedianMessage.setTextColor(_mActivity.getResources().getColor(R.color.base_color));
+        //这行代码必须在最底部。
+        mPresenter.downloadCedian();
+        messageTextView = tvCedianMessage;
+        downloadTextView = tvCedianDownload;
+        KLog.e("点测点末尾………………");
+    }
+
+    private void downloadYusheshuizhunxian() {
+        KLog.e("点击预设水准线开始………………………………");
+        if (BaseApplication.mUserInfoBean == null || TextUtils.isEmpty(BaseApplication.mUserInfoBean.getDept().getOrgId())) {
+            tvYusheshuizhunxianMessage.setTextColor(Color.RED);
+            tvYusheshuizhunxianMessage.setText("缺少参数：部门ID");
+            for (int i = 0; i < arrayTextView.length; i++) {
+                arrayTextView[i].setEnabled(true);
+            }
+            progressBar.setVisibility(View.GONE);
+            return;
+        }
+        tvYusheshuizhunxianDownload.setText("0%");
+        tvYusheshuizhunxianDownload.setBackgroundResource(R.drawable.oval_bg_with_stroke_only);
+        tvYusheshuizhunxianMessage.setText("开始下载……");
+        tvYusheshuizhunxianMessage.setTextColor(_mActivity.getResources().getColor(R.color.base_color));
+        //这行代码必须在最底部。
+        mPresenter.downloadYusheshuizhunxian(BaseApplication.mUserInfoBean.getDept().getOrgId());
+        messageTextView = tvYusheshuizhunxianMessage;
+        downloadTextView = tvYusheshuizhunxianDownload;
+        KLog.e("点预设水准线…………末尾……");
+    }
+
+    private void downloadJidian() {
+        KLog.e("点基点………开始………");
+        tvJidianDownload.setText("0%");
+        tvJidianDownload.setBackgroundResource(R.drawable.oval_bg_with_stroke_only);
+        tvJidianMessage.setText("开始下载……");
+        tvJidianMessage.setTextColor(_mActivity.getResources().getColor(R.color.base_color));
+        //这行代码必须在最底部。
+        mPresenter.downloadJidian();
+        messageTextView = tvJidianMessage;
+        downloadTextView = tvJidianDownload;
+        KLog.e("点基点………末尾………");
+    }
+
+    private void downloadStaff() {
+        KLog.e("点人员…开始……………");
+        tvStaffDownload.setText("0%");
+        tvStaffDownload.setBackgroundResource(R.drawable.oval_bg_with_stroke_only);
+        tvStaffMessage.setText("开始下载……");
+        tvStaffMessage.setTextColor(_mActivity.getResources().getColor(R.color.base_color));
+        //这行代码必须在最底部。
+        mPresenter.downloadStaff();
+        messageTextView = tvStaffMessage;
+        downloadTextView = tvStaffDownload;
+        KLog.e("点人员…末尾……………");
     }
 
     @Override
@@ -311,12 +397,15 @@ public class DownloadFragment extends BaseFragment<DownloadContract.Presenter> i
         tvGongdianMessage.setText(message);
         progress = (int) (((1.0 / intSum) * 100) * intIndex) + "%";
         tvGongdianDownload.setText(progress);
+        if (isDownloadAll) {
+            progressBar.setProgress((int) (((1.0 / intSum) * 100) * intIndex));
+        }
         KLog.e(message);
     }
 
     @Override
     public void onGongdianCompleted() {
-        KLog.e("intFailedSum::" + intFailedSum);
+        KLog.e("onGongdianCompleted::intFailedSum::" + intFailedSum);
         if (intFailedSum > 0) {
             tvGongdianMessage.setTextColor(Color.RED);
             message = String.format("%d个工点数据下载失败", intFailedSum);
@@ -327,7 +416,17 @@ public class DownloadFragment extends BaseFragment<DownloadContract.Presenter> i
         }
         tvGongdianDownload.setText("下载");
         tvGongdianDownload.setBackgroundResource(R.drawable.rect_bg_stroke);
-        tvGongdianDownload.setEnabled(true);
+        KLog.e("111111111111");
+
+        if (isDownloadAll) {
+            downloadDuanmian();
+            KLog.e("222222222222");
+
+        } else {
+            for (int i = 0; i < arrayTextView.length; i++) {
+                arrayTextView[i].setEnabled(true);
+            }
+        }
     }
 
     @Override
@@ -344,6 +443,9 @@ public class DownloadFragment extends BaseFragment<DownloadContract.Presenter> i
         tvDuanmianMessage.setText(message);
         progress = (int) (((1.0 / intSum) * 100) * intIndex) + "%";
         tvDuanmianDownload.setText(progress);
+        if (isDownloadAll) {
+            progressBar.setProgress((int) (((1.0 / intSum) * 100) * intIndex));
+        }
         KLog.e(message);
     }
 
@@ -360,7 +462,13 @@ public class DownloadFragment extends BaseFragment<DownloadContract.Presenter> i
         }
         tvDuanmianDownload.setText("下载");
         tvDuanmianDownload.setBackgroundResource(R.drawable.rect_bg_stroke);
-        tvDuanmianDownload.setEnabled(true);
+        if (isDownloadAll) {
+            downloadCedian();
+        } else {
+            for (int i = 0; i < arrayTextView.length; i++) {
+                arrayTextView[i].setEnabled(true);
+            }
+        }
     }
 
     @Override
@@ -377,6 +485,9 @@ public class DownloadFragment extends BaseFragment<DownloadContract.Presenter> i
         tvCedianMessage.setText(message);
         progress = (int) (((1.0 / intSum) * 100) * intIndex) + "%";
         tvCedianDownload.setText(progress);
+        if (isDownloadAll) {
+            progressBar.setProgress((int) (((1.0 / intSum) * 100) * intIndex));
+        }
         KLog.e(message);
     }
 
@@ -393,7 +504,13 @@ public class DownloadFragment extends BaseFragment<DownloadContract.Presenter> i
         }
         tvCedianDownload.setText("下载");
         tvCedianDownload.setBackgroundResource(R.drawable.rect_bg_stroke);
-        tvCedianDownload.setEnabled(true);
+        if (isDownloadAll) {
+            downloadYusheshuizhunxian();
+        } else {
+            for (int i = 0; i < arrayTextView.length; i++) {
+                arrayTextView[i].setEnabled(true);
+            }
+        }
     }
 
     @Override
@@ -410,6 +527,9 @@ public class DownloadFragment extends BaseFragment<DownloadContract.Presenter> i
         tvYusheshuizhunxianMessage.setText(message);
         progress = (int) (((1.0 / intSum) * 100) * intIndex) + "%";
         tvYusheshuizhunxianDownload.setText(progress);
+        if (isDownloadAll) {
+            progressBar.setProgress((int) (((1.0 / intSum) * 100) * intIndex));
+        }
         KLog.e(message);
     }
 
@@ -426,7 +546,13 @@ public class DownloadFragment extends BaseFragment<DownloadContract.Presenter> i
         }
         tvYusheshuizhunxianDownload.setText("下载");
         tvYusheshuizhunxianDownload.setBackgroundResource(R.drawable.rect_bg_stroke);
-        tvYusheshuizhunxianDownload.setEnabled(true);
+        if (isDownloadAll) {
+            downloadJidian();
+        } else {
+            for (int i = 0; i < arrayTextView.length; i++) {
+                arrayTextView[i].setEnabled(true);
+            }
+        }
     }
 
     @Override
@@ -443,6 +569,9 @@ public class DownloadFragment extends BaseFragment<DownloadContract.Presenter> i
         tvJidianMessage.setText(message);
         progress = (int) (((1.0 / intSum) * 100) * intIndex) + "%";
         tvJidianDownload.setText(progress);
+        if (isDownloadAll) {
+            progressBar.setProgress((int) (((1.0 / intSum) * 100) * intIndex));
+        }
         KLog.e(message);
     }
 
@@ -459,7 +588,13 @@ public class DownloadFragment extends BaseFragment<DownloadContract.Presenter> i
         }
         tvJidianDownload.setText("下载");
         tvJidianDownload.setBackgroundResource(R.drawable.rect_bg_stroke);
-        tvJidianDownload.setEnabled(true);
+        if (isDownloadAll) {
+            downloadStaff();
+        } else {
+            for (int i = 0; i < arrayTextView.length; i++) {
+                arrayTextView[i].setEnabled(true);
+            }
+        }
     }
 
     @Override
@@ -476,6 +611,9 @@ public class DownloadFragment extends BaseFragment<DownloadContract.Presenter> i
         tvStaffMessage.setText(message);
         progress = (int) (((1.0 / intSum) * 100) * intIndex) + "%";
         tvStaffDownload.setText(progress);
+        if (isDownloadAll) {
+            progressBar.setProgress((int) (((1.0 / intSum) * 100) * intIndex));
+        }
         KLog.e(message);
     }
 
@@ -492,6 +630,14 @@ public class DownloadFragment extends BaseFragment<DownloadContract.Presenter> i
         }
         tvStaffDownload.setText("下载");
         tvStaffDownload.setBackgroundResource(R.drawable.rect_bg_stroke);
-        tvStaffDownload.setEnabled(true);
+        if (isDownloadAll) {
+            isDownloadAll = false;
+            tvDownloadAll.setBackgroundResource(R.drawable.rect_bg_down_all);
+            tvDownloadAll.setText("全部下载");
+            progressBar.setVisibility(View.GONE);
+        }
+        for (int i = 0; i < arrayTextView.length; i++) {
+            arrayTextView[i].setEnabled(true);
+        }
     }
 }

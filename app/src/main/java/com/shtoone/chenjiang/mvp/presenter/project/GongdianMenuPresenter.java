@@ -1,7 +1,6 @@
 package com.shtoone.chenjiang.mvp.presenter.project;
 
 
-import com.shtoone.chenjiang.BaseApplication;
 import com.shtoone.chenjiang.common.Constants;
 import com.shtoone.chenjiang.mvp.contract.project.GongdianMenuContract;
 import com.shtoone.chenjiang.mvp.model.bean.GongdianData;
@@ -41,17 +40,11 @@ public class GongdianMenuPresenter extends BasePresenter<GongdianMenuContract.Vi
                         List<GongdianData> mGongdianData = null;
                         try {
                             //分页查询每次查询PAGE_SIZE条，从0开始。
-                            Thread.sleep(1000);
-                            if (BaseApplication.temp == 2) {
-                                String s = null;
-                                s.split("1");
-                            }
                             mGongdianData = DataSupport.select("*")
                                     .order("id").limit(Constants.PAGE_SIZE)
                                     .offset(pagination * Constants.PAGE_SIZE)
                                     .find(GongdianData.class);
                             subscriber.onNext(mGongdianData);
-                            BaseApplication.temp++;
                         } catch (Exception ex) {
                             subscriber.onError(ex);
                         }

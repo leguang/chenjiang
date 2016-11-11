@@ -53,6 +53,8 @@ public class DownloadPresenter extends BasePresenter<DownloadContract.View> impl
 
     @Override
     public void downloadGongdian(String userID) {
+        intSum = 0;
+        intIndex = 0;
         DataSupport.deleteAll(GongdianData.class);
 
         mRxManager.add(
@@ -60,17 +62,15 @@ public class DownloadPresenter extends BasePresenter<DownloadContract.View> impl
                         .flatMap(new Func1<GongdianInfoBean, Observable<GongdianInfoBean.GdxxsBean>>() {
                             @Override
                             public Observable<GongdianInfoBean.GdxxsBean> call(GongdianInfoBean gongdianInfoBean) {
-                                KLog.e("111111111flatMap::" + Thread.currentThread().getName());
-                                intIndex = 0;
+
                                 intSum = gongdianInfoBean.getGdxxs().size();
-                                KLog.e("intGongdianSize::" + intSum);
+                                KLog.e("intSum::" + intSum);
                                 return Observable.from(gongdianInfoBean.getGdxxs());
                             }
                         })
                         .map(new Func1<GongdianInfoBean.GdxxsBean, Boolean>() {
                             @Override
                             public Boolean call(GongdianInfoBean.GdxxsBean gdxxsBean) {
-                                KLog.e("22222222222map::" + Thread.currentThread().getName());
                                 GongdianData mGongdianData = new GongdianData();
                                 mGongdianData.setSsgzw(gdxxsBean.getSsgzw());
                                 mGongdianData.setGdpx(gdxxsBean.getGdpx());
@@ -115,23 +115,24 @@ public class DownloadPresenter extends BasePresenter<DownloadContract.View> impl
 
     @Override
     public void downloadDuanmian() {
-        DataSupport.deleteAll(DuanmianData.class);
-
-        List<GongdianData> mGongdianData = DataSupport.findAll(GongdianData.class);
-        intSum = mGongdianData.size();
+        intSum = 0;
         intIndex = 0;
+        DataSupport.deleteAll(DuanmianData.class);
+        List<GongdianData> mGongdianData = DataSupport.findAll(GongdianData.class);
+
         mRxManager.add(
-                Observable.from(mGongdianData).flatMap(new Func1<GongdianData, Observable<DuanmianInfoBean>>() {
-                    @Override
-                    public Observable<DuanmianInfoBean> call(GongdianData gongdianData) {
-                        KLog.e("gongdianData.getGdid()::" + gongdianData.getGdid());
-                        intIndex += 1;
-                        KLog.e("intIndex::" + intIndex);
-                        return HttpHelper.getInstance().initService().duanmianInfoDownload(gongdianData.getGdid());
-                    }
-                }).flatMap(new Func1<DuanmianInfoBean, Observable<DuanmianInfoBean.LjdmsBean>>() {
+                Observable.from(mGongdianData)
+                        .flatMap(new Func1<GongdianData, Observable<DuanmianInfoBean>>() {
+                            @Override
+                            public Observable<DuanmianInfoBean> call(GongdianData gongdianData) {
+
+                                return HttpHelper.getInstance().initService().duanmianInfoDownload(gongdianData.getGdid());
+                            }
+                        }).flatMap(new Func1<DuanmianInfoBean, Observable<DuanmianInfoBean.LjdmsBean>>() {
                     @Override
                     public Observable<DuanmianInfoBean.LjdmsBean> call(DuanmianInfoBean duanmianInfoBean) {
+                        intSum += duanmianInfoBean.getLjdms().size();
+                        KLog.e("intSum::" + intSum);
                         return Observable.from(duanmianInfoBean.getLjdms());
                     }
                 }).map(new Func1<DuanmianInfoBean.LjdmsBean, Boolean>() {
@@ -167,6 +168,8 @@ public class DownloadPresenter extends BasePresenter<DownloadContract.View> impl
 
                             @Override
                             public void onNext(Boolean aBoolean) {
+                                intIndex += 1;
+                                KLog.e("intIndex::" + intIndex);
                                 getView().setDuanmianMessage(aBoolean, intSum, intIndex);
                             }
 
@@ -186,23 +189,29 @@ public class DownloadPresenter extends BasePresenter<DownloadContract.View> impl
 
     @Override
     public void downloadCedian() {
-        DataSupport.deleteAll(CedianData.class);
-
-        List<DuanmianData> mDuanmianData = DataSupport.findAll(DuanmianData.class);
-        intSum = mDuanmianData.size();
         intIndex = 0;
+        intSum = 0;
+        DataSupport.deleteAll(CedianData.class);
+        List<DuanmianData> mDuanmianData = DataSupport.findAll(DuanmianData.class);
+
         mRxManager.add(
                 Observable.from(mDuanmianData).flatMap(new Func1<DuanmianData, Observable<CedianInfoBean>>() {
                     @Override
                     public Observable<CedianInfoBean> call(DuanmianData DuanmianData) {
-                        KLog.e("gongdianData.getGdid()::" + DuanmianData.getDmid());
-                        intIndex += 1;
-                        KLog.e("intIndex::" + intIndex);
                         return HttpHelper.getInstance().initService().cedianInfoDownload(DuanmianData.getDmid());
                     }
                 }).flatMap(new Func1<CedianInfoBean, Observable<CedianInfoBean.LjcdsBean>>() {
                     @Override
                     public Observable<CedianInfoBean.LjcdsBean> call(CedianInfoBean cedianInfoBean) {
+                        intSum += cedianInfoBean.getLjcds().size();
+                        KLog.e("intSum::" + intSum);
+
+                        try {
+                            Thread.sleep(2000);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+
                         return Observable.from(cedianInfoBean.getLjcds());
                     }
                 }).map(new Func1<CedianInfoBean.LjcdsBean, Boolean>() {
@@ -235,6 +244,8 @@ public class DownloadPresenter extends BasePresenter<DownloadContract.View> impl
 
                             @Override
                             public void onNext(Boolean aBoolean) {
+                                intIndex += 1;
+                                KLog.e("intIndex::" + intIndex);
                                 getView().setCedianMessage(aBoolean, intSum, intIndex);
                             }
 
@@ -255,6 +266,8 @@ public class DownloadPresenter extends BasePresenter<DownloadContract.View> impl
 
     @Override
     public void downloadYusheshuizhunxian(String departId) {
+        intIndex = 0;
+        intSum = 0;
         DataSupport.deleteAll(YusheshuizhunxianData.class);
 
         mRxManager.add(
@@ -262,7 +275,7 @@ public class DownloadPresenter extends BasePresenter<DownloadContract.View> impl
                         .flatMap(new Func1<YusheshuizhunxianInfoBean, Observable<YusheshuizhunxianInfoBean.YsszxsBean>>() {
                             @Override
                             public Observable<YusheshuizhunxianInfoBean.YsszxsBean> call(YusheshuizhunxianInfoBean yusheshuizhunxianInfoBean) {
-                                intIndex = 0;
+
                                 intSum = yusheshuizhunxianInfoBean.getYsszxs().size();
                                 return Observable.from(yusheshuizhunxianInfoBean.getYsszxs());
                             }
@@ -312,6 +325,8 @@ public class DownloadPresenter extends BasePresenter<DownloadContract.View> impl
 
     @Override
     public void downloadJidian() {
+        intIndex = 0;
+        intSum = 0;
         DataSupport.deleteAll(JidianData.class);
 
         mRxManager.add(
@@ -320,7 +335,7 @@ public class DownloadPresenter extends BasePresenter<DownloadContract.View> impl
                             @Override
                             public Observable<JidianBean.GzjdsBean> call(JidianBean jidianBean) {
                                 KLog.e("jidianBean::" + jidianBean);
-                                intIndex = 0;
+
                                 intSum = jidianBean.getGzjds().size();
                                 return Observable.from(jidianBean.getGzjds());
                             }
@@ -372,6 +387,8 @@ public class DownloadPresenter extends BasePresenter<DownloadContract.View> impl
 
     @Override
     public void downloadStaff() {
+        intIndex = 0;
+        intSum = 0;
         DataSupport.deleteAll(StaffData.class);
 
         mRxManager.add(
@@ -379,7 +396,6 @@ public class DownloadPresenter extends BasePresenter<DownloadContract.View> impl
                         .flatMap(new Func1<StaffBean, Observable<StaffBean.ObsBean>>() {
                             @Override
                             public Observable<StaffBean.ObsBean> call(StaffBean staffBean) {
-                                intIndex = 0;
                                 intSum = staffBean.getObs().size();
                                 return Observable.from(staffBean.getObs());
                             }

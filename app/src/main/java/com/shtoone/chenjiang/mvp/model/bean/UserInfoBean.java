@@ -8,23 +8,33 @@ package com.shtoone.chenjiang.mvp.model.bean;
 public class UserInfoBean {
 
     /**
+     * userPhoneNum : 13888888888
      * status : 0
      * description : 登录成功
-     * userId : 40288bf15803d149015803d461bf0006
-     * dept : {"orgId":"40288bf457f5cadd0157f5e5d341001d","orgName":"一分部-项目分部(工区)"}
-     * userFullName : 测试人员1
+     * userId : 4028ca815848a903015849383a1d002b
+     * dept : {"orgId":"402880e447e99cf10147e9a03b320003","orgName":"昌吉赣客专"}
+     * userFullName : test
      */
 
+    private String userPhoneNum;
     private int status;
     private String description;
     private String userId;
     /**
-     * orgId : 40288bf457f5cadd0157f5e5d341001d
-     * orgName : 一分部-项目分部(工区)
+     * orgId : 402880e447e99cf10147e9a03b320003
+     * orgName : 昌吉赣客专
      */
 
     private DeptBean dept;
     private String userFullName;
+
+    public String getUserPhoneNum() {
+        return userPhoneNum;
+    }
+
+    public void setUserPhoneNum(String userPhoneNum) {
+        this.userPhoneNum = userPhoneNum;
+    }
 
     public int getStatus() {
         return status;

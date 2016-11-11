@@ -15,6 +15,7 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.shtoone.chenjiang.BaseApplication;
 import com.shtoone.chenjiang.R;
 import com.shtoone.chenjiang.mvp.contract.base.BaseContract;
 import com.shtoone.chenjiang.mvp.view.base.BaseActivity;
@@ -71,6 +72,10 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     }
 
     private void initData() {
+        if (BaseApplication.mUserInfoBean != null) {
+            tv_username.setText("姓名：" + BaseApplication.mUserInfoBean.getUserFullName());
+            tv_phone_number.setText("电话" + BaseApplication.mUserInfoBean.getUserPhoneNum());
+        }
         navigationView.setNavigationItemSelectedListener(this);
         llNavHeader.setOnClickListener(new View.OnClickListener() {
             @Override

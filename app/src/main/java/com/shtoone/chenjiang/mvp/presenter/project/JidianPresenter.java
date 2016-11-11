@@ -38,7 +38,6 @@ public class JidianPresenter extends BasePresenter<JidianContract.View> implemen
                     public void call(Subscriber<? super List<JidianData>> subscriber) {
                         List<JidianData> mJidianData = null;
                         try {
-                            Thread.sleep(1000);
                             mJidianData = DataSupport.select("*").order("id")
                                     .limit(Constants.PAGE_SIZE)
                                     .offset(pagination * Constants.PAGE_SIZE)

@@ -22,7 +22,6 @@ import com.shtoone.chenjiang.mvp.view.base.BaseLazyFragment;
 import com.shtoone.chenjiang.utils.DensityUtils;
 import com.shtoone.chenjiang.utils.ToastUtils;
 import com.shtoone.chenjiang.widget.PageStateLayout;
-import com.socks.library.KLog;
 
 import java.net.ConnectException;
 import java.util.List;
@@ -142,7 +141,6 @@ public class StaffFragment extends BaseLazyFragment<StaffContract.Presenter> imp
                         isLoading = true;
                         pagination += 1;
                         mPresenter.queryData(pagination);
-                        KLog.e("进来了…………………………");
                     }
                 }
             }
