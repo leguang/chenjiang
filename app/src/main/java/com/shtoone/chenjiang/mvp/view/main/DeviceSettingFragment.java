@@ -47,7 +47,7 @@ public class DeviceSettingFragment extends BaseFragment {
     }
 
     private void initData() {
-        String[] arr = {"请选择设备", "1", "2", "3", "4", "5"};
+        String[] arr = {"请选择设备"};
         spinner.setItems(arr);
         spinner.setOnItemSelectedListener(new MaterialSpinner.OnItemSelectedListener<String>() {
 

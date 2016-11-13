@@ -25,6 +25,7 @@ public class BaseApplication extends LitePalApplication {
     private static final String TAG = BaseApplication.class.getSimpleName();
     public static Context mContext;
     public static UserInfoBean mUserInfoBean;
+    public static boolean isShowDialog = true;
     public RefWatcher mRefWatcher;
 
 

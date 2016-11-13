@@ -114,7 +114,7 @@ public class MainFragment extends BaseFragment<MainContract.Presenter> implement
             public boolean onMenuItemClick(MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.action_add:
-                        ToastUtils.showToast(getContext(), "添加……………………");
+                        start(AddShuizhunxianFragment.newInstance());
                         break;
                 }
                 return true;
