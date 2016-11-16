@@ -7,12 +7,15 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 
+import com.shtoone.chenjiang.BaseApplication;
 import com.shtoone.chenjiang.R;
 import com.shtoone.chenjiang.common.Constants;
 import com.shtoone.chenjiang.mvp.contract.base.BaseContract;
 import com.shtoone.chenjiang.utils.DisplayUtils;
 import com.shtoone.chenjiang.utils.NetworkUtils;
+import com.shtoone.chenjiang.utils.ScreenUtils;
 import com.shtoone.chenjiang.widget.PageStateLayout;
+import com.socks.library.KLog;
 
 import in.srain.cube.views.ptr.PtrFrameLayout;
 import in.srain.cube.views.ptr.PtrHandler;
@@ -138,6 +141,13 @@ public abstract class BaseFragment<P extends BaseContract.Presenter> extends Swi
         return true;
     }
 
+    public void initStateBar(View view) {
+        KLog.e(ScreenUtils.getStatusBarHeight(BaseApplication.mContext));
+        view.setPadding(view.getPaddingLeft(),
+                view.getPaddingTop() + ScreenUtils.getStatusBarHeight(BaseApplication.mContext),
+                view.getPaddingRight(), view.getPaddingBottom());
+    }
+
     public void initPageStateLayout(final PageStateLayout mPageStateLayout) {
         if (null == mPageStateLayout) return;
 
@@ -156,4 +166,5 @@ public abstract class BaseFragment<P extends BaseContract.Presenter> extends Swi
             }
         });
     }
+
 }

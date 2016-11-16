@@ -58,7 +58,7 @@
     <style name="AddShuizhunxian">
         <item name="android:background">@drawable/rect_bg_stroke_table</item>
         <item name="android:layout_width">0dp</item>
-        <item name="android:layout_height">45dp</item>
+        <item name="android:layout_height">35dp</item>
 
 
 

@@ -2,7 +2,8 @@ package com.shtoone.chenjiang.mvp.contract;
 
 
 import com.shtoone.chenjiang.mvp.contract.base.BaseContract;
-import com.shtoone.chenjiang.mvp.model.bean.LevelLineData;
+import com.shtoone.chenjiang.mvp.model.bean.GongdianData;
+import com.shtoone.chenjiang.mvp.model.bean.YusheshuizhunxianData;
 
 import java.util.List;
 
@@ -12,7 +13,9 @@ import java.util.List;
  */
 public interface MainContract {
     interface View extends BaseContract.View {
-        void refresh(List<LevelLineData> levelLineDatas);
+        void responseShuizhunxianData(List<YusheshuizhunxianData> mShuizhunxianData);
+
+        void responseGongdianData(List<GongdianData> mGongdianData);
     }
 
     interface Presenter extends BaseContract.Presenter {

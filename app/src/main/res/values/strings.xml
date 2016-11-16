@@ -47,4 +47,12 @@
     <string name="dialog_content">当前网络非Wifi网络，下载会消耗流量，请问是否继续下载。</string>
     <string name="dialog_positiveText">确定</string>
     <string name="dialog_negativeText">取消</string>
+
+    <!--测量模块-->
+    <string name="zhuandian">转点</string>
+    <string name="measure">测量</string>
+    <string name="delete">删除</string>
+    <string name="cedian">测点</string>
+    <string name="fance">返测</string>
+    <string name="chongce">重测</string>
 </resources>

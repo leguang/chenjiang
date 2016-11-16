@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group>
+        <item
+            android:id="@+id/message_drawer_main_activity"
+            android:icon="@android:drawable/ic_menu_view"
+            android:title="消息中心" />
+        <item
+            android:id="@+id/logout_drawer_main_activity"
+            android:icon="@drawable/ic_menu_manage"
+            android:title="重新登录" />
+    </group>
+
+    <item android:title="About">
+        <menu>
+            <item
+                android:id="@+id/about_drawer_main_activity"
+                android:icon="@drawable/ic_menu_share"
+                android:title="关于" />
+            <item
+                android:id="@+id/version_drawer_main_activity"
+                android:icon="@drawable/ic_menu_send"
+                android:title="版本" />
+        </menu>
+    </item>
+
+</menu>

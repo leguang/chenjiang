@@ -44,12 +44,28 @@ public class ScreenUtils {
     }
 
     /**
-     * 获得状态栏的高度
+     * 获取状态栏高度——方法1
+     */
+    public static int getStatusBarHeight(Context context) {
+
+        int statusBarHeight = -1;
+        //获取status_bar_height资源的ID
+        int resourceId = context.getResources().getIdentifier("status_bar_height", "dimen", "android");
+        if (resourceId > 0) {
+            //根据资源ID获取响应的尺寸值
+            statusBarHeight = context.getResources().getDimensionPixelSize(resourceId);
+        }
+
+        return statusBarHeight;
+    }
+
+    /**
+     * 获得状态栏的高度——方法2
      *
      * @param context
      * @return
      */
-    public static int getStatusHeight(Context context) {
+    public static int getStatusBarHeight2(Context context) {
 
         int statusHeight = -1;
         try {
@@ -63,6 +79,7 @@ public class ScreenUtils {
         }
         return statusHeight;
     }
+
 
     /**
      * 获取当前屏幕截图，包含状态栏
@@ -106,7 +123,6 @@ public class ScreenUtils {
                 - statusBarHeight);
         view.destroyDrawingCache();
         return bp;
-
     }
 
 }

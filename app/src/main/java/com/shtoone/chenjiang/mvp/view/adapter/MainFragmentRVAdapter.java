@@ -10,7 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.shtoone.chenjiang.R;
-import com.shtoone.chenjiang.mvp.model.bean.LevelLineData;
+import com.shtoone.chenjiang.mvp.model.bean.YusheshuizhunxianData;
 import com.shtoone.chenjiang.mvp.view.adapter.base.OnItemClickListener;
 
 import java.util.List;
@@ -20,13 +20,13 @@ public class MainFragmentRVAdapter extends RecyclerView.Adapter<ViewHolder> {
     private static final String TAG = MainFragmentRVAdapter.class.getSimpleName();
     private Context context;
     private OnItemClickListener mOnItemClickListener;
-    private List<LevelLineData> itemsData;
+    private List<YusheshuizhunxianData> itemsData;
 
     public enum ITEM_TYPE {
         TYPE_ITEM, TYPE_FOOTER
     }
 
-    public MainFragmentRVAdapter(Context context, List<LevelLineData> itemsData) {
+    public MainFragmentRVAdapter(Context context, List<YusheshuizhunxianData> itemsData) {
         super();
         this.context = context;
         this.itemsData = itemsData;
@@ -63,9 +63,9 @@ public class MainFragmentRVAdapter extends RecyclerView.Adapter<ViewHolder> {
         if (holder instanceof ItemViewHolder) {
             ItemViewHolder mItemViewHolder = (ItemViewHolder) holder;
             mItemViewHolder.tv_bianhao.setText("编      号：" + itemsData.get(position).getId() + "");
-            mItemViewHolder.tv_route.setText("路线类型：" + itemsData.get(position).getRouteType() + "");
-            mItemViewHolder.tv_observe.setText("观测类型：" + itemsData.get(position).getObserveType() + "");
-            mItemViewHolder.tv_date.setText("观测时间：" + itemsData.get(position).getObserveDate() + "");
+            mItemViewHolder.tv_route.setText("路线类型：" + itemsData.get(position).getXianlubianhao() + "");
+            mItemViewHolder.tv_observe.setText("观测类型：" + itemsData.get(position).getLeixing() + "");
+            mItemViewHolder.tv_date.setText("观测时间：" + itemsData.get(position).getXiugaishijian() + "");
         }
     }
 

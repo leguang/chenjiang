@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/material_orange_200"
+    android:gravity="center"
+    android:padding="15dp">
+
+    <TableRow android:background="@color/material_cyan_50">
+
+        <TextView
+            style="@style/AddShuizhunxian"
+            android:layout_weight="1"
+            android:gravity="right|center_vertical"
+            android:paddingRight="5dp"
+            android:text="编号：" />
+
+        <TextView
+            android:id="@+id/tv_bianhao_add_shuizhunxian_fragment"
+            style="@style/AddShuizhunxian"
+            android:layout_weight="2.5"
+            android:gravity="left|center_vertical"
+            android:paddingLeft="5dp" />
+    </TableRow>
+
+    <TableRow>
+
+        <TextView
+            style="@style/AddShuizhunxian"
+            android:layout_weight="1"
+            android:gravity="right|center_vertical"
+            android:paddingRight="5dp"
+            android:text="路线类型：" />
+
+        <TextView
+            style="@style/AddShuizhunxian"
+            android:layout_weight="2.5"
+            android:gravity="left|center_vertical"
+            android:paddingLeft="5dp" />
+
+    </TableRow>
+
+    <TableRow android:background="@color/material_cyan_50">
+
+        <TextView
+            style="@style/AddShuizhunxian"
+            android:layout_weight="1"
+            android:gravity="right|center_vertical"
+            android:paddingRight="5dp"
+            android:text="观测类型：" />
+
+        <TextView
+            style="@style/AddShuizhunxian"
+            android:layout_weight="2.5"
+            android:gravity="left|center_vertical"
+            android:paddingLeft="5dp" />
+
+    </TableRow>
+
+    <TableRow>
+
+        <TextView
+            style="@style/AddShuizhunxian"
+            android:layout_weight="1"
+            android:gravity="right|center_vertical"
+            android:paddingRight="5dp"
+            android:text="标段：" />
+
+
+        <TextView
+            style="@style/AddShuizhunxian"
+            android:layout_weight="2.5"
+            android:gravity="left|center_vertical"
+            android:paddingLeft="5dp" />
+    </TableRow>
+
+    <TableRow android:background="@color/material_cyan_50">
+
+        <TextView
+            style="@style/AddShuizhunxian"
+            android:layout_weight="1"
+            android:gravity="right|center_vertical"
+            android:paddingRight="5dp"
+            android:text="工点：" />
+
+        <TextView
+            style="@style/AddShuizhunxian"
+            android:layout_weight="2.5"
+            android:gravity="left|center_vertical"
+            android:paddingLeft="5dp" />
+
+    </TableRow>
+
+    <TableRow>
+
+        <TextView
+            style="@style/AddShuizhunxian"
+            android:layout_weight="1"
+            android:gravity="right|center_vertical"
+            android:paddingRight="5dp"
+            android:text="工作基点：" />
+
+        <TextView
+            style="@style/AddShuizhunxian"
+            android:layout_weight="2.5"
+            android:gravity="left|center_vertical"
+            android:paddingLeft="5dp" />
+
+    </TableRow>
+
+    <TableRow android:background="@color/material_cyan_50">
+
+        <TextView
+            style="@style/AddShuizhunxian"
+            android:layout_weight="1"
+            android:gravity="right|center_vertical"
+            android:paddingRight="5dp"
+            android:text="天气：" />
+
+        <TextView
+            style="@style/AddShuizhunxian"
+            android:layout_weight="2.5"
+            android:gravity="left|center_vertical"
+            android:paddingLeft="5dp" />
+
+    </TableRow>
+
+    <TableRow>
+
+        <TextView
+            style="@style/AddShuizhunxian"
+            android:layout_weight="1"
+            android:gravity="right|center_vertical"
+            android:paddingRight="5dp"
+            android:text="司镜人员：" />
+
+        <TextView
+            style="@style/AddShuizhunxian"
+            android:layout_weight="2.5"
+            android:gravity="left|center_vertical"
+            android:paddingLeft="5dp" />
+
+    </TableRow>
+
+    <TableRow android:background="@color/material_cyan_50">
+
+        <TextView
+            style="@style/AddShuizhunxian"
+            android:layout_weight="1"
+            android:gravity="right|center_vertical"
+            android:paddingRight="5dp"
+            android:text="气压(hPa)：" />
+
+        <TextView
+            style="@style/AddShuizhunxian"
+            android:layout_weight="2.5"
+            android:gravity="left|center_vertical"
+            android:paddingLeft="5dp" />
+
+    </TableRow>
+
+    <TableRow>
+
+        <TextView
+            style="@style/AddShuizhunxian"
+            android:layout_weight="1"
+            android:gravity="right|center_vertical"
+            android:paddingRight="5dp"
+            android:text="温度(℃)：" />
+
+        <TextView
+            style="@style/AddShuizhunxian"
+            android:layout_weight="2.5"
+            android:gravity="left|center_vertical"
+            android:paddingLeft="5dp" />
+
+    </TableRow>
+
+    <TableRow android:background="@color/material_cyan_50">
+
+        <TextView
+            style="@style/AddShuizhunxian"
+            android:layout_weight="1"
+            android:gravity="right|center_vertical"
+            android:paddingRight="5dp"
+            android:text="观测日期：" />
+
+        <TextView
+            android:id="@+id/tv_date_add_shuizhunxian_fragment"
+            style="@style/AddShuizhunxian"
+            android:layout_weight="2.5"
+            android:gravity="left|center_vertical"
+            android:paddingLeft="5dp" />
+    </TableRow>
+
+    <TableRow android:background="@color/material_yellow_200">
+
+        <TextView
+            style="@style/AddShuizhunxian"
+            android:layout_weight="1"
+            android:gravity="right|center_vertical"
+            android:paddingRight="5dp"
+            android:text="仪器品牌：" />
+
+        <TextView
+            style="@style/AddShuizhunxian"
+            android:layout_weight="2.5"
+            android:gravity="left|center_vertical"
+            android:paddingLeft="5dp" />
+    </TableRow>
+
+    <TableRow android:background="@color/material_yellow_200">
+
+        <TextView
+            style="@style/AddShuizhunxian"
+            android:layout_weight="1"
+            android:gravity="right|center_vertical"
+            android:paddingRight="5dp"
+            android:text="仪器型号：" />
+
+        <TextView
+            style="@style/AddShuizhunxian"
+            android:layout_weight="2.5"
+            android:gravity="left|center_vertical"
+            android:paddingLeft="5dp" />
+    </TableRow>
+
+    <TableRow android:background="@color/material_yellow_200">
+
+        <TextView
+            style="@style/AddShuizhunxian"
+            android:layout_weight="1"
+            android:gravity="right|center_vertical"
+            android:paddingRight="5dp"
+            android:text="设备号：" />
+
+        <TextView
+            style="@style/AddShuizhunxian"
+            android:layout_weight="2.5"
+            android:gravity="left|center_vertical"
+            android:paddingLeft="5dp" />
+    </TableRow>
+
+</TableLayout>

@@ -51,13 +51,13 @@ public class SettingFragment extends BaseFragment<SettingContract.Presenter> imp
         //关闭抽屉菜单，使其无法滑动弹出，避免左划退出fragment时造成滑动冲突。
         ((MainActivity) _mActivity).closeDrawer();
         ButterKnife.bind(this, view);
+        initStateBar(toolbar);
         return attachToSwipeBack(view);
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        KLog.e("onViewCreated");
         initData();
     }
 

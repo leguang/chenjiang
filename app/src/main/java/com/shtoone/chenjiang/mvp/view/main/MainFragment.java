@@ -1,5 +1,6 @@
 package com.shtoone.chenjiang.mvp.view.main;
 
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.annotation.NonNull;
@@ -7,8 +8,6 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.TypedValue;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -16,22 +15,25 @@ import android.view.ViewGroup;
 import android.view.animation.OvershootInterpolator;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import com.qiangxi.checkupdatelibrary.bean.CheckUpdateInfo;
 import com.qiangxi.checkupdatelibrary.dialog.ForceUpdateDialog;
 import com.qiangxi.checkupdatelibrary.dialog.UpdateDialog;
+import com.shtoone.chenjiang.BaseApplication;
 import com.shtoone.chenjiang.R;
 import com.shtoone.chenjiang.common.Constants;
 import com.shtoone.chenjiang.event.EventData;
 import com.shtoone.chenjiang.mvp.contract.MainContract;
-import com.shtoone.chenjiang.mvp.model.bean.LevelLineData;
+import com.shtoone.chenjiang.mvp.model.bean.GongdianData;
+import com.shtoone.chenjiang.mvp.model.bean.YusheshuizhunxianData;
 import com.shtoone.chenjiang.mvp.presenter.MainPresenter;
 import com.shtoone.chenjiang.mvp.view.adapter.ListDropDownAdapter;
 import com.shtoone.chenjiang.mvp.view.adapter.MainFragmentRVAdapter;
 import com.shtoone.chenjiang.mvp.view.base.BaseFragment;
+import com.shtoone.chenjiang.mvp.view.main.measure.MeasureFragment;
 import com.shtoone.chenjiang.utils.ToastUtils;
 import com.shtoone.chenjiang.widget.PageStateLayout;
+import com.socks.library.KLog;
 import com.yyydjk.library.DropDownMenu;
 
 import org.greenrobot.eventbus.EventBus;
@@ -72,13 +74,13 @@ public class MainFragment extends BaseFragment<MainContract.Presenter> implement
     private boolean isLoading;
     private MainFragmentRVAdapter mAdapter;
     private CheckUpdateInfo mCheckUpdateInfo;
+    private View contentView;
 
-
-    private String headers[] = {"工点", "测量", "时间"};
-    private String citys[] = {"不限", "武汉武汉武汉武汉武汉武汉武汉武汉武汉武汉武汉武汉武汉武汉武汉武汉武汉武汉武汉武汉武汉武汉武汉武汉武汉武汉", "北京北京北京北京北京北京北京北京北京北京北京北京北京北京北京北京北京北京北京北京北京北京北京北京北京北京北京北京", "上海上海上海上海上海上海上海上海上海上海上海上海上海上海上海上海上海上海上海上海上海", "成都", "广州", "深圳", "重庆", "天津", "西安", "南京", "杭州", "不限", "武汉", "北京", "上海", "成都", "广州", "深圳", "重庆", "天津", "西安", "南京", "杭州"};
-    private String ages[] = {"不限", "待测量", "待平差", "已删除"};
-    private String sexs[] = {"不限", "近一周", "近一月"};
     private List<View> popupViews = new ArrayList<>();
+    private ListView gongdianView, measureStatusView, timeTypeView;
+    private String[] arrayHeaders;
+    private String[] arrayMeasureStatus;
+    private String[] arrayTimeType;
 
     public static MainFragment newInstance() {
         return new MainFragment();
@@ -95,104 +97,17 @@ public class MainFragment extends BaseFragment<MainContract.Presenter> implement
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_main, container, false);
         ButterKnife.bind(this, view);
+        contentView = inflater.inflate(R.layout.recyclerview, null);
+        initView(contentView);
         return view;
     }
 
-    @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-
-        ((MainActivity) _mActivity).initToolBar(toolbar);
-        toolbar.setTitle("水准线路列表");
-        initData();
-    }
-
-    private void initData() {
-        toolbar.inflateMenu(R.menu.menu_add);
-        toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                switch (item.getItemId()) {
-                    case R.id.action_add:
-                        start(AddShuizhunxianFragment.newInstance());
-                        break;
-                }
-                return true;
-            }
-        });
-
-        //init city menu
-        ListView cityView = new ListView(_mActivity);
-        final ListDropDownAdapter cityAdapter = new ListDropDownAdapter(_mActivity, Arrays.asList(citys));
-        cityView.setDividerHeight(0);
-        cityView.setAdapter(cityAdapter);
-
-        //init age menu
-        ListView ageView = new ListView(_mActivity);
-        ageView.setDividerHeight(0);
-        final ListDropDownAdapter ageAdapter = new ListDropDownAdapter(_mActivity, Arrays.asList(ages));
-        ageView.setAdapter(ageAdapter);
-
-        //init sex menu
-        ListView sexView = new ListView(_mActivity);
-        sexView.setDividerHeight(0);
-        final ListDropDownAdapter sexAdapter = new ListDropDownAdapter(_mActivity, Arrays.asList(sexs));
-        sexView.setAdapter(sexAdapter);
-
-
-        popupViews.add(cityView);
-        popupViews.add(ageView);
-        popupViews.add(sexView);
-
-        //add item click event
-        cityView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                cityAdapter.setCheckItem(position);
-                dropDownMenu.setTabText(position == 0 ? headers[0] : citys[position]);
-                dropDownMenu.closeMenu();
-            }
-        });
-
-        ageView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                ageAdapter.setCheckItem(position);
-                dropDownMenu.setTabText(position == 0 ? headers[1] : ages[position]);
-                dropDownMenu.closeMenu();
-            }
-        });
-
-        sexView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                sexAdapter.setCheckItem(position);
-                dropDownMenu.setTabText(position == 0 ? headers[2] : sexs[position]);
-                dropDownMenu.closeMenu();
-            }
-        });
-
-        //init context view
-        TextView contentView = new TextView(_mActivity);
-
-        contentView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-        contentView.setText("内容显示区域");
-        contentView.setGravity(Gravity.CENTER);
-        contentView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
-
-
-        View view = View.inflate(_mActivity, R.layout.recyclerview, null);
-        pagestatelayout = (PageStateLayout) view.findViewById(R.id.pagestatelayout);
-        ptrframelayout = (PtrFrameLayout) view.findViewById(R.id.ptrframelayout);
-        recyclerview = (RecyclerView) view.findViewById(R.id.recyclerview);
-
-        //init dropdownview
-        dropDownMenu.setDropDownMenu(Arrays.asList(headers), popupViews, view);
-
+    private void initView(View contentView) {
+        pagestatelayout = (PageStateLayout) contentView.findViewById(R.id.pagestatelayout);
+        ptrframelayout = (PtrFrameLayout) contentView.findViewById(R.id.ptrframelayout);
+        recyclerview = (RecyclerView) contentView.findViewById(R.id.recyclerview);
         mLinearLayoutManager = new LinearLayoutManager(_mActivity);
         recyclerview.setLayoutManager(mLinearLayoutManager);
-
-
         recyclerview.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
@@ -227,52 +142,135 @@ public class MainFragment extends BaseFragment<MainContract.Presenter> implement
     }
 
     @Override
-    public boolean isCanDoRefresh() {
-        //判断是哪种状态的页面，都让其可下拉
-        if (pagestatelayout.isShowContent) {
-            //判断RecyclerView是否在在顶部，在顶部则允许滑动下拉刷新
-            if (null != recyclerview) {
-                if (recyclerview.getLayoutManager() instanceof LinearLayoutManager) {
-                    LinearLayoutManager lm = (LinearLayoutManager) recyclerview.getLayoutManager();
-                    int position = lm.findFirstVisibleItemPosition();
-                    if (position >= 0) {
-                        if (lm.findViewByPosition(position).getTop() >= 0 && position == 0) {
-                            return true;
-                        }
-                    }
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        ((MainActivity) _mActivity).initToolBar(toolbar);
+        toolbar.setTitle("水准线路列表");
+        initData();
+    }
+
+    private void initData() {
+
+        toolbar.inflateMenu(R.menu.menu_add);
+        toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.action_add:
+                        start(MeasureFragment.newInstance());
+                        break;
                 }
-            } else {
                 return true;
             }
-            return false;
+        });
+
+        Resources res = getResources();
+        arrayHeaders = res.getStringArray(R.array.headers);
+        arrayMeasureStatus = res.getStringArray(R.array.measure_status);
+        arrayTimeType = res.getStringArray(R.array.time_type);
+
+
+        measureStatusView = new ListView(_mActivity);
+        measureStatusView.setDividerHeight(0);
+        final ListDropDownAdapter ageAdapter = new ListDropDownAdapter(_mActivity, Arrays.asList(arrayMeasureStatus));
+        measureStatusView.setAdapter(ageAdapter);
+        measureStatusView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                ageAdapter.setCheckItem(position);
+                dropDownMenu.setTabText(position == 0 ? arrayHeaders[1] : arrayMeasureStatus[position]);
+                dropDownMenu.closeMenu();
+            }
+        });
+
+
+        timeTypeView = new ListView(_mActivity);
+        timeTypeView.setDividerHeight(0);
+        final ListDropDownAdapter sexAdapter = new ListDropDownAdapter(_mActivity, Arrays.asList(arrayTimeType));
+        timeTypeView.setAdapter(sexAdapter);
+
+        timeTypeView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                sexAdapter.setCheckItem(position);
+                dropDownMenu.setTabText(position == 0 ? arrayHeaders[2] : arrayTimeType[position]);
+                dropDownMenu.closeMenu();
+            }
+        });
+
+    }
+
+    @Override
+    public boolean isCanDoRefresh() {
+        //判断RecyclerView是否在在顶部，在顶部则允许滑动下拉刷新
+        if (null != recyclerview && null != mLinearLayoutManager) {
+            int position = mLinearLayoutManager.findFirstVisibleItemPosition();
+            KLog.e(position);
+            if (position >= 0) {
+                if (mLinearLayoutManager.findViewByPosition(position).getTop() >= 0 && position == 0) {
+                    return true;
+                }
+            }
         } else {
             return true;
         }
+        return false;
     }
 
     @Override
     public void showContent() {
-        pagestatelayout.showContent();
+//        pagestatelayout.showContent();
     }
 
     @Override
     public void showError(Throwable t) {
-        pagestatelayout.showError();
+//        pagestatelayout.showError();
     }
 
     @Override
     public void showLoading() {
-        pagestatelayout.showLoading();
+//        pagestatelayout.showLoading();
     }
 
     @Override
-    public void refresh(List<LevelLineData> levelLineDatas) {
-        //设置动画与适配器
-        SlideInLeftAnimationAdapter mSlideInLeftAnimationAdapter = new SlideInLeftAnimationAdapter(mAdapter = new MainFragmentRVAdapter(_mActivity, levelLineDatas));
+    public void responseShuizhunxianData(List<YusheshuizhunxianData> mShuizhunxianData) {
+        //mAdapter的实例化要放到最开始，因为在没有数据的时候，滑动会空指针异常，因为  if (newState == RecyclerView.SCROLL_STATE_IDLE && lastVisibleItemPosition + 1 == mAdapter.getItemCount()) {
+        SlideInLeftAnimationAdapter mSlideInLeftAnimationAdapter = new SlideInLeftAnimationAdapter(mAdapter = new MainFragmentRVAdapter(_mActivity, mShuizhunxianData));
         mSlideInLeftAnimationAdapter.setDuration(500);
-        mSlideInLeftAnimationAdapter.setInterpolator(new OvershootInterpolator(.5f));
+        mSlideInLeftAnimationAdapter.setInterpolator(new OvershootInterpolator(0.5f));
         mScaleInAnimationAdapter = new ScaleInAnimationAdapter(mSlideInLeftAnimationAdapter);
         recyclerview.setAdapter(mScaleInAnimationAdapter);
+    }
+
+    @Override
+    public void responseGongdianData(List<GongdianData> mGongdianData) {
+        final List<String> listGongdian = new ArrayList<>();
+
+        if (mGongdianData.size() > 0) {
+            for (GongdianData gongdianData : mGongdianData) {
+                listGongdian.add(gongdianData.getZxlc());
+            }
+        }
+
+        gongdianView = new ListView(_mActivity);
+        final ListDropDownAdapter gongdianAdapter = new ListDropDownAdapter(_mActivity, listGongdian);
+        gongdianView.setDividerHeight(0);
+        gongdianView.setAdapter(gongdianAdapter);
+        gongdianView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                gongdianAdapter.setCheckItem(position);
+                dropDownMenu.setTabText(position == 0 ? arrayHeaders[0] : listGongdian.get(position));
+                dropDownMenu.closeMenu();
+            }
+        });
+
+        //工点不一定要在最左边，可以放最右边
+        popupViews.add(gongdianView);
+        popupViews.add(measureStatusView);
+        popupViews.add(timeTypeView);
+        dropDownMenu.setDropDownMenu(Arrays.asList(arrayHeaders), popupViews, contentView);
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
@@ -357,7 +355,7 @@ public class MainFragment extends BaseFragment<MainContract.Presenter> implement
             _mActivity.finish();
         } else {
             TOUCH_TIME = System.currentTimeMillis();
-            ToastUtils.showInfoToast(_mActivity, Constants.PRESS_AGAIN);
+            ToastUtils.showInfoToast(BaseApplication.mContext, Constants.PRESS_AGAIN);
         }
         return true;
     }

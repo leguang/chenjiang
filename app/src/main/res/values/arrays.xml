@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources>
+    <string-array name="headers">
+        <item>工点</item>
+        <item>测量</item>
+        <item>时间</item>
+    </string-array>
+
+    <string-array name="measure_status">
+        <item>不限</item>
+        <item>待测量</item>
+        <item>待平差</item>
+        <item>已删除</item>
+    </string-array>
+
+    <string-array name="time_type">
+        <item>不限</item>
+        <item>近一周</item>
+        <item>进一月</item>
+    </string-array>
+
+    <string-array name="route_type">
+        <item>闭合</item>
+        <item>附合</item>
+    </string-array>
+
+    <string-array name="observe_type">
+        <item>aBFFB</item>
+        <item>aFBBF</item>
+        <item>BFFB</item>
+        <item>aBF</item>
+        <item>BF</item>
+    </string-array>
+
+    <string-array name="weather">
+        <item>晴</item>
+        <item>阴</item>
+        <item>雨</item>
+        <item>雪</item>
+        <item>风</item>
+        <item>其他</item>
+    </string-array>
+</resources>

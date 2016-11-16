@@ -69,7 +69,7 @@ public class VersionFragment extends BaseFragment<VersionContract.Presenter> imp
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
+        initStateBar(toolbar);
         initData();
     }
 

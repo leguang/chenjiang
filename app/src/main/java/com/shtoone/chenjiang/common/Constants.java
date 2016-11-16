@@ -41,23 +41,16 @@ public class Constants {
     public static final String USER_ID = "user_id";
 
     //网络链接超时时间
-    public static final int DEFAULT_TIMEOUT = 20;
+    public static final int DEFAULT_TIMEOUT = 3;
 
     //检测App升级
     public static final int CHECKUPDATE = 0;
-
-    //隐藏注册成功后，登陆界面fab的隐藏
-    public static final int HIDE_LOGIN_FAB = 1;
 
 
     //作为登录的参数，固定这个写法
     public static final String OSTYPE = "2";
     public static final String PRESS_AGAIN = "再按一次退出";
     public static final String ENCRYPT_KEY = "leguang";
-
-    public static final String PARAMETERS = "parameters";
-    public static final String USERGROUPID = "usergroupid";
-
 
     public static final String ABOUTAPP = "http://note.youdao.com/share/?id=37e5d8602c49af15d7589d7f91bd548b&type=note";
     public static final String ABOUTCOMPANY = "http://en.ccccltd.cn/ccccltd/";
@@ -68,5 +61,14 @@ public class Constants {
     //下载页面
     public static final String UPDATA_TIME = "updata_time";
 
+    //工点
+    public static final String GONGDIAN = "gongdian";
+    //基点
+    public static final String JIDIAN = "JIDIAN";
+    //人员
+    public static final String STAFF = "STAFF";
+
+    //EventBus系列,值是随便取，只要不相同即可
+    public static final int EVENT_FINISH_LAUNCH = 10;
 
 }

@@ -69,6 +69,7 @@ public class StaffFragment extends BaseLazyFragment<StaffContract.Presenter> imp
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_staff, container, false);
         ButterKnife.bind(this, view);
+        initStateBar(toolbar);
         return view;
     }
 

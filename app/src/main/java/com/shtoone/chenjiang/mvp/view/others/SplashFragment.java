@@ -14,14 +14,13 @@ import com.shtoone.chenjiang.R;
 import com.shtoone.chenjiang.common.Constants;
 import com.shtoone.chenjiang.mvp.contract.SplashContract;
 import com.shtoone.chenjiang.mvp.presenter.SplashPresenter;
-import com.shtoone.chenjiang.mvp.view.main.MainActivity;
 import com.shtoone.chenjiang.mvp.view.base.BaseFragment;
+import com.shtoone.chenjiang.mvp.view.main.MainActivity;
 import com.shtoone.chenjiang.utils.SharedPreferencesUtils;
 import com.shtoone.chenjiang.widget.CircleTextProgressbar;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 
 /**
  * Author：leguang on 2016/10/9 0009 15:49
@@ -72,7 +71,9 @@ public class SplashFragment extends BaseFragment<SplashContract.Presenter> imple
             @Override
             public void onProgress(int what, int progress) {
                 if (((int) (progress % temp)) == 0) {
-                    ctpSkip.setText((--intTime) + "s");
+                    if (ctpSkip != null) {
+                        ctpSkip.setText((--intTime) + "s");
+                    }
                 }
             }
         });
@@ -85,12 +86,6 @@ public class SplashFragment extends BaseFragment<SplashContract.Presenter> imple
         //严格按照流程来，Presenter层的代码应该在View层代码的必要数据加载完成之后才调用
         mPresenter.checkLogin();
         mPresenter.checkUpdate();
-    }
-
-    @OnClick(R.id.ctp_skip)
-    public void onClick() {
-
-
     }
 
     @Override
@@ -106,7 +101,6 @@ public class SplashFragment extends BaseFragment<SplashContract.Presenter> imple
         } else {
 //            start(LoginFragment.newInstance());
             _mActivity.startActivity(new Intent(_mActivity, MainActivity.class));
-
         }
     }
 
@@ -119,10 +113,15 @@ public class SplashFragment extends BaseFragment<SplashContract.Presenter> imple
     }
 
     @Override
-    public void onDestroy() {
+    public void onDestroyView() {
         isExit = true;
-        ctpSkip = null;
-        super.onDestroy();
+        //以下操作是为了防止内存泄漏
+        if (ctpSkip != null) {
+            ctpSkip.stop();
+            ctpSkip.setCountdownProgressListener(1, null);
+            ctpSkip = null;
+        }
+        super.onDestroyView();
     }
 
     @Override

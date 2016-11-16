@@ -1,9 +1,10 @@
 package com.shtoone.chenjiang.mvp.view.main;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -12,15 +13,20 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewAnimationUtils;
+import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.shtoone.chenjiang.BaseApplication;
 import com.shtoone.chenjiang.R;
+import com.shtoone.chenjiang.common.Constants;
+import com.shtoone.chenjiang.event.EventData;
 import com.shtoone.chenjiang.mvp.contract.base.BaseContract;
 import com.shtoone.chenjiang.mvp.view.base.BaseActivity;
 import com.shtoone.chenjiang.mvp.view.main.project.ProjectActivity;
-import com.shtoone.chenjiang.utils.AnimationUtils;
+
+import org.greenrobot.eventbus.EventBus;
 
 import me.yokeyword.fragmentation.SupportFragment;
 
@@ -29,13 +35,8 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     private NavigationView navigationView;
     private TextView tv_username;
     private TextView tv_phone_number;
-    private Toolbar toolbar;
-    private FloatingActionButton fab;
     private LinearLayout llNavHeader;
     private ActionBarDrawerToggle toggle;
-    // 再点一次退出程序时间设置
-    private static final long WAIT_TIME = 2000L;
-    private long TOUCH_TIME = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,13 +48,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         }
         initView();
         initData();
-        drawer.post(new Runnable() {
-            @Override
-            public void run() {
-                AnimationUtils.show(drawer, 0, 3000);
-
-            }
-        });
+        revealShow();
     }
 
     @NonNull
@@ -177,7 +172,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                     }
                 }
             }
-        }, 250);
+        }, 300);
         return true;
     }
 
@@ -196,5 +191,46 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
     public void openDrawer() {
         drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
+    }
+
+    private void revealShow() {
+        drawer.post(new Runnable() {
+            @Override
+            public void run() {
+                if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.LOLLIPOP) {
+                    drawer.setVisibility(View.VISIBLE);
+                    return;
+                }
+
+                int cx = (drawer.getLeft() + drawer.getRight()) / 2;
+                int cy = (drawer.getTop() + drawer.getBottom()) / 2;
+
+                int w = drawer.getWidth();
+                int h = drawer.getHeight();
+
+                // 勾股定理 & 进一法
+                int finalRadius = (int) Math.hypot(w, h);
+
+                Animator anim = ViewAnimationUtils.createCircularReveal(drawer, cx, cy, 0, finalRadius);
+                anim.addListener(new AnimatorListenerAdapter() {
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        super.onAnimationEnd(animation);
+                        drawer.setVisibility(View.VISIBLE);
+                        EventBus.getDefault().postSticky(new EventData(Constants.EVENT_FINISH_LAUNCH));
+
+                    }
+
+                    @Override
+                    public void onAnimationStart(Animator animation) {
+                        super.onAnimationStart(animation);
+                        drawer.setVisibility(View.VISIBLE);
+                    }
+                });
+                anim.setInterpolator(new AccelerateDecelerateInterpolator());
+                anim.setDuration(1000);
+                anim.start();
+            }
+        });
     }
 }

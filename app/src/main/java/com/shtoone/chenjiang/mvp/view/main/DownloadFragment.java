@@ -109,6 +109,7 @@ public class DownloadFragment extends BaseFragment<DownloadContract.Presenter> i
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        initStateBar(appBar);
         initData();
     }
 
@@ -292,14 +293,12 @@ public class DownloadFragment extends BaseFragment<DownloadContract.Presenter> i
 
     private void downloadGongdian() {
         KLog.e("点击进入下载工点………………");
-
         if (BaseApplication.mUserInfoBean == null || TextUtils.isEmpty(BaseApplication.mUserInfoBean.getUserId())) {
             tvGongdianMessage.setTextColor(Color.RED);
             tvGongdianMessage.setText("缺少参数：userid");
             for (int i = 0; i < arrayTextView.length; i++) {
                 arrayTextView[i].setEnabled(true);
             }
-            progressBar.setVisibility(View.GONE);
             if (isDownloadAll) {
                 isDownloadAll = false;
                 tvDownloadAll.setBackgroundResource(R.drawable.rect_bg_down_all);
@@ -329,7 +328,6 @@ public class DownloadFragment extends BaseFragment<DownloadContract.Presenter> i
             for (int i = 0; i < arrayTextView.length; i++) {
                 arrayTextView[i].setEnabled(true);
             }
-            progressBar.setVisibility(View.GONE);
             if (isDownloadAll) {
                 isDownloadAll = false;
                 tvDownloadAll.setBackgroundResource(R.drawable.rect_bg_down_all);
@@ -358,7 +356,6 @@ public class DownloadFragment extends BaseFragment<DownloadContract.Presenter> i
             for (int i = 0; i < arrayTextView.length; i++) {
                 arrayTextView[i].setEnabled(true);
             }
-            progressBar.setVisibility(View.GONE);
             if (isDownloadAll) {
                 isDownloadAll = false;
                 tvDownloadAll.setBackgroundResource(R.drawable.rect_bg_down_all);
@@ -386,7 +383,6 @@ public class DownloadFragment extends BaseFragment<DownloadContract.Presenter> i
             for (int i = 0; i < arrayTextView.length; i++) {
                 arrayTextView[i].setEnabled(true);
             }
-            progressBar.setVisibility(View.GONE);
             if (isDownloadAll) {
                 isDownloadAll = false;
                 tvDownloadAll.setBackgroundResource(R.drawable.rect_bg_down_all);

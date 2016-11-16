@@ -1,10 +1,9 @@
 package com.shtoone.chenjiang.mvp.presenter;
 
 
-import android.util.Log;
-
 import com.shtoone.chenjiang.mvp.contract.MainContract;
-import com.shtoone.chenjiang.mvp.model.bean.LevelLineData;
+import com.shtoone.chenjiang.mvp.model.bean.GongdianData;
+import com.shtoone.chenjiang.mvp.model.bean.YusheshuizhunxianData;
 import com.shtoone.chenjiang.mvp.presenter.base.BasePresenter;
 import com.socks.library.KLog;
 
@@ -33,41 +32,43 @@ public class MainPresenter extends BasePresenter<MainContract.View> implements M
 
 
     public void requestGongdianData() {
-        mRxManager.add(Observable.create(new Observable.OnSubscribe<List<LevelLineData>>() {
+        mRxManager.add(Observable.create(new Observable.OnSubscribe<List<GongdianData>>() {
             @Override
-            public void call(Subscriber<? super List<LevelLineData>> subscriber) {
+            public void call(Subscriber<? super List<GongdianData>> subscriber) {
                 try {
-                    List<LevelLineData> mLevelLineData = DataSupport.findAll(LevelLineData.class);
-                    subscriber.onNext(mLevelLineData);
+                    List<GongdianData> mGongdianData = DataSupport.findAll(GongdianData.class);
+                    subscriber.onNext(mGongdianData);
                 } catch (Exception ex) {
-                    Log.e(TAG, "Error reading from the database", ex);
                     subscriber.onError(ex);
                 }
                 subscriber.onCompleted();
             }
         }).subscribeOn(Schedulers.computation())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new RxSubscriber<List<LevelLineData>>() {
+                .subscribe(new RxSubscriber<List<GongdianData>>() {
 
                                @Override
-                               public void _onNext(List<LevelLineData> levelLineDatas) {
-
+                               public void _onNext(List<GongdianData> mGongdianData) {
+                                   KLog.e("_onNext111111111111");
+                                   getView().responseGongdianData(mGongdianData);
+                                   //下载完工点后就下载预设水准线
+                                   requestShuizhunxianData();
                                }
                            }
                 ));
     }
 
 
-    public void requestLevelLineData() {
-        mRxManager.add(Observable.create(new Observable.OnSubscribe<List<LevelLineData>>() {
+    public void requestShuizhunxianData() {
+        mRxManager.add(Observable.create(new Observable.OnSubscribe<List<YusheshuizhunxianData>>() {
             @Override
-            public void call(Subscriber<? super List<LevelLineData>> subscriber) {
+            public void call(Subscriber<? super List<YusheshuizhunxianData>> subscriber) {
                 try {
-                    List<LevelLineData> mLevelLineData = DataSupport.findAll(LevelLineData.class);
-                    KLog.e("call::" + mLevelLineData.size());
+                    List<YusheshuizhunxianData> mShuizhunxianData = DataSupport.findAll(YusheshuizhunxianData.class);
+                    KLog.e("call::" + mShuizhunxianData.size());
                     KLog.e("map method in thread: " + Thread.currentThread().getName());
 
-                    subscriber.onNext(mLevelLineData);
+                    subscriber.onNext(mShuizhunxianData);
                 } catch (Exception ex) {
                     subscriber.onError(ex);
                 }
@@ -75,12 +76,12 @@ public class MainPresenter extends BasePresenter<MainContract.View> implements M
             }
         }).subscribeOn(Schedulers.computation())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new RxSubscriber<List<LevelLineData>>() {
+                .subscribe(new RxSubscriber<List<YusheshuizhunxianData>>() {
 
                                @Override
-                               public void _onNext(List<LevelLineData> levelLineDatas) {
-                                   KLog.e("_onNext::" + levelLineDatas.size());
-                                   getView().refresh(levelLineDatas);
+                               public void _onNext(List<YusheshuizhunxianData> mShuizhunxianData) {
+                                   KLog.e("_onNext::" + mShuizhunxianData.size());
+                                   getView().responseShuizhunxianData(mShuizhunxianData);
                                    KLog.e("map method in thread: " + Thread.currentThread().getName());
                                }
                            }
@@ -89,6 +90,6 @@ public class MainPresenter extends BasePresenter<MainContract.View> implements M
 
     @Override
     public void start() {
-        requestLevelLineData();
+        requestGongdianData();
     }
 }

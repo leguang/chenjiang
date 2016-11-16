@@ -4,16 +4,12 @@ import android.content.Context;
 
 import com.github.moduth.blockcanary.BlockCanary;
 import com.shtoone.chenjiang.common.AppContext;
-import com.shtoone.chenjiang.mvp.model.bean.CedianData;
 import com.shtoone.chenjiang.mvp.model.bean.UserInfoBean;
 import com.socks.library.KLog;
 import com.squareup.leakcanary.LeakCanary;
 import com.squareup.leakcanary.RefWatcher;
 
 import org.litepal.LitePalApplication;
-import org.litepal.crud.DataSupport;
-
-import java.util.List;
 
 
 /**
@@ -46,8 +42,8 @@ public class BaseApplication extends LitePalApplication {
         BlockCanary.install(this, new AppContext()).start();
         //初始化数据库
 
-        List<CedianData> mCedianData = DataSupport.findAll(CedianData.class);
-        KLog.e("mCedianData.size()：：" + mCedianData.size());
+//        List<CedianData> mCedianData = DataSupport.findAll(CedianData.class);
+//        KLog.e("mCedianData.size()：：" + mCedianData.size());
 //        for (int i = 0; i < 50; i++) {
 //
 //            GongdianData gongdianData = new GongdianData();
