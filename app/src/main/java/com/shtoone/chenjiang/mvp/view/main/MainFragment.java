@@ -78,9 +78,7 @@ public class MainFragment extends BaseFragment<MainContract.Presenter> implement
 
     private List<View> popupViews = new ArrayList<>();
     private ListView gongdianView, measureStatusView, timeTypeView;
-    private String[] arrayHeaders;
-    private String[] arrayMeasureStatus;
-    private String[] arrayTimeType;
+    private String[] arrayHeaders, arrayMeasureStatus, arrayTimeType;
 
     public static MainFragment newInstance() {
         return new MainFragment();
@@ -112,18 +110,18 @@ public class MainFragment extends BaseFragment<MainContract.Presenter> implement
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
-                //还有一个不完美的地方就是当规定的item个数时，最后一个item在屏幕外滑到可见时，其底部没有footview，这点以后再解决。
-                if (newState == RecyclerView.SCROLL_STATE_IDLE && lastVisibleItemPosition + 1 == mAdapter.getItemCount()) {
-
+                if (mAdapter == null) {
+                    return;
+                }
+                if (newState == RecyclerView.SCROLL_STATE_IDLE
+                        && lastVisibleItemPosition + 1 == mAdapter.getItemCount()
+                        //目的是判断第一页数据条数是否满足一整页。
+                        && mAdapter.getItemCount() >= Constants.PAGE_SIZE) {
                     if (!isLoading) {
                         isLoading = true;
-                        recyclerview.postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-//                                loadMore();
-                                isLoading = false;
-                            }
-                        }, 500);
+//                        pagination += 1;
+//                        mPresenter.queryData(pagination);
+                        KLog.e("进来了…………………………");
                     }
                 }
             }
@@ -131,6 +129,9 @@ public class MainFragment extends BaseFragment<MainContract.Presenter> implement
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
+                if (mLinearLayoutManager == null) {
+                    return;
+                }
                 lastVisibleItemPosition = mLinearLayoutManager.findLastVisibleItemPosition();
 
 

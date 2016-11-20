@@ -30,6 +30,10 @@ public class MainPresenter extends BasePresenter<MainContract.View> implements M
         super(mView);
     }
 
+    @Override
+    public void start() {
+        requestGongdianData();
+    }
 
     public void requestGongdianData() {
         mRxManager.add(Observable.create(new Observable.OnSubscribe<List<GongdianData>>() {
@@ -88,8 +92,5 @@ public class MainPresenter extends BasePresenter<MainContract.View> implements M
                 ));
     }
 
-    @Override
-    public void start() {
-        requestGongdianData();
-    }
+
 }

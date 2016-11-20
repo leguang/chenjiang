@@ -44,10 +44,10 @@ public class BaseApplication extends LitePalApplication {
 
 //        List<CedianData> mCedianData = DataSupport.findAll(CedianData.class);
 //        KLog.e("mCedianData.size()：：" + mCedianData.size());
-//        for (int i = 0; i < 50; i++) {
+//        for (int i = 0; i <10; i++) {
 //
 //            GongdianData gongdianData = new GongdianData();
-//            gongdianData.setName("@" + (i + 1));
+//            gongdianData.setZxlc("@" + (i + 1));
 //            boolean is = gongdianData.save();
 //            KLog.e(is);
 //        }
@@ -91,6 +91,19 @@ public class BaseApplication extends LitePalApplication {
 //            KLog.e(isis);
 //        }
 
+//        for (int i = 0; i < 100; i++) {
+//
+//            ShuizhunxianData f = new ShuizhunxianData();
+//            f.setBeizhu("备注" + (i + 1));
+//            f.setEditDate("2011-11-11 11:22:22");
+//            f.setDepartId("2e2d1s5fdfs2e5s6");
+//            f.setDepartName("先期标" + (i + 1));
+//            f.setBianhao("L7004" + i);
+//            f.setRouteType("附和");
+//
+//            boolean isis = f.save();
+//            KLog.e(isis);
+//        }
 
     }
 }

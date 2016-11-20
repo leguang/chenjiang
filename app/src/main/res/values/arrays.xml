@@ -40,4 +40,10 @@
         <item>风</item>
         <item>其他</item>
     </string-array>
+
+    <string-array name="upload_status">
+        <item>不限</item>
+        <item>待上传</item>
+        <item>已上传</item>
+    </string-array>
 </resources>

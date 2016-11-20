@@ -142,7 +142,6 @@ public abstract class BaseFragment<P extends BaseContract.Presenter> extends Swi
     }
 
     public void initStateBar(View view) {
-        KLog.e(ScreenUtils.getStatusBarHeight(BaseApplication.mContext));
         view.setPadding(view.getPaddingLeft(),
                 view.getPaddingTop() + ScreenUtils.getStatusBarHeight(BaseApplication.mContext),
                 view.getPaddingRight(), view.getPaddingBottom());

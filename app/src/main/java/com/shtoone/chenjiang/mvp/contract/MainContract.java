@@ -13,9 +13,9 @@ import java.util.List;
  */
 public interface MainContract {
     interface View extends BaseContract.View {
-        void responseShuizhunxianData(List<YusheshuizhunxianData> mShuizhunxianData);
-
         void responseGongdianData(List<GongdianData> mGongdianData);
+
+        void responseShuizhunxianData(List<YusheshuizhunxianData> mShuizhunxianData);
     }
 
     interface Presenter extends BaseContract.Presenter {

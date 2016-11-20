@@ -49,9 +49,7 @@ public class GongdianMenuFragment extends BaseFragment<GongdianMenuContract.Pres
     private int pagination = 0;
     private LinearLayoutManager mLinearLayoutManager;
     private int lastVisibleItemPosition;
-    private View mFooterLoading;
-    private View mFooterNotLoading;
-    private View mFooterError;
+    private View mFooterLoading, mFooterNotLoading, mFooterError;
     private boolean isLoading;
 
     public static GongdianMenuFragment newInstance() {
@@ -119,6 +117,9 @@ public class GongdianMenuFragment extends BaseFragment<GongdianMenuContract.Pres
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
+                if (mAdapter == null) {
+                    return;
+                }
                 if (newState == RecyclerView.SCROLL_STATE_IDLE
                         && lastVisibleItemPosition + 1 == mAdapter.getItemCount()
                         //目的是判断第一页数据条数是否满足一整页。
@@ -135,6 +136,9 @@ public class GongdianMenuFragment extends BaseFragment<GongdianMenuContract.Pres
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
+                if (mLinearLayoutManager == null) {
+                    return;
+                }
                 lastVisibleItemPosition = mLinearLayoutManager.findLastVisibleItemPosition();
             }
         });

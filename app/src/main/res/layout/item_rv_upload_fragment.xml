@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?android:attr/selectableItemBackground"
+    android:paddingLeft="15dp"
+    android:paddingRight="15dp"
+    android:paddingTop="5dp">
+
+    <TextView
+        android:id="@+id/tv_bianhao_item_rv_upload_fragment"
+        style="@style/UplaodTheme"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="LC00001"
+        android:textColor="@color/material_green_500"
+        android:textSize="20dp" />
+
+    <TextView
+        android:id="@+id/tv_biaoduan_item_rv_upload_fragment"
+        style="@style/UplaodTheme"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_bianhao_item_rv_upload_fragment"
+        android:text="先期标" />
+
+    <TextView
+        android:id="@+id/tv_edittime_item_rv_upload_fragment"
+        style="@style/UplaodTheme"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_biaoduan_item_rv_upload_fragment"
+        android:text="编辑时间：2012-12-22 22:22:22" />
+
+    <TextView
+        android:id="@+id/tv_observe_time_item_rv_upload_fragment"
+        style="@style/UplaodTheme"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_edittime_item_rv_upload_fragment"
+        android:text="观测日期：2012-12-22 22:22:22" />
+
+    <TextView
+        android:id="@+id/tv_route_type_item_rv_upload_fragment"
+        style="@style/UplaodTheme"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_observe_time_item_rv_upload_fragment"
+        android:text="线路类型：附和" />
+
+    <TextView
+        android:id="@+id/tv_observe_type_item_rv_upload_fragment"
+        style="@style/UplaodTheme"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_route_type_item_rv_upload_fragment"
+        android:text="观测类型：aBFFB" />
+
+    <CheckBox
+        android:id="@+id/cb_item_rv_upload_fragment"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_alignParentRight="true"
+        android:gravity="center"
+        android:padding="7dp" />
+
+</RelativeLayout>
+

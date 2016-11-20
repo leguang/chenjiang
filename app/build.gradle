@@ -79,4 +79,6 @@ dependencies {
     compile 'com.daimajia.numberprogressbar:library:1.2@aar'
     compile 'com.robinhood.ticker:ticker:1.1.1'
     compile 'com.afollestad.material-dialogs:core:0.9.1.0'
+    //recycleview实现viewpager
+    compile 'com.github.lsjwzh.RecyclerViewPager:lib:v1.1.2'
 }

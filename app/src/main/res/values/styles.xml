@@ -60,7 +60,18 @@
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_height">35dp</item>
 
+    </style>
 
+    <!--上传模块-->
+    <style name="UplaodTheme">
+        <item name="android:textColor">@color/black_87_percent_alpha</item>
+        <item name="android:padding">0.5dp</item>
+        <item name="android:textSize">13sp</item>
+        <item name="android:lines">1</item>
+    </style>
 
+    <style name="CheckBoxTheme" parent="Theme.AppCompat.Light">
+        <item name="colorControlNormal">@color/white</item>
+        <item name="colorControlActivated">@color/white</item>
     </style>
 </resources>

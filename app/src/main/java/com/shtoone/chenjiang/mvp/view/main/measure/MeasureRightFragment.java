@@ -3,6 +3,7 @@ package com.shtoone.chenjiang.mvp.view.main.measure;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +11,7 @@ import android.view.ViewGroup;
 
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigation;
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigationItem;
+import com.lsjwzh.widget.recyclerviewpager.RecyclerViewPager;
 import com.shtoone.chenjiang.R;
 import com.shtoone.chenjiang.mvp.contract.MeasureContract;
 import com.shtoone.chenjiang.mvp.presenter.MeasurePresenter;
@@ -33,7 +35,7 @@ public class MeasureRightFragment extends BaseFragment<MeasureContract.Presenter
     @BindView(R.id.bottom_navigation_laboratory_activity)
     AHBottomNavigation bottomNavigation;
     private ArrayList<AHBottomNavigationItem> bottomNavigationItems = new ArrayList<>();
-
+    protected RecyclerViewPager mRecyclerView;
 
     public static MeasureRightFragment newInstance() {
         return new MeasureRightFragment();
@@ -52,6 +54,7 @@ public class MeasureRightFragment extends BaseFragment<MeasureContract.Presenter
         ButterKnife.bind(this, view);
         //重设toolbar的paddingTop值，以填补状态栏高度
         initStateBar(toolbar);
+
         return view;
     }
 
@@ -60,6 +63,8 @@ public class MeasureRightFragment extends BaseFragment<MeasureContract.Presenter
         super.onViewCreated(view, savedInstanceState);
         initToolbar();
         initData();
+        initViewPager(view);
+
     }
 
     private void initToolbar() {
@@ -115,6 +120,24 @@ public class MeasureRightFragment extends BaseFragment<MeasureContract.Presenter
 
             }
         });
+
+    }
+
+    protected void initViewPager(View view) {
+        mRecyclerView = (RecyclerViewPager) view.findViewById(R.id.viewpager);
+
+        LinearLayoutManager layout = new LinearLayoutManager(_mActivity, LinearLayoutManager.VERTICAL, false);
+        //数字越大，触发滚向下一页所需偏移就越大
+        mRecyclerView.setTriggerOffset(0.1f);
+        //数字越大，就越容易滚动
+        mRecyclerView.setFlingFactor(0.0f);
+        mRecyclerView.setLayoutManager(layout);
+        mRecyclerView.setAdapter(new LayoutAdapter(_mActivity, mRecyclerView));
+        mRecyclerView.setHasFixedSize(true);
+        mRecyclerView.setLongClickable(true);
+
+
+
 
     }
 

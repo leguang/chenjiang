@@ -11,8 +11,12 @@ import com.shtoone.chenjiang.mvp.model.bean.StaffBean;
 import com.shtoone.chenjiang.mvp.model.bean.UserInfoBean;
 import com.shtoone.chenjiang.mvp.model.bean.YusheshuizhunxianInfoBean;
 
+import okhttp3.ResponseBody;
 import retrofit2.Call;
+import retrofit2.http.Field;
+import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
+import retrofit2.http.POST;
 import retrofit2.http.Query;
 import rx.Observable;
 
@@ -57,4 +61,9 @@ public interface ApiService {
     //下载人员信息
     @GET("app.do?obsDownload")
     Observable<StaffBean> staffDownload();
+
+    //上传水准线
+    @FormUrlEncoded
+    @POST("app.do?dataUpload")
+    Call<ResponseBody> upload(@Field("szxJson") String szxJson);
 }

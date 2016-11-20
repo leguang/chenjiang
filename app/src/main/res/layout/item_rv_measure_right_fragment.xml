@@ -1,0 +1,350 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?android:attr/selectableItemBackground"
+    android:gravity="center"
+    android:padding="30dp">
+
+
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center">
+
+        <TableRow android:gravity="center">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:src="@drawable/ic_keyboard_arrow_up_light_green_a400_48dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginBottom="10dp"
+                    android:background="@drawable/oval_bg_measure_number"
+                    android:gravity="center"
+                    android:text="77"
+                    android:textColor="@color/base_color"
+                    android:textSize="25sp" />
+
+            </LinearLayout>
+
+        </TableRow>
+
+        <TableRow>
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="64dp"
+                android:layout_weight="1"
+                android:background="@drawable/rect_bg_stroke_table"
+                android:gravity="center"
+                android:text="往测"
+                android:textColor="@color/base_color"
+                android:textSize="25sp" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="64dp"
+                android:layout_weight="2"
+                android:background="@drawable/rect_bg_stroke_table"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/rect_bg_stroke_table"
+                    android:gravity="center"
+                    android:text="1111" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/rect_bg_stroke_table"
+                    android:gravity="center"
+                    android:text="222222" />
+            </LinearLayout>
+
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/rect_bg_stroke_table"
+                android:gravity="center"
+                android:text="333" />
+
+        </TableRow>
+
+        <TableRow android:background="@color/material_cyan_50">
+
+            <TextView
+                style="@style/AddShuizhunxian"
+                android:layout_weight="1"
+                android:gravity="right|center_vertical"
+                android:paddingRight="5dp"
+                android:text="B1  HD：" />
+
+            <TextView
+                android:id="@+id/tv_bianhao_add_shuizhunxian_fragment"
+                style="@style/AddShuizhunxian"
+                android:layout_weight="1"
+                android:gravity="left|center_vertical"
+                android:paddingLeft="5dp" />
+
+            <TextView
+                style="@style/AddShuizhunxian"
+                android:layout_weight="1"
+                android:gravity="right|center_vertical"
+                android:paddingRight="5dp"
+                android:text="" />
+
+            <TextView
+                style="@style/AddShuizhunxian"
+                android:layout_weight="1"
+                android:gravity="right|center_vertical"
+                android:paddingRight="5dp"
+                android:text="" />
+        </TableRow>
+
+        <TableRow>
+
+            <TextView
+                style="@style/AddShuizhunxian"
+                android:layout_weight="1"
+                android:gravity="right|center_vertical"
+                android:paddingRight="5dp"
+                android:text="B2  HD：" />
+
+            <TextView
+                style="@style/AddShuizhunxian"
+                android:layout_weight="1"
+                android:gravity="left|center_vertical"
+                android:paddingLeft="5dp" />
+
+            <TextView
+                style="@style/AddShuizhunxian"
+                android:layout_weight="1"
+                android:gravity="right|center_vertical"
+                android:paddingRight="5dp"
+                android:text="" />
+
+            <TextView
+                style="@style/AddShuizhunxian"
+                android:layout_weight="1"
+                android:gravity="right|center_vertical"
+                android:paddingRight="5dp"
+                android:text="" />
+
+        </TableRow>
+
+        <TableRow android:background="@color/material_cyan_50">
+
+            <TextView
+                style="@style/AddShuizhunxian"
+                android:layout_weight="1"
+                android:gravity="right|center_vertical"
+                android:paddingRight="5dp"
+                android:text="F1  HD：" />
+
+            <TextView
+                style="@style/AddShuizhunxian"
+                android:layout_weight="1"
+                android:gravity="left|center_vertical"
+                android:paddingLeft="5dp" />
+
+            <TextView
+                style="@style/AddShuizhunxian"
+                android:layout_weight="1"
+                android:gravity="right|center_vertical"
+                android:paddingRight="5dp"
+                android:text="" />
+
+            <TextView
+                style="@style/AddShuizhunxian"
+                android:layout_weight="1"
+                android:gravity="right|center_vertical"
+                android:paddingRight="5dp"
+                android:text="" />
+
+        </TableRow>
+
+        <TableRow>
+
+            <TextView
+                style="@style/AddShuizhunxian"
+                android:layout_weight="1"
+                android:gravity="right|center_vertical"
+                android:paddingRight="5dp"
+                android:text="F2  HD：" />
+
+
+            <TextView
+                style="@style/AddShuizhunxian"
+                android:layout_weight="1"
+                android:gravity="left|center_vertical"
+                android:paddingLeft="5dp" />
+
+            <TextView
+                style="@style/AddShuizhunxian"
+                android:layout_weight="1"
+                android:gravity="right|center_vertical"
+                android:paddingRight="5dp"
+                android:text="" />
+
+            <TextView
+                style="@style/AddShuizhunxian"
+                android:layout_weight="1"
+                android:gravity="right|center_vertical"
+                android:paddingRight="5dp"
+                android:text="" />
+        </TableRow>
+
+        <TableRow android:background="@color/material_cyan_50">
+
+            <TextView
+                style="@style/AddShuizhunxian"
+                android:layout_weight="1"
+                android:gravity="right|center_vertical"
+                android:paddingRight="5dp"
+                android:text="B1  R：" />
+
+            <TextView
+                style="@style/AddShuizhunxian"
+                android:layout_weight="1"
+                android:gravity="left|center_vertical"
+                android:paddingLeft="5dp" />
+
+            <TextView
+                style="@style/AddShuizhunxian"
+                android:layout_weight="1"
+                android:gravity="right|center_vertical"
+                android:paddingRight="5dp"
+                android:text="" />
+
+            <TextView
+                style="@style/AddShuizhunxian"
+                android:layout_weight="1"
+                android:gravity="right|center_vertical"
+                android:paddingRight="5dp"
+                android:text="" />
+
+        </TableRow>
+
+        <TableRow>
+
+            <TextView
+                style="@style/AddShuizhunxian"
+                android:layout_weight="1"
+                android:gravity="right|center_vertical"
+                android:paddingRight="5dp"
+                android:text="B2  R：" />
+
+            <TextView
+                style="@style/AddShuizhunxian"
+                android:layout_weight="1"
+                android:gravity="left|center_vertical"
+                android:paddingLeft="5dp" />
+
+            <TextView
+                style="@style/AddShuizhunxian"
+                android:layout_weight="1"
+                android:gravity="right|center_vertical"
+                android:paddingRight="5dp"
+                android:text="" />
+
+            <TextView
+                style="@style/AddShuizhunxian"
+                android:layout_weight="1"
+                android:gravity="right|center_vertical"
+                android:paddingRight="5dp"
+                android:text="" />
+
+        </TableRow>
+
+        <TableRow android:background="@color/material_cyan_50">
+
+            <TextView
+                style="@style/AddShuizhunxian"
+                android:layout_weight="1"
+                android:gravity="right|center_vertical"
+                android:paddingRight="5dp"
+                android:text="F1  R：" />
+
+            <TextView
+                style="@style/AddShuizhunxian"
+                android:layout_weight="1"
+                android:gravity="left|center_vertical"
+                android:paddingLeft="5dp" />
+
+            <TextView
+                style="@style/AddShuizhunxian"
+                android:layout_weight="1"
+                android:gravity="right|center_vertical"
+                android:paddingRight="5dp"
+                android:text="" />
+
+            <TextView
+                style="@style/AddShuizhunxian"
+                android:layout_weight="1"
+                android:gravity="right|center_vertical"
+                android:paddingRight="5dp"
+                android:text="" />
+
+        </TableRow>
+
+        <TableRow>
+
+            <TextView
+                style="@style/AddShuizhunxian"
+                android:layout_weight="1"
+                android:gravity="right|center_vertical"
+                android:paddingRight="5dp"
+                android:text="F2  R：" />
+
+            <TextView
+                style="@style/AddShuizhunxian"
+                android:layout_weight="1"
+                android:gravity="left|center_vertical"
+                android:paddingLeft="5dp" />
+
+            <TextView
+                style="@style/AddShuizhunxian"
+                android:layout_weight="1"
+                android:gravity="right|center_vertical"
+                android:paddingRight="5dp"
+                android:text="" />
+
+            <TextView
+                style="@style/AddShuizhunxian"
+                android:layout_weight="1"
+                android:gravity="right|center_vertical"
+                android:paddingRight="5dp"
+                android:text="" />
+
+        </TableRow>
+
+        <TableRow android:gravity="center">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:src="@drawable/ic_keyboard_arrow_down_purple_800_48dp" />
+
+        </TableRow>
+
+        <Space android:layout_height="25dp" />
+    </TableLayout>
+
+
+</FrameLayout>
