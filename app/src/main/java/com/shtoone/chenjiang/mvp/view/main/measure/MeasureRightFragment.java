@@ -13,8 +13,8 @@ import com.aurelhubert.ahbottomnavigation.AHBottomNavigation;
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigationItem;
 import com.lsjwzh.widget.recyclerviewpager.RecyclerViewPager;
 import com.shtoone.chenjiang.R;
-import com.shtoone.chenjiang.mvp.contract.MeasureContract;
-import com.shtoone.chenjiang.mvp.presenter.MeasurePresenter;
+import com.shtoone.chenjiang.mvp.contract.measure.MeasureContract;
+import com.shtoone.chenjiang.mvp.presenter.measure.MeasurePresenter;
 import com.shtoone.chenjiang.mvp.view.base.BaseFragment;
 import com.socks.library.KLog;
 

@@ -10,7 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.shtoone.chenjiang.R;
-import com.shtoone.chenjiang.mvp.model.bean.YusheshuizhunxianData;
+import com.shtoone.chenjiang.mvp.model.entity.db.YusheshuizhunxianData;
 import com.shtoone.chenjiang.mvp.view.adapter.base.OnItemClickListener;
 
 import java.util.List;

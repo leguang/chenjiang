@@ -2,8 +2,8 @@ package com.shtoone.chenjiang.mvp.contract;
 
 
 import com.shtoone.chenjiang.mvp.contract.base.BaseContract;
-import com.shtoone.chenjiang.mvp.model.bean.GongdianData;
-import com.shtoone.chenjiang.mvp.model.bean.YusheshuizhunxianData;
+import com.shtoone.chenjiang.mvp.model.entity.db.GongdianData;
+import com.shtoone.chenjiang.mvp.model.entity.db.YusheshuizhunxianData;
 
 import java.util.List;
 

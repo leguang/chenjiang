@@ -2,7 +2,7 @@ package com.shtoone.chenjiang.mvp.presenter;
 
 import com.shtoone.chenjiang.mvp.contract.VersionContract;
 import com.shtoone.chenjiang.mvp.model.HttpHelper;
-import com.shtoone.chenjiang.mvp.model.bean.CheckUpdateBean;
+import com.shtoone.chenjiang.mvp.model.entity.bean.CheckUpdateBean;
 import com.shtoone.chenjiang.mvp.presenter.base.BasePresenter;
 
 import retrofit2.Call;
@@ -17,6 +17,7 @@ public class VersionPresenter extends BasePresenter<VersionContract.View> implem
 
     private static final String TAG = VersionPresenter.class.getSimpleName();
     private CheckUpdateBean.UpdateInfoBean mUpdateInfo;
+    private Call mCall;
 
 
     public VersionPresenter(VersionContract.View mView) {
@@ -27,9 +28,13 @@ public class VersionPresenter extends BasePresenter<VersionContract.View> implem
     @Override
     public void checkUpdate() {
         getView().showLoading();
-        HttpHelper.getInstance().initService().checkUpdate().enqueue(new Callback<CheckUpdateBean>() {
+        mCall = HttpHelper.getInstance().initService().checkUpdate();
+        mCall.enqueue(new Callback<CheckUpdateBean>() {
             @Override
             public void onResponse(Call<CheckUpdateBean> call, Response<CheckUpdateBean> response) {
+                if (getView() == null) {
+                    return;
+                }
                 if (response.isSuccessful()) {
                     if (response.body().isSuccess()) {
                         mUpdateInfo = response.body().getUpdateInfo();
@@ -37,7 +42,6 @@ public class VersionPresenter extends BasePresenter<VersionContract.View> implem
                             getView().showForceUpdateDialog(mUpdateInfo);
                         } else {
                             getView().showUpdateDialog(mUpdateInfo);
-
                         }
 
                     } else {
@@ -50,6 +54,9 @@ public class VersionPresenter extends BasePresenter<VersionContract.View> implem
 
             @Override
             public void onFailure(Call<CheckUpdateBean> call, Throwable t) {
+                if (getView() == null) {
+                    return;
+                }
                 getView().showError(t);
             }
         });
@@ -61,4 +68,9 @@ public class VersionPresenter extends BasePresenter<VersionContract.View> implem
 
     }
 
+    @Override
+    public void detachView() {
+        mCall.cancel();
+        super.detachView();
+    }
 }

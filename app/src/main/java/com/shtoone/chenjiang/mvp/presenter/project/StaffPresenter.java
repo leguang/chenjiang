@@ -2,7 +2,7 @@ package com.shtoone.chenjiang.mvp.presenter.project;
 
 import com.shtoone.chenjiang.common.Constants;
 import com.shtoone.chenjiang.mvp.contract.project.StaffContract;
-import com.shtoone.chenjiang.mvp.model.bean.StaffData;
+import com.shtoone.chenjiang.mvp.model.entity.db.StaffData;
 import com.shtoone.chenjiang.mvp.presenter.base.BasePresenter;
 
 import org.litepal.crud.DataSupport;

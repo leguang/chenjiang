@@ -2,7 +2,7 @@ package com.shtoone.chenjiang.mvp.presenter;
 
 import com.shtoone.chenjiang.mvp.contract.RegisterContract;
 import com.shtoone.chenjiang.mvp.model.HttpHelper;
-import com.shtoone.chenjiang.mvp.model.bean.RegisterBean;
+import com.shtoone.chenjiang.mvp.model.entity.bean.RegisterBean;
 import com.shtoone.chenjiang.mvp.presenter.base.BasePresenter;
 import com.socks.library.KLog;
 

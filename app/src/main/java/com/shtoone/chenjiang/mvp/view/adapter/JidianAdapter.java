@@ -5,7 +5,7 @@ import android.text.Html;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.shtoone.chenjiang.R;
-import com.shtoone.chenjiang.mvp.model.bean.JidianData;
+import com.shtoone.chenjiang.mvp.model.entity.db.JidianData;
 
 public class JidianAdapter extends BaseQuickAdapter<JidianData, BaseViewHolder> {
     private static final String TAG = JidianAdapter.class.getSimpleName();

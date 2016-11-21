@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:background="?android:attr/selectableItemBackground"
     android:gravity="center"
-    android:padding="30dp">
+    android:padding="20dp">
 
 
     <TableLayout
@@ -82,7 +82,9 @@
                 android:layout_weight="1"
                 android:background="@drawable/rect_bg_stroke_table"
                 android:gravity="center"
-                android:text="333" />
+                android:text="BFFB"
+                android:textColor="@color/black"
+                android:textSize="22sp" />
 
         </TableRow>
 
@@ -107,7 +109,7 @@
                 android:layout_weight="1"
                 android:gravity="right|center_vertical"
                 android:paddingRight="5dp"
-                android:text="" />
+                android:text="后视距和：" />
 
             <TextView
                 style="@style/AddShuizhunxian"
@@ -137,7 +139,7 @@
                 android:layout_weight="1"
                 android:gravity="right|center_vertical"
                 android:paddingRight="5dp"
-                android:text="" />
+                android:text="前视距和：" />
 
             <TextView
                 style="@style/AddShuizhunxian"
@@ -168,7 +170,7 @@
                 android:layout_weight="1"
                 android:gravity="right|center_vertical"
                 android:paddingRight="5dp"
-                android:text="" />
+                android:text="高差1：" />
 
             <TextView
                 style="@style/AddShuizhunxian"
@@ -200,7 +202,7 @@
                 android:layout_weight="1"
                 android:gravity="right|center_vertical"
                 android:paddingRight="5dp"
-                android:text="" />
+                android:text="高差2：" />
 
             <TextView
                 style="@style/AddShuizhunxian"
@@ -230,7 +232,7 @@
                 android:layout_weight="1"
                 android:gravity="right|center_vertical"
                 android:paddingRight="5dp"
-                android:text="" />
+                android:text="测站高差：" />
 
             <TextView
                 style="@style/AddShuizhunxian"
@@ -261,7 +263,7 @@
                 android:layout_weight="1"
                 android:gravity="right|center_vertical"
                 android:paddingRight="5dp"
-                android:text="" />
+                android:text="高程值：" />
 
             <TextView
                 style="@style/AddShuizhunxian"
@@ -292,7 +294,7 @@
                 android:layout_weight="1"
                 android:gravity="right|center_vertical"
                 android:paddingRight="5dp"
-                android:text="" />
+                android:text="FR读数差:" />
 
             <TextView
                 style="@style/AddShuizhunxian"
@@ -323,7 +325,7 @@
                 android:layout_weight="1"
                 android:gravity="right|center_vertical"
                 android:paddingRight="5dp"
-                android:text="" />
+                android:text="BR读数差:" />
 
             <TextView
                 style="@style/AddShuizhunxian"

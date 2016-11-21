@@ -2,9 +2,9 @@ package com.shtoone.chenjiang.mvp.presenter;
 
 import com.shtoone.chenjiang.common.Constants;
 import com.shtoone.chenjiang.mvp.contract.AddShuizhunxianContract;
-import com.shtoone.chenjiang.mvp.model.bean.GongdianData;
-import com.shtoone.chenjiang.mvp.model.bean.JidianData;
-import com.shtoone.chenjiang.mvp.model.bean.StaffData;
+import com.shtoone.chenjiang.mvp.model.entity.db.GongdianData;
+import com.shtoone.chenjiang.mvp.model.entity.db.JidianData;
+import com.shtoone.chenjiang.mvp.model.entity.db.StaffData;
 import com.shtoone.chenjiang.mvp.presenter.base.BasePresenter;
 
 import org.litepal.crud.DataSupport;

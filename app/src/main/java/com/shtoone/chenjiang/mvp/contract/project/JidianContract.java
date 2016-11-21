@@ -2,7 +2,7 @@ package com.shtoone.chenjiang.mvp.contract.project;
 
 
 import com.shtoone.chenjiang.mvp.contract.base.BaseContract;
-import com.shtoone.chenjiang.mvp.model.bean.JidianData;
+import com.shtoone.chenjiang.mvp.model.entity.db.JidianData;
 
 import java.util.List;
 

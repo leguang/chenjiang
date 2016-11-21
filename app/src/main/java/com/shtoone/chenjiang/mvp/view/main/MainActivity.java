@@ -25,6 +25,8 @@ import com.shtoone.chenjiang.event.EventData;
 import com.shtoone.chenjiang.mvp.contract.base.BaseContract;
 import com.shtoone.chenjiang.mvp.view.base.BaseActivity;
 import com.shtoone.chenjiang.mvp.view.main.project.ProjectActivity;
+import com.shtoone.chenjiang.mvp.view.main.setting.SettingFragment;
+import com.shtoone.chenjiang.mvp.view.main.upload.UploadFragment;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -194,13 +196,13 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     }
 
     private void revealShow() {
+        if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.LOLLIPOP) {
+            drawer.setVisibility(View.VISIBLE);
+            return;
+        }
         drawer.post(new Runnable() {
             @Override
             public void run() {
-                if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.LOLLIPOP) {
-                    drawer.setVisibility(View.VISIBLE);
-                    return;
-                }
 
                 int cx = (drawer.getLeft() + drawer.getRight()) / 2;
                 int cy = (drawer.getTop() + drawer.getBottom()) / 2;

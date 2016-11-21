@@ -2,7 +2,7 @@ package com.shtoone.chenjiang.mvp.contract.project;
 
 
 import com.shtoone.chenjiang.mvp.contract.base.BaseContract;
-import com.shtoone.chenjiang.mvp.model.bean.StaffData;
+import com.shtoone.chenjiang.mvp.model.entity.db.StaffData;
 
 import java.util.List;
 

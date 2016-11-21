@@ -15,7 +15,7 @@ import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.shtoone.chenjiang.R;
 import com.shtoone.chenjiang.common.Constants;
 import com.shtoone.chenjiang.mvp.contract.project.JidianContract;
-import com.shtoone.chenjiang.mvp.model.bean.JidianData;
+import com.shtoone.chenjiang.mvp.model.entity.db.JidianData;
 import com.shtoone.chenjiang.mvp.presenter.project.JidianPresenter;
 import com.shtoone.chenjiang.mvp.view.adapter.JidianAdapter;
 import com.shtoone.chenjiang.mvp.view.base.BaseLazyFragment;

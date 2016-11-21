@@ -4,8 +4,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
-import com.shtoone.chenjiang.mvp.view.main.DeviceSettingFragment;
-import com.shtoone.chenjiang.mvp.view.main.ParamSettingFragment;
+import com.shtoone.chenjiang.mvp.view.main.setting.DeviceSettingFragment;
+import com.shtoone.chenjiang.mvp.view.main.setting.ParamSettingFragment;
 
 /**
  * Created by leguang on 2016/6/9 0009.

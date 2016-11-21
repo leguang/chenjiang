@@ -21,7 +21,7 @@ import android.view.animation.AccelerateDecelerateInterpolator;
 import com.shtoone.chenjiang.R;
 import com.shtoone.chenjiang.common.Constants;
 import com.shtoone.chenjiang.mvp.contract.LoginContract;
-import com.shtoone.chenjiang.mvp.model.bean.UserInfoBean;
+import com.shtoone.chenjiang.mvp.model.entity.bean.UserInfoBean;
 import com.shtoone.chenjiang.mvp.presenter.LoginPresenter;
 import com.shtoone.chenjiang.mvp.view.base.BaseFragment;
 import com.shtoone.chenjiang.mvp.view.main.MainActivity;

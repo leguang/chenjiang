@@ -16,7 +16,7 @@ import com.qiangxi.checkupdatelibrary.dialog.UpdateDialog;
 import com.shtoone.chenjiang.R;
 import com.shtoone.chenjiang.common.Constants;
 import com.shtoone.chenjiang.mvp.contract.VersionContract;
-import com.shtoone.chenjiang.mvp.model.bean.CheckUpdateBean;
+import com.shtoone.chenjiang.mvp.model.entity.bean.CheckUpdateBean;
 import com.shtoone.chenjiang.mvp.presenter.VersionPresenter;
 import com.shtoone.chenjiang.mvp.view.base.BaseFragment;
 import com.shtoone.chenjiang.utils.AppUtils;
@@ -124,6 +124,9 @@ public class VersionFragment extends BaseFragment<VersionContract.Presenter> imp
 
     @Override
     public void setErrorMessage(String message) {
+        if (btUpdate == null) {
+            return;
+        }
         btUpdate.setErrorText(message);
         btUpdate.setProgress(-1);
     }

@@ -15,7 +15,7 @@ import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.shtoone.chenjiang.R;
 import com.shtoone.chenjiang.common.Constants;
 import com.shtoone.chenjiang.mvp.contract.project.StaffContract;
-import com.shtoone.chenjiang.mvp.model.bean.StaffData;
+import com.shtoone.chenjiang.mvp.model.entity.db.StaffData;
 import com.shtoone.chenjiang.mvp.presenter.project.StaffPresenter;
 import com.shtoone.chenjiang.mvp.view.adapter.StaffAdapter;
 import com.shtoone.chenjiang.mvp.view.base.BaseLazyFragment;

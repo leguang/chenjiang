@@ -7,7 +7,7 @@ import com.shtoone.chenjiang.BaseApplication;
 import com.shtoone.chenjiang.common.Constants;
 import com.shtoone.chenjiang.mvp.contract.LoginContract;
 import com.shtoone.chenjiang.mvp.model.HttpHelper;
-import com.shtoone.chenjiang.mvp.model.bean.UserInfoBean;
+import com.shtoone.chenjiang.mvp.model.entity.bean.UserInfoBean;
 import com.shtoone.chenjiang.mvp.presenter.base.BasePresenter;
 import com.shtoone.chenjiang.utils.AESCryptUtils;
 import com.shtoone.chenjiang.utils.SharedPreferencesUtils;

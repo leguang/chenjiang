@@ -2,8 +2,8 @@ package com.shtoone.chenjiang.mvp.presenter;
 
 
 import com.shtoone.chenjiang.mvp.contract.MainContract;
-import com.shtoone.chenjiang.mvp.model.bean.GongdianData;
-import com.shtoone.chenjiang.mvp.model.bean.YusheshuizhunxianData;
+import com.shtoone.chenjiang.mvp.model.entity.db.GongdianData;
+import com.shtoone.chenjiang.mvp.model.entity.db.YusheshuizhunxianData;
 import com.shtoone.chenjiang.mvp.presenter.base.BasePresenter;
 import com.socks.library.KLog;
 

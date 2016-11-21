@@ -7,7 +7,7 @@ import android.widget.CompoundButton;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.shtoone.chenjiang.R;
-import com.shtoone.chenjiang.mvp.model.bean.ShuizhunxianData;
+import com.shtoone.chenjiang.mvp.model.entity.db.ShuizhunxianData;
 import com.shtoone.chenjiang.mvp.view.adapter.base.OnItemClickListener;
 
 import java.util.List;

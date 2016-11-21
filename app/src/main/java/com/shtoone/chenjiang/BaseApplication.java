@@ -4,7 +4,7 @@ import android.content.Context;
 
 import com.github.moduth.blockcanary.BlockCanary;
 import com.shtoone.chenjiang.common.AppContext;
-import com.shtoone.chenjiang.mvp.model.bean.UserInfoBean;
+import com.shtoone.chenjiang.mvp.model.entity.bean.UserInfoBean;
 import com.socks.library.KLog;
 import com.squareup.leakcanary.LeakCanary;
 import com.squareup.leakcanary.RefWatcher;

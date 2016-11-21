@@ -74,6 +74,10 @@ public class Constants {
     //上传模块
     public static final int UPLAND_SUCCESS = 30;
     public static final int UPLAND_FAIL = 31;
+    public static final String FROMTO_MEASURED_DATA_FRAGMENT = "measured_data_fragment";
+    public static final String FROMTO_CHECK_MEASURE_RIGHT_FRAGMENT = "check_measure_right_fragment";
+    public static final String FROMTO_X = "x";
+    public static final String FROMTO_Y = "y";
 
 
 }

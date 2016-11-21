@@ -1,15 +1,15 @@
 package com.shtoone.chenjiang.mvp.model;
 
 
-import com.shtoone.chenjiang.mvp.model.bean.CedianInfoBean;
-import com.shtoone.chenjiang.mvp.model.bean.CheckUpdateBean;
-import com.shtoone.chenjiang.mvp.model.bean.DuanmianInfoBean;
-import com.shtoone.chenjiang.mvp.model.bean.GongdianInfoBean;
-import com.shtoone.chenjiang.mvp.model.bean.JidianBean;
-import com.shtoone.chenjiang.mvp.model.bean.RegisterBean;
-import com.shtoone.chenjiang.mvp.model.bean.StaffBean;
-import com.shtoone.chenjiang.mvp.model.bean.UserInfoBean;
-import com.shtoone.chenjiang.mvp.model.bean.YusheshuizhunxianInfoBean;
+import com.shtoone.chenjiang.mvp.model.entity.bean.CedianInfoBean;
+import com.shtoone.chenjiang.mvp.model.entity.bean.CheckUpdateBean;
+import com.shtoone.chenjiang.mvp.model.entity.bean.DuanmianInfoBean;
+import com.shtoone.chenjiang.mvp.model.entity.bean.GongdianInfoBean;
+import com.shtoone.chenjiang.mvp.model.entity.bean.JidianBean;
+import com.shtoone.chenjiang.mvp.model.entity.bean.RegisterBean;
+import com.shtoone.chenjiang.mvp.model.entity.bean.StaffBean;
+import com.shtoone.chenjiang.mvp.model.entity.bean.UserInfoBean;
+import com.shtoone.chenjiang.mvp.model.entity.bean.YusheshuizhunxianInfoBean;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;

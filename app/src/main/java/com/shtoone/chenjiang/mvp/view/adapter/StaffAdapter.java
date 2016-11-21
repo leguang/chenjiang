@@ -5,7 +5,7 @@ import android.text.Html;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.shtoone.chenjiang.R;
-import com.shtoone.chenjiang.mvp.model.bean.StaffData;
+import com.shtoone.chenjiang.mvp.model.entity.db.StaffData;
 
 public class StaffAdapter extends BaseQuickAdapter<StaffData, BaseViewHolder> {
     private static final String TAG = StaffAdapter.class.getSimpleName();

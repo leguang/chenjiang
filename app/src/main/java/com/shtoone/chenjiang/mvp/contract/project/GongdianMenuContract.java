@@ -2,7 +2,7 @@ package com.shtoone.chenjiang.mvp.contract.project;
 
 
 import com.shtoone.chenjiang.mvp.contract.base.BaseContract;
-import com.shtoone.chenjiang.mvp.model.bean.GongdianData;
+import com.shtoone.chenjiang.mvp.model.entity.db.GongdianData;
 
 import java.util.List;
 

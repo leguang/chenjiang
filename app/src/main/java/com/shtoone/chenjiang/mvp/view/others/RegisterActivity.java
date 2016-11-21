@@ -15,9 +15,8 @@ import android.view.animation.AccelerateDecelerateInterpolator;
 import com.shtoone.chenjiang.BaseApplication;
 import com.shtoone.chenjiang.R;
 import com.shtoone.chenjiang.common.Constants;
-import com.shtoone.chenjiang.event.EventData;
 import com.shtoone.chenjiang.mvp.contract.RegisterContract;
-import com.shtoone.chenjiang.mvp.model.bean.RegisterBean;
+import com.shtoone.chenjiang.mvp.model.entity.bean.RegisterBean;
 import com.shtoone.chenjiang.mvp.presenter.RegisterPresenter;
 import com.shtoone.chenjiang.mvp.view.base.BaseActivity;
 import com.shtoone.chenjiang.utils.AESCryptUtils;
@@ -28,7 +27,6 @@ import com.shtoone.chenjiang.utils.ToastUtils;
 import com.shtoone.chenjiang.widget.processbutton.iml.ActionProcessButton;
 import com.socks.library.KLog;
 
-import org.greenrobot.eventbus.EventBus;
 import org.json.JSONException;
 
 import java.net.ConnectException;

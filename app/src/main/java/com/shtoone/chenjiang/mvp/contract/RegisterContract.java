@@ -2,7 +2,7 @@ package com.shtoone.chenjiang.mvp.contract;
 
 
 import com.shtoone.chenjiang.mvp.contract.base.BaseContract;
-import com.shtoone.chenjiang.mvp.model.bean.RegisterBean;
+import com.shtoone.chenjiang.mvp.model.entity.bean.RegisterBean;
 
 /**
  * Author：leguang on 2016/10/9 0009 15:49

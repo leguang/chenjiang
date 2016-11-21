@@ -14,7 +14,7 @@ import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.shtoone.chenjiang.R;
 import com.shtoone.chenjiang.common.Constants;
 import com.shtoone.chenjiang.mvp.contract.project.GongdianMenuContract;
-import com.shtoone.chenjiang.mvp.model.bean.GongdianData;
+import com.shtoone.chenjiang.mvp.model.entity.db.GongdianData;
 import com.shtoone.chenjiang.mvp.presenter.project.GongdianMenuPresenter;
 import com.shtoone.chenjiang.mvp.view.adapter.GongdianMenuAdapter;
 import com.shtoone.chenjiang.mvp.view.base.BaseFragment;

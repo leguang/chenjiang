@@ -6,7 +6,7 @@ import android.util.SparseBooleanArray;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.shtoone.chenjiang.R;
-import com.shtoone.chenjiang.mvp.model.bean.GongdianData;
+import com.shtoone.chenjiang.mvp.model.entity.db.GongdianData;
 import com.socks.library.KLog;
 
 import java.util.List;

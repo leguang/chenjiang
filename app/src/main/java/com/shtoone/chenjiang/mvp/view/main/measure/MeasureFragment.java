@@ -11,8 +11,8 @@ import android.view.ViewGroup;
 
 import com.shtoone.chenjiang.BaseApplication;
 import com.shtoone.chenjiang.R;
-import com.shtoone.chenjiang.mvp.contract.MeasureContract;
-import com.shtoone.chenjiang.mvp.presenter.MeasurePresenter;
+import com.shtoone.chenjiang.mvp.contract.measure.MeasureContract;
+import com.shtoone.chenjiang.mvp.presenter.measure.MeasurePresenter;
 import com.shtoone.chenjiang.mvp.view.base.BaseFragment;
 import com.shtoone.chenjiang.mvp.view.main.MainActivity;
 
