@@ -9,8 +9,12 @@ import com.shtoone.chenjiang.mvp.model.bean.ShuizhunxianData;
 import com.shtoone.chenjiang.mvp.presenter.base.BasePresenter;
 import com.socks.library.KLog;
 
+import org.json.JSONException;
 import org.litepal.crud.DataSupport;
 
+import java.io.IOException;
+import java.net.ConnectException;
+import java.net.SocketTimeoutException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,6 +22,7 @@ import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import retrofit2.adapter.rxjava.HttpException;
 import rx.Observable;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
@@ -109,17 +114,21 @@ public class UploadPresenter extends BasePresenter<UploadContract.View> implemen
         String str = mGson.toJson(listShuizhunxian, ArrayList.class);
         KLog.e(str);
 
-        HttpHelper.getInstance().initService().upload(str).enqueue(new Callback<ResponseBody>() {
+        HttpHelper.getInstance().initService().upload().enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-//                if (response.isSuccessful()) {
-//                    try {
-//                        KLog.e("responseBody:"+response.body().string());
-//                    } catch (IOException e) {
-//                        e.printStackTrace();
-//                    }
-//                }
+                if (response.isSuccessful()) {
+                    try {
+                        KLog.e("responseBody:" + response.body().string());
+                        getView().onUploaded(Constants.UPLAND_SUCCESS, "恭喜，上传成功");
 
+
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                    getView().onUploaded(Constants.UPLAND_FAIL, "上传失败，请重试");
+                }
 
 
             }
@@ -127,6 +136,19 @@ public class UploadPresenter extends BasePresenter<UploadContract.View> implemen
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
                 t.printStackTrace();
+                KLog.e(t);
+
+                if (t instanceof ConnectException) {
+                    getView().onUploaded(Constants.UPLAND_FAIL, "网络异常，请重试");
+                } else if (t instanceof HttpException) {
+                    getView().onUploaded(Constants.UPLAND_FAIL, "服务器异常");
+                } else if (t instanceof SocketTimeoutException) {
+                    getView().onUploaded(Constants.UPLAND_FAIL, "连接超时，请重试");
+                } else if (t instanceof JSONException) {
+                    getView().onUploaded(Constants.UPLAND_FAIL, "解析异常，请重试");
+                } else {
+                    getView().onUploaded(Constants.UPLAND_FAIL, "数据异常");
+                }
             }
         });
     }

@@ -81,4 +81,5 @@ dependencies {
     compile 'com.afollestad.material-dialogs:core:0.9.1.0'
     //recycleview实现viewpager
     compile 'com.github.lsjwzh.RecyclerViewPager:lib:v1.1.2'
+    compile 'com.trycatch.android:mysnackbar:1.2.2'
 }

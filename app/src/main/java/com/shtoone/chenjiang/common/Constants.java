@@ -71,4 +71,9 @@ public class Constants {
     //EventBus系列,值是随便取，只要不相同即可
     public static final int EVENT_FINISH_LAUNCH = 10;
 
+    //上传模块
+    public static final int UPLAND_SUCCESS = 30;
+    public static final int UPLAND_FAIL = 31;
+
+
 }

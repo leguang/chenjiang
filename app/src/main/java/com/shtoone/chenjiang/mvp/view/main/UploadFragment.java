@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -35,7 +36,8 @@ import com.shtoone.chenjiang.mvp.view.adapter.base.OnItemClickListener;
 import com.shtoone.chenjiang.mvp.view.base.BaseFragment;
 import com.shtoone.chenjiang.utils.ToastUtils;
 import com.shtoone.chenjiang.widget.PageStateLayout;
-import com.socks.library.KLog;
+import com.trycatch.mysnackbar.Prompt;
+import com.trycatch.mysnackbar.TSnackbar;
 import com.yyydjk.library.DropDownMenu;
 
 import org.json.JSONException;
@@ -67,6 +69,8 @@ public class UploadFragment extends BaseFragment<UploadContract.Presenter> imple
     CheckBox cbCheckAll;
     @BindView(R.id.iv_upload_upload_fragment)
     ImageView ivUpload;
+    @BindView(R.id.fab)
+    FloatingActionButton fab;
     private View contentView;
     private RecyclerView recyclerview;
     private PageStateLayout pagestatelayout;
@@ -83,6 +87,7 @@ public class UploadFragment extends BaseFragment<UploadContract.Presenter> imple
     private ListDropDownAdapter gongdianAdapter;
     private List<ShuizhunxianData> listChecked = new ArrayList<>();
     private int pagination = 0;
+    private ObjectAnimator animator;
 
     public static UploadFragment newInstance() {
         return new UploadFragment();
@@ -226,6 +231,8 @@ public class UploadFragment extends BaseFragment<UploadContract.Presenter> imple
                 if (mAdapter == null) {
                     return;
                 }
+
+                //判断分页加载的时机是滑动到底部。
                 if (newState == RecyclerView.SCROLL_STATE_IDLE
                         && lastVisibleItemPosition + 1 == mAdapter.getItemCount()
                         //目的是判断第一页数据条数是否满足一整页。
@@ -235,6 +242,11 @@ public class UploadFragment extends BaseFragment<UploadContract.Presenter> imple
                         pagination += 1;
                         mPresenter.requestShuizhunxianData(pagination);
                     }
+                }
+
+                //滑动到顶部之后就可以隐藏掉FAB了。
+                if (newState == RecyclerView.SCROLL_STATE_IDLE && mLinearLayoutManager.findFirstVisibleItemPosition() == 0) {
+                    fab.hide();
                 }
             }
 
@@ -246,6 +258,12 @@ public class UploadFragment extends BaseFragment<UploadContract.Presenter> imple
                     return;
                 }
                 lastVisibleItemPosition = mLinearLayoutManager.findLastVisibleItemPosition();
+
+                if (dy > 5) {
+                    fab.hide();
+                } else if (dy < -5) {
+                    fab.show();
+                }
             }
         });
 
@@ -307,11 +325,25 @@ public class UploadFragment extends BaseFragment<UploadContract.Presenter> imple
     }
 
     @Override
+    public void onUploaded(int intMessage, String strMessage) {
+        animator.end();
+        ivUpload.setImageResource(R.drawable.ic_backup_white_24dp);
+
+        ViewGroup viewGroup = (ViewGroup) _mActivity.findViewById(android.R.id.content).getRootView();
+        TSnackbar snackBar = TSnackbar.make(viewGroup, strMessage, TSnackbar.LENGTH_SHORT, TSnackbar.APPEAR_FROM_TOP_TO_DOWN);
+        if (intMessage == Constants.UPLAND_SUCCESS) {
+            snackBar.setPromptThemBackground(Prompt.SUCCESS);
+        } else {
+            snackBar.setPromptThemBackground(Prompt.ERROR);
+        }
+        snackBar.show();
+    }
+
+    @Override
     public boolean isCanDoRefresh() {
-        //判断RecyclerView是否在在顶部，在顶部则允许滑动下拉刷新
+        //判断RecyclerView是否在在顶部，在顶部则允许滑动下拉刷新。
         if (null != recyclerview && null != mLinearLayoutManager) {
             int position = mLinearLayoutManager.findFirstVisibleItemPosition();
-            KLog.e(position);
             if (position >= 0) {
                 if (mLinearLayoutManager.findViewByPosition(position).getTop() >= 0 && position == 0) {
                     return true;
@@ -353,11 +385,14 @@ public class UploadFragment extends BaseFragment<UploadContract.Presenter> imple
     //只能用OnClickListener不能用OnCheckedChangeListener，因为最终会onBindViewHolder中调用notifyDataSetChanged ，
     // 因为我是在convert通过接口的形式传出数据，然后OnCheckedChangeListener这个会随着状态的改变自动调用onCheckedChanged，所以会循环调用自己
     // 所以会报Cannot call this method while RecyclerView is computing a layout or scrolling
-    @OnClick({R.id.cb_check_all_upload_fragment, R.id.iv_upload_upload_fragment})
+    @OnClick({R.id.cb_check_all_upload_fragment, R.id.iv_upload_upload_fragment, R.id.fab})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.cb_check_all_upload_fragment:
                 mAdapter.checkAllChanged(cbCheckAll.isChecked());
+                break;
+            case R.id.fab:
+                recyclerview.smoothScrollToPosition(0);
                 break;
             case R.id.iv_upload_upload_fragment:
                 if (listChecked == null || listChecked.size() == 0) {
@@ -374,14 +409,27 @@ public class UploadFragment extends BaseFragment<UploadContract.Presenter> imple
                     mSnackbar.show();
                     return;
                 }
+
                 mPresenter.upload(listChecked);
+
+                ViewGroup viewGroup = (ViewGroup) _mActivity.findViewById(android.R.id.content).getRootView();
+
+
+                TSnackbar snackBar = TSnackbar.make(viewGroup, "上传中，请稍后...", TSnackbar.LENGTH_LONG, TSnackbar.APPEAR_FROM_TOP_TO_DOWN);
+                snackBar.setPromptThemBackground(Prompt.SUCCESS);
+                snackBar.addIconProgressLoading(0, true, false);
+                snackBar.show();
+
                 //开启旋转动画
                 ivUpload.setImageResource(R.drawable.ic_sync_white_24dp);
-                ObjectAnimator animator = ObjectAnimator.ofFloat(ivUpload, "rotation", 360f, 0f);
-                animator.setDuration(1000);
-                animator.setRepeatMode(Animation.RESTART);
-                animator.setRepeatCount(Animation.INFINITE);
-                animator.setInterpolator(new LinearInterpolator());
+                //不需要重复创建ObjectAnimator对象。
+                if (animator == null) {
+                    animator = ObjectAnimator.ofFloat(ivUpload, "rotation", 360f, 0f);
+                    animator.setDuration(1000);
+                    animator.setRepeatMode(Animation.RESTART);
+                    animator.setRepeatCount(Animation.INFINITE);
+                    animator.setInterpolator(new LinearInterpolator());
+                }
                 animator.start();
                 break;
         }

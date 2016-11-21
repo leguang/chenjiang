@@ -16,11 +16,15 @@ public interface UploadContract {
         void responseGongdianData(List<GongdianData> mGongdianData);
 
         void responseShuizhunxianData(List<ShuizhunxianData> mShuizhunxianData, int pagination);
+
+        void onUploaded(int intMessageType, String strMessage);
+
     }
 
     interface Presenter extends BaseContract.Presenter {
         void requestShuizhunxianData(int pagination);
 
         void upload(List<ShuizhunxianData> listShuizhunxian);
+
     }
 }
