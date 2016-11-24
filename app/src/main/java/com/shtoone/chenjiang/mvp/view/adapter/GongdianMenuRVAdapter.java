@@ -11,12 +11,12 @@ import com.socks.library.KLog;
 
 import java.util.List;
 
-public class GongdianMenuAdapter extends BaseQuickAdapter<GongdianData, BaseViewHolder> {
-    private static final String TAG = GongdianMenuAdapter.class.getSimpleName();
+public class GongdianMenuRVAdapter extends BaseQuickAdapter<GongdianData, BaseViewHolder> {
+    private static final String TAG = GongdianMenuRVAdapter.class.getSimpleName();
     private SparseBooleanArray mBooleanArray = new SparseBooleanArray();
     private int mLastCheckedPosition = -1;
 
-    public GongdianMenuAdapter() {
+    public GongdianMenuRVAdapter() {
         super(R.layout.item_rv_project_menu_fragment, null);
     }
 

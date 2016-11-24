@@ -17,10 +17,10 @@ import com.shtoone.chenjiang.common.Constants;
 import com.shtoone.chenjiang.mvp.contract.project.JidianContract;
 import com.shtoone.chenjiang.mvp.model.entity.db.JidianData;
 import com.shtoone.chenjiang.mvp.presenter.project.JidianPresenter;
-import com.shtoone.chenjiang.mvp.view.adapter.JidianAdapter;
+import com.shtoone.chenjiang.mvp.view.adapter.JidianRVAdapter;
 import com.shtoone.chenjiang.mvp.view.base.BaseLazyFragment;
 import com.shtoone.chenjiang.utils.DensityUtils;
-import com.shtoone.chenjiang.utils.ToastUtils;
+import com.shtoone.chenjiang.common.ToastUtils;
 import com.shtoone.chenjiang.widget.PageStateLayout;
 
 import java.net.ConnectException;
@@ -46,7 +46,7 @@ public class JidianFragment extends BaseLazyFragment<JidianContract.Presenter> i
     @BindView(R.id.ptrframelayout)
     PtrFrameLayout ptrframelayout;
     private int pagination = 0;
-    private JidianAdapter mAdapter;
+    private JidianRVAdapter mAdapter;
     private LinearLayoutManager mLinearLayoutManager;
     private int lastVisibleItemPosition;
     private View mFooterLoading;
@@ -125,7 +125,7 @@ public class JidianFragment extends BaseLazyFragment<JidianContract.Presenter> i
 
 
     private void setAdapter() {
-        mAdapter = new JidianAdapter();
+        mAdapter = new JidianRVAdapter();
         mAdapter.removeAllFooterView();
     }
 

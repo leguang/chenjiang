@@ -44,9 +44,12 @@
 
     <!--Dialog模块-->
     <string name="dialog_title">确定下载吗？</string>
-    <string name="dialog_content">当前网络非Wifi网络，下载会消耗流量，请问是否继续下载。</string>
+    <string name="dialog_content">当前网络非Wifi网络，下载会消耗流量，请问是否继续下载？</string>
     <string name="dialog_positiveText">确定</string>
     <string name="dialog_negativeText">取消</string>
+
+    <string name="dialog_delete_title">确定删除吗？</string>
+    <string name="dialog_delete_content">删除当前水准线后不可恢复，请问是否继续删除？</string>
 
     <!--测量模块-->
     <string name="zhuandian">转点</string>

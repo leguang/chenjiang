@@ -52,7 +52,8 @@
         <activity
             android:name=".mvp.view.main.MainActivity"
             android:launchMode="singleTop"
-            android:theme="@style/AppTheme.Transparent" />
+            android:theme="@style/AppTheme.Transparent"
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".mvp.view.others.RegisterActivity"
             android:launchMode="singleTop"

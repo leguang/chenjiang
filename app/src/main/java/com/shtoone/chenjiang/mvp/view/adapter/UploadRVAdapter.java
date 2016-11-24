@@ -16,16 +16,16 @@ import java.util.List;
  * Author：leguang on 2016/10/9 0009 15:49
  * Email：langmanleguang@qq.com
  */
-public class UploadAdapter extends BaseQuickAdapter<ShuizhunxianData, BaseViewHolder> {
+public class UploadRVAdapter extends BaseQuickAdapter<ShuizhunxianData, BaseViewHolder> {
 
-    private static final String TAG = UploadAdapter.class.getSimpleName();
+    private static final String TAG = UploadRVAdapter.class.getSimpleName();
 
     private List<ShuizhunxianData> listChecked;
     private OnCheckedChangeListener mOnCheckedChangeListener;
     private OnItemClickListener mOnItemClickListener;
 
 
-    public UploadAdapter(List<ShuizhunxianData> listChecked) {
+    public UploadRVAdapter(List<ShuizhunxianData> listChecked) {
         super(R.layout.item_rv_upload_fragment, null);
         this.listChecked = listChecked;
     }
@@ -89,9 +89,9 @@ public class UploadAdapter extends BaseQuickAdapter<ShuizhunxianData, BaseViewHo
         notifyDataSetChanged();
     }
 
-    //之所以要复写，是因为原框架的addData在加完数据之后自动
-    @Override
-    public void addData(List<ShuizhunxianData> newData) {
-        super.addData(newData);
-    }
+//    //之所以要复写，是因为原框架的addData在加完数据之后自动
+//    @Override
+//    public void addData(List<ShuizhunxianData> newData) {
+//        super.addData(newData);
+//    }
 }

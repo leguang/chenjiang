@@ -7,7 +7,6 @@
     <storage value="external"></storage>
 
     <list>
-        <mapping class="com.shtoone.chenjiang.mvp.model.entity.db.LevelLineData"></mapping>
         <mapping class="com.shtoone.chenjiang.mvp.model.entity.db.GongdianData"></mapping>
         <mapping class="com.shtoone.chenjiang.mvp.model.entity.db.MeasureSpecificationData"></mapping>
         <mapping class="com.shtoone.chenjiang.mvp.model.entity.db.StaffData"></mapping>
@@ -16,5 +15,7 @@
         <mapping class="com.shtoone.chenjiang.mvp.model.entity.db.CedianData"></mapping>
         <mapping class="com.shtoone.chenjiang.mvp.model.entity.db.YusheshuizhunxianData"></mapping>
         <mapping class="com.shtoone.chenjiang.mvp.model.entity.db.ShuizhunxianData"></mapping>
+        <mapping class="com.shtoone.chenjiang.mvp.model.entity.db.OriginalData"></mapping>
+        <mapping class="com.shtoone.chenjiang.mvp.model.entity.db.ResultData"></mapping>
     </list>
 </litepal>

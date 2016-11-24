@@ -27,6 +27,8 @@ import com.shtoone.chenjiang.mvp.view.base.BaseActivity;
 import com.shtoone.chenjiang.mvp.view.main.project.ProjectActivity;
 import com.shtoone.chenjiang.mvp.view.main.setting.SettingFragment;
 import com.shtoone.chenjiang.mvp.view.main.upload.UploadFragment;
+import com.shtoone.chenjiang.mvp.view.others.LaunchActivity;
+import com.shtoone.chenjiang.utils.SharedPreferencesUtils;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -156,7 +158,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                     }
 
                 } else if (id == R.id.relogin) {
-
+                    go2Login();
                 } else if (id == R.id.about) {
 
                 } else if (id == R.id.version) {
@@ -176,6 +178,18 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
             }
         }, 300);
         return true;
+    }
+
+    private void go2Login() {
+        //用户名和密码设为空，这样在点击重新登录后，即使没有登录，下次启动由于闪屏页的验证是需要用户名和密码，所以跳转到登录页面。
+        SharedPreferencesUtils.put(BaseApplication.mContext, Constants.USERNAME, "");
+        SharedPreferencesUtils.put(BaseApplication.mContext, Constants.PASSWORD, "");
+
+        Intent mIntent = new Intent(this, LaunchActivity.class);
+        //目的是为了通知LaunchActivity此时应该启动loginfragment，而不是闪屏页。
+        mIntent.putExtra(Constants.FROM_TO, Constants.FROM_MAIN);
+        startActivity(mIntent);
+        finish();
     }
 
     private void go2Project() {

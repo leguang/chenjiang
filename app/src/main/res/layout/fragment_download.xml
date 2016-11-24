@@ -95,10 +95,29 @@
                 android:background="@color/white"
                 android:orientation="horizontal">
 
-                <ImageView
+                <!--<ImageView-->
+                <!--android:layout_width="70dp"-->
+                <!--android:layout_height="match_parent"-->
+                <!--android:background="@drawable/oval_bg_with_stroke_only"-->
+                <!--android:padding="15dp"-->
+                <!--android:src="@drawable/ic_gongdian_black_48dp"-->
+                <!--android:tint="@color/base_color" />-->
+
+                <FrameLayout
                     android:layout_width="70dp"
-                    android:layout_height="match_parent"
-                    android:background="@color/material_yellow_500" />
+                    android:layout_height="match_parent">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:background="@drawable/oval_bg_with_stroke_only"
+                        android:gravity="center"
+                        android:text="工"
+                        android:textColor="@color/base_color"
+                        android:textSize="25sp"
+                        android:textStyle="bold" />
+                </FrameLayout>
 
                 <LinearLayout
                     android:layout_width="0dp"
@@ -146,10 +165,21 @@
                 android:background="@color/white"
                 android:orientation="horizontal">
 
-                <ImageView
+                <FrameLayout
                     android:layout_width="70dp"
-                    android:layout_height="match_parent"
-                    android:background="@color/material_yellow_500" />
+                    android:layout_height="match_parent">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:background="@drawable/oval_bg_with_stroke_only"
+                        android:gravity="center"
+                        android:text="断"
+                        android:textColor="@color/base_color"
+                        android:textSize="25sp"
+                        android:textStyle="bold" />
+                </FrameLayout>
 
                 <LinearLayout
                     android:layout_width="0dp"
@@ -197,10 +227,21 @@
                 android:background="@color/white"
                 android:orientation="horizontal">
 
-                <ImageView
+                <FrameLayout
                     android:layout_width="70dp"
-                    android:layout_height="match_parent"
-                    android:background="@color/material_yellow_500" />
+                    android:layout_height="match_parent">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:background="@drawable/oval_bg_with_stroke_only"
+                        android:gravity="center"
+                        android:text="测"
+                        android:textColor="@color/base_color"
+                        android:textSize="25sp"
+                        android:textStyle="bold" />
+                </FrameLayout>
 
                 <LinearLayout
                     android:layout_width="0dp"
@@ -248,10 +289,21 @@
                 android:background="@color/white"
                 android:orientation="horizontal">
 
-                <ImageView
+                <FrameLayout
                     android:layout_width="70dp"
-                    android:layout_height="match_parent"
-                    android:background="@color/material_yellow_500" />
+                    android:layout_height="match_parent">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:background="@drawable/oval_bg_with_stroke_only"
+                        android:gravity="center"
+                        android:text="预"
+                        android:textColor="@color/base_color"
+                        android:textSize="25sp"
+                        android:textStyle="bold" />
+                </FrameLayout>
 
                 <LinearLayout
                     android:layout_width="0dp"
@@ -299,10 +351,21 @@
                 android:background="@color/white"
                 android:orientation="horizontal">
 
-                <ImageView
+                <FrameLayout
                     android:layout_width="70dp"
-                    android:layout_height="match_parent"
-                    android:background="@color/material_yellow_500" />
+                    android:layout_height="match_parent">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:background="@drawable/oval_bg_with_stroke_only"
+                        android:gravity="center"
+                        android:text="基"
+                        android:textColor="@color/base_color"
+                        android:textSize="25sp"
+                        android:textStyle="bold" />
+                </FrameLayout>
 
                 <LinearLayout
                     android:layout_width="0dp"
@@ -350,10 +413,21 @@
                 android:background="@color/white"
                 android:orientation="horizontal">
 
-                <ImageView
+                <FrameLayout
                     android:layout_width="70dp"
-                    android:layout_height="match_parent"
-                    android:background="@color/material_yellow_500" />
+                    android:layout_height="match_parent">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:background="@drawable/oval_bg_with_stroke_only"
+                        android:gravity="center"
+                        android:text="人"
+                        android:textColor="@color/base_color"
+                        android:textSize="25sp"
+                        android:textStyle="bold" />
+                </FrameLayout>
 
                 <LinearLayout
                     android:layout_width="0dp"

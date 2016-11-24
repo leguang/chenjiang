@@ -7,10 +7,10 @@ import com.chad.library.adapter.base.BaseViewHolder;
 import com.shtoone.chenjiang.R;
 import com.shtoone.chenjiang.mvp.model.entity.db.JidianData;
 
-public class JidianAdapter extends BaseQuickAdapter<JidianData, BaseViewHolder> {
-    private static final String TAG = JidianAdapter.class.getSimpleName();
+public class JidianRVAdapter extends BaseQuickAdapter<JidianData, BaseViewHolder> {
+    private static final String TAG = JidianRVAdapter.class.getSimpleName();
 
-    public JidianAdapter() {
+    public JidianRVAdapter() {
         super(R.layout.item_rv_project_jidian_fragment, null);
     }
 

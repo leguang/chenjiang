@@ -2,7 +2,6 @@ package com.shtoone.chenjiang.mvp.contract;
 
 
 import com.shtoone.chenjiang.mvp.contract.base.BaseContract;
-import com.shtoone.chenjiang.mvp.model.entity.bean.UserInfoBean;
 
 /**
  * Author：leguang on 2016/10/9 0009 15:49
@@ -10,7 +9,6 @@ import com.shtoone.chenjiang.mvp.model.entity.bean.UserInfoBean;
  */
 public interface LoginContract {
     interface View extends BaseContract.View {
-        void savaData(UserInfoBean mUserInfoBean);
 
         void setErrorMessage(String message);
 

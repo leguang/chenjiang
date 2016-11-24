@@ -70,7 +70,6 @@ public class VersionPresenter extends BasePresenter<VersionContract.View> implem
 
     @Override
     public void detachView() {
-        mCall.cancel();
         super.detachView();
     }
 }

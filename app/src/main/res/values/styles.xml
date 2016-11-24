@@ -58,6 +58,22 @@
     <style name="AddShuizhunxian">
         <item name="android:background">@drawable/rect_bg_stroke_table</item>
         <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">45dp</item>
+
+    </style>
+
+    <!--编辑水准线模块-->
+    <style name="EditShuizhunxian">
+        <item name="android:background">@drawable/rect_bg_stroke_table</item>
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">45dp</item>
+
+    </style>
+
+    <!--测量模块-->
+    <style name="MeasureTable">
+        <item name="android:background">@drawable/rect_bg_stroke_table</item>
+        <item name="android:layout_width">0dp</item>
         <item name="android:layout_height">35dp</item>
 
     </style>

@@ -21,20 +21,16 @@ import android.view.animation.AccelerateDecelerateInterpolator;
 import com.shtoone.chenjiang.R;
 import com.shtoone.chenjiang.common.Constants;
 import com.shtoone.chenjiang.mvp.contract.LoginContract;
-import com.shtoone.chenjiang.mvp.model.entity.bean.UserInfoBean;
 import com.shtoone.chenjiang.mvp.presenter.LoginPresenter;
 import com.shtoone.chenjiang.mvp.view.base.BaseFragment;
 import com.shtoone.chenjiang.mvp.view.main.MainActivity;
-import com.shtoone.chenjiang.utils.AESCryptUtils;
 import com.shtoone.chenjiang.utils.KeyBoardUtils;
-import com.shtoone.chenjiang.utils.SharedPreferencesUtils;
 import com.shtoone.chenjiang.widget.processbutton.iml.ActionProcessButton;
 
 import org.json.JSONException;
 
 import java.net.ConnectException;
 import java.net.SocketTimeoutException;
-import java.security.GeneralSecurityException;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -58,18 +54,26 @@ public class LoginFragment extends BaseFragment<LoginContract.Presenter> impleme
     FloatingActionButton fab;
     @BindView(R.id.cl_login_fragment)
     CoordinatorLayout cl;
-
-
     private String username;
     private String password;
+    private int fromTo;
 
-    public static LoginFragment newInstance() {
-        return new LoginFragment();
+    public static LoginFragment newInstance(int fromTo) {
+        Bundle args = new Bundle();
+        args.putInt(Constants.FROM_TO, fromTo);
+
+        LoginFragment fragment = new LoginFragment();
+        fragment.setArguments(args);
+        return fragment;
     }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Bundle args = getArguments();
+        if (args != null) {
+            fromTo = args.getInt(Constants.FROM_TO);
+        }
     }
 
     @NonNull
@@ -82,9 +86,11 @@ public class LoginFragment extends BaseFragment<LoginContract.Presenter> impleme
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        getFragmentManager().beginTransaction()
-                .show(getPreFragment())
-                .commit();
+        if (fromTo == Constants.FROM_SPLASH) {
+            getFragmentManager().beginTransaction()
+                    .show(getPreFragment())
+                    .commit();
+        }
         View view = inflater.inflate(R.layout.fragment_login, container, false);
 
         ButterKnife.bind(this, view);
@@ -166,22 +172,6 @@ public class LoginFragment extends BaseFragment<LoginContract.Presenter> impleme
             etUsername.setErrorEnabled(true);
             etUsername.setError("");
             etPassword.setError("密码不能为空");
-        }
-    }
-
-    @Override
-    public void savaData(UserInfoBean mUserInfoBean) {
-        try {
-            String usernameEncrypted = AESCryptUtils.encrypt(Constants.ENCRYPT_KEY, username);
-            String passwordEncrypted = AESCryptUtils.encrypt(Constants.ENCRYPT_KEY, password);
-            String userIdEncrypted = AESCryptUtils.encrypt(Constants.ENCRYPT_KEY, mUserInfoBean.getUserId());
-
-            SharedPreferencesUtils.put(_mActivity, Constants.USERNAME, usernameEncrypted);
-            SharedPreferencesUtils.put(_mActivity, Constants.PASSWORD, passwordEncrypted);
-            SharedPreferencesUtils.put(_mActivity, Constants.USER_ID, userIdEncrypted);
-
-        } catch (GeneralSecurityException e) {
-            e.printStackTrace();
         }
     }
 

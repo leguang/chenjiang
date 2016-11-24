@@ -9,7 +9,7 @@
     <TableRow android:background="@color/material_cyan_50">
 
         <TextView
-            style="@style/AddShuizhunxian"
+            style="@style/MeasureTable"
             android:layout_weight="1"
             android:gravity="right|center_vertical"
             android:paddingRight="5dp"
@@ -17,7 +17,7 @@
 
         <TextView
             android:id="@+id/tv_bianhao_add_shuizhunxian_fragment"
-            style="@style/AddShuizhunxian"
+            style="@style/MeasureTable"
             android:layout_weight="2.5"
             android:gravity="left|center_vertical"
             android:paddingLeft="5dp" />
@@ -26,14 +26,14 @@
     <TableRow>
 
         <TextView
-            style="@style/AddShuizhunxian"
+            style="@style/MeasureTable"
             android:layout_weight="1"
             android:gravity="right|center_vertical"
             android:paddingRight="5dp"
             android:text="路线类型：" />
 
         <TextView
-            style="@style/AddShuizhunxian"
+            style="@style/MeasureTable"
             android:layout_weight="2.5"
             android:gravity="left|center_vertical"
             android:paddingLeft="5dp" />
@@ -43,14 +43,14 @@
     <TableRow android:background="@color/material_cyan_50">
 
         <TextView
-            style="@style/AddShuizhunxian"
+            style="@style/MeasureTable"
             android:layout_weight="1"
             android:gravity="right|center_vertical"
             android:paddingRight="5dp"
             android:text="观测类型：" />
 
         <TextView
-            style="@style/AddShuizhunxian"
+            style="@style/MeasureTable"
             android:layout_weight="2.5"
             android:gravity="left|center_vertical"
             android:paddingLeft="5dp" />
@@ -60,7 +60,7 @@
     <TableRow>
 
         <TextView
-            style="@style/AddShuizhunxian"
+            style="@style/MeasureTable"
             android:layout_weight="1"
             android:gravity="right|center_vertical"
             android:paddingRight="5dp"
@@ -68,7 +68,7 @@
 
 
         <TextView
-            style="@style/AddShuizhunxian"
+            style="@style/MeasureTable"
             android:layout_weight="2.5"
             android:gravity="left|center_vertical"
             android:paddingLeft="5dp" />
@@ -77,14 +77,14 @@
     <TableRow android:background="@color/material_cyan_50">
 
         <TextView
-            style="@style/AddShuizhunxian"
+            style="@style/MeasureTable"
             android:layout_weight="1"
             android:gravity="right|center_vertical"
             android:paddingRight="5dp"
             android:text="工点：" />
 
         <TextView
-            style="@style/AddShuizhunxian"
+            style="@style/MeasureTable"
             android:layout_weight="2.5"
             android:gravity="left|center_vertical"
             android:paddingLeft="5dp" />
@@ -94,14 +94,14 @@
     <TableRow>
 
         <TextView
-            style="@style/AddShuizhunxian"
+            style="@style/MeasureTable"
             android:layout_weight="1"
             android:gravity="right|center_vertical"
             android:paddingRight="5dp"
             android:text="工作基点：" />
 
         <TextView
-            style="@style/AddShuizhunxian"
+            style="@style/MeasureTable"
             android:layout_weight="2.5"
             android:gravity="left|center_vertical"
             android:paddingLeft="5dp" />
@@ -111,14 +111,14 @@
     <TableRow android:background="@color/material_cyan_50">
 
         <TextView
-            style="@style/AddShuizhunxian"
+            style="@style/MeasureTable"
             android:layout_weight="1"
             android:gravity="right|center_vertical"
             android:paddingRight="5dp"
             android:text="天气：" />
 
         <TextView
-            style="@style/AddShuizhunxian"
+            style="@style/MeasureTable"
             android:layout_weight="2.5"
             android:gravity="left|center_vertical"
             android:paddingLeft="5dp" />
@@ -128,14 +128,14 @@
     <TableRow>
 
         <TextView
-            style="@style/AddShuizhunxian"
+            style="@style/MeasureTable"
             android:layout_weight="1"
             android:gravity="right|center_vertical"
             android:paddingRight="5dp"
             android:text="司镜人员：" />
 
         <TextView
-            style="@style/AddShuizhunxian"
+            style="@style/MeasureTable"
             android:layout_weight="2.5"
             android:gravity="left|center_vertical"
             android:paddingLeft="5dp" />
@@ -145,14 +145,14 @@
     <TableRow android:background="@color/material_cyan_50">
 
         <TextView
-            style="@style/AddShuizhunxian"
+            style="@style/MeasureTable"
             android:layout_weight="1"
             android:gravity="right|center_vertical"
             android:paddingRight="5dp"
             android:text="气压(hPa)：" />
 
         <TextView
-            style="@style/AddShuizhunxian"
+            style="@style/MeasureTable"
             android:layout_weight="2.5"
             android:gravity="left|center_vertical"
             android:paddingLeft="5dp" />
@@ -162,14 +162,14 @@
     <TableRow>
 
         <TextView
-            style="@style/AddShuizhunxian"
+            style="@style/MeasureTable"
             android:layout_weight="1"
             android:gravity="right|center_vertical"
             android:paddingRight="5dp"
             android:text="温度(℃)：" />
 
         <TextView
-            style="@style/AddShuizhunxian"
+            style="@style/MeasureTable"
             android:layout_weight="2.5"
             android:gravity="left|center_vertical"
             android:paddingLeft="5dp" />
@@ -179,7 +179,7 @@
     <TableRow android:background="@color/material_cyan_50">
 
         <TextView
-            style="@style/AddShuizhunxian"
+            style="@style/MeasureTable"
             android:layout_weight="1"
             android:gravity="right|center_vertical"
             android:paddingRight="5dp"
@@ -187,7 +187,7 @@
 
         <TextView
             android:id="@+id/tv_date_add_shuizhunxian_fragment"
-            style="@style/AddShuizhunxian"
+            style="@style/MeasureTable"
             android:layout_weight="2.5"
             android:gravity="left|center_vertical"
             android:paddingLeft="5dp" />
@@ -196,14 +196,14 @@
     <TableRow android:background="@color/material_yellow_200">
 
         <TextView
-            style="@style/AddShuizhunxian"
+            style="@style/MeasureTable"
             android:layout_weight="1"
             android:gravity="right|center_vertical"
             android:paddingRight="5dp"
             android:text="仪器品牌：" />
 
         <TextView
-            style="@style/AddShuizhunxian"
+            style="@style/MeasureTable"
             android:layout_weight="2.5"
             android:gravity="left|center_vertical"
             android:paddingLeft="5dp" />
@@ -212,14 +212,14 @@
     <TableRow android:background="@color/material_yellow_200">
 
         <TextView
-            style="@style/AddShuizhunxian"
+            style="@style/MeasureTable"
             android:layout_weight="1"
             android:gravity="right|center_vertical"
             android:paddingRight="5dp"
             android:text="仪器型号：" />
 
         <TextView
-            style="@style/AddShuizhunxian"
+            style="@style/MeasureTable"
             android:layout_weight="2.5"
             android:gravity="left|center_vertical"
             android:paddingLeft="5dp" />
@@ -228,14 +228,14 @@
     <TableRow android:background="@color/material_yellow_200">
 
         <TextView
-            style="@style/AddShuizhunxian"
+            style="@style/MeasureTable"
             android:layout_weight="1"
             android:gravity="right|center_vertical"
             android:paddingRight="5dp"
             android:text="设备号：" />
 
         <TextView
-            style="@style/AddShuizhunxian"
+            style="@style/MeasureTable"
             android:layout_weight="2.5"
             android:gravity="left|center_vertical"
             android:paddingLeft="5dp" />

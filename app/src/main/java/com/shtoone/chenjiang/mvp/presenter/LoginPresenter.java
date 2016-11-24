@@ -3,6 +3,7 @@ package com.shtoone.chenjiang.mvp.presenter;
 
 import android.text.TextUtils;
 
+import com.google.gson.Gson;
 import com.shtoone.chenjiang.BaseApplication;
 import com.shtoone.chenjiang.common.Constants;
 import com.shtoone.chenjiang.mvp.contract.LoginContract;
@@ -33,7 +34,7 @@ public class LoginPresenter extends BasePresenter<LoginContract.View> implements
     }
 
     @Override
-    public void login(String username, String password) {
+    public void login(final String username, final String password) {
         String encryptRegisterCode = (String) SharedPreferencesUtils.get(BaseApplication.mContext, Constants.REGISTER_CODE, "");
 
         //进行解密
@@ -54,7 +55,8 @@ public class LoginPresenter extends BasePresenter<LoginContract.View> implements
                 if (response.isSuccessful()) {
                     if (response.body().getStatus() == 0) {
                         BaseApplication.mUserInfoBean = mUserInfoBean = response.body();
-                        getView().savaData(mUserInfoBean);
+                        savaData(username, password);
+
                         getView().setSuccessMessage();
                         //进入管理层界面
                         getView().go2Main();
@@ -73,8 +75,27 @@ public class LoginPresenter extends BasePresenter<LoginContract.View> implements
         });
     }
 
+    private void savaData(String username, String password) {
+        try {
+            String usernameEncrypted = AESCryptUtils.encrypt(Constants.ENCRYPT_KEY, username);
+            String passwordEncrypted = AESCryptUtils.encrypt(Constants.ENCRYPT_KEY, password);
+            String userIdEncrypted = AESCryptUtils.encrypt(Constants.ENCRYPT_KEY, mUserInfoBean.getUserId());
+            String userInfoEncrypted = AESCryptUtils.encrypt(Constants.ENCRYPT_KEY, new Gson().toJson(mUserInfoBean));
+
+            SharedPreferencesUtils.put(BaseApplication.mContext, Constants.USERNAME, usernameEncrypted);
+            SharedPreferencesUtils.put(BaseApplication.mContext, Constants.PASSWORD, passwordEncrypted);
+            SharedPreferencesUtils.put(BaseApplication.mContext, Constants.USER_ID, userIdEncrypted);
+            SharedPreferencesUtils.put(BaseApplication.mContext, Constants.USER_INFO_BEAN, userInfoEncrypted);
+
+        } catch (GeneralSecurityException e) {
+            e.printStackTrace();
+        }
+    }
+
     @Override
     public void start() {
 
     }
+
+
 }

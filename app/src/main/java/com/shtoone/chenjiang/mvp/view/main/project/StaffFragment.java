@@ -17,10 +17,10 @@ import com.shtoone.chenjiang.common.Constants;
 import com.shtoone.chenjiang.mvp.contract.project.StaffContract;
 import com.shtoone.chenjiang.mvp.model.entity.db.StaffData;
 import com.shtoone.chenjiang.mvp.presenter.project.StaffPresenter;
-import com.shtoone.chenjiang.mvp.view.adapter.StaffAdapter;
+import com.shtoone.chenjiang.mvp.view.adapter.StaffRVAdapter;
 import com.shtoone.chenjiang.mvp.view.base.BaseLazyFragment;
 import com.shtoone.chenjiang.utils.DensityUtils;
-import com.shtoone.chenjiang.utils.ToastUtils;
+import com.shtoone.chenjiang.common.ToastUtils;
 import com.shtoone.chenjiang.widget.PageStateLayout;
 
 import java.net.ConnectException;
@@ -46,12 +46,10 @@ public class StaffFragment extends BaseLazyFragment<StaffContract.Presenter> imp
     @BindView(R.id.ptrframelayout)
     PtrFrameLayout ptrframelayout;
     private int pagination = 0;
-    private StaffAdapter mAdapter;
+    private StaffRVAdapter mAdapter;
     private LinearLayoutManager mLinearLayoutManager;
     private int lastVisibleItemPosition;
-    private View mFooterLoading;
-    private View mFooterNotLoading;
-    private View mFooterError;
+    private View mFooterLoading, mFooterNotLoading, mFooterError;
     private boolean isLoading;
 
     public static StaffFragment newInstance() {
@@ -78,7 +76,6 @@ public class StaffFragment extends BaseLazyFragment<StaffContract.Presenter> imp
         super.onViewCreated(view, savedInstanceState);
         toolbar.setTitle("项目查看");
         initToolbarBackNavigation(toolbar);
-        initPageStateLayout(pagestatelayout);
         pagestatelayout.setPadding(0, 0, 0, DensityUtils.dp2px(_mActivity, 56));
     }
 
@@ -125,7 +122,7 @@ public class StaffFragment extends BaseLazyFragment<StaffContract.Presenter> imp
 
 
     private void setAdapter() {
-        mAdapter = new StaffAdapter();
+        mAdapter = new StaffRVAdapter();
         mAdapter.removeAllFooterView();
     }
 
@@ -134,6 +131,9 @@ public class StaffFragment extends BaseLazyFragment<StaffContract.Presenter> imp
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
+                if (mAdapter == null) {
+                    return;
+                }
                 if (newState == RecyclerView.SCROLL_STATE_IDLE
                         && lastVisibleItemPosition + 1 == mAdapter.getItemCount()
                         //目的是判断第一页数据条数是否满足一整页。
@@ -149,6 +149,9 @@ public class StaffFragment extends BaseLazyFragment<StaffContract.Presenter> imp
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
+                if (mLinearLayoutManager == null) {
+                    return;
+                }
                 lastVisibleItemPosition = mLinearLayoutManager.findLastVisibleItemPosition();
             }
         });

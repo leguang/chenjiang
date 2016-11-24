@@ -24,8 +24,7 @@ import android.view.ViewGroup;
 
 import com.shtoone.chenjiang.BaseApplication;
 import com.shtoone.chenjiang.R;
-import com.shtoone.chenjiang.utils.ToastUtils;
-import com.socks.library.KLog;
+import com.shtoone.chenjiang.common.ToastUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -78,7 +77,6 @@ public class LayoutAdapter extends RecyclerView.Adapter<LayoutAdapter.SimpleView
 
     @Override
     public void onBindViewHolder(SimpleViewHolder holder, final int position) {
-        KLog.e(position);
         final View itemView = holder.itemView;
 //        itemView.setBackgroundResource(position % 2 == 0 ? R.color.material_red_50 : R.color.material_green_50);
         itemView.setOnClickListener(new View.OnClickListener() {

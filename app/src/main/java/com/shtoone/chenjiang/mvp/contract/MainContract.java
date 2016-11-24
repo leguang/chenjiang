@@ -15,12 +15,12 @@ public interface MainContract {
     interface View extends BaseContract.View {
         void responseGongdianData(List<GongdianData> mGongdianData);
 
-        void responseShuizhunxianData(List<YusheshuizhunxianData> mShuizhunxianData);
+        void responseShuizhunxianData(List<YusheshuizhunxianData> mShuizhunxianData, int pagination);
     }
 
     interface Presenter extends BaseContract.Presenter {
+        void requestGongdianData();
 
-
+        void requestShuizhunxianData(int pagination);
     }
-
 }

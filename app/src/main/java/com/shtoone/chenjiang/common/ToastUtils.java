@@ -1,4 +1,4 @@
-package com.shtoone.chenjiang.utils;
+package com.shtoone.chenjiang.common;
 
 import android.content.Context;
 import android.widget.Toast;

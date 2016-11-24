@@ -30,21 +30,18 @@ import com.shtoone.chenjiang.mvp.model.entity.db.GongdianData;
 import com.shtoone.chenjiang.mvp.model.entity.db.ShuizhunxianData;
 import com.shtoone.chenjiang.mvp.presenter.upload.UploadPresenter;
 import com.shtoone.chenjiang.mvp.view.adapter.Decoration;
-import com.shtoone.chenjiang.mvp.view.adapter.ListDropDownAdapter;
-import com.shtoone.chenjiang.mvp.view.adapter.UploadAdapter;
+import com.shtoone.chenjiang.mvp.view.adapter.ListDropDownLVAdapter;
+import com.shtoone.chenjiang.mvp.view.adapter.UploadRVAdapter;
 import com.shtoone.chenjiang.mvp.view.adapter.base.OnItemClickListener;
 import com.shtoone.chenjiang.mvp.view.base.BaseFragment;
 import com.shtoone.chenjiang.mvp.view.main.MainActivity;
-import com.shtoone.chenjiang.utils.ToastUtils;
+import com.shtoone.chenjiang.common.ToastUtils;
 import com.shtoone.chenjiang.widget.PageStateLayout;
 import com.trycatch.mysnackbar.Prompt;
 import com.trycatch.mysnackbar.TSnackbar;
 import com.yyydjk.library.DropDownMenu;
 
-import org.json.JSONException;
-
 import java.net.ConnectException;
-import java.net.SocketTimeoutException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -53,7 +50,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import in.srain.cube.views.ptr.PtrFrameLayout;
-import retrofit2.adapter.rxjava.HttpException;
 
 /**
  * Author：leguang on 2016/10/9 0009 15:49
@@ -76,7 +72,7 @@ public class UploadFragment extends BaseFragment<UploadContract.Presenter> imple
     private RecyclerView recyclerview;
     private PageStateLayout pagestatelayout;
     private PtrFrameLayout ptrframelayout;
-    private UploadAdapter mAdapter;
+    private UploadRVAdapter mAdapter;
     private LinearLayoutManager mLinearLayoutManager;
     private int lastVisibleItemPosition;
     private View mFooterLoading, mFooterNotLoading, mFooterError;
@@ -85,7 +81,7 @@ public class UploadFragment extends BaseFragment<UploadContract.Presenter> imple
     private ListView gongdianView, measureStatusView, timeTypeView;
     private String[] arrayHeaders, arrayUploadStatus, arrayTimeType;
     private List<String> listGongdian = new ArrayList<String>();
-    private ListDropDownAdapter gongdianAdapter;
+    private ListDropDownLVAdapter gongdianAdapter;
     private List<ShuizhunxianData> listChecked = new ArrayList<>();
     private int pagination = 0;
     private ObjectAnimator animator;
@@ -128,7 +124,6 @@ public class UploadFragment extends BaseFragment<UploadContract.Presenter> imple
         mFooterLoading = getLayoutInflater(savedInstanceState).inflate(R.layout.item_footer_loading, (ViewGroup) recyclerview.getParent(), false);
         mFooterNotLoading = getLayoutInflater(savedInstanceState).inflate(R.layout.item_footer_not_loading, (ViewGroup) recyclerview.getParent(), false);
         mFooterError = getLayoutInflater(savedInstanceState).inflate(R.layout.item_footer_error, (ViewGroup) recyclerview.getParent(), false);
-
         initData();
     }
 
@@ -147,7 +142,7 @@ public class UploadFragment extends BaseFragment<UploadContract.Presenter> imple
         arrayTimeType = res.getStringArray(R.array.time_type);
 
         gongdianView = new ListView(_mActivity);
-        gongdianAdapter = new ListDropDownAdapter(_mActivity, listGongdian);
+        gongdianAdapter = new ListDropDownLVAdapter(_mActivity, listGongdian);
         gongdianView.setDividerHeight(0);
         gongdianView.setAdapter(gongdianAdapter);
         gongdianView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -161,7 +156,7 @@ public class UploadFragment extends BaseFragment<UploadContract.Presenter> imple
 
         measureStatusView = new ListView(_mActivity);
         measureStatusView.setDividerHeight(0);
-        final ListDropDownAdapter ageAdapter = new ListDropDownAdapter(_mActivity, Arrays.asList(arrayUploadStatus));
+        final ListDropDownLVAdapter ageAdapter = new ListDropDownLVAdapter(_mActivity, Arrays.asList(arrayUploadStatus));
         measureStatusView.setAdapter(ageAdapter);
         measureStatusView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -174,7 +169,7 @@ public class UploadFragment extends BaseFragment<UploadContract.Presenter> imple
 
         timeTypeView = new ListView(_mActivity);
         timeTypeView.setDividerHeight(0);
-        final ListDropDownAdapter sexAdapter = new ListDropDownAdapter(_mActivity, Arrays.asList(arrayTimeType));
+        final ListDropDownLVAdapter sexAdapter = new ListDropDownLVAdapter(_mActivity, Arrays.asList(arrayTimeType));
         timeTypeView.setAdapter(sexAdapter);
         timeTypeView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -196,8 +191,10 @@ public class UploadFragment extends BaseFragment<UploadContract.Presenter> imple
         mLinearLayoutManager = new LinearLayoutManager(_mActivity);
         recyclerview.setLayoutManager(mLinearLayoutManager);
 
-        mAdapter = new UploadAdapter(listChecked);
-        mAdapter.setOnCheckedChangeListener(new UploadAdapter.OnCheckedChangeListener() {
+        mAdapter = new UploadRVAdapter(listChecked);
+        mAdapter.removeAllFooterView();
+
+        mAdapter.setOnCheckedChangeListener(new UploadRVAdapter.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, int position) {
                 if (compoundButton.isChecked()) {
@@ -219,7 +216,6 @@ public class UploadFragment extends BaseFragment<UploadContract.Presenter> imple
                 start(CheckMeasureFragment.newInstance());
             }
         });
-        mAdapter.removeAllFooterView();
         recyclerview.addItemDecoration(new Decoration(_mActivity, Decoration.VERTICAL_LIST));
         recyclerview.setAdapter(mAdapter);
     }
@@ -359,22 +355,29 @@ public class UploadFragment extends BaseFragment<UploadContract.Presenter> imple
 
     @Override
     public void showContent() {
-
+        pagestatelayout.showContent();
     }
 
     @Override
     public void showError(Throwable t) {
-        if (t instanceof ConnectException) {
-        } else if (t instanceof HttpException) {
-        } else if (t instanceof SocketTimeoutException) {
-        } else if (t instanceof JSONException) {
+        //第一页加载出错，显示方式和第一页以后的部分出错显示不同
+        if (pagination == 0) {
+            if (t instanceof ConnectException) {
+                pagestatelayout.showNetError();
+            } else {
+                pagestatelayout.showError();
+            }
         } else {
+            mAdapter.removeAllFooterView();
+            mAdapter.addFooterView(mFooterError);
         }
     }
 
-
     @Override
     public void showLoading() {
+        if (pagination == 0) {
+            pagestatelayout.showLoading();
+        }
     }
 
     @Override

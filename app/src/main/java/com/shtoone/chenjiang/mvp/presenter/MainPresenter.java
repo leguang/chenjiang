@@ -1,11 +1,11 @@
 package com.shtoone.chenjiang.mvp.presenter;
 
 
+import com.shtoone.chenjiang.common.Constants;
 import com.shtoone.chenjiang.mvp.contract.MainContract;
 import com.shtoone.chenjiang.mvp.model.entity.db.GongdianData;
 import com.shtoone.chenjiang.mvp.model.entity.db.YusheshuizhunxianData;
 import com.shtoone.chenjiang.mvp.presenter.base.BasePresenter;
-import com.socks.library.KLog;
 
 import org.litepal.crud.DataSupport;
 
@@ -33,8 +33,10 @@ public class MainPresenter extends BasePresenter<MainContract.View> implements M
     @Override
     public void start() {
         requestGongdianData();
+        requestShuizhunxianData(0);
     }
 
+    @Override
     public void requestGongdianData() {
         mRxManager.add(Observable.create(new Observable.OnSubscribe<List<GongdianData>>() {
             @Override
@@ -49,48 +51,53 @@ public class MainPresenter extends BasePresenter<MainContract.View> implements M
             }
         }).subscribeOn(Schedulers.computation())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new RxSubscriber<List<GongdianData>>() {
+                .subscribe(new Subscriber<List<GongdianData>>() {
+                               @Override
+                               public void onCompleted() {
+
+                               }
 
                                @Override
-                               public void _onNext(List<GongdianData> mGongdianData) {
-                                   KLog.e("_onNext111111111111");
-                                   getView().responseGongdianData(mGongdianData);
-                                   //下载完工点后就下载预设水准线
-                                   requestShuizhunxianData();
+                               public void onError(Throwable e) {
+
+                               }
+
+                               @Override
+                               public void onNext(List<GongdianData> gongdianDatas) {
+                                   getView().responseGongdianData(gongdianDatas);
                                }
                            }
                 ));
     }
 
-
-    public void requestShuizhunxianData() {
+    @Override
+    public void requestShuizhunxianData(final int pagination) {
         mRxManager.add(Observable.create(new Observable.OnSubscribe<List<YusheshuizhunxianData>>() {
             @Override
             public void call(Subscriber<? super List<YusheshuizhunxianData>> subscriber) {
+                List<YusheshuizhunxianData> mShuizhunxianData = null;
                 try {
-                    List<YusheshuizhunxianData> mShuizhunxianData = DataSupport.findAll(YusheshuizhunxianData.class);
-                    KLog.e("call::" + mShuizhunxianData.size());
-                    KLog.e("map method in thread: " + Thread.currentThread().getName());
-
+                    mShuizhunxianData = DataSupport.select("*")
+                            .order("id").limit(Constants.PAGE_SIZE)
+                            .offset(pagination * Constants.PAGE_SIZE)
+                            .find(YusheshuizhunxianData.class);
                     subscriber.onNext(mShuizhunxianData);
                 } catch (Exception ex) {
                     subscriber.onError(ex);
                 }
-                subscriber.onCompleted();
+                //做此判断的目的是为了不让最后onCompleted()调用的showContent()遮住了showEmpty()的显示。
+                if (mShuizhunxianData != null && mShuizhunxianData.size() > 0) {
+                    subscriber.onCompleted();
+                }
             }
         }).subscribeOn(Schedulers.computation())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new RxSubscriber<List<YusheshuizhunxianData>>() {
-
                                @Override
                                public void _onNext(List<YusheshuizhunxianData> mShuizhunxianData) {
-                                   KLog.e("_onNext::" + mShuizhunxianData.size());
-                                   getView().responseShuizhunxianData(mShuizhunxianData);
-                                   KLog.e("map method in thread: " + Thread.currentThread().getName());
+                                   getView().responseShuizhunxianData(mShuizhunxianData, pagination);
                                }
                            }
                 ));
     }
-
-
 }

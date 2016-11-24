@@ -39,6 +39,7 @@ public class Constants {
     public static final String PASSWORD = "password";
     public static final String REGISTER_CODE = "register_code";
     public static final String USER_ID = "user_id";
+    public static final String USER_INFO_BEAN = "user_info_bean";
 
     //网络链接超时时间
     public static final int DEFAULT_TIMEOUT = 3;
@@ -61,6 +62,8 @@ public class Constants {
     //下载页面
     public static final String UPDATA_TIME = "updata_time";
 
+    //预设水准线
+    public static final String YUSHESHUIZHUNXIAN = "yusheshuizhunxian";
     //工点
     public static final String GONGDIAN = "gongdian";
     //基点
@@ -79,5 +82,9 @@ public class Constants {
     public static final String FROMTO_X = "x";
     public static final String FROMTO_Y = "y";
 
+    public static final String FROM_TO = "from_to";
+
+    public static final int FROM_SPLASH = 0;
+    public static final int FROM_MAIN = 1;
 
 }

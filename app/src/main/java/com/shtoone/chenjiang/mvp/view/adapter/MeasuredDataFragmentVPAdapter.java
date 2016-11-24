@@ -4,7 +4,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
-import com.shtoone.chenjiang.mvp.view.main.upload.MeasuredDataListFragment;
+import com.shtoone.chenjiang.mvp.view.main.upload.MeasuredOriginalDataFragment;
+import com.shtoone.chenjiang.mvp.view.main.upload.MeasuredResultDataFragment;
 
 /**
  * Created by leguang on 2016/6/9 0009.
@@ -20,7 +21,12 @@ public class MeasuredDataFragmentVPAdapter extends FragmentPagerAdapter {
     @Override
     public Fragment getItem(int position) {
         if (null != arrTabTitle && arrTabTitle.length > 0) {
-            return MeasuredDataListFragment.newInstance(position);
+            if (position==0){
+                return MeasuredOriginalDataFragment.newInstance();
+            }else {
+                return MeasuredResultDataFragment.newInstance();
+
+            }
         }
         return null;
     }

@@ -27,15 +27,16 @@ import com.jaredrummler.materialspinner.MaterialSpinner;
 import com.shtoone.chenjiang.BaseApplication;
 import com.shtoone.chenjiang.R;
 import com.shtoone.chenjiang.common.Constants;
-import com.shtoone.chenjiang.mvp.contract.AddShuizhunxianContract;
-import com.shtoone.chenjiang.mvp.presenter.AddShuizhunxianPresenter;
+import com.shtoone.chenjiang.mvp.contract.ShuizhunxianContract;
+import com.shtoone.chenjiang.mvp.presenter.ShuizhunxianPresenter;
 import com.shtoone.chenjiang.mvp.view.base.BaseFragment;
 import com.shtoone.chenjiang.utils.DensityUtils;
-import com.shtoone.chenjiang.utils.ToastUtils;
+import com.shtoone.chenjiang.common.ToastUtils;
 import com.socks.library.KLog;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 import butterknife.BindView;
@@ -45,7 +46,7 @@ import butterknife.ButterKnife;
  * Author：leguang on 2016/10/9 0009 15:49
  * Email：langmanleguang@qq.com
  */
-public class AddShuizhunxianFragment extends BaseFragment<AddShuizhunxianContract.Presenter> implements AddShuizhunxianContract.View {
+public class AddShuizhunxianFragment extends BaseFragment<ShuizhunxianContract.Presenter> implements ShuizhunxianContract.View {
 
     private static final String TAG = AddShuizhunxianFragment.class.getSimpleName();
     @BindView(R.id.toolbar_toolbar)
@@ -76,9 +77,6 @@ public class AddShuizhunxianFragment extends BaseFragment<AddShuizhunxianContrac
     LinearLayout ll;
     private ImageView iv;
 
-    private static final String[] ANDROID_VERSIONS = {
-            "1", "2", "3", "4", "5", "5", "5", "5", "5", "5", "5", "5", "5", "5"
-    };
     private String[] arrayRouteType;
     private String[] arrayObserveType;
     private String[] arrayWeather;
@@ -89,8 +87,8 @@ public class AddShuizhunxianFragment extends BaseFragment<AddShuizhunxianContrac
 
     @NonNull
     @Override
-    protected AddShuizhunxianContract.Presenter createPresenter() {
-        return new AddShuizhunxianPresenter(this);
+    protected ShuizhunxianContract.Presenter createPresenter() {
+        return new ShuizhunxianPresenter(this);
     }
 
     @Nullable
@@ -118,7 +116,7 @@ public class AddShuizhunxianFragment extends BaseFragment<AddShuizhunxianContrac
 
 
     private void initToolbar() {
-        toolbar.setTitle("添加水准线");
+        toolbar.setTitle("新增水准线");
         initToolbarBackNavigation(toolbar);
 
         toolbar.inflateMenu(R.menu.menu_save);
@@ -195,10 +193,10 @@ public class AddShuizhunxianFragment extends BaseFragment<AddShuizhunxianContrac
             }
         });
 
-        if (BaseApplication.mUserInfoBean.getDept() == null) {
-            //还是要把闪屏页的登录检测，用来检测本地登录
-        }
-        spinnerBiaoduan.setItems(BaseApplication.mUserInfoBean.getDept().getOrgName());
+//        if (BaseApplication.mUserInfoBean.getDept() == null) {
+//            //还是要把闪屏页的登录检测，用来检测本地登录
+//        }
+//        spinnerBiaoduan.setItems(BaseApplication.mUserInfoBean.getDept().getOrgName());
         int index1 = spinnerGongdian.getSelectedIndex();
         int index2 = spinnerJidians.getSelectedIndex();
         int index3 = spinnerStaff.getSelectedIndex();
@@ -242,6 +240,11 @@ public class AddShuizhunxianFragment extends BaseFragment<AddShuizhunxianContrac
             int index3 = spinnerStaff.getSelectedIndex();
             KLog.e("responseDataindex3::" + index3);
         }
+    }
+
+    @Override
+    public void responseStaffData(List<String> mStaffData) {
+
     }
 
     private void startAnimation(MenuItem item) {

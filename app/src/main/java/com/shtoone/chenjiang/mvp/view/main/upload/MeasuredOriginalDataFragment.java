@@ -1,8 +1,9 @@
-package com.shtoone.chenjiang.mvp.view.main.project;
+package com.shtoone.chenjiang.mvp.view.main.upload;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -13,12 +14,11 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.shtoone.chenjiang.R;
 import com.shtoone.chenjiang.common.Constants;
-import com.shtoone.chenjiang.mvp.contract.project.GongdianMenuContract;
-import com.shtoone.chenjiang.mvp.model.entity.db.GongdianData;
-import com.shtoone.chenjiang.mvp.presenter.project.GongdianMenuPresenter;
-import com.shtoone.chenjiang.mvp.view.adapter.GongdianMenuRVAdapter;
+import com.shtoone.chenjiang.mvp.contract.upload.MeasuredOriginalDataContract;
+import com.shtoone.chenjiang.mvp.model.entity.db.OriginalData;
+import com.shtoone.chenjiang.mvp.presenter.upload.MeasuredOriginalDataPresenter;
+import com.shtoone.chenjiang.mvp.view.adapter.MeasuredOriginalDataRVAdapter;
 import com.shtoone.chenjiang.mvp.view.base.BaseFragment;
-import com.shtoone.chenjiang.utils.DensityUtils;
 import com.shtoone.chenjiang.common.ToastUtils;
 import com.shtoone.chenjiang.widget.PageStateLayout;
 import com.socks.library.KLog;
@@ -28,88 +28,80 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import in.srain.cube.views.ptr.PtrFrameLayout;
 
 /**
  * Author：leguang on 2016/10/9 0009 15:49
  * Email：langmanleguang@qq.com
  */
-public class GongdianMenuFragment extends BaseFragment<GongdianMenuContract.Presenter> implements GongdianMenuContract.View {
+public class MeasuredOriginalDataFragment extends BaseFragment<MeasuredOriginalDataContract.Presenter> implements MeasuredOriginalDataContract.View {
 
-    private static final String TAG = GongdianMenuFragment.class.getSimpleName();
+    private static final String TAG = MeasuredOriginalDataFragment.class.getSimpleName();
     @BindView(R.id.recyclerview)
     RecyclerView recyclerview;
     @BindView(R.id.pagestatelayout)
     PageStateLayout pagestatelayout;
     @BindView(R.id.ptrframelayout)
     PtrFrameLayout ptrframelayout;
-    private GongdianMenuRVAdapter mAdapter;
-    private int mCurrentPosition = -1;
-    private static final String SAVE_STATE_POSITION = "save_state_position";
-    private int pagination = 0;
+    @BindView(R.id.fab)
+    FloatingActionButton fab;
+    private MeasuredOriginalDataRVAdapter mAdapter;
     private LinearLayoutManager mLinearLayoutManager;
     private int lastVisibleItemPosition;
     private View mFooterLoading, mFooterNotLoading, mFooterError;
+    private int pagination = 0;
     private boolean isLoading;
 
-    public static GongdianMenuFragment newInstance() {
-        return new GongdianMenuFragment();
+    public static MeasuredOriginalDataFragment newInstance() {
+        return new MeasuredOriginalDataFragment();
+    }
+
+    @NonNull
+    @Override
+    protected MeasuredOriginalDataContract.Presenter createPresenter() {
+        return new MeasuredOriginalDataPresenter(this);
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.recyclerview, container, false);
+        View view = inflater.inflate(R.layout.fragment_measured_data_list, container, false);
         ButterKnife.bind(this, view);
+        //这几个view必须在注入view之后，否则(ViewGroup) recyclerview.getParent()会因recyclerview为空而报异常。
+        mFooterLoading = getLayoutInflater(savedInstanceState).inflate(R.layout.item_footer_loading, (ViewGroup) recyclerview.getParent(), false);
+        mFooterNotLoading = getLayoutInflater(savedInstanceState).inflate(R.layout.item_footer_not_loading, (ViewGroup) recyclerview.getParent(), false);
+        mFooterError = getLayoutInflater(savedInstanceState).inflate(R.layout.item_footer_error, (ViewGroup) recyclerview.getParent(), false);
         return view;
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        pagestatelayout.setPadding(0, 0, 0, DensityUtils.dp2px(_mActivity, 56));
-        mLinearLayoutManager = new LinearLayoutManager(_mActivity);
-        recyclerview.setLayoutManager(mLinearLayoutManager);
-        mFooterLoading = getLayoutInflater(savedInstanceState).inflate(R.layout.item_footer_loading, (ViewGroup) recyclerview.getParent(), false);
-        mFooterNotLoading = getLayoutInflater(savedInstanceState).inflate(R.layout.item_footer_not_loading, (ViewGroup) recyclerview.getParent(), false);
-        mFooterError = getLayoutInflater(savedInstanceState).inflate(R.layout.item_footer_error, (ViewGroup) recyclerview.getParent(), false);
-        mFooterError.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mAdapter.removeAllFooterView();
-                mAdapter.addFooterView(mFooterLoading);
-                mPresenter.queryData(pagination);
-            }
-        });
-        setAdapter();
-        setLoadMore();
-        recyclerview.addOnItemTouchListener(new OnItemClickListener() {
-            @Override
-            public void SimpleOnItemClick(BaseQuickAdapter adapter, View view, int position) {
-                ToastUtils.showToast(_mActivity, Integer.toString(position));
-                showProjectContent(position);
-            }
-        });
+        initData();
+    }
 
-        recyclerview.setAdapter(mAdapter);
+    private void initData() {
+        setRecyclerview();
+        setLoadMore();
         initPageStateLayout(pagestatelayout);
         initPtrFrameLayout(ptrframelayout);
     }
 
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
+    private void setRecyclerview() {
+        //下拉刷新必须得在懒加载里设置，因为下拉刷新是一进来就刷新，启动start()。
+        mLinearLayoutManager = new LinearLayoutManager(_mActivity);
+        recyclerview.setLayoutManager(mLinearLayoutManager);
 
-        //处理缓存
-        if (savedInstanceState != null) {
-            mCurrentPosition = savedInstanceState.getInt(SAVE_STATE_POSITION);
-            mAdapter.setItemChecked(mCurrentPosition);
-        }
-    }
-
-    private void setAdapter() {
-        mAdapter = new GongdianMenuRVAdapter();
+        recyclerview.addOnItemTouchListener(new OnItemClickListener() {
+            @Override
+            public void SimpleOnItemClick(BaseQuickAdapter adapter, View view, int position) {
+                ToastUtils.showToast(_mActivity, Integer.toString(position));
+            }
+        });
+        mAdapter = new MeasuredOriginalDataRVAdapter();
         mAdapter.removeAllFooterView();
+        recyclerview.setAdapter(mAdapter);
     }
 
     private void setLoadMore() {
@@ -117,9 +109,12 @@ public class GongdianMenuFragment extends BaseFragment<GongdianMenuContract.Pres
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
+
                 if (mAdapter == null) {
                     return;
                 }
+
+                //判断分页加载的时机是滑动到底部。
                 if (newState == RecyclerView.SCROLL_STATE_IDLE
                         && lastVisibleItemPosition + 1 == mAdapter.getItemCount()
                         //目的是判断第一页数据条数是否满足一整页。
@@ -127,41 +122,60 @@ public class GongdianMenuFragment extends BaseFragment<GongdianMenuContract.Pres
                     if (!isLoading) {
                         isLoading = true;
                         pagination += 1;
-                        mPresenter.queryData(pagination);
+                        mPresenter.request(pagination);
                     }
+                }
+
+                //滑动到顶部之后就可以隐藏掉FAB了。
+                if (newState == RecyclerView.SCROLL_STATE_IDLE && mLinearLayoutManager.findFirstVisibleItemPosition() == 0) {
+                    fab.hide();
                 }
             }
 
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
+
                 if (mLinearLayoutManager == null) {
                     return;
                 }
                 lastVisibleItemPosition = mLinearLayoutManager.findLastVisibleItemPosition();
+
+                if (dy > 5) {
+                    fab.hide();
+                } else if (dy < -5) {
+                    fab.show();
+                }
+            }
+        });
+
+        mFooterError.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mAdapter.removeAllFooterView();
+                mAdapter.addFooterView(mFooterLoading);
+                mPresenter.request(pagination);
             }
         });
     }
 
     @Override
-    public void refresh(List<GongdianData> mGongdianData, int pagination) {
-        if (mGongdianData.size() > 0) {
+    public void response(List<OriginalData> mOriginalData, int pagination) {
+        KLog.e("mOriginalData::" + mOriginalData.size());
+        if (mOriginalData.size() > 0) {
             if (pagination == 0) {
-                //刷明是第一页，或者是刷新,把页码重置为0，代表第一页。
-                if (mGongdianData.size() >= Constants.PAGE_SIZE) {
+                //说明是第一页，或者是刷新,把页码重置为0，代表第一页。
+                if (mOriginalData.size() >= Constants.PAGE_SIZE) {
                     mAdapter.removeAllFooterView();
                     mAdapter.addFooterView(mFooterLoading);
                 }
                 this.pagination = 0;
-                mCurrentPosition = 0;
-                mAdapter.setNewData(mGongdianData);
-                mAdapter.setItemChecked(0);
+                mAdapter.setNewData(mOriginalData);
+                KLog.e("setNewData::");
                 //设置一下会重新刷新整个item的位置，即使不是第一个item位置刷新，也会重新刷新定位到第一个。
                 recyclerview.setAdapter(mAdapter);
-                //刷新右边
-                showProjectContent(0);
             } else {
-                mAdapter.addData(mGongdianData);
+                mAdapter.addData(mOriginalData);
             }
             //靠这个参数控制最后不需要请求数据
             isLoading = false;
@@ -176,12 +190,6 @@ public class GongdianMenuFragment extends BaseFragment<GongdianMenuContract.Pres
         }
     }
 
-    @NonNull
-    @Override
-    protected GongdianMenuContract.Presenter createPresenter() {
-        return new GongdianMenuPresenter(this);
-    }
-
     @Override
     public void showContent() {
         pagestatelayout.showContent();
@@ -189,6 +197,7 @@ public class GongdianMenuFragment extends BaseFragment<GongdianMenuContract.Pres
 
     @Override
     public void showError(Throwable t) {
+        //第一页加载出错，显示方式和第一页以后的部分出错显示不同
         if (pagination == 0) {
             if (t instanceof ConnectException) {
                 pagestatelayout.showNetError();
@@ -208,51 +217,25 @@ public class GongdianMenuFragment extends BaseFragment<GongdianMenuContract.Pres
         }
     }
 
-    private void showProjectContent(int position) {
-        KLog.e("切换：：" + position);
 
-        if (position == mCurrentPosition) {
-            return;
-        }
-        mCurrentPosition = position;
-        mAdapter.setItemChecked(position);
-        GongdianContentFragment fragment = GongdianContentFragment.newInstance();
-        ((GongdianFragment) getParentFragment()).switchContentFragment(fragment);
-    }
-
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putInt(SAVE_STATE_POSITION, mCurrentPosition);
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        recyclerview.setAdapter(mAdapter = null);
+    @OnClick(R.id.fab)
+    public void onClick() {
+        recyclerview.smoothScrollToPosition(0);
     }
 
     @Override
     public boolean isCanDoRefresh() {
-        //判断是哪种状态的页面，都让其可下拉
-        if (pagestatelayout.isShowContent) {
-            //判断RecyclerView是否在在顶部，在顶部则允许滑动下拉刷新
-            if (null != recyclerview) {
-                if (recyclerview.getLayoutManager() instanceof LinearLayoutManager) {
-                    LinearLayoutManager lm = (LinearLayoutManager) recyclerview.getLayoutManager();
-                    int position = lm.findFirstVisibleItemPosition();
-                    if (position >= 0) {
-                        if (lm.findViewByPosition(position).getTop() >= 0 && position >= 0) {
-                            return true;
-                        }
-                    }
+        //判断RecyclerView是否在在顶部，在顶部则允许滑动下拉刷新。
+        if (null != recyclerview && null != mLinearLayoutManager) {
+            int position = mLinearLayoutManager.findFirstVisibleItemPosition();
+            if (position >= 0) {
+                if (mLinearLayoutManager.findViewByPosition(position).getTop() >= 0 && position == 0) {
+                    return true;
                 }
-            } else {
-                return true;
             }
-            return false;
         } else {
             return true;
         }
+        return false;
     }
 }

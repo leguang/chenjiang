@@ -1,7 +1,7 @@
 package com.shtoone.chenjiang.mvp.presenter;
 
 import com.shtoone.chenjiang.common.Constants;
-import com.shtoone.chenjiang.mvp.contract.AddShuizhunxianContract;
+import com.shtoone.chenjiang.mvp.contract.ShuizhunxianContract;
 import com.shtoone.chenjiang.mvp.model.entity.db.GongdianData;
 import com.shtoone.chenjiang.mvp.model.entity.db.JidianData;
 import com.shtoone.chenjiang.mvp.model.entity.db.StaffData;
@@ -9,6 +9,7 @@ import com.shtoone.chenjiang.mvp.presenter.base.BasePresenter;
 
 import org.litepal.crud.DataSupport;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -22,10 +23,10 @@ import rx.schedulers.Schedulers;
  * Author：leguang on 2016/10/14 0014 13:17
  * Email：langmanleguang@qq.com
  */
-public class AddShuizhunxianPresenter extends BasePresenter<AddShuizhunxianContract.View> implements AddShuizhunxianContract.Presenter {
-    private static final String TAG = AddShuizhunxianPresenter.class.getSimpleName();
+public class ShuizhunxianPresenter extends BasePresenter<ShuizhunxianContract.View> implements ShuizhunxianContract.Presenter {
+    private static final String TAG = ShuizhunxianPresenter.class.getSimpleName();
 
-    public AddShuizhunxianPresenter(AddShuizhunxianContract.View mView) {
+    public ShuizhunxianPresenter(ShuizhunxianContract.View mView) {
         super(mView);
     }
 
@@ -75,6 +76,38 @@ public class AddShuizhunxianPresenter extends BasePresenter<AddShuizhunxianContr
                             @Override
                             public void _onNext(Map<String, String[]> map) {
                                 getView().responseData(map);
+                            }
+                        })
+        );
+    }
+
+    @Override
+    public void requestStaffData() {
+        mRxManager.add(Observable.create(new Observable.OnSubscribe<List<String>>() {
+                    @Override
+                    public void call(Subscriber<? super List<String>> subscriber) {
+                        List<StaffData> mStaffData = null;
+                        List<String> listStaffName = null;
+                        try {
+                            mStaffData = DataSupport.findAll(StaffData.class);
+                            if (mStaffData.size() > 0) {
+                                listStaffName = new ArrayList<String>();
+                                for (StaffData staffData : mStaffData) {
+                                    listStaffName.add(staffData.getUserName());
+                                }
+                            }
+                            subscriber.onNext(listStaffName);
+                        } catch (Exception ex) {
+                            subscriber.onError(ex);
+                            getView().showError(ex);
+                        }
+                        subscriber.onCompleted();
+                    }
+                }).subscribeOn(Schedulers.computation())
+                        .observeOn(AndroidSchedulers.mainThread()).subscribe(new RxSubscriber<List<String>>() {
+                            @Override
+                            public void _onNext(List<String> staffDatas) {
+                                getView().responseStaffData(staffDatas);
                             }
                         })
         );

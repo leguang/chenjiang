@@ -88,8 +88,12 @@ public class VersionFragment extends BaseFragment<VersionContract.Presenter> imp
     @Override
     public void showError(Throwable t) {
         if (t instanceof ConnectException) {
-            setErrorMessage("网络异常,点击进入设置");
-            btUpdate.setOnClickListener(new go2SettingOnClickListener());
+            if (!NetworkUtils.isConnected(_mActivity)) {
+                setErrorMessage("网络异常,点击进入设置");
+                btUpdate.setOnClickListener(new go2SettingOnClickListener());
+            } else {
+                setErrorMessage("网络异常");
+            }
         } else if (t instanceof HttpException) {
             setErrorMessage("服务器异常");
         } else if (t instanceof SocketTimeoutException) {
@@ -194,15 +198,12 @@ public class VersionFragment extends BaseFragment<VersionContract.Presenter> imp
     }
 
     public class go2SettingOnClickListener implements View.OnClickListener {
+
         @Override
         public void onClick(View view) {
-            if (!NetworkUtils.isConnected(_mActivity)) {
-                NetworkUtils.openSetting(_mActivity);
-            }
+            NetworkUtils.openSetting(_mActivity);
             btUpdate.setProgress(0);
             btUpdate.setOnClickListener(new CheckUpdateOnClickListener());
         }
     }
-
-
 }

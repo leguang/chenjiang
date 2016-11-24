@@ -4,6 +4,7 @@
     android:layout_height="wrap_content"
     android:layout_marginBottom="1dp"
     android:background="@color/white"
+    android:foreground="?android:attr/selectableItemBackground"
     android:orientation="horizontal">
 
     <ImageView
@@ -14,6 +15,7 @@
         android:src="@drawable/ic_delete_forever_black_48dp" />
 
     <LinearLayout
+        android:id="@+id/ll_middle_item_rv_main_fragment"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_gravity="start"
@@ -54,5 +56,7 @@
         android:id="@+id/iv_right_item_rv_main_fragment"
         android:layout_width="75dp"
         android:layout_height="match_parent"
-        android:background="@color/red" />
+        android:padding="10dp"
+        android:src="@drawable/ic_measure"
+        android:tint="@color/base_color" />
 </LinearLayout>

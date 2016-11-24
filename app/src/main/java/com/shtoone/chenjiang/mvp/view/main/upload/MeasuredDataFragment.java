@@ -1,10 +1,12 @@
 package com.shtoone.chenjiang.mvp.view.main.upload;
 
 import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
@@ -13,18 +15,13 @@ import android.view.View;
 import android.view.ViewAnimationUtils;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateDecelerateInterpolator;
-import android.widget.LinearLayout;
 
 import com.shtoone.chenjiang.R;
 import com.shtoone.chenjiang.common.Constants;
-import com.shtoone.chenjiang.event.EventData;
 import com.shtoone.chenjiang.mvp.contract.base.BaseContract;
 import com.shtoone.chenjiang.mvp.view.adapter.MeasuredDataFragmentVPAdapter;
 import com.shtoone.chenjiang.mvp.view.base.BaseFragment;
 import com.shtoone.chenjiang.mvp.view.main.MainActivity;
-import com.socks.library.KLog;
-
-import org.greenrobot.eventbus.EventBus;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -43,7 +40,9 @@ public class MeasuredDataFragment extends BaseFragment {
     @BindView(R.id.vp_measured_data_fragment)
     ViewPager vp;
     @BindView(R.id.ll_measured_data_fragment)
-    LinearLayout ll;
+    CoordinatorLayout ll;
+    @BindView(R.id.appbar_toolbar_tablayout)
+    AppBarLayout appbar;
     private int x;
     private int y;
 
@@ -78,7 +77,7 @@ public class MeasuredDataFragment extends BaseFragment {
         //关闭抽屉菜单，使其无法滑动弹出，避免左划退出fragment时造成滑动冲突。
         ((MainActivity) _mActivity).closeDrawer();
         ButterKnife.bind(this, view);
-        initStateBar(toolbar);
+        initStateBar(appbar);
         return attachToSwipeBack(view);
     }
 
@@ -104,7 +103,7 @@ public class MeasuredDataFragment extends BaseFragment {
     }
 
     private void revealShow() {
-        if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.LOLLIPOP) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
             ll.setVisibility(View.VISIBLE);
             return;
         }

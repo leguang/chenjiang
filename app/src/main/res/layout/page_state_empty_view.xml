@@ -17,6 +17,6 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="暂无数据，请更换条件查询..."
+        android:text="暂无数据，请点击下载..."
         android:textSize="14sp" />
 </LinearLayout>

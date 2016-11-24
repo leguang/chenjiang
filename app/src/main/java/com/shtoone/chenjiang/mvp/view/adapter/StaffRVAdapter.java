@@ -7,10 +7,10 @@ import com.chad.library.adapter.base.BaseViewHolder;
 import com.shtoone.chenjiang.R;
 import com.shtoone.chenjiang.mvp.model.entity.db.StaffData;
 
-public class StaffAdapter extends BaseQuickAdapter<StaffData, BaseViewHolder> {
-    private static final String TAG = StaffAdapter.class.getSimpleName();
+public class StaffRVAdapter extends BaseQuickAdapter<StaffData, BaseViewHolder> {
+    private static final String TAG = StaffRVAdapter.class.getSimpleName();
 
-    public StaffAdapter() {
+    public StaffRVAdapter() {
         super(R.layout.item_rv_project_staff_fragment, null);
     }
 

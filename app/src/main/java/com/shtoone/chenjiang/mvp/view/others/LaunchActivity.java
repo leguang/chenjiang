@@ -6,10 +6,11 @@ import android.support.annotation.NonNull;
 
 import com.shtoone.chenjiang.R;
 import com.shtoone.chenjiang.common.Constants;
+import com.shtoone.chenjiang.common.ToastUtils;
 import com.shtoone.chenjiang.event.EventData;
 import com.shtoone.chenjiang.mvp.contract.base.BaseContract;
 import com.shtoone.chenjiang.mvp.view.base.BaseActivity;
-import com.shtoone.chenjiang.utils.ToastUtils;
+import com.socks.library.KLog;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -26,28 +27,27 @@ public class LaunchActivity extends BaseActivity {
     // 再点一次退出程序时间设置
     private static final long WAIT_TIME = 2000L;
     private long TOUCH_TIME = 0;
+    private int fromTo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_launch);
-
+        fromTo = getIntent().getIntExtra(Constants.FROM_TO, Constants.FROM_SPLASH);
+        KLog.e("fromTo::" + fromTo);
         if (savedInstanceState == null) {
-            loadRootFragment(R.id.fl_launch_activity, SplashFragment.newInstance());
+            if (fromTo == Constants.FROM_SPLASH) {
+                loadRootFragment(R.id.fl_launch_activity, SplashFragment.newInstance());
+            } else {
+                loadRootFragment(R.id.fl_launch_activity, LoginFragment.newInstance(Constants.FROM_MAIN));
+            }
         }
-
-        checkUpdate();
     }
 
     @NonNull
     @Override
     protected BaseContract.Presenter createPresenter() {
         return null;
-    }
-
-
-    private void checkUpdate() {
-
     }
 
     @Override

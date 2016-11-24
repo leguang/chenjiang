@@ -1,107 +1,69 @@
 package com.shtoone.chenjiang.mvp.view.adapter;
 
-import android.content.Context;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.RecyclerView.ViewHolder;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
 
+import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.chad.library.adapter.base.BaseViewHolder;
 import com.shtoone.chenjiang.R;
 import com.shtoone.chenjiang.mvp.model.entity.db.YusheshuizhunxianData;
-import com.shtoone.chenjiang.mvp.view.adapter.base.OnItemClickListener;
 
-import java.util.List;
-
-
-public class MainFragmentRVAdapter extends RecyclerView.Adapter<ViewHolder> {
+public class MainFragmentRVAdapter extends BaseQuickAdapter<YusheshuizhunxianData, BaseViewHolder> {
     private static final String TAG = MainFragmentRVAdapter.class.getSimpleName();
-    private Context context;
     private OnItemClickListener mOnItemClickListener;
-    private List<YusheshuizhunxianData> itemsData;
 
-    public enum ITEM_TYPE {
-        TYPE_ITEM, TYPE_FOOTER
+    public MainFragmentRVAdapter() {
+        super(R.layout.item_rv_main_fragment, null);
     }
 
-    public MainFragmentRVAdapter(Context context, List<YusheshuizhunxianData> itemsData) {
-        super();
-        this.context = context;
-        this.itemsData = itemsData;
+    @Override
+    protected void convert(BaseViewHolder holder, YusheshuizhunxianData yusheshuizhunxianData) {
+        final int position = holder.getLayoutPosition() - this.getHeaderLayoutCount();
+        holder.setText(R.id.tv_bianhao_item_rv_main_fragment, yusheshuizhunxianData.getXianlubianhao())
+                .setText(R.id.tv_route_type_item_rv_main_fragment, yusheshuizhunxianData.getLeixing())
+                .setText(R.id.tv_observe_type_item_rv_main_fragment, yusheshuizhunxianData.getJidianshu())
+                .setText(R.id.tv_date_item_rv_main_fragment, yusheshuizhunxianData.getXiugaishijian())
+                .setOnClickListener(R.id.iv_left_item_rv_main_fragment, new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        if (mOnItemClickListener == null) {
+                            return;
+                        }
+                        mOnItemClickListener.onLeftClick(view, position);
+                    }
+                }).setOnClickListener(R.id.ll_middle_item_rv_main_fragment, new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (mOnItemClickListener == null) {
+                    return;
+                }
+                mOnItemClickListener.onMiddleClick(view, position);
+            }
+        }).setOnClickListener(R.id.iv_right_item_rv_main_fragment, new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (mOnItemClickListener == null) {
+                    return;
+                }
+                mOnItemClickListener.onRightClick(view, position);
+            }
+        });
+    }
+
+    @Override
+    public void remove(int position) {
+        this.mData.remove(position);
+        notifyDataSetChanged();
     }
 
     public void setOnItemClickListener(OnItemClickListener mOnItemClickListener) {
         this.mOnItemClickListener = mOnItemClickListener;
     }
 
-    @Override
-    public int getItemCount() {
-        if (itemsData != null && itemsData.size() > 0) {
-            //这里的10是根据分页查询，一页该显示的条数
-            if (itemsData.size() > 4) {
-                return itemsData.size() + 1;
-            } else {
-                return itemsData.size();
-            }
-        }
-        return 0;
-    }
+    public interface OnItemClickListener {
+        void onLeftClick(View view, int position);
 
-    @Override
-    public int getItemViewType(int position) {
-        if (getItemCount() > 4 && position + 1 == getItemCount()) {
-            return ITEM_TYPE.TYPE_FOOTER.ordinal();
-        } else {
-            return ITEM_TYPE.TYPE_ITEM.ordinal();
-        }
-    }
+        void onMiddleClick(View view, int position);
 
-    @Override
-    public void onBindViewHolder(final ViewHolder holder, int position) {
-        if (holder instanceof ItemViewHolder) {
-            ItemViewHolder mItemViewHolder = (ItemViewHolder) holder;
-            mItemViewHolder.tv_bianhao.setText("编      号：" + itemsData.get(position).getId() + "");
-            mItemViewHolder.tv_route.setText("路线类型：" + itemsData.get(position).getXianlubianhao() + "");
-            mItemViewHolder.tv_observe.setText("观测类型：" + itemsData.get(position).getLeixing() + "");
-            mItemViewHolder.tv_date.setText("观测时间：" + itemsData.get(position).getXiugaishijian() + "");
-        }
-    }
-
-    @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        if (viewType == ITEM_TYPE.TYPE_ITEM.ordinal()) {
-            return new ItemViewHolder(LayoutInflater.from(context).inflate(R.layout.item_rv_main_fragment, parent, false));
-        } else if (viewType == ITEM_TYPE.TYPE_FOOTER.ordinal()) {
-            return new FootViewHolder(LayoutInflater.from(context).inflate(R.layout.item_footer_loading, parent, false));
-        }
-        return null;
-    }
-
-    static class ItemViewHolder extends RecyclerView.ViewHolder {
-        ImageView iv_left;
-        ImageView iv_right;
-        TextView tv_bianhao;
-        TextView tv_route;
-        TextView tv_observe;
-        TextView tv_date;
-
-        public ItemViewHolder(View view) {
-            super(view);
-            iv_left = (ImageView) view.findViewById(R.id.iv_left_item_rv_main_fragment);
-            iv_right = (ImageView) view.findViewById(R.id.iv_right_item_rv_main_fragment);
-            tv_bianhao = (TextView) view.findViewById(R.id.tv_bianhao_item_rv_main_fragment);
-            tv_route = (TextView) view.findViewById(R.id.tv_route_type_item_rv_main_fragment);
-            tv_observe = (TextView) view.findViewById(R.id.tv_observe_type_item_rv_main_fragment);
-            tv_date = (TextView) view.findViewById(R.id.tv_date_item_rv_main_fragment);
-        }
-    }
-
-    static class FootViewHolder extends RecyclerView.ViewHolder {
-
-        public FootViewHolder(View view) {
-            super(view);
-        }
+        void onRightClick(View view, int position);
     }
 }

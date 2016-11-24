@@ -2,11 +2,13 @@ package com.shtoone.chenjiang.mvp.model.entity.db;
 
 import org.litepal.crud.DataSupport;
 
+import java.io.Serializable;
+
 /**
  * Author：leguang on 2016/10/25 0025 14:50
  * Email：langmanleguang@qq.com
  */
-public class YusheshuizhunxianData extends DataSupport {
+public class YusheshuizhunxianData extends DataSupport implements Serializable {
     private long id;
     private String biaoshi;
     private String ysszxid;
@@ -20,6 +22,69 @@ public class YusheshuizhunxianData extends DataSupport {
     private String departId;
     private String jidianshu;
     private String xianluxinxi;
+    private boolean edit;
+    private String routeType;
+    private String observeType;
+    private String weather;
+    private String pressure;
+    private String temperature;
+    private String staff;
+
+    public String getRouteType() {
+        return routeType;
+    }
+
+    public void setRouteType(String routeType) {
+        this.routeType = routeType;
+    }
+
+    public String getObserveType() {
+        return observeType;
+    }
+
+    public void setObserveType(String observeType) {
+        this.observeType = observeType;
+    }
+
+    public String getWeather() {
+        return weather;
+    }
+
+    public void setWeather(String weather) {
+        this.weather = weather;
+    }
+
+    public String getPressure() {
+        return pressure;
+    }
+
+    public void setPressure(String pressure) {
+        this.pressure = pressure;
+    }
+
+    public String getTemperature() {
+        return temperature;
+    }
+
+    public void setTemperature(String temperature) {
+        this.temperature = temperature;
+    }
+
+    public String getStaff() {
+        return staff;
+    }
+
+    public void setStaff(String staff) {
+        this.staff = staff;
+    }
+
+    public boolean isEdit() {
+        return edit;
+    }
+
+    public void setEdit(boolean edit) {
+        this.edit = edit;
+    }
 
     public long getId() {
         return id;

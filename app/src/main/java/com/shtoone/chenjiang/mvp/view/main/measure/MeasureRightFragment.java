@@ -16,7 +16,6 @@ import com.shtoone.chenjiang.R;
 import com.shtoone.chenjiang.mvp.contract.measure.MeasureContract;
 import com.shtoone.chenjiang.mvp.presenter.measure.MeasurePresenter;
 import com.shtoone.chenjiang.mvp.view.base.BaseFragment;
-import com.socks.library.KLog;
 
 import java.util.ArrayList;
 
@@ -103,7 +102,6 @@ public class MeasureRightFragment extends BaseFragment<MeasureContract.Presenter
             @Override
             public void onTabSelected(int position, final boolean wasSelected) {
 
-                KLog.e("position::" + position);
                 switch (position) {
 
                     case 0:

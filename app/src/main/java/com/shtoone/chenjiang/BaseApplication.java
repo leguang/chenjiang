@@ -42,8 +42,6 @@ public class BaseApplication extends LitePalApplication {
         BlockCanary.install(this, new AppContext()).start();
         //初始化数据库
 
-//        List<CedianData> mCedianData = DataSupport.findAll(CedianData.class);
-//        KLog.e("mCedianData.size()：：" + mCedianData.size());
 //        for (int i = 0; i <10; i++) {
 //
 //            GongdianData gongdianData = new GongdianData();
@@ -52,13 +50,11 @@ public class BaseApplication extends LitePalApplication {
 //            KLog.e(is);
 //        }
 
-//        for (int i = 0; i < 45; i++) {
-//
+//        DataSupport.deleteAll(StaffData.class);
+//        for (int i = 0; i < 100; i++) {
 //            StaffData mStaffData = new StaffData();
-//            mStaffData.setName("哎我" + i);
-//            mStaffData.setType("司镜人员" + i);
-//            mStaffData.setPhtoneNumber("13888888888");
-//
+//            mStaffData.setUserName("哎我" + (i + 1));
+//            mStaffData.setUserPhone("电话：" + (i + 1));
 //            boolean is = mStaffData.save();
 //            KLog.e(is);
 //        }
@@ -77,22 +73,9 @@ public class BaseApplication extends LitePalApplication {
 //            KLog.e(is);
 //        }
 
+//
+//        DataSupport.deleteAll(StaffData.class);
 //        for (int i = 0; i < 100; i++) {
-//
-//            LevelLineData levelLineData = new LevelLineData();
-//            levelLineData.setId(1516161);
-//            levelLineData.setBiaoDuan("前期标");
-//            levelLineData.setMeasureType("aBBFF");
-//            levelLineData.setObserveDate("2016-01-15");
-//            levelLineData.setObserveType("附和");
-//            levelLineData.setRouteType("aBBFF");
-//            boolean isis = levelLineData.save();
-//
-//            KLog.e(isis);
-//        }
-
-//        for (int i = 0; i < 100; i++) {
-//
 //            ShuizhunxianData f = new ShuizhunxianData();
 //            f.setBeizhu("备注" + (i + 1));
 //            f.setEditDate("2011-11-11 11:22:22");
@@ -100,8 +83,39 @@ public class BaseApplication extends LitePalApplication {
 //            f.setDepartName("先期标" + (i + 1));
 //            f.setBianhao("L7004" + i);
 //            f.setRouteType("附和");
-//
 //            boolean isis = f.save();
+//            KLog.e(isis);
+//        }
+//
+//        for (int i = 0; i < 100; i++) {
+//            OriginalData mOriginalData = new OriginalData();
+//            mOriginalData.setNumber("备注" + (i + 1));
+//
+//            boolean isis = mOriginalData.save();
+//            KLog.e(isis);
+//        }
+//
+//        for (int i = 0; i < 100; i++) {
+//            ResultData mResultData = new ResultData();
+//            mResultData.setNumber("备注" + (i + 1));
+//            mResultData.setState("状态" + (i + 1));
+//            boolean isis = mResultData.save();
+//            KLog.e(isis);
+//        }
+
+//        DataSupport.deleteAll(YusheshuizhunxianData.class);
+//        for (int i = 0; i < 100; i++) {
+//            YusheshuizhunxianData mYusheshuizhunxianData = new YusheshuizhunxianData();
+//            mYusheshuizhunxianData.setXianlubianhao("备注" + (i + 1));
+//            mYusheshuizhunxianData.setJidianshu("状态" + (i + 1));
+//            mYusheshuizhunxianData.setXianluxinxi("jd0,cd1,cd2,cd3,jd1,");
+//            mYusheshuizhunxianData.setEdit(true);
+//            mYusheshuizhunxianData.setRouteType("闭合");
+//            mYusheshuizhunxianData.setObserveType("BF");
+//            mYusheshuizhunxianData.setTemperature("16");
+//            mYusheshuizhunxianData.setPressure("700");
+//            mYusheshuizhunxianData.setStaff("哎我" + (i + 1));
+//            boolean isis = mYusheshuizhunxianData.save();
 //            KLog.e(isis);
 //        }
 

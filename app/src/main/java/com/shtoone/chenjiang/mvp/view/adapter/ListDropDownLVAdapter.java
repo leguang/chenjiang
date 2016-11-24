@@ -15,7 +15,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 
-public class ListDropDownAdapter extends BaseAdapter {
+public class ListDropDownLVAdapter extends BaseAdapter {
 
     private Context context;
     private List<String> list;
@@ -26,7 +26,7 @@ public class ListDropDownAdapter extends BaseAdapter {
         notifyDataSetChanged();
     }
 
-    public ListDropDownAdapter(Context context, List<String> list) {
+    public ListDropDownLVAdapter(Context context, List<String> list) {
         this.context = context;
         this.list = list;
     }

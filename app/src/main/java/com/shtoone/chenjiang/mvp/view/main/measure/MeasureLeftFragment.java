@@ -8,7 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.shtoone.chenjiang.R;
-import com.socks.library.KLog;
 
 /**
  * Author：leguang on 2016/10/9 0009 15:49
@@ -33,7 +32,6 @@ public class MeasureLeftFragment extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        KLog.e("onViewCreated");
         initData();
     }
 

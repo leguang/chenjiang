@@ -91,7 +91,7 @@
         <TableRow android:background="@color/material_cyan_50">
 
             <TextView
-                style="@style/AddShuizhunxian"
+                style="@style/MeasureTable"
                 android:layout_weight="1"
                 android:gravity="right|center_vertical"
                 android:paddingRight="5dp"
@@ -99,20 +99,20 @@
 
             <TextView
                 android:id="@+id/tv_bianhao_add_shuizhunxian_fragment"
-                style="@style/AddShuizhunxian"
+                style="@style/MeasureTable"
                 android:layout_weight="1"
                 android:gravity="left|center_vertical"
                 android:paddingLeft="5dp" />
 
             <TextView
-                style="@style/AddShuizhunxian"
+                style="@style/MeasureTable"
                 android:layout_weight="1"
                 android:gravity="right|center_vertical"
                 android:paddingRight="5dp"
                 android:text="后视距和：" />
 
             <TextView
-                style="@style/AddShuizhunxian"
+                style="@style/MeasureTable"
                 android:layout_weight="1"
                 android:gravity="right|center_vertical"
                 android:paddingRight="5dp"
@@ -122,27 +122,27 @@
         <TableRow>
 
             <TextView
-                style="@style/AddShuizhunxian"
+                style="@style/MeasureTable"
                 android:layout_weight="1"
                 android:gravity="right|center_vertical"
                 android:paddingRight="5dp"
                 android:text="B2  HD：" />
 
             <TextView
-                style="@style/AddShuizhunxian"
+                style="@style/MeasureTable"
                 android:layout_weight="1"
                 android:gravity="left|center_vertical"
                 android:paddingLeft="5dp" />
 
             <TextView
-                style="@style/AddShuizhunxian"
+                style="@style/MeasureTable"
                 android:layout_weight="1"
                 android:gravity="right|center_vertical"
                 android:paddingRight="5dp"
                 android:text="前视距和：" />
 
             <TextView
-                style="@style/AddShuizhunxian"
+                style="@style/MeasureTable"
                 android:layout_weight="1"
                 android:gravity="right|center_vertical"
                 android:paddingRight="5dp"
@@ -153,27 +153,27 @@
         <TableRow android:background="@color/material_cyan_50">
 
             <TextView
-                style="@style/AddShuizhunxian"
+                style="@style/MeasureTable"
                 android:layout_weight="1"
                 android:gravity="right|center_vertical"
                 android:paddingRight="5dp"
                 android:text="F1  HD：" />
 
             <TextView
-                style="@style/AddShuizhunxian"
+                style="@style/MeasureTable"
                 android:layout_weight="1"
                 android:gravity="left|center_vertical"
                 android:paddingLeft="5dp" />
 
             <TextView
-                style="@style/AddShuizhunxian"
+                style="@style/MeasureTable"
                 android:layout_weight="1"
                 android:gravity="right|center_vertical"
                 android:paddingRight="5dp"
                 android:text="高差1：" />
 
             <TextView
-                style="@style/AddShuizhunxian"
+                style="@style/MeasureTable"
                 android:layout_weight="1"
                 android:gravity="right|center_vertical"
                 android:paddingRight="5dp"
@@ -184,7 +184,7 @@
         <TableRow>
 
             <TextView
-                style="@style/AddShuizhunxian"
+                style="@style/MeasureTable"
                 android:layout_weight="1"
                 android:gravity="right|center_vertical"
                 android:paddingRight="5dp"
@@ -192,20 +192,20 @@
 
 
             <TextView
-                style="@style/AddShuizhunxian"
+                style="@style/MeasureTable"
                 android:layout_weight="1"
                 android:gravity="left|center_vertical"
                 android:paddingLeft="5dp" />
 
             <TextView
-                style="@style/AddShuizhunxian"
+                style="@style/MeasureTable"
                 android:layout_weight="1"
                 android:gravity="right|center_vertical"
                 android:paddingRight="5dp"
                 android:text="高差2：" />
 
             <TextView
-                style="@style/AddShuizhunxian"
+                style="@style/MeasureTable"
                 android:layout_weight="1"
                 android:gravity="right|center_vertical"
                 android:paddingRight="5dp"
@@ -215,27 +215,27 @@
         <TableRow android:background="@color/material_cyan_50">
 
             <TextView
-                style="@style/AddShuizhunxian"
+                style="@style/MeasureTable"
                 android:layout_weight="1"
                 android:gravity="right|center_vertical"
                 android:paddingRight="5dp"
                 android:text="B1  R：" />
 
             <TextView
-                style="@style/AddShuizhunxian"
+                style="@style/MeasureTable"
                 android:layout_weight="1"
                 android:gravity="left|center_vertical"
                 android:paddingLeft="5dp" />
 
             <TextView
-                style="@style/AddShuizhunxian"
+                style="@style/MeasureTable"
                 android:layout_weight="1"
                 android:gravity="right|center_vertical"
                 android:paddingRight="5dp"
                 android:text="测站高差：" />
 
             <TextView
-                style="@style/AddShuizhunxian"
+                style="@style/MeasureTable"
                 android:layout_weight="1"
                 android:gravity="right|center_vertical"
                 android:paddingRight="5dp"
@@ -246,27 +246,27 @@
         <TableRow>
 
             <TextView
-                style="@style/AddShuizhunxian"
+                style="@style/MeasureTable"
                 android:layout_weight="1"
                 android:gravity="right|center_vertical"
                 android:paddingRight="5dp"
                 android:text="B2  R：" />
 
             <TextView
-                style="@style/AddShuizhunxian"
+                style="@style/MeasureTable"
                 android:layout_weight="1"
                 android:gravity="left|center_vertical"
                 android:paddingLeft="5dp" />
 
             <TextView
-                style="@style/AddShuizhunxian"
+                style="@style/MeasureTable"
                 android:layout_weight="1"
                 android:gravity="right|center_vertical"
                 android:paddingRight="5dp"
                 android:text="高程值：" />
 
             <TextView
-                style="@style/AddShuizhunxian"
+                style="@style/MeasureTable"
                 android:layout_weight="1"
                 android:gravity="right|center_vertical"
                 android:paddingRight="5dp"
@@ -277,27 +277,27 @@
         <TableRow android:background="@color/material_cyan_50">
 
             <TextView
-                style="@style/AddShuizhunxian"
+                style="@style/MeasureTable"
                 android:layout_weight="1"
                 android:gravity="right|center_vertical"
                 android:paddingRight="5dp"
                 android:text="F1  R：" />
 
             <TextView
-                style="@style/AddShuizhunxian"
+                style="@style/MeasureTable"
                 android:layout_weight="1"
                 android:gravity="left|center_vertical"
                 android:paddingLeft="5dp" />
 
             <TextView
-                style="@style/AddShuizhunxian"
+                style="@style/MeasureTable"
                 android:layout_weight="1"
                 android:gravity="right|center_vertical"
                 android:paddingRight="5dp"
                 android:text="FR读数差:" />
 
             <TextView
-                style="@style/AddShuizhunxian"
+                style="@style/MeasureTable"
                 android:layout_weight="1"
                 android:gravity="right|center_vertical"
                 android:paddingRight="5dp"
@@ -308,27 +308,27 @@
         <TableRow>
 
             <TextView
-                style="@style/AddShuizhunxian"
+                style="@style/MeasureTable"
                 android:layout_weight="1"
                 android:gravity="right|center_vertical"
                 android:paddingRight="5dp"
                 android:text="F2  R：" />
 
             <TextView
-                style="@style/AddShuizhunxian"
+                style="@style/MeasureTable"
                 android:layout_weight="1"
                 android:gravity="left|center_vertical"
                 android:paddingLeft="5dp" />
 
             <TextView
-                style="@style/AddShuizhunxian"
+                style="@style/MeasureTable"
                 android:layout_weight="1"
                 android:gravity="right|center_vertical"
                 android:paddingRight="5dp"
                 android:text="BR读数差:" />
 
             <TextView
-                style="@style/AddShuizhunxian"
+                style="@style/MeasureTable"
                 android:layout_weight="1"
                 android:gravity="right|center_vertical"
                 android:paddingRight="5dp"

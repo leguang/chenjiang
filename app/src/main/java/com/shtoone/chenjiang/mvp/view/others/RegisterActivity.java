@@ -15,6 +15,7 @@ import android.view.animation.AccelerateDecelerateInterpolator;
 import com.shtoone.chenjiang.BaseApplication;
 import com.shtoone.chenjiang.R;
 import com.shtoone.chenjiang.common.Constants;
+import com.shtoone.chenjiang.common.ToastUtils;
 import com.shtoone.chenjiang.mvp.contract.RegisterContract;
 import com.shtoone.chenjiang.mvp.model.entity.bean.RegisterBean;
 import com.shtoone.chenjiang.mvp.presenter.RegisterPresenter;
@@ -23,7 +24,6 @@ import com.shtoone.chenjiang.utils.AESCryptUtils;
 import com.shtoone.chenjiang.utils.DeviceUtils;
 import com.shtoone.chenjiang.utils.KeyBoardUtils;
 import com.shtoone.chenjiang.utils.SharedPreferencesUtils;
-import com.shtoone.chenjiang.utils.ToastUtils;
 import com.shtoone.chenjiang.widget.processbutton.iml.ActionProcessButton;
 import com.socks.library.KLog;
 

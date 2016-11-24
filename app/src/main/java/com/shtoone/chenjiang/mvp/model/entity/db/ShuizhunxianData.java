@@ -8,13 +8,13 @@ import org.litepal.crud.DataSupport;
 public class ShuizhunxianData extends DataSupport {
 
     private String bianhao;
-    private java.lang.String editDate;
-    private java.lang.String observeDate;
+    private String editDate;
+    private String observeDate;
     private String departName;
     private String observeType;
-    private java.lang.String routeType;
-    private java.lang.String beizhu;
-    private java.lang.String departId;
+    private String routeType;
+    private String beizhu;
+    private String departId;
 
     public String getBianhao() {
         return bianhao;
