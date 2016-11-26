@@ -23,8 +23,10 @@ import com.shtoone.chenjiang.BaseApplication;
 import com.shtoone.chenjiang.R;
 import com.shtoone.chenjiang.common.Constants;
 import com.shtoone.chenjiang.common.Dialoghelper;
+import com.shtoone.chenjiang.common.ToastUtils;
 import com.shtoone.chenjiang.event.EventData;
 import com.shtoone.chenjiang.mvp.contract.MainContract;
+import com.shtoone.chenjiang.mvp.model.entity.bean.CheckUpdateBean;
 import com.shtoone.chenjiang.mvp.model.entity.db.GongdianData;
 import com.shtoone.chenjiang.mvp.model.entity.db.YusheshuizhunxianData;
 import com.shtoone.chenjiang.mvp.presenter.MainPresenter;
@@ -33,7 +35,6 @@ import com.shtoone.chenjiang.mvp.view.adapter.ListDropDownLVAdapter;
 import com.shtoone.chenjiang.mvp.view.adapter.MainFragmentRVAdapter;
 import com.shtoone.chenjiang.mvp.view.base.BaseFragment;
 import com.shtoone.chenjiang.mvp.view.main.measure.MeasureFragment;
-import com.shtoone.chenjiang.common.ToastUtils;
 import com.shtoone.chenjiang.widget.PageStateLayout;
 import com.socks.library.KLog;
 import com.yyydjk.library.DropDownMenu;
@@ -85,6 +86,7 @@ public class MainFragment extends BaseFragment<MainContract.Presenter> implement
     private String[] arrayHeaders, arrayMeasureStatus, arrayTimeType;
     private int pagination;
     private View mFooterLoading, mFooterNotLoading, mFooterError;
+    private String strGongdianParam = "全部", strMeasureStatusParam = "全部", strTimeTypeParam = "全部";
 
     public static MainFragment newInstance() {
         return new MainFragment();
@@ -157,6 +159,11 @@ public class MainFragment extends BaseFragment<MainContract.Presenter> implement
         gongdianView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                KLog.e(position + "^^^^" + id);
+
+                strGongdianParam = listGongdian.get(position);
+                mPresenter.requestShuizhunxianData(pagination, strGongdianParam, strMeasureStatusParam, strTimeTypeParam);
+
                 gongdianAdapter.setCheckItem(position);
                 dropDownMenu.setTabText(position == 0 ? arrayHeaders[0] : listGongdian.get(position));
                 dropDownMenu.closeMenu();
@@ -171,6 +178,11 @@ public class MainFragment extends BaseFragment<MainContract.Presenter> implement
         measureStatusView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                KLog.e(position + "^^^^" + id);
+
+                strMeasureStatusParam = arrayMeasureStatus[position];
+                mPresenter.requestShuizhunxianData(pagination, strGongdianParam, strMeasureStatusParam, strTimeTypeParam);
+
                 ageAdapter.setCheckItem(position);
                 dropDownMenu.setTabText(position == 0 ? arrayHeaders[1] : arrayMeasureStatus[position]);
                 dropDownMenu.closeMenu();
@@ -185,6 +197,11 @@ public class MainFragment extends BaseFragment<MainContract.Presenter> implement
         timeTypeView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                KLog.e(position + "^^^^" + id);
+
+                strTimeTypeParam = arrayTimeType[position];
+                mPresenter.requestShuizhunxianData(pagination, strGongdianParam, strMeasureStatusParam, strTimeTypeParam);
+
                 sexAdapter.setCheckItem(position);
                 dropDownMenu.setTabText(position == 0 ? arrayHeaders[2] : arrayTimeType[position]);
                 dropDownMenu.closeMenu();
@@ -226,18 +243,17 @@ public class MainFragment extends BaseFragment<MainContract.Presenter> implement
 
             @Override
             public void onMiddleClick(View view, int position) {
-                ToastUtils.showToast(BaseApplication.mContext, "onMiddleClick" + position);
-                KLog.e("onMiddleClick" + position);
-                edit(position);
-
                 start(EditShuizhunxianFragment.newInstance(mAdapter.getData().get(position)));
-
             }
 
             @Override
             public void onRightClick(View view, int position) {
-                measure(position);
-                start(MeasureFragment.newInstance());
+                if (!mAdapter.getData().get(position).isEdit()) {
+                    ViewGroup viewGroup = (ViewGroup) _mActivity.findViewById(android.R.id.content).getRootView();
+                    Dialoghelper.warningSnackbar(viewGroup, "请先编辑水准线路再进行测量！", Dialoghelper.APPEAR_FROM_TOP_TO_DOWN);
+                } else {
+                    start(MeasureFragment.newInstance());
+                }
             }
         });
         recyclerview.addItemDecoration(new Decoration(_mActivity, Decoration.VERTICAL_LIST));
@@ -273,7 +289,7 @@ public class MainFragment extends BaseFragment<MainContract.Presenter> implement
                     if (!isLoading) {
                         isLoading = true;
                         pagination += 1;
-                        mPresenter.requestShuizhunxianData(pagination);
+                        mPresenter.requestShuizhunxianData(pagination, strGongdianParam, strMeasureStatusParam, strTimeTypeParam);
                     }
                 }
 
@@ -305,7 +321,7 @@ public class MainFragment extends BaseFragment<MainContract.Presenter> implement
             public void onClick(View v) {
                 mAdapter.removeAllFooterView();
                 mAdapter.addFooterView(mFooterLoading);
-                mPresenter.requestShuizhunxianData(pagination);
+                mPresenter.requestShuizhunxianData(pagination, strGongdianParam, strMeasureStatusParam, strTimeTypeParam);
             }
         });
     }
@@ -352,6 +368,7 @@ public class MainFragment extends BaseFragment<MainContract.Presenter> implement
         }
 
         listGongdian.clear();
+        listGongdian.add("全部");
         if (mGongdianData.size() > 0) {
             for (GongdianData gongdianData : mGongdianData) {
                 listGongdian.add(gongdianData.getZxlc());
@@ -403,68 +420,58 @@ public class MainFragment extends BaseFragment<MainContract.Presenter> implement
         }
     }
 
-
     @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
     public void onMessageEvent(EventData event) {
 
-//        if (event.position == Constants.CHECKUPDATE) {
-//
-//            mCheckUpdateInfo = new CheckUpdateInfo();
-//            mCheckUpdateInfo.setAppName("android检查更新库")
-//                    .setIsForceUpdate(1)//设置是否强制更新,该方法的参数只要和服务端商定好什么数字代表强制更新即可
-//                    .setNewAppReleaseTime("2016-10-14 12:37")//软件发布时间
-//                    .setNewAppSize(12.3f)//单位为M
-//                    .setNewAppUrl("http://shouji.360tpcdn.com/160914/c5164dfbbf98a443f72f32da936e1379/com.tencent.mobileqq_410.apk")
-//                    .setNewAppVersionCode(20)//新app的VersionCode
-//                    .setNewAppVersionName("1.0.2")
-//                    .setNewAppUpdateDesc("1,优化下载逻辑\n2,修复一些bug\n3,完全实现强制更新与非强制更新逻辑\n4,非强制更新状态下进行下载,默认在后台进行下载\n5,当下载成功时,会在通知栏显示一个通知,点击该通知,进入安装应用界面\n6,当下载失败时,会在通知栏显示一个通知,点击该通知,会重新下载该应用\n7,当下载中,会在通知栏显示实时下载进度,但前提要dialog.setShowProgress(true).");
-//
-//            UpdateDialogClick();
-//
-//        }
+        if (event.position == Constants.EVENT_REFRESH) {
+            mPresenter.start();
+        }
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
+    public void onUpdateEvent(CheckUpdateBean.UpdateInfoBean mCheckUpdateInfo) {
+        if (mCheckUpdateInfo.getIsForceUpdate() == 0) {
+            UpdateDialog(mCheckUpdateInfo);
+        } else {
+            forceUpdateDialog(mCheckUpdateInfo);
+        }
+    }
 
     /**
      * 强制更新,checkupdatelibrary中提供的默认强制更新Dialog,您完全可以自定义自己的Dialog,
      */
-    public void forceUpdateDialogClick() {
-        mCheckUpdateInfo.setIsForceUpdate(0);
-        if (mCheckUpdateInfo.getIsForceUpdate() == 0) {
-            ForceUpdateDialog dialog = new ForceUpdateDialog(_mActivity);
-            dialog.setAppSize(mCheckUpdateInfo.getNewAppSize())
-                    .setDownloadUrl(mCheckUpdateInfo.getNewAppUrl())
-                    .setTitle(mCheckUpdateInfo.getAppName() + "有更新啦")
-                    .setReleaseTime(mCheckUpdateInfo.getNewAppReleaseTime())
-                    .setVersionName(mCheckUpdateInfo.getNewAppVersionName())
-                    .setUpdateDesc(mCheckUpdateInfo.getNewAppUpdateDesc())
-                    .setFileName("这是QQ.apk")
-                    .setFilePath(Environment.getExternalStorageDirectory().getPath() + "/checkupdatelib").show();
-        }
+    public void forceUpdateDialog(CheckUpdateBean.UpdateInfoBean mCheckUpdateInfo) {
+        ForceUpdateDialog dialog = new ForceUpdateDialog(_mActivity);
+        dialog.setAppSize(Math.round(((Float.valueOf(mCheckUpdateInfo.getNewAppSize())) / (1024 * 1024))))
+                .setDownloadUrl(Constants.BASE_URL + mCheckUpdateInfo.getNewAppUrl().replace("\\", "/"))
+                .setTitle(mCheckUpdateInfo.getAppName() + "有重大更新啦!")
+                .setReleaseTime(mCheckUpdateInfo.getNewAppReleaseTime())
+                .setVersionName(mCheckUpdateInfo.getNewAppVersionName())
+                .setUpdateDesc(mCheckUpdateInfo.getNewAppUpdateDesc())
+                .setFileName("cjgc.apk")
+                .setFilePath(Environment.getExternalStorageDirectory().getPath() + "/checkupdatelib").show();
+
     }
 
     /**
      * 非强制更新,checkupdatelibrary中提供的默认非强制更新Dialog,您完全可以自定义自己的Dialog
      */
-    public void UpdateDialogClick() {
-        mCheckUpdateInfo.setIsForceUpdate(1);
-        if (mCheckUpdateInfo.getIsForceUpdate() == 1) {
-            UpdateDialog dialog = new UpdateDialog(_mActivity);
-            dialog.setAppSize(mCheckUpdateInfo.getNewAppSize())
-                    .setDownloadUrl(mCheckUpdateInfo.getNewAppUrl())
-                    .setTitle(mCheckUpdateInfo.getAppName() + "有更新啦")
-                    .setReleaseTime(mCheckUpdateInfo.getNewAppReleaseTime())
-                    .setVersionName(mCheckUpdateInfo.getNewAppVersionName())
-                    .setUpdateDesc(mCheckUpdateInfo.getNewAppUpdateDesc())
-                    .setFileName("这是QQ.apk")
-                    .setFilePath(Environment.getExternalStorageDirectory().getPath() + "/checkupdatelib")
-                    //该方法需设为true,才会在通知栏显示下载进度,默认为false,即不显示
-                    //该方法只会控制下载进度的展示,当下载完成或下载失败时展示的通知不受该方法影响
-                    //即不管该方法是置为false还是true,当下载完成或下载失败时都会在通知栏展示一个通知
-                    .setShowProgress(true)
-                    .setIconResId(R.mipmap.ic_launcher)
-                    .setAppName(mCheckUpdateInfo.getAppName()).show();
-        }
+    public void UpdateDialog(CheckUpdateBean.UpdateInfoBean mCheckUpdateInfo) {
+        UpdateDialog dialog = new UpdateDialog(_mActivity);
+        dialog.setAppSize(Math.round(((Float.valueOf(mCheckUpdateInfo.getNewAppSize())) / (1024 * 1024))))
+                .setDownloadUrl(Constants.BASE_URL + mCheckUpdateInfo.getNewAppUrl().replace("\\", "/"))
+                .setTitle(mCheckUpdateInfo.getAppName() + "有更新啦!")
+                .setReleaseTime(mCheckUpdateInfo.getNewAppReleaseTime())
+                .setVersionName(mCheckUpdateInfo.getNewAppVersionName())
+                .setUpdateDesc(mCheckUpdateInfo.getNewAppUpdateDesc())
+                .setFileName("cjgc.apk")
+                .setFilePath(Environment.getExternalStorageDirectory().getPath() + "/checkupdatelib")
+                //该方法需设为true,才会在通知栏显示下载进度,默认为false,即不显示
+                //该方法只会控制下载进度的展示,当下载完成或下载失败时展示的通知不受该方法影响
+                //即不管该方法是置为false还是true,当下载完成或下载失败时都会在通知栏展示一个通知
+                .setShowProgress(true)
+                .setIconResId(R.mipmap.ic_launcher)
+                .setAppName(mCheckUpdateInfo.getAppName()).show();
     }
 
 

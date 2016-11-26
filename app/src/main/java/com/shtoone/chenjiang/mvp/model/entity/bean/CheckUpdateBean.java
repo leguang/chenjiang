@@ -7,30 +7,40 @@ package com.shtoone.chenjiang.mvp.model.entity.bean;
 public class CheckUpdateBean {
 
     /**
-     * success : true
-     * updateInfo : {"newAppUpdateDesc":"1,优化下载逻辑 2,修复一些bug 3,完全实现强制更新与非强制更新逻辑 4,非强制更新状态下进行下载,默认在后台进行下载 5,当下载成功时,会在通知栏显示一个通知,点击该通知,进入安装应用界面 6,当下载失败时,会在通知栏显示一个通知,点击该通知,会重新下载该应用 7,当下载中,会在通知栏显示实时下载进度,但前提要dialog.setShowProgress(true).","appName":"android检查更新库","newAppUrl":"http://shouji.360tpcdn.com/160914/c5164dfbbf98a443f72f32da936e1379/com.tencent.mobileqq_410.apk","isForceUpdate":1,"newAppVersionName":"1.0.2","newAppReleaseTime":"2016-10-14 12:37","newAppSize":12.300000190734863,"newAppVersionCode":20}
+     * status : 0
+     * description : 检测更新成功
+     * updateInfo : {"newAppUpdateDesc":"升级","appName":"shtoone","newAppUrl":"dataFile/apk/4028ca8158992362015899547e200012.apk","isForceUpdate":0,"newAppVersionName":"1.0","newAppReleaseTime":"2016-11-25 10:33:21","newAppSize":"2173270","newAppVersionCode":1}
      */
 
-    private boolean success;
+    private int status;
+    private String description;
     /**
-     * newAppUpdateDesc : 1,优化下载逻辑 2,修复一些bug 3,完全实现强制更新与非强制更新逻辑 4,非强制更新状态下进行下载,默认在后台进行下载 5,当下载成功时,会在通知栏显示一个通知,点击该通知,进入安装应用界面 6,当下载失败时,会在通知栏显示一个通知,点击该通知,会重新下载该应用 7,当下载中,会在通知栏显示实时下载进度,但前提要dialog.setShowProgress(true).
-     * appName : android检查更新库
-     * newAppUrl : http://shouji.360tpcdn.com/160914/c5164dfbbf98a443f72f32da936e1379/com.tencent.mobileqq_410.apk
-     * isForceUpdate : 1
-     * newAppVersionName : 1.0.2
-     * newAppReleaseTime : 2016-10-14 12:37
-     * newAppSize : 12.300000190734863
-     * newAppVersionCode : 20
+     * newAppUpdateDesc : 升级
+     * appName : shtoone
+     * newAppUrl : dataFile/apk/4028ca8158992362015899547e200012.apk
+     * isForceUpdate : 0
+     * newAppVersionName : 1.0
+     * newAppReleaseTime : 2016-11-25 10:33:21
+     * newAppSize : 2173270
+     * newAppVersionCode : 1
      */
 
     private UpdateInfoBean updateInfo;
 
-    public boolean isSuccess() {
-        return success;
+    public int getStatus() {
+        return status;
     }
 
-    public void setSuccess(boolean success) {
-        this.success = success;
+    public void setStatus(int status) {
+        this.status = status;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public UpdateInfoBean getUpdateInfo() {
@@ -48,7 +58,7 @@ public class CheckUpdateBean {
         private int isForceUpdate;
         private String newAppVersionName;
         private String newAppReleaseTime;
-        private float newAppSize;
+        private String newAppSize;
         private int newAppVersionCode;
 
         public String getNewAppUpdateDesc() {
@@ -99,11 +109,11 @@ public class CheckUpdateBean {
             this.newAppReleaseTime = newAppReleaseTime;
         }
 
-        public float getNewAppSize() {
+        public String getNewAppSize() {
             return newAppSize;
         }
 
-        public void setNewAppSize(float newAppSize) {
+        public void setNewAppSize(String newAppSize) {
             this.newAppSize = newAppSize;
         }
 

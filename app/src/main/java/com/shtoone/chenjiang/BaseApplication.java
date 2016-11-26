@@ -11,7 +11,6 @@ import com.squareup.leakcanary.RefWatcher;
 
 import org.litepal.LitePalApplication;
 
-
 /**
  * Author：leguang on 2016/10/9 0009 15:49
  * Email：langmanleguang@qq.com
@@ -37,11 +36,11 @@ public class BaseApplication extends LitePalApplication {
 //        Thread.setDefaultUncaughtExceptionHandler(AppExceptionHandler.getInstance(this));
         //创建LeakCanary对象，观察内存泄漏
         mRefWatcher = LeakCanary.install(this);
-
         // 在主进程初始化调用哈
         BlockCanary.install(this, new AppContext()).start();
-        //初始化数据库
 
+//        DataSupport.deleteAll(GongdianData.class);
+//
 //        for (int i = 0; i <10; i++) {
 //
 //            GongdianData gongdianData = new GongdianData();
@@ -49,7 +48,7 @@ public class BaseApplication extends LitePalApplication {
 //            boolean is = gongdianData.save();
 //            KLog.e(is);
 //        }
-
+//
 //        DataSupport.deleteAll(StaffData.class);
 //        for (int i = 0; i < 100; i++) {
 //            StaffData mStaffData = new StaffData();
@@ -58,22 +57,20 @@ public class BaseApplication extends LitePalApplication {
 //            boolean is = mStaffData.save();
 //            KLog.e(is);
 //        }
-
-
+//
+//        DataSupport.deleteAll(JidianData.class);
+//
 //        for (int i = 0; i < 45; i++) {
 //
 //            JidianData mJidianData = new JidianData();
 //            mJidianData.setBianhao("SWLFJJKDK16511");
 //            mJidianData.setName("CP181");
-//            mJidianData.setXiuzhenghougaochengzhi("75.2655");
-//            mJidianData.setLichengguanhao("DK");
-//            mJidianData.setLichengzhi("6646.1616");
 //
 //            boolean is = mJidianData.save();
 //            KLog.e(is);
 //        }
-
 //
+////
 //        DataSupport.deleteAll(StaffData.class);
 //        for (int i = 0; i < 100; i++) {
 //            ShuizhunxianData f = new ShuizhunxianData();
@@ -86,6 +83,7 @@ public class BaseApplication extends LitePalApplication {
 //            boolean isis = f.save();
 //            KLog.e(isis);
 //        }
+//        DataSupport.deleteAll(OriginalData.class);
 //
 //        for (int i = 0; i < 100; i++) {
 //            OriginalData mOriginalData = new OriginalData();
@@ -94,6 +92,7 @@ public class BaseApplication extends LitePalApplication {
 //            boolean isis = mOriginalData.save();
 //            KLog.e(isis);
 //        }
+//        DataSupport.deleteAll(ResultData.class);
 //
 //        for (int i = 0; i < 100; i++) {
 //            ResultData mResultData = new ResultData();
@@ -102,9 +101,9 @@ public class BaseApplication extends LitePalApplication {
 //            boolean isis = mResultData.save();
 //            KLog.e(isis);
 //        }
-
+//
 //        DataSupport.deleteAll(YusheshuizhunxianData.class);
-//        for (int i = 0; i < 100; i++) {
+//        for (int i = 0; i < 21; i++) {
 //            YusheshuizhunxianData mYusheshuizhunxianData = new YusheshuizhunxianData();
 //            mYusheshuizhunxianData.setXianlubianhao("备注" + (i + 1));
 //            mYusheshuizhunxianData.setJidianshu("状态" + (i + 1));

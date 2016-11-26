@@ -21,6 +21,6 @@ public interface MainContract {
     interface Presenter extends BaseContract.Presenter {
         void requestGongdianData();
 
-        void requestShuizhunxianData(int pagination);
+        void requestShuizhunxianData(int pagination, String strGongdianParam, String strMeasureStatusParam, String strTimeTypeParam);
     }
 }

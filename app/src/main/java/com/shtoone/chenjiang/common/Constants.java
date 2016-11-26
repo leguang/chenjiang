@@ -44,9 +44,6 @@ public class Constants {
     //网络链接超时时间
     public static final int DEFAULT_TIMEOUT = 3;
 
-    //检测App升级
-    public static final int CHECKUPDATE = 0;
-
 
     //作为登录的参数，固定这个写法
     public static final String OSTYPE = "2";
@@ -71,8 +68,13 @@ public class Constants {
     //人员
     public static final String STAFF = "STAFF";
 
-    //EventBus系列,值是随便取，只要不相同即可
+    //EventBus系列,值是随便取，只要不相同即可。**********************************************************************
     public static final int EVENT_FINISH_LAUNCH = 10;
+    //检测App升级
+    public static final int EVENT_CHECK_UPDATE = 0;
+    //刷新主界面的列表
+    public static final int EVENT_REFRESH = 1;
+    //EventBus系列,值是随便取，只要不相同即可。**********************************************************************
 
     //上传模块
     public static final int UPLAND_SUCCESS = 30;

@@ -21,6 +21,7 @@ import com.shtoone.chenjiang.BaseApplication;
 import com.shtoone.chenjiang.R;
 import com.shtoone.chenjiang.common.Constants;
 import com.shtoone.chenjiang.common.Dialoghelper;
+import com.shtoone.chenjiang.event.EventData;
 import com.shtoone.chenjiang.mvp.contract.DownloadContract;
 import com.shtoone.chenjiang.mvp.model.entity.db.DuanmianData;
 import com.shtoone.chenjiang.mvp.model.entity.db.GongdianData;
@@ -30,6 +31,7 @@ import com.shtoone.chenjiang.utils.NetworkUtils;
 import com.shtoone.chenjiang.utils.SharedPreferencesUtils;
 import com.socks.library.KLog;
 
+import org.greenrobot.eventbus.EventBus;
 import org.json.JSONException;
 import org.litepal.crud.DataSupport;
 
@@ -245,6 +247,13 @@ public class DownloadFragment extends BaseFragment<DownloadContract.Presenter> i
         for (int i = 0; i < arrayTextView.length; i++) {
             arrayTextView[i].setEnabled(false);
         }
+
+        //更改时间
+        DateFormat df = new SimpleDateFormat("MM-dd HH:mm");
+        String strUpdateTime = df.format(new Date());
+        tvDate.setText(strUpdateTime);
+        SharedPreferencesUtils.put(BaseApplication.mContext, Constants.UPDATA_TIME, strUpdateTime);//保存到sp中
+        
         switch (view.getId()) {
             case R.id.bt_download_all_download_fragment:
                 downloadAll();
@@ -283,10 +292,6 @@ public class DownloadFragment extends BaseFragment<DownloadContract.Presenter> i
         tvDownloadAll.setBackgroundResource(R.drawable.rect_bg_downing_all);
         progressBar.setVisibility(View.VISIBLE);
         progressBar.setProgress(1);
-        DateFormat df = new SimpleDateFormat("MM-dd HH:mm");
-        String strUpdateTime = df.format(new Date());
-        tvDate.setText(strUpdateTime);
-        SharedPreferencesUtils.put(BaseApplication.mContext, Constants.UPDATA_TIME, strUpdateTime);
         downloadGongdian();
         KLog.e("点击下载所有末尾………………");
     }
@@ -598,6 +603,8 @@ public class DownloadFragment extends BaseFragment<DownloadContract.Presenter> i
                 arrayTextView[i].setEnabled(true);
             }
         }
+
+        EventBus.getDefault().post(new EventData(Constants.EVENT_REFRESH));
     }
 
     @Override

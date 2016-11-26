@@ -10,7 +10,6 @@ import com.shtoone.chenjiang.common.ToastUtils;
 import com.shtoone.chenjiang.event.EventData;
 import com.shtoone.chenjiang.mvp.contract.base.BaseContract;
 import com.shtoone.chenjiang.mvp.view.base.BaseActivity;
-import com.socks.library.KLog;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -34,7 +33,6 @@ public class LaunchActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_launch);
         fromTo = getIntent().getIntExtra(Constants.FROM_TO, Constants.FROM_SPLASH);
-        KLog.e("fromTo::" + fromTo);
         if (savedInstanceState == null) {
             if (fromTo == Constants.FROM_SPLASH) {
                 loadRootFragment(R.id.fl_launch_activity, SplashFragment.newInstance());

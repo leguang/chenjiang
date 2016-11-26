@@ -211,6 +211,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:background="@drawable/rect_bg_stroke_table"
+                        android:inputType="number"
                         android:singleLine="true" />
                 </FrameLayout>
 
@@ -235,6 +236,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:background="@drawable/rect_bg_stroke_table"
+                        android:inputType="number"
                         android:singleLine="true" />
                 </FrameLayout>
 

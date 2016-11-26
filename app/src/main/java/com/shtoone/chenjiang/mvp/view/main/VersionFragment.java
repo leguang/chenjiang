@@ -147,7 +147,7 @@ public class VersionFragment extends BaseFragment<VersionContract.Presenter> imp
             @Override
             public void run() {
                 ForceUpdateDialog dialog = new ForceUpdateDialog(_mActivity);
-                dialog.setAppSize(mUpdateInfoBean.getNewAppSize())
+                dialog.setAppSize(Float.valueOf(mUpdateInfoBean.getNewAppSize()))
                         .setDownloadUrl(mUpdateInfoBean.getNewAppUrl())
                         .setTitle(mUpdateInfoBean.getAppName() + "有更新啦")
                         .setReleaseTime(mUpdateInfoBean.getNewAppReleaseTime())
@@ -171,7 +171,7 @@ public class VersionFragment extends BaseFragment<VersionContract.Presenter> imp
             @Override
             public void run() {
                 UpdateDialog dialog = new UpdateDialog(_mActivity);
-                dialog.setAppSize(mUpdateInfoBean.getNewAppSize())
+                dialog.setAppSize(Float.valueOf(mUpdateInfoBean.getNewAppSize()))
                         .setDownloadUrl(mUpdateInfoBean.getNewAppUrl())
                         .setTitle(mUpdateInfoBean.getAppName() + "有更新啦")
                         .setReleaseTime(mUpdateInfoBean.getNewAppReleaseTime())

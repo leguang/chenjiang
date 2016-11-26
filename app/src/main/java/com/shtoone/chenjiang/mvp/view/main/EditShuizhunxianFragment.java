@@ -27,12 +27,15 @@ import com.shtoone.chenjiang.BaseApplication;
 import com.shtoone.chenjiang.R;
 import com.shtoone.chenjiang.common.Constants;
 import com.shtoone.chenjiang.common.Dialoghelper;
+import com.shtoone.chenjiang.event.EventData;
 import com.shtoone.chenjiang.mvp.contract.ShuizhunxianContract;
 import com.shtoone.chenjiang.mvp.model.entity.db.YusheshuizhunxianData;
 import com.shtoone.chenjiang.mvp.presenter.ShuizhunxianPresenter;
 import com.shtoone.chenjiang.mvp.view.base.BaseFragment;
 import com.shtoone.chenjiang.utils.DensityUtils;
 import com.socks.library.KLog;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -156,6 +159,9 @@ public class EditShuizhunxianFragment extends BaseFragment<ShuizhunxianContract.
                             Dialoghelper.warningSnackbar(viewGroup, "气压不能为空", Dialoghelper.APPEAR_FROM_TOP_TO_DOWN);
                             return true;
                         }
+                        //恢复原始样式
+                        etTemperature.setBackgroundResource(R.drawable.rect_bg_stroke_table);
+                        etPressure.setBackgroundResource(R.drawable.rect_bg_stroke_table);
                         startAnimation(item);
                         save();
                         break;
@@ -178,6 +184,7 @@ public class EditShuizhunxianFragment extends BaseFragment<ShuizhunxianContract.
         ViewGroup viewGroup = (ViewGroup) _mActivity.findViewById(android.R.id.content).getRootView();
         if (rowsAffected > 0) {
             Dialoghelper.successSnackbar(viewGroup, "恭喜，保存成功", Dialoghelper.APPEAR_FROM_TOP_TO_DOWN);
+            EventBus.getDefault().post(new EventData(Constants.EVENT_REFRESH));
         } else {
             Dialoghelper.errorSnackbar(viewGroup, "保存失败，请重新保存", Dialoghelper.APPEAR_FROM_TOP_TO_DOWN);
         }

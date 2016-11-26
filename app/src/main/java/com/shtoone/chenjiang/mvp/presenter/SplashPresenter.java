@@ -5,17 +5,20 @@ import android.text.TextUtils;
 import com.google.gson.Gson;
 import com.shtoone.chenjiang.BaseApplication;
 import com.shtoone.chenjiang.common.Constants;
-import com.shtoone.chenjiang.event.EventData;
 import com.shtoone.chenjiang.mvp.contract.SplashContract;
+import com.shtoone.chenjiang.mvp.model.HttpHelper;
+import com.shtoone.chenjiang.mvp.model.entity.bean.CheckUpdateBean;
 import com.shtoone.chenjiang.mvp.model.entity.bean.UserInfoBean;
 import com.shtoone.chenjiang.mvp.presenter.base.BasePresenter;
 import com.shtoone.chenjiang.utils.AESCryptUtils;
 import com.shtoone.chenjiang.utils.SharedPreferencesUtils;
 import com.socks.library.KLog;
 
-import org.greenrobot.eventbus.EventBus;
-
 import java.security.GeneralSecurityException;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * Author：leguang on 2016/10/9 0009 15:49
@@ -105,19 +108,27 @@ public class SplashPresenter extends BasePresenter<SplashContract.View> implemen
 
     @Override
     public void checkUpdate() {
-        EventBus.getDefault().postSticky(new EventData(Constants.CHECKUPDATE));
-//        Q.checkUpdate("get", "checkUpdateUrl", new CheckUpdateCallback2() {
-//            @Override
-//            public void onCheckUpdateSuccess(String result) {
-//                //result:服务端返回的json,需要自己判断有无更新,解析成自己的实体类进行判断是否有版本更新
-//
-//            }
-//
-//            @Override
-//            public void onCheckUpdateFailure(String failureMessage) {
-//
-//            }
-//        });
+        HttpHelper.getInstance().initService().checkUpdate().enqueue(new Callback<CheckUpdateBean>() {
+            @Override
+            public void onResponse(Call<CheckUpdateBean> call, Response<CheckUpdateBean> response) {
+                if (getView() == null) {
+                    return;
+                }
+                if (response.isSuccessful()) {
+                    CheckUpdateBean mCheckUpdateBean = response.body();
+                    if (mCheckUpdateBean.getStatus() == 0) {
+//                        EventBus.getDefault().postSticky(mCheckUpdateBean.getUpdateInfo());
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<CheckUpdateBean> call, Throwable t) {
+                if (getView() == null) {
+                    return;
+                }
+            }
+        });
     }
 
 

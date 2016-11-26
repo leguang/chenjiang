@@ -30,6 +30,16 @@ public class YusheshuizhunxianData extends DataSupport implements Serializable {
     private String temperature;
     private String staff;
 
+    public String getMeasureState() {
+        return measureState;
+    }
+
+    public void setMeasureState(String measureState) {
+        this.measureState = measureState;
+    }
+
+    private String measureState;
+
     public String getRouteType() {
         return routeType;
     }

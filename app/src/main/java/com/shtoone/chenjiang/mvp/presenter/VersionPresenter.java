@@ -36,7 +36,7 @@ public class VersionPresenter extends BasePresenter<VersionContract.View> implem
                     return;
                 }
                 if (response.isSuccessful()) {
-                    if (response.body().isSuccess()) {
+                    if (response.body().getStatus() == 0) {
                         mUpdateInfo = response.body().getUpdateInfo();
                         if (mUpdateInfo.getIsForceUpdate() == 0) {
                             getView().showForceUpdateDialog(mUpdateInfo);

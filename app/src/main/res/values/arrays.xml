@@ -7,14 +7,14 @@
     </string-array>
 
     <string-array name="measure_status">
-        <item>不限</item>
+        <item>全部</item>
         <item>待测量</item>
         <item>待平差</item>
         <item>已删除</item>
     </string-array>
 
     <string-array name="time_type">
-        <item>不限</item>
+        <item>全部</item>
         <item>近一周</item>
         <item>进一月</item>
     </string-array>
@@ -42,7 +42,7 @@
     </string-array>
 
     <string-array name="upload_status">
-        <item>不限</item>
+        <item>全部</item>
         <item>待上传</item>
         <item>已上传</item>
     </string-array>
