@@ -248,27 +248,16 @@ public class MainFragment extends BaseFragment<MainContract.Presenter> implement
 
             @Override
             public void onRightClick(View view, int position) {
-                if (!mAdapter.getData().get(position).isEdit()) {
+                if (mAdapter.getData().get(position).getEdit().equals(0)) {
                     ViewGroup viewGroup = (ViewGroup) _mActivity.findViewById(android.R.id.content).getRootView();
                     Dialoghelper.warningSnackbar(viewGroup, "请先编辑水准线路再进行测量！", Dialoghelper.APPEAR_FROM_TOP_TO_DOWN);
                 } else {
-                    start(MeasureFragment.newInstance());
+                    start(MeasureFragment.newInstance(mAdapter.getData().get(position)));
                 }
             }
         });
         recyclerview.addItemDecoration(new Decoration(_mActivity, Decoration.VERTICAL_LIST));
         recyclerview.setAdapter(mAdapter);
-    }
-
-    private void delete(int position) {
-
-
-    }
-
-    private void edit(int position) {
-    }
-
-    private void measure(int position) {
     }
 
     private void setLoadMore() {
@@ -328,7 +317,11 @@ public class MainFragment extends BaseFragment<MainContract.Presenter> implement
 
     @Override
     public void responseShuizhunxianData(List<YusheshuizhunxianData> mYusheshuizhunxianData, int pagination) {
+        KLog.e("mYusheshuizhunxianData.size()::" + mYusheshuizhunxianData.size());
+        KLog.e("pagination::" + pagination);
+
         if (mYusheshuizhunxianData.size() > 0) {
+            pagestatelayout.showContent();
             if (pagination == 0) {
                 //刷明是第一页，或者是刷新,把页码重置为0，代表第一页。
                 if (mYusheshuizhunxianData.size() >= Constants.PAGE_SIZE) {
@@ -371,7 +364,7 @@ public class MainFragment extends BaseFragment<MainContract.Presenter> implement
         listGongdian.add("全部");
         if (mGongdianData.size() > 0) {
             for (GongdianData gongdianData : mGongdianData) {
-                listGongdian.add(gongdianData.getZxlc());
+                listGongdian.add(gongdianData.getGdmc());
             }
         }
         gongdianAdapter.notifyDataSetChanged();

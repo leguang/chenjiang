@@ -12,11 +12,52 @@
         android:layout_height="match_parent"
         android:clipToPadding="false" />
 
-    <com.aurelhubert.ahbottomnavigation.AHBottomNavigation
-        android:id="@+id/bottom_navigation_laboratory_activity"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom" />
+        android:layout_gravity="bottom"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/bt_jidian_measure_right_fragment"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/jidian"
+            android:textColor="@color/base_color" />
+
+        <Button
+            android:id="@+id/bt_zhuandian_measure_right_fragment"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/zhuandian"
+            android:textColor="@color/base_color" />
+
+        <Button
+            android:id="@+id/bt_cedian_measure_right_fragment"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/cedian"
+            android:textColor="@color/base_color" />
+
+        <Button
+            android:id="@+id/bt_chongce_measure_right_fragment"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/chongce"
+            android:textColor="@color/base_color" />
+
+        <Button
+            android:id="@+id/bt_fance_measure_right_fragment"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/fance"
+            android:textColor="@color/base_color" />
+    </LinearLayout>
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"

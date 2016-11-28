@@ -22,13 +22,14 @@ public class YusheshuizhunxianData extends DataSupport implements Serializable {
     private String departId;
     private String jidianshu;
     private String xianluxinxi;
-    private boolean edit;
+    private String edit;
     private String routeType;
     private String observeType;
     private String weather;
     private String pressure;
     private String temperature;
     private String staff;
+    private String measureState;
 
     public String getMeasureState() {
         return measureState;
@@ -37,8 +38,6 @@ public class YusheshuizhunxianData extends DataSupport implements Serializable {
     public void setMeasureState(String measureState) {
         this.measureState = measureState;
     }
-
-    private String measureState;
 
     public String getRouteType() {
         return routeType;
@@ -88,11 +87,11 @@ public class YusheshuizhunxianData extends DataSupport implements Serializable {
         this.staff = staff;
     }
 
-    public boolean isEdit() {
+    public String getEdit() {
         return edit;
     }
 
-    public void setEdit(boolean edit) {
+    public void setEdit(String edit) {
         this.edit = edit;
     }
 

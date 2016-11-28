@@ -35,7 +35,6 @@ public interface DownloadContract {
     }
 
     interface Presenter extends BaseContract.Presenter {
-        void downloadAll();
 
         void downloadGongdian(String userID);
 

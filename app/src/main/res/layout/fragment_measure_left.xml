@@ -16,7 +16,7 @@
             android:text="编号：" />
 
         <TextView
-            android:id="@+id/tv_bianhao_add_shuizhunxian_fragment"
+            android:id="@+id/tv_bianhao_measure_left_fragment"
             style="@style/MeasureTable"
             android:layout_weight="2.5"
             android:gravity="left|center_vertical"
@@ -33,6 +33,7 @@
             android:text="路线类型：" />
 
         <TextView
+            android:id="@+id/tv_route_type_measure_left_fragment"
             style="@style/MeasureTable"
             android:layout_weight="2.5"
             android:gravity="left|center_vertical"
@@ -50,6 +51,7 @@
             android:text="观测类型：" />
 
         <TextView
+            android:id="@+id/tv_observe_type_measure_left_fragment"
             style="@style/MeasureTable"
             android:layout_weight="2.5"
             android:gravity="left|center_vertical"
@@ -68,6 +70,7 @@
 
 
         <TextView
+            android:id="@+id/tv_biaoduan_measure_left_fragment"
             style="@style/MeasureTable"
             android:layout_weight="2.5"
             android:gravity="left|center_vertical"
@@ -84,6 +87,7 @@
             android:text="工点：" />
 
         <TextView
+            android:id="@+id/tv_gongdian_measure_left_fragment"
             style="@style/MeasureTable"
             android:layout_weight="2.5"
             android:gravity="left|center_vertical"
@@ -98,9 +102,10 @@
             android:layout_weight="1"
             android:gravity="right|center_vertical"
             android:paddingRight="5dp"
-            android:text="工作基点：" />
+            android:text="基点：" />
 
         <TextView
+            android:id="@+id/tv_jidian_measure_left_fragment"
             style="@style/MeasureTable"
             android:layout_weight="2.5"
             android:gravity="left|center_vertical"
@@ -118,6 +123,7 @@
             android:text="天气：" />
 
         <TextView
+            android:id="@+id/tv_weather_measure_left_fragment"
             style="@style/MeasureTable"
             android:layout_weight="2.5"
             android:gravity="left|center_vertical"
@@ -135,6 +141,7 @@
             android:text="司镜人员：" />
 
         <TextView
+            android:id="@+id/tv_staff_measure_left_fragment"
             style="@style/MeasureTable"
             android:layout_weight="2.5"
             android:gravity="left|center_vertical"
@@ -152,6 +159,7 @@
             android:text="气压(hPa)：" />
 
         <TextView
+            android:id="@+id/tv_pressure_measure_left_fragment"
             style="@style/MeasureTable"
             android:layout_weight="2.5"
             android:gravity="left|center_vertical"
@@ -169,6 +177,7 @@
             android:text="温度(℃)：" />
 
         <TextView
+            android:id="@+id/tv_temperature_measure_left_fragment"
             style="@style/MeasureTable"
             android:layout_weight="2.5"
             android:gravity="left|center_vertical"
@@ -186,7 +195,7 @@
             android:text="观测日期：" />
 
         <TextView
-            android:id="@+id/tv_date_add_shuizhunxian_fragment"
+            android:id="@+id/tv_date_measure_left_fragment"
             style="@style/MeasureTable"
             android:layout_weight="2.5"
             android:gravity="left|center_vertical"
@@ -203,6 +212,7 @@
             android:text="仪器品牌：" />
 
         <TextView
+            android:id="@+id/tv_brand_measure_left_fragment"
             style="@style/MeasureTable"
             android:layout_weight="2.5"
             android:gravity="left|center_vertical"
@@ -219,6 +229,7 @@
             android:text="仪器型号：" />
 
         <TextView
+            android:id="@+id/tv_xinghao_measure_left_fragment"
             style="@style/MeasureTable"
             android:layout_weight="2.5"
             android:gravity="left|center_vertical"
@@ -235,6 +246,7 @@
             android:text="设备号：" />
 
         <TextView
+            android:id="@+id/tv_shebeihao_measure_left_fragment"
             style="@style/MeasureTable"
             android:layout_weight="2.5"
             android:gravity="left|center_vertical"

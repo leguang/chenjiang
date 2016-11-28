@@ -3,6 +3,8 @@ package com.shtoone.chenjiang.mvp.presenter;
 
 import com.shtoone.chenjiang.common.Constants;
 import com.shtoone.chenjiang.mvp.contract.MainContract;
+import com.shtoone.chenjiang.mvp.model.entity.db.CedianData;
+import com.shtoone.chenjiang.mvp.model.entity.db.DuanmianData;
 import com.shtoone.chenjiang.mvp.model.entity.db.GongdianData;
 import com.shtoone.chenjiang.mvp.model.entity.db.YusheshuizhunxianData;
 import com.shtoone.chenjiang.mvp.presenter.base.BasePresenter;
@@ -10,11 +12,17 @@ import com.socks.library.KLog;
 
 import org.litepal.crud.DataSupport;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import rx.Observable;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
+import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 
 
@@ -55,9 +63,12 @@ public class MainPresenter extends BasePresenter<MainContract.View> implements M
         }).subscribeOn(Schedulers.computation())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<List<GongdianData>>() {
-                               @Override
-                               public void onCompleted() {
 
+                               @Override
+                               public void onStart() {
+                                   super.onStart();
+                                   KLog.e("onStart");
+                                   getView().showLoading();
                                }
 
                                @Override
@@ -69,17 +80,23 @@ public class MainPresenter extends BasePresenter<MainContract.View> implements M
                                public void onNext(List<GongdianData> gongdianDatas) {
                                    getView().responseGongdianData(gongdianDatas);
                                }
+
+                               @Override
+                               public void onCompleted() {
+
+                               }
                            }
                 ));
     }
 
     @Override
-    public void requestShuizhunxianData(final int pagination, String strTimeTypeParam, String strMeasureStatusParam, String strGongdianParam) {
+    public void requestShuizhunxianData(final int pagination, final String strGongdianParam, final String strMeasureStatusParam, final String strTimeTypeParam) {
 
+        //由于框架支持的原生sql查询老是报错，因此只能用最笨的方式。
         KLog.e("pagination::" + pagination);
-        KLog.e("strTimeTypeParam::" + strTimeTypeParam);
-        KLog.e("strMeasureStatusParam::" + strMeasureStatusParam);
         KLog.e("strGongdianParam::" + strGongdianParam);
+        KLog.e("strMeasureStatusParam::" + strMeasureStatusParam);
+        KLog.e("strTimeTypeParam::" + strTimeTypeParam);
 
 
         mRxManager.add(Observable.create(new Observable.OnSubscribe<List<YusheshuizhunxianData>>() {
@@ -87,36 +104,145 @@ public class MainPresenter extends BasePresenter<MainContract.View> implements M
             public void call(Subscriber<? super List<YusheshuizhunxianData>> subscriber) {
                 List<YusheshuizhunxianData> mShuizhunxianData = null;
                 try {
+                    if (strMeasureStatusParam.equals("全部")) {
 
-                    mShuizhunxianData = DataSupport.where("xiugaishijian Between ? and ?", "2016-11-09", "2016-11-19").where()
-                            .order("id").limit(Constants.PAGE_SIZE)
-                            .offset(pagination * Constants.PAGE_SIZE)
-                            .find(YusheshuizhunxianData.class);
+                        if (strTimeTypeParam.equals("全部")) {
+                            mShuizhunxianData = DataSupport.order("id").limit(Constants.PAGE_SIZE)
+                                    .offset(pagination * Constants.PAGE_SIZE)
+                                    .find(YusheshuizhunxianData.class);
 
-                    KLog.e("mGongdianData::" + mShuizhunxianData.size());
+                        } else if (strTimeTypeParam.equals("近一周")) {
+                            DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+                            Calendar mCalendar = Calendar.getInstance();
+                            String strEndTime = df.format(mCalendar.getTime());
+                            mCalendar.add(Calendar.DAY_OF_MONTH, -7);
+                            String strStartTime = df.format(mCalendar.getTime());
+
+                            mShuizhunxianData = DataSupport.where("xiugaishijian Between ? and ?", strStartTime, strEndTime)
+                                    .order("id").limit(Constants.PAGE_SIZE)
+                                    .offset(pagination * Constants.PAGE_SIZE)
+                                    .find(YusheshuizhunxianData.class);
+
+                        } else if (strTimeTypeParam.equals("近一月")) {
+                            DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+                            Calendar mCalendar = Calendar.getInstance();
+                            String strEndTime = df.format(mCalendar.getTime());
+                            mCalendar.add(Calendar.MONTH, -1);
+                            String strStartTime = df.format(mCalendar.getTime());
+
+                            mShuizhunxianData = DataSupport.where("xiugaishijian Between ? and ?", strStartTime, strEndTime)
+                                    .order("id").limit(Constants.PAGE_SIZE)
+                                    .offset(pagination * Constants.PAGE_SIZE)
+                                    .find(YusheshuizhunxianData.class);
+                        }
+                    } else {
+
+                        if (strTimeTypeParam.equals("全部")) {
+                            mShuizhunxianData = DataSupport.where("measureState = ?", strMeasureStatusParam)
+                                    .order("id").limit(Constants.PAGE_SIZE)
+                                    .offset(pagination * Constants.PAGE_SIZE)
+                                    .find(YusheshuizhunxianData.class);
 
 
-//                    mShuizhunxianData = DataSupport.select("*")
-//                            .order("id").limit(Constants.PAGE_SIZE)
-//                            .offset(pagination * Constants.PAGE_SIZE)
-//                            .find(YusheshuizhunxianData.class);
+                        } else if (strTimeTypeParam.equals("近一周")) {
+                            DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+                            Calendar mCalendar = Calendar.getInstance();
+                            String strEndTime = df.format(mCalendar.getTime());
+                            mCalendar.add(Calendar.DAY_OF_MONTH, -7);
+                            String strStartTime = df.format(mCalendar.getTime());
+
+                            mShuizhunxianData = DataSupport.where("measureState = ? and xiugaishijian Between ? and ?", strMeasureStatusParam, strStartTime, strEndTime)
+                                    .order("id").limit(Constants.PAGE_SIZE)
+                                    .offset(pagination * Constants.PAGE_SIZE)
+                                    .find(YusheshuizhunxianData.class);
+
+                        } else if (strTimeTypeParam.equals("近一月")) {
+                            DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+                            Calendar mCalendar = Calendar.getInstance();
+                            String strEndTime = df.format(mCalendar.getTime());
+                            mCalendar.add(Calendar.MONTH, -1);
+                            String strStartTime = df.format(mCalendar.getTime());
+
+                            mShuizhunxianData = DataSupport.where("measureState = ? and xiugaishijian Between ? and ?", strMeasureStatusParam, strStartTime, strEndTime)
+                                    .order("id").limit(Constants.PAGE_SIZE)
+                                    .offset(pagination * Constants.PAGE_SIZE)
+                                    .find(YusheshuizhunxianData.class);
+                        }
+                    }
+
                     subscriber.onNext(mShuizhunxianData);
                 } catch (Exception ex) {
                     subscriber.onError(ex);
                 }
-                //做此判断的目的是为了不让最后onCompleted()调用的showContent()遮住了showEmpty()的显示。
-                if (mShuizhunxianData != null && mShuizhunxianData.size() > 0) {
-                    subscriber.onCompleted();
-                }
             }
         }).subscribeOn(Schedulers.computation())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new RxSubscriber<List<YusheshuizhunxianData>>() {
+                .subscribe(new Action1<List<YusheshuizhunxianData>>() {
                                @Override
-                               public void _onNext(List<YusheshuizhunxianData> mShuizhunxianData) {
-                                   getView().responseShuizhunxianData(mShuizhunxianData, pagination);
+                               public void call(List<YusheshuizhunxianData> yusheshuizhunxianDatas) {
+                                   KLog.e("333333333");
+
+                                   filterShuizhunxianData(pagination, strGongdianParam, yusheshuizhunxianDatas);
                                }
                            }
                 ));
     }
+
+    public void filterShuizhunxianData(final int pagination, final String strGongdianParam, List<YusheshuizhunxianData> yusheshuizhunxianDatas) {
+        final List<YusheshuizhunxianData> filteredShuizhunxianData = new ArrayList<YusheshuizhunxianData>();
+        KLog.e("222222222222");
+
+
+        Observable.from(yusheshuizhunxianDatas).filter(new Func1<YusheshuizhunxianData, Boolean>() {
+            @Override
+            public Boolean call(YusheshuizhunxianData yusheshuizhunxianData) {
+                String[] arrayCedian = yusheshuizhunxianData.getXianluxinxi().split(",");
+
+//                CedianData mCedianData = DataSupport.where("bianhao = ?", arrayCedian[1]).findFirst(CedianData.class);
+                CedianData mCedianData = DataSupport.where("bianhao = ?", "cd18").findFirst(CedianData.class);
+
+
+                DuanmianData mDuanmianData = DataSupport.where("dmid = ?", mCedianData.getDuanmianid()).findFirst(DuanmianData.class);
+                GongdianData mGongdianData = DataSupport.where("gdid = ?", mDuanmianData.getGongdianid()).findFirst(GongdianData.class);
+                KLog.e("44444444");
+
+
+                KLog.e(mGongdianData.getGdmc() + "::::::::::::" + strGongdianParam);
+                return mGongdianData.getGdmc().equals(strGongdianParam);
+            }
+        }).subscribeOn(Schedulers.computation())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<YusheshuizhunxianData>() {
+
+                    @Override
+                    public void onStart() {
+                        super.onStart();
+                        KLog.e("onStart");
+                        getView().showLoading();
+                    }
+
+                    @Override
+                    public void onNext(YusheshuizhunxianData yusheshuizhunxianData) {
+                        KLog.e("5555555555");
+                        filteredShuizhunxianData.add(yusheshuizhunxianData);
+                    }
+
+                    @Override
+                    public void onCompleted() {
+                        KLog.e("11111111111");
+                        KLog.e("filteredShuizhunxianData.size()::" + filteredShuizhunxianData.size());
+                        KLog.e("pagination::" + pagination);
+                        getView().responseShuizhunxianData(filteredShuizhunxianData, pagination);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        e.printStackTrace();
+                        //此处不考虑错误类型，笼统的以错误来介绍
+                        KLog.e("onError::" + e);
+                        getView().showError(e);
+                    }
+                });
+    }
+
 }

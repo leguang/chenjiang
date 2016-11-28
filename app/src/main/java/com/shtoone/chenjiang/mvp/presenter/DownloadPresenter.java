@@ -47,11 +47,6 @@ public class DownloadPresenter extends BasePresenter<DownloadContract.View> impl
     }
 
     @Override
-    public void downloadAll() {
-
-    }
-
-    @Override
     public void downloadGongdian(String userID) {
         intSum = 0;
         intIndex = 0;

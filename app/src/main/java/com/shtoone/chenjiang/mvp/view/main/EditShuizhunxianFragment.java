@@ -179,7 +179,7 @@ public class EditShuizhunxianFragment extends BaseFragment<ShuizhunxianContract.
         mYusheshuizhunxianData.setTemperature(etTemperature.getText().toString());
         mYusheshuizhunxianData.setPressure(etPressure.getText().toString());
         mYusheshuizhunxianData.setXiugaishijian(tvDate.getText().toString());
-        mYusheshuizhunxianData.setEdit(true);
+        mYusheshuizhunxianData.setEdit("1");
         int rowsAffected = mYusheshuizhunxianData.update(mYusheshuizhunxianData.getId());
         ViewGroup viewGroup = (ViewGroup) _mActivity.findViewById(android.R.id.content).getRootView();
         if (rowsAffected > 0) {
@@ -209,11 +209,18 @@ public class EditShuizhunxianFragment extends BaseFragment<ShuizhunxianContract.
         }
         //设置基点和测点
         if (!TextUtils.isEmpty(mYusheshuizhunxianData.getXianluxinxi())) {
-            String arrayXianlu[] = mYusheshuizhunxianData.getXianluxinxi().split(",");
-            String strJidian = arrayXianlu[0] + "/" + arrayXianlu[arrayXianlu.length - 1];
-            tvJidian.setText(strJidian);
-            String strCedian = arrayXianlu[1] + "/…/" + arrayXianlu[arrayXianlu.length - 2];
-            tvCedian.setText(strCedian);
+            StringBuffer sbJidian = new StringBuffer();
+            StringBuffer sbCedian = new StringBuffer();
+            String[] arrayJidianAndCedian = mYusheshuizhunxianData.getXianluxinxi().split(",");
+            for (String s : arrayJidianAndCedian) {
+                if (s.contains("jd")) {
+                    sbJidian.append(s + "/");
+                } else if (s.contains("cd")) {
+                    sbCedian.append(s + "/");
+                }
+            }
+            tvJidian.setText(sbJidian.toString().substring(0, sbJidian.toString().length() - 1));
+            tvCedian.setText(sbCedian.toString().substring(0, sbCedian.toString().length() - 1));
         }
         etPressure.setText(mYusheshuizhunxianData.getPressure());
         etTemperature.setText(mYusheshuizhunxianData.getTemperature());

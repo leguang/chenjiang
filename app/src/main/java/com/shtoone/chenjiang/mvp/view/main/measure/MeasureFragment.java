@@ -8,10 +8,13 @@ import android.support.v4.widget.SlidingPaneLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 
 import com.shtoone.chenjiang.BaseApplication;
 import com.shtoone.chenjiang.R;
+import com.shtoone.chenjiang.common.Constants;
 import com.shtoone.chenjiang.mvp.contract.measure.MeasureContract;
+import com.shtoone.chenjiang.mvp.model.entity.db.YusheshuizhunxianData;
 import com.shtoone.chenjiang.mvp.presenter.measure.MeasurePresenter;
 import com.shtoone.chenjiang.mvp.view.base.BaseFragment;
 import com.shtoone.chenjiang.mvp.view.main.MainActivity;
@@ -28,9 +31,29 @@ public class MeasureFragment extends BaseFragment<MeasureContract.Presenter> imp
     private static final String TAG = MeasureFragment.class.getSimpleName();
     @BindView(R.id.sliding_pane_layout_measure_fragment)
     SlidingPaneLayout slidingPaneLayout;
+    @BindView(R.id.fl_left_measure_fragment)
+    FrameLayout flLeft;
+    @BindView(R.id.fl_right_measure_fragment)
+    FrameLayout flRight;
+    private YusheshuizhunxianData mYusheshuizhunxianData;
 
-    public static MeasureFragment newInstance() {
-        return new MeasureFragment();
+    public static MeasureFragment newInstance(YusheshuizhunxianData mYusheshuizhunxianData) {
+        Bundle args = new Bundle();
+        args.putSerializable(Constants.YUSHESHUIZHUNXIAN, mYusheshuizhunxianData);
+
+        MeasureFragment fragment = new MeasureFragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        Bundle args = getArguments();
+        if (args != null) {
+            mYusheshuizhunxianData = (YusheshuizhunxianData) args.getSerializable(Constants.YUSHESHUIZHUNXIAN);
+        }
     }
 
     @NonNull
@@ -54,7 +77,13 @@ public class MeasureFragment extends BaseFragment<MeasureContract.Presenter> imp
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        if (savedInstanceState == null) {
+            loadRootFragment(R.id.fl_left_measure_fragment, MeasureLeftFragment.newInstance(mYusheshuizhunxianData));
+        }
 
+        if (savedInstanceState == null) {
+            loadRootFragment(R.id.fl_right_measure_fragment, MeasureRightFragment.newInstance());
+        }
         initData();
     }
 

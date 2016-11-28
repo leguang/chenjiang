@@ -5,11 +5,13 @@ import android.content.Context;
 import com.github.moduth.blockcanary.BlockCanary;
 import com.shtoone.chenjiang.common.AppContext;
 import com.shtoone.chenjiang.mvp.model.entity.bean.UserInfoBean;
+import com.shtoone.chenjiang.mvp.model.entity.db.YusheshuizhunxianData;
 import com.socks.library.KLog;
 import com.squareup.leakcanary.LeakCanary;
 import com.squareup.leakcanary.RefWatcher;
 
 import org.litepal.LitePalApplication;
+import org.litepal.crud.DataSupport;
 
 /**
  * Author：leguang on 2016/10/9 0009 15:49
@@ -102,21 +104,39 @@ public class BaseApplication extends LitePalApplication {
 //            KLog.e(isis);
 //        }
 //
-//        DataSupport.deleteAll(YusheshuizhunxianData.class);
-//        for (int i = 0; i < 21; i++) {
-//            YusheshuizhunxianData mYusheshuizhunxianData = new YusheshuizhunxianData();
-//            mYusheshuizhunxianData.setXianlubianhao("备注" + (i + 1));
-//            mYusheshuizhunxianData.setJidianshu("状态" + (i + 1));
-//            mYusheshuizhunxianData.setXianluxinxi("jd0,cd1,cd2,cd3,jd1,");
-//            mYusheshuizhunxianData.setEdit(true);
-//            mYusheshuizhunxianData.setRouteType("闭合");
-//            mYusheshuizhunxianData.setObserveType("BF");
-//            mYusheshuizhunxianData.setTemperature("16");
-//            mYusheshuizhunxianData.setPressure("700");
-//            mYusheshuizhunxianData.setStaff("哎我" + (i + 1));
-//            boolean isis = mYusheshuizhunxianData.save();
-//            KLog.e(isis);
-//        }
+        DataSupport.deleteAll(YusheshuizhunxianData.class);
+        for (int i = 0; i < 4; i++) {
+            YusheshuizhunxianData mYusheshuizhunxianData = new YusheshuizhunxianData();
+            mYusheshuizhunxianData.setXianlubianhao("备注" + (i + 1));
+            mYusheshuizhunxianData.setJidianshu("状态" + (i + 1));
+            mYusheshuizhunxianData.setXianluxinxi("jd0,cd1,cd2,cd3,jd1,");
+            mYusheshuizhunxianData.setEdit("1");
+            mYusheshuizhunxianData.setRouteType("闭合");
+            mYusheshuizhunxianData.setObserveType("BF");
+            mYusheshuizhunxianData.setTemperature("16");
+            mYusheshuizhunxianData.setPressure("700");
+            mYusheshuizhunxianData.setXiugaishijian("2016-11-09");
+            mYusheshuizhunxianData.setMeasureState("待测量");
 
+            boolean isis = mYusheshuizhunxianData.save();
+            KLog.e(isis);
+        }
+
+        for (int i = 0; i < 4; i++) {
+            YusheshuizhunxianData mYusheshuizhunxianData = new YusheshuizhunxianData();
+            mYusheshuizhunxianData.setXianlubianhao("备注" + (i + 1));
+            mYusheshuizhunxianData.setJidianshu("状态" + (i + 1));
+            mYusheshuizhunxianData.setXianluxinxi("jd0,cd1,cd2,cd3,jd1,");
+            mYusheshuizhunxianData.setEdit("1");
+            mYusheshuizhunxianData.setRouteType("闭合");
+            mYusheshuizhunxianData.setObserveType("BF");
+            mYusheshuizhunxianData.setTemperature("16");
+            mYusheshuizhunxianData.setPressure("700");
+            mYusheshuizhunxianData.setXiugaishijian("2016-11-09");
+            mYusheshuizhunxianData.setMeasureState("待平差");
+
+            boolean isis = mYusheshuizhunxianData.save();
+            KLog.e(isis);
+        }
     }
 }

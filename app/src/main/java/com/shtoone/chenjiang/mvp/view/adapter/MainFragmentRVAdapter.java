@@ -53,7 +53,7 @@ public class MainFragmentRVAdapter extends BaseQuickAdapter<YusheshuizhunxianDat
         //默认下载的预设水准线都是未编辑状态，则把图标颜色都设置成灰色。
         ImageView mImageViewLeft = holder.getView(R.id.iv_left_item_rv_main_fragment);
         ImageView mImageViewRight = holder.getView(R.id.iv_right_item_rv_main_fragment);
-        if (!yusheshuizhunxianData.isEdit()) {
+        if (yusheshuizhunxianData.getEdit().equals("0")) {
             mImageViewLeft.setImageDrawable(DrawableUtils.getTintDrawable(mImageViewLeft.getDrawable(), 0xff808080, true));
             mImageViewRight.setImageDrawable(DrawableUtils.getTintDrawable(mImageViewRight.getDrawable(), 0xff808080, true));
         } else {

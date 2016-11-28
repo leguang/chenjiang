@@ -89,4 +89,10 @@ public class Constants {
     public static final int FROM_SPLASH = 0;
     public static final int FROM_MAIN = 1;
 
+
+    //测量状态
+    public static final String measure_state_daiceliang = "0";
+    public static final String measure_state_daipingcha = "1";
+    public static final String measure_state_deleted = "2";
+
 }

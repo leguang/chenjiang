@@ -51,23 +51,23 @@ public abstract class BasePresenter<V extends BaseContract.View> {
     public abstract class RxSubscriber<T> extends Subscriber<T> {
 
         @Override
-        public void onCompleted() {
-            KLog.e("onCompleted");
-            getView().showContent();
-        }
-
-        @Override
         public void onStart() {
             super.onStart();
             KLog.e("onStart");
             getView().showLoading();
         }
 
-
         @Override
         public void onNext(T t) {
             KLog.e("onNext");
             _onNext(t);
+        }
+
+
+        @Override
+        public void onCompleted() {
+            KLog.e("onCompleted");
+            getView().showContent();
         }
 
         @Override

@@ -15,7 +15,7 @@ import android.widget.ImageView;
 public class AnimationUtils {
 
     private static final String TAG = AnimationUtils.class.getSimpleName();
-    public static final long PERFECT_MILLS = 5000;
+    public static final long PERFECT_MILLS = 1000;
     public static final int MINI_RADIUS = 0;
 
     /**

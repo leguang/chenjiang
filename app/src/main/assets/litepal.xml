@@ -17,5 +17,6 @@
         <mapping class="com.shtoone.chenjiang.mvp.model.entity.db.ShuizhunxianData"></mapping>
         <mapping class="com.shtoone.chenjiang.mvp.model.entity.db.OriginalData"></mapping>
         <mapping class="com.shtoone.chenjiang.mvp.model.entity.db.ResultData"></mapping>
+        <mapping class="com.shtoone.chenjiang.mvp.model.entity.db.DeviceData"></mapping>
     </list>
 </litepal>

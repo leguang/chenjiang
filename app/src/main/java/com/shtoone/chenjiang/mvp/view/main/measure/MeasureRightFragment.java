@@ -3,13 +3,14 @@ package com.shtoone.chenjiang.mvp.view.main.measure;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
-import com.aurelhubert.ahbottomnavigation.AHBottomNavigation;
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigationItem;
 import com.lsjwzh.widget.recyclerviewpager.RecyclerViewPager;
 import com.shtoone.chenjiang.R;
@@ -21,6 +22,7 @@ import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 /**
  * Author：leguang on 2016/10/9 0009 15:49
@@ -31,8 +33,19 @@ public class MeasureRightFragment extends BaseFragment<MeasureContract.Presenter
     private static final String TAG = MeasureRightFragment.class.getSimpleName();
     @BindView(R.id.toolbar_toolbar)
     Toolbar toolbar;
-    @BindView(R.id.bottom_navigation_laboratory_activity)
-    AHBottomNavigation bottomNavigation;
+    @BindView(R.id.bt_jidian_measure_right_fragment)
+    Button btJidian;
+    @BindView(R.id.bt_zhuandian_measure_right_fragment)
+    Button btZhuandian;
+    @BindView(R.id.bt_cedian_measure_right_fragment)
+    Button btCedian;
+    @BindView(R.id.bt_chongce_measure_right_fragment)
+    Button btChongce;
+    @BindView(R.id.bt_fance_measure_right_fragment)
+    Button btFance;
+    @BindView(R.id.fab)
+    FloatingActionButton fab;
+
     private ArrayList<AHBottomNavigationItem> bottomNavigationItems = new ArrayList<>();
     protected RecyclerViewPager mRecyclerView;
 
@@ -79,45 +92,7 @@ public class MeasureRightFragment extends BaseFragment<MeasureContract.Presenter
     }
 
     private void initData() {
-        AHBottomNavigationItem item0 = new AHBottomNavigationItem(R.string.chongce, R.drawable.ic_nearby, R.color.white);
-        AHBottomNavigationItem item1 = new AHBottomNavigationItem(R.string.fance, R.drawable.ic_nearby, R.color.white);
-        AHBottomNavigationItem item2 = new AHBottomNavigationItem(R.string.jidian, R.drawable.ic_nearby, R.color.white);
-        AHBottomNavigationItem item3 = new AHBottomNavigationItem(R.string.zhuandian, R.drawable.ic_nearby, R.color.white);
-        AHBottomNavigationItem item4 = new AHBottomNavigationItem(R.string.cedian, R.drawable.ic_nearby, R.color.white);
-        bottomNavigationItems.add(item0);
-        bottomNavigationItems.add(item1);
-        bottomNavigationItems.add(item2);
-        bottomNavigationItems.add(item3);
-        bottomNavigationItems.add(item4);
-        bottomNavigation.addItems(bottomNavigationItems);
-        bottomNavigation.setDefaultBackgroundColor(getResources().getColor(R.color.white));
-        bottomNavigation.setBehaviorTranslationEnabled(false);
-        bottomNavigation.setColored(true);
-        bottomNavigation.setForceTint(false);
-        bottomNavigation.setAccentColor(getResources().getColor(R.color.base_color));
-        bottomNavigation.setInactiveColor(getResources().getColor(R.color.gray));
-        bottomNavigation.setForceTitlesDisplay(true);
 
-        bottomNavigation.setOnTabSelectedListener(new AHBottomNavigation.OnTabSelectedListener() {
-            @Override
-            public void onTabSelected(int position, final boolean wasSelected) {
-
-                switch (position) {
-
-                    case 0:
-                        break;
-                    case 1:
-                        break;
-                    case 2:
-                        break;
-                    case 3:
-                        break;
-                    case 4:
-                        break;
-                }
-
-            }
-        });
 
     }
 
@@ -135,8 +110,6 @@ public class MeasureRightFragment extends BaseFragment<MeasureContract.Presenter
         mRecyclerView.setLongClickable(true);
 
 
-
-
     }
 
     @Override
@@ -151,5 +124,24 @@ public class MeasureRightFragment extends BaseFragment<MeasureContract.Presenter
 
     @Override
     public void showLoading() {
+    }
+
+    @OnClick({R.id.bt_jidian_measure_right_fragment, R.id.bt_zhuandian_measure_right_fragment, R.id.bt_cedian_measure_right_fragment, R.id.bt_chongce_measure_right_fragment, R.id.bt_fance_measure_right_fragment, R.id.fab})
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.bt_jidian_measure_right_fragment:
+
+                break;
+            case R.id.bt_zhuandian_measure_right_fragment:
+                break;
+            case R.id.bt_cedian_measure_right_fragment:
+                break;
+            case R.id.bt_chongce_measure_right_fragment:
+                break;
+            case R.id.bt_fance_measure_right_fragment:
+                break;
+            case R.id.fab:
+                break;
+        }
     }
 }
