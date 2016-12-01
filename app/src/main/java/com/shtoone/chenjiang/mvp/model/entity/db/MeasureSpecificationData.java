@@ -7,7 +7,7 @@ import org.litepal.crud.DataSupport;
  * Email：langmanleguang@qq.com
  */
 public class MeasureSpecificationData extends DataSupport {
-    private int id;
+    private long id;
     private float qianhoushijuleijicha;
     private float shixianchangdu;
     private float qianhoushijucha;
@@ -18,7 +18,7 @@ public class MeasureSpecificationData extends DataSupport {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -71,4 +71,5 @@ public class MeasureSpecificationData extends DataSupport {
     }
 
     private float shixiangaodu;
+
 }

@@ -13,11 +13,15 @@ import com.shtoone.chenjiang.BaseApplication;
 import com.shtoone.chenjiang.R;
 import com.shtoone.chenjiang.common.Constants;
 import com.shtoone.chenjiang.mvp.contract.SplashContract;
+import com.shtoone.chenjiang.mvp.model.entity.db.MeasureSpecificationData;
 import com.shtoone.chenjiang.mvp.presenter.SplashPresenter;
 import com.shtoone.chenjiang.mvp.view.base.BaseFragment;
 import com.shtoone.chenjiang.mvp.view.main.MainActivity;
 import com.shtoone.chenjiang.utils.SharedPreferencesUtils;
 import com.shtoone.chenjiang.widget.CircleTextProgressbar;
+import com.socks.library.KLog;
+
+import org.litepal.crud.DataSupport;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -32,6 +36,7 @@ public class SplashFragment extends BaseFragment<SplashContract.Presenter> imple
     //目的是为了判断网络请求时，用户是否退出
     private boolean isExit;
     private boolean isFirstentry;
+    private int intRetry = 0;
 
     @BindView(R.id.ctp_skip)
     CircleTextProgressbar ctpSkip;
@@ -86,6 +91,44 @@ public class SplashFragment extends BaseFragment<SplashContract.Presenter> imple
         //严格按照流程来，Presenter层的代码应该在View层代码的必要数据加载完成之后才调用
         mPresenter.checkLogin();
         mPresenter.checkUpdate();
+        //由于一些数据只需要创建一次，所以写在这里，因为引导页从始至终只会运行一次。
+        initDataBase();
+    }
+
+    private void initDataBase() {
+        KLog.e("intRetry::" + intRetry);
+        intRetry++;
+        boolean isInitialize = (boolean) SharedPreferencesUtils.get(BaseApplication.mContext, Constants.IS_INITIALIZE, false);
+        if (isInitialize && intRetry > 10) {
+            return;
+        }
+        //初始化测量参数标准
+        //先删除，保证表里面永远都只有两行数据即可。
+        DataSupport.deleteAll(MeasureSpecificationData.class);
+        MeasureSpecificationData mStandardData = new MeasureSpecificationData();
+        mStandardData.setQianhoushijuleijicha(6.0f);
+        mStandardData.setShixianchangdu(50);
+        mStandardData.setQianhoushijucha(1.5f);
+        mStandardData.setLiangcidushucha(0.4f);
+        mStandardData.setLiangcigaochazhicha(0.6f);
+        mStandardData.setShixiangaodu(0.55f);
+
+        //初始化修改后的标准参考值，一开始的参考值是跟国家二等水准测量标准是一样，后面手动修改的则update。因此只要克隆成一模一样的。
+
+        MeasureSpecificationData mCurrentData = new MeasureSpecificationData();
+        mCurrentData.setQianhoushijuleijicha(6.0f);
+        mCurrentData.setShixianchangdu(50);
+        mCurrentData.setQianhoushijucha(1.5f);
+        mCurrentData.setLiangcidushucha(0.4f);
+        mCurrentData.setLiangcigaochazhicha(0.6f);
+        mCurrentData.setShixiangaodu(0.55f);
+
+        if (mStandardData.save() && mCurrentData.save()) {
+            SharedPreferencesUtils.put(_mActivity, Constants.IS_INITIALIZE, true);
+        } else {
+            //递归10层。
+            initDataBase();
+        }
     }
 
     @Override
@@ -95,12 +138,12 @@ public class SplashFragment extends BaseFragment<SplashContract.Presenter> imple
             return;
         }
         if (isFirstentry) {
-            start(GuideFragment.newInstance());
-//            _mActivity.startActivity(new Intent(_mActivity, MainActivity.class));
+//            start(GuideFragment.newInstance());
+            _mActivity.startActivity(new Intent(_mActivity, MainActivity.class));
 
         } else {
-            start(LoginFragment.newInstance(Constants.FROM_SPLASH));
-//            _mActivity.startActivity(new Intent(_mActivity, MainActivity.class));
+//            start(LoginFragment.newInstance(Constants.FROM_SPLASH));
+            _mActivity.startActivity(new Intent(_mActivity, MainActivity.class));
         }
     }
 
@@ -138,7 +181,6 @@ public class SplashFragment extends BaseFragment<SplashContract.Presenter> imple
     public void showLoading() {
 
     }
-
 
 
 }

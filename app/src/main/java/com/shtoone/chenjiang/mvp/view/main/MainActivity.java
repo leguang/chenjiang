@@ -61,7 +61,6 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         return null;
     }
 
-
     private void initView() {
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         navigationView = (NavigationView) findViewById(R.id.nav_view);

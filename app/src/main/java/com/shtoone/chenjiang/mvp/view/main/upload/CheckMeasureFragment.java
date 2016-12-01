@@ -11,8 +11,7 @@ import android.view.ViewGroup;
 
 import com.shtoone.chenjiang.BaseApplication;
 import com.shtoone.chenjiang.R;
-import com.shtoone.chenjiang.mvp.contract.measure.MeasureContract;
-import com.shtoone.chenjiang.mvp.presenter.measure.MeasurePresenter;
+import com.shtoone.chenjiang.mvp.contract.base.BaseContract;
 import com.shtoone.chenjiang.mvp.view.base.BaseFragment;
 import com.shtoone.chenjiang.mvp.view.main.MainActivity;
 
@@ -24,7 +23,7 @@ import me.yokeyword.fragmentation.SupportFragment;
  * Author：leguang on 2016/10/9 0009 15:49
  * Email：langmanleguang@qq.com
  */
-public class CheckMeasureFragment extends BaseFragment<MeasureContract.Presenter> implements MeasureContract.View {
+public class CheckMeasureFragment extends BaseFragment {
 
     private static final String TAG = CheckMeasureFragment.class.getSimpleName();
     @BindView(R.id.sliding_pane_layout_measure_fragment)
@@ -32,12 +31,6 @@ public class CheckMeasureFragment extends BaseFragment<MeasureContract.Presenter
 
     public static CheckMeasureFragment newInstance() {
         return new CheckMeasureFragment();
-    }
-
-    @NonNull
-    @Override
-    protected MeasureContract.Presenter createPresenter() {
-        return new MeasurePresenter(this);
     }
 
     @Nullable
@@ -68,16 +61,6 @@ public class CheckMeasureFragment extends BaseFragment<MeasureContract.Presenter
         slidingPaneLayout.setSliderFadeColor(0);
     }
 
-
-    @Override
-    public void showContent() {
-
-    }
-
-    @Override
-    public void showError(Throwable t) {
-    }
-
     public void toggle() {
         if (slidingPaneLayout.isOpen()) {
             slidingPaneLayout.closePane();
@@ -86,9 +69,6 @@ public class CheckMeasureFragment extends BaseFragment<MeasureContract.Presenter
         }
     }
 
-    @Override
-    public void showLoading() {
-    }
 
     public void startFragment(SupportFragment toFragment) {
         start(toFragment);
@@ -103,4 +83,9 @@ public class CheckMeasureFragment extends BaseFragment<MeasureContract.Presenter
     }
 
 
+    @NonNull
+    @Override
+    protected BaseContract.Presenter createPresenter() {
+        return null;
+    }
 }

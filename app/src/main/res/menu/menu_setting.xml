@@ -1,0 +1,17 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/action_bluetooth_setting"
+        android:icon="@drawable/ic_settings_bluetooth_white_24dp"
+        android:title="设置蓝牙"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/action_save_param"
+        android:icon="@drawable/ic_save_white_24dp"
+        android:title="设置蓝牙"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/action_reset_param"
+        android:title="重置二等测量规范"
+        app:showAsAction="never" />
+</menu>

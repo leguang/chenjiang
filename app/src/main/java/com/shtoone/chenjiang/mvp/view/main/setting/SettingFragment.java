@@ -7,15 +7,20 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.shtoone.chenjiang.R;
+import com.shtoone.chenjiang.common.Constants;
+import com.shtoone.chenjiang.event.EventData;
 import com.shtoone.chenjiang.mvp.contract.base.BaseContract;
 import com.shtoone.chenjiang.mvp.view.adapter.SettingFragmentVPAdapter;
 import com.shtoone.chenjiang.mvp.view.base.BaseFragment;
 import com.shtoone.chenjiang.mvp.view.main.MainActivity;
 import com.socks.library.KLog;
+
+import org.greenrobot.eventbus.EventBus;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -56,10 +61,66 @@ public class SettingFragment extends BaseFragment {
     }
 
     private void initData() {
+        initToolbar();
+        initViewPager();
+    }
+
+    private void initToolbar() {
+        if (toolbar == null) {
+            return;
+        }
         initToolbarBackNavigation(toolbar);
         toolbar.setTitle("系统设置");
 
+        toolbar.inflateMenu(R.menu.menu_setting);
+        toolbar.getMenu().findItem(R.id.action_bluetooth_setting).setVisible(false);
+
+        toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.action_bluetooth_setting:
+                        start(BluetoothFragment.newInstance());
+                        break;
+                    case R.id.action_save_param:
+                        EventBus.getDefault().post(new EventData(Constants.EVENT_SAVE_PARAM));
+                        break;
+                    case R.id.action_reset_param:
+                        EventBus.getDefault().post(new EventData(Constants.EVENT_RESET_SECOND_CLASS));
+                        break;
+                }
+                return true;
+            }
+        });
+    }
+
+    private void initViewPager() {
         vp.setAdapter(new SettingFragmentVPAdapter(getChildFragmentManager()));
+        vp.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                toolbar.invalidate();
+                if (position == 0) {
+                    toolbar.getMenu().findItem(R.id.action_bluetooth_setting).setVisible(false);
+                    toolbar.getMenu().findItem(R.id.action_save_param).setVisible(true);
+                    toolbar.getMenu().findItem(R.id.action_reset_param).setVisible(true);
+                } else if (position == 1) {
+                    toolbar.getMenu().findItem(R.id.action_save_param).setVisible(false);
+                    toolbar.getMenu().findItem(R.id.action_reset_param).setVisible(false);
+                    toolbar.getMenu().findItem(R.id.action_bluetooth_setting).setVisible(true);
+                }
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
         tablayout.setupWithViewPager(vp);
     }
 

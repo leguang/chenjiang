@@ -13,10 +13,20 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.shtoone.chenjiang.R;
+import com.shtoone.chenjiang.common.Constants;
+import com.shtoone.chenjiang.common.Dialoghelper;
+import com.shtoone.chenjiang.event.EventData;
 import com.shtoone.chenjiang.mvp.contract.base.BaseContract;
 import com.shtoone.chenjiang.mvp.model.entity.db.MeasureSpecificationData;
 import com.shtoone.chenjiang.mvp.view.base.BaseFragment;
-import com.socks.library.KLog;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+import org.litepal.crud.DataSupport;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -26,7 +36,6 @@ import butterknife.ButterKnife;
  * Email：langmanleguang@qq.com
  */
 public class ParamSettingFragment extends BaseFragment {
-
     private static final String TAG = ParamSettingFragment.class.getSimpleName();
     @BindView(R.id.et0_qianhoushijuleijicha_param_setting_fragment)
     EditText et0Qianhoushijuleijicha;
@@ -64,6 +73,11 @@ public class ParamSettingFragment extends BaseFragment {
     View view5Shixiangaodu;
     @BindView(R.id.tv5_shixiangaodu_param_setting_fragment)
     TextView tv5Shixiangaodu;
+    private MeasureSpecificationData mStandardData;
+    private MeasureSpecificationData mCurrentData;
+    private int intRetry = 0;
+    private List<View> listLine;
+    private ViewGroup rootView;
 
     public static ParamSettingFragment newInstance() {
         return new ParamSettingFragment();
@@ -82,171 +96,40 @@ public class ParamSettingFragment extends BaseFragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        rootView = (ViewGroup) _mActivity.findViewById(android.R.id.content).getRootView();
         initData();
     }
 
     private void initData() {
+        mStandardData = DataSupport.findFirst(MeasureSpecificationData.class);
+        mCurrentData = DataSupport.findLast(MeasureSpecificationData.class);
 
-        MeasureSpecificationData mMeasureSpecificationData = new MeasureSpecificationData();
-        mMeasureSpecificationData.setQianhoushijuleijicha(6.0f);
-        mMeasureSpecificationData.setShixianchangdu(50);
-        mMeasureSpecificationData.setQianhoushijucha(1.5f);
-        mMeasureSpecificationData.setLiangcidushucha(0.4f);
-        mMeasureSpecificationData.setLiangcigaochazhicha(0.6f);
-        mMeasureSpecificationData.setShixiangaodu(0.55f);
-        boolean isis = mMeasureSpecificationData.save();
+        if (mCurrentData == null) {
+            Dialoghelper.warningSnackbar(rootView, "数据读取失败，请点击重置", Dialoghelper.APPEAR_FROM_TOP_TO_DOWN);
+            return;
+        }
 
-        KLog.e(isis);
+        listLine = new ArrayList<>();
+        listLine.add(view0Qianhoushijuleijicha);
+        listLine.add(view1Shixianchangdu);
+        listLine.add(view2Qianhoushijucha);
+        listLine.add(view3liangcidushucha);
+        listLine.add(view4Liangcigaochazhicha);
+        listLine.add(view5Shixiangaodu);
 
-        et0Qianhoushijuleijicha.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
+        et0Qianhoushijuleijicha.setText(mCurrentData.getQianhoushijuleijicha() + "");
+        et1Shixianchangdu.setText(mCurrentData.getShixianchangdu() + "");
+        et2Qianhoushijucha.setText(mCurrentData.getQianhoushijucha() + "");
+        et3Liangcidushucha.setText(mCurrentData.getLiangcidushucha() + "");
+        et4Liangcigaochazhicha.setText(mCurrentData.getLiangcigaochazhicha() + "");
+        et5Shixiangaodu.setText(mCurrentData.getShixiangaodu() + "");
 
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (TextUtils.isEmpty(s)) {
-                    view0Qianhoushijuleijicha.setVisibility(View.VISIBLE);
-                    tv0Qianhoushijuleijicha.setVisibility(View.VISIBLE);
-                    tv0Qianhoushijuleijicha.setText("不能为空");
-                } else if (Float.parseFloat(s.toString()) >= 0 && Float.parseFloat(s.toString()) <= 6.0) {
-                    view0Qianhoushijuleijicha.setVisibility(View.GONE);
-                    tv0Qianhoushijuleijicha.setVisibility(View.GONE);
-                } else if (Float.parseFloat(s.toString()) < 0) {
-                    view0Qianhoushijuleijicha.setVisibility(View.VISIBLE);
-                    tv0Qianhoushijuleijicha.setVisibility(View.VISIBLE);
-                    tv0Qianhoushijuleijicha.setText("不能小于0");
-                } else if (Float.parseFloat(s.toString()) > 6.0) {
-                    view0Qianhoushijuleijicha.setVisibility(View.VISIBLE);
-                    tv0Qianhoushijuleijicha.setVisibility(View.VISIBLE);
-                    tv0Qianhoushijuleijicha.setText("不能小于6.0");
-                }
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-            }
-        });
-
-        et1Shixianchangdu.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (TextUtils.isEmpty(s)) {
-                    view1Shixianchangdu.setVisibility(View.VISIBLE);
-                    tv1Shixianchangdu.setVisibility(View.VISIBLE);
-                    tv1Shixianchangdu.setText("不能为空");
-                } else if (Float.parseFloat(s.toString()) >= 0 && Float.parseFloat(s.toString()) <= 6.0) {
-                    view1Shixianchangdu.setVisibility(View.GONE);
-                    tv1Shixianchangdu.setVisibility(View.GONE);
-                } else if (Float.parseFloat(s.toString()) < 0) {
-                    view1Shixianchangdu.setVisibility(View.VISIBLE);
-                    tv1Shixianchangdu.setVisibility(View.VISIBLE);
-                    tv1Shixianchangdu.setText("不能小于0");
-                } else if (Float.parseFloat(s.toString()) > 6.0) {
-                    view1Shixianchangdu.setVisibility(View.VISIBLE);
-                    tv1Shixianchangdu.setVisibility(View.VISIBLE);
-                    tv1Shixianchangdu.setText("不能小于6.0");
-                }
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-            }
-        });
-
-        et2Qianhoushijucha.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (TextUtils.isEmpty(s)) {
-                    view2Qianhoushijucha.setVisibility(View.VISIBLE);
-                    tv2Qianhoushijucha.setVisibility(View.VISIBLE);
-                    tv2Qianhoushijucha.setText("不能为空");
-                } else if (Float.parseFloat(s.toString()) >= 0 && Float.parseFloat(s.toString()) <= 6.0) {
-                    view2Qianhoushijucha.setVisibility(View.GONE);
-                    tv2Qianhoushijucha.setVisibility(View.GONE);
-                } else if (Float.parseFloat(s.toString()) < 0) {
-                    view2Qianhoushijucha.setVisibility(View.VISIBLE);
-                    tv2Qianhoushijucha.setVisibility(View.VISIBLE);
-                    tv2Qianhoushijucha.setText("不能小于0");
-                } else if (Float.parseFloat(s.toString()) > 6.0) {
-                    view2Qianhoushijucha.setVisibility(View.VISIBLE);
-                    tv2Qianhoushijucha.setVisibility(View.VISIBLE);
-                    tv2Qianhoushijucha.setText("不能小于6.0");
-                }
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-            }
-        });
-
-        et3Liangcidushucha.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (TextUtils.isEmpty(s)) {
-                    view3liangcidushucha.setVisibility(View.VISIBLE);
-                    tv3Liangcidushucha.setVisibility(View.VISIBLE);
-                    tv3Liangcidushucha.setText("不能为空");
-                } else if (Float.parseFloat(s.toString()) >= 0 && Float.parseFloat(s.toString()) <= 6.0) {
-                    view3liangcidushucha.setVisibility(View.GONE);
-                    tv3Liangcidushucha.setVisibility(View.GONE);
-                } else if (Float.parseFloat(s.toString()) < 0) {
-                    view3liangcidushucha.setVisibility(View.VISIBLE);
-                    tv3Liangcidushucha.setVisibility(View.VISIBLE);
-                    tv3Liangcidushucha.setText("不能小于0");
-                } else if (Float.parseFloat(s.toString()) > 6.0) {
-                    view3liangcidushucha.setVisibility(View.VISIBLE);
-                    tv3Liangcidushucha.setVisibility(View.VISIBLE);
-                    tv3Liangcidushucha.setText("不能小于6.0");
-                }
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-            }
-        });
-
-        et4Liangcigaochazhicha.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (TextUtils.isEmpty(s)) {
-                    view4Liangcigaochazhicha.setVisibility(View.VISIBLE);
-                    tv4Liangcigaochazhicha.setVisibility(View.VISIBLE);
-                    tv4Liangcigaochazhicha.setText("不能为空");
-                } else if (Float.parseFloat(s.toString()) >= 0 && Float.parseFloat(s.toString()) <= 6.0) {
-                    view4Liangcigaochazhicha.setVisibility(View.GONE);
-                    tv4Liangcigaochazhicha.setVisibility(View.GONE);
-                } else if (Float.parseFloat(s.toString()) < 0) {
-                    view4Liangcigaochazhicha.setVisibility(View.VISIBLE);
-                    tv4Liangcigaochazhicha.setVisibility(View.VISIBLE);
-                    tv4Liangcigaochazhicha.setText("不能小于0");
-                } else if (Float.parseFloat(s.toString()) > 6.0) {
-                    view4Liangcigaochazhicha.setVisibility(View.VISIBLE);
-                    tv4Liangcigaochazhicha.setVisibility(View.VISIBLE);
-                    tv4Liangcigaochazhicha.setText("不能小于6.0");
-                }
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-            }
-        });
+        et0Qianhoushijuleijicha.addTextChangedListener(new BaseTextWatcher(tv0Qianhoushijuleijicha, view0Qianhoushijuleijicha, mStandardData.getQianhoushijuleijicha()));
+        et1Shixianchangdu.addTextChangedListener(new BaseTextWatcher(tv1Shixianchangdu, view1Shixianchangdu, mStandardData.getShixianchangdu()));
+        et2Qianhoushijucha.addTextChangedListener(new BaseTextWatcher(tv2Qianhoushijucha, view2Qianhoushijucha, mStandardData.getQianhoushijucha()));
+        et3Liangcidushucha.addTextChangedListener(new BaseTextWatcher(tv3Liangcidushucha, view3liangcidushucha, mStandardData.getLiangcidushucha()));
+        et4Liangcigaochazhicha.addTextChangedListener(new BaseTextWatcher(tv4Liangcigaochazhicha, view4Liangcigaochazhicha, mStandardData.getLiangcigaochazhicha()));
+//        et5Shixiangaodu.addTextChangedListener(new BaseTextWatcher(tv5Shixiangaodu, view5Shixiangaodu, mStandardData.getShixiangaodu()));
 
         et5Shixiangaodu.addTextChangedListener(new TextWatcher() {
             @Override
@@ -255,22 +138,7 @@ public class ParamSettingFragment extends BaseFragment {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (TextUtils.isEmpty(s)) {
-                    view5Shixiangaodu.setVisibility(View.VISIBLE);
-                    tv5Shixiangaodu.setVisibility(View.VISIBLE);
-                    tv5Shixiangaodu.setText("不能为空");
-                } else if (Float.parseFloat(s.toString()) >= 0 && Float.parseFloat(s.toString()) <= 6.0) {
-                    view5Shixiangaodu.setVisibility(View.GONE);
-                    tv5Shixiangaodu.setVisibility(View.GONE);
-                } else if (Float.parseFloat(s.toString()) < 0) {
-                    view5Shixiangaodu.setVisibility(View.VISIBLE);
-                    tv5Shixiangaodu.setVisibility(View.VISIBLE);
-                    tv5Shixiangaodu.setText("不能小于0");
-                } else if (Float.parseFloat(s.toString()) > 6.0) {
-                    view5Shixiangaodu.setVisibility(View.VISIBLE);
-                    tv5Shixiangaodu.setVisibility(View.VISIBLE);
-                    tv5Shixiangaodu.setText("不能小于6.0");
-                }
+
             }
 
             @Override
@@ -283,5 +151,141 @@ public class ParamSettingFragment extends BaseFragment {
     @Override
     protected BaseContract.Presenter createPresenter() {
         return null;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
+    }
+
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessageEvent(EventData event) {
+        if (event.position == Constants.EVENT_SAVE_PARAM) {
+            save();
+        } else if (event.position == Constants.EVENT_RESET_SECOND_CLASS) {
+            reset();
+        }
+    }
+
+    private void save() {
+        boolean isCanSave = true;
+        for (View view : listLine) {
+            if (view.getVisibility() == View.VISIBLE) {
+                isCanSave = false;
+                break;
+            }
+        }
+
+        if (isCanSave) {
+            mCurrentData.setQianhoushijuleijicha(Float.parseFloat(et0Qianhoushijuleijicha.getText().toString().trim()));
+            mCurrentData.setShixianchangdu(Float.parseFloat(et1Shixianchangdu.getText().toString().trim()));
+            mCurrentData.setQianhoushijucha(Float.parseFloat(et2Qianhoushijucha.getText().toString().trim()));
+            mCurrentData.setLiangcidushucha(Float.parseFloat(et3Liangcidushucha.getText().toString().trim()));
+            mCurrentData.setLiangcigaochazhicha(Float.parseFloat(et4Liangcigaochazhicha.getText().toString().trim()));
+            mCurrentData.setShixiangaodu(Float.parseFloat(et5Shixiangaodu.getText().toString().trim()));
+
+            if (mCurrentData.update(mCurrentData.getId()) > 0) {
+                Dialoghelper.successSnackbar(rootView, "恭喜，保存成功", Dialoghelper.APPEAR_FROM_TOP_TO_DOWN);
+            } else {
+                Dialoghelper.errorSnackbar(rootView, "抱歉，保存失败，请重试", Dialoghelper.APPEAR_FROM_TOP_TO_DOWN);
+            }
+
+        } else {
+            Dialoghelper.warningSnackbar(rootView, "请按照标准范围设置参考值", Dialoghelper.APPEAR_FROM_TOP_TO_DOWN);
+        }
+    }
+
+    private void reset() {
+        intRetry++;
+        if (intRetry > 10) {
+            Dialoghelper.errorSnackbar(rootView, "重置失败", Dialoghelper.APPEAR_FROM_TOP_TO_DOWN);
+            return;
+        }
+        //先删除，保证表里面永远都只有两行数据即可。
+        DataSupport.deleteAll(MeasureSpecificationData.class);
+        mStandardData = new MeasureSpecificationData();
+        mStandardData.setQianhoushijuleijicha(6.0f);
+        mStandardData.setShixianchangdu(50);
+        mStandardData.setQianhoushijucha(1.5f);
+        mStandardData.setLiangcidushucha(0.4f);
+        mStandardData.setLiangcigaochazhicha(0.6f);
+        mStandardData.setShixiangaodu(0.55f);
+
+        mCurrentData = new MeasureSpecificationData();
+        mCurrentData.setQianhoushijuleijicha(6.0f);
+        mCurrentData.setShixianchangdu(50);
+        mCurrentData.setQianhoushijucha(1.5f);
+        mCurrentData.setLiangcidushucha(0.4f);
+        mCurrentData.setLiangcigaochazhicha(0.6f);
+        mCurrentData.setShixiangaodu(0.55f);
+
+        if (mStandardData.save() && mCurrentData.save()) {
+            Dialoghelper.successSnackbar(rootView, "重置成功", Dialoghelper.APPEAR_FROM_TOP_TO_DOWN);
+            et0Qianhoushijuleijicha.setText(mStandardData.getQianhoushijuleijicha() + "");
+            et1Shixianchangdu.setText(mStandardData.getShixianchangdu() + "");
+            et2Qianhoushijucha.setText(mStandardData.getQianhoushijucha() + "");
+            et3Liangcidushucha.setText(mStandardData.getLiangcidushucha() + "");
+            et4Liangcigaochazhicha.setText(mStandardData.getLiangcigaochazhicha() + "");
+            et5Shixiangaodu.setText(mStandardData.getShixiangaodu() + "");
+
+        } else {
+            //递归10层。
+            reset();
+        }
+    }
+
+    class BaseTextWatcher implements TextWatcher {
+        TextView mTextView;
+        View mView;
+        float mData;
+
+        public BaseTextWatcher(TextView mTextView, View mView, float mData) {
+            this.mTextView = mTextView;
+            this.mView = mView;
+            this.mData = mData;
+        }
+
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+            try {
+                if (TextUtils.isEmpty(s)) {
+                    mView.setVisibility(View.VISIBLE);
+                    mTextView.setVisibility(View.VISIBLE);
+                    mTextView.setText("不能为空");
+                } else if (Float.parseFloat(s.toString()) >= 0 && Float.parseFloat(s.toString()) <= mData) {
+                    mView.setVisibility(View.GONE);
+                    mTextView.setVisibility(View.GONE);
+                } else if (Float.parseFloat(s.toString()) < 0) {
+                    mView.setVisibility(View.VISIBLE);
+                    mTextView.setVisibility(View.VISIBLE);
+                    mTextView.setText("不能小于0");
+                } else if (Float.parseFloat(s.toString()) > mData) {
+                    mView.setVisibility(View.VISIBLE);
+                    mTextView.setVisibility(View.VISIBLE);
+                    mTextView.setText("不能大于" + mData);
+                }
+            } catch (NumberFormatException e) {
+                mView.setVisibility(View.VISIBLE);
+                mTextView.setVisibility(View.VISIBLE);
+                mTextView.setText("请输入正确值");
+            }
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {
+        }
     }
 }

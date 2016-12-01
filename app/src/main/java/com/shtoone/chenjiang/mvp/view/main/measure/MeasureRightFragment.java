@@ -1,5 +1,6 @@
 package com.shtoone.chenjiang.mvp.view.main.measure;
 
+import android.app.Dialog;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -7,18 +8,21 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
-import com.aurelhubert.ahbottomnavigation.AHBottomNavigationItem;
 import com.lsjwzh.widget.recyclerviewpager.RecyclerViewPager;
 import com.shtoone.chenjiang.R;
+import com.shtoone.chenjiang.common.AudioPlayer;
+import com.shtoone.chenjiang.common.Dialoghelper;
+import com.shtoone.chenjiang.common.ToastUtils;
 import com.shtoone.chenjiang.mvp.contract.measure.MeasureContract;
 import com.shtoone.chenjiang.mvp.presenter.measure.MeasurePresenter;
 import com.shtoone.chenjiang.mvp.view.base.BaseFragment;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -45,9 +49,8 @@ public class MeasureRightFragment extends BaseFragment<MeasureContract.Presenter
     Button btFance;
     @BindView(R.id.fab)
     FloatingActionButton fab;
-
-    private ArrayList<AHBottomNavigationItem> bottomNavigationItems = new ArrayList<>();
     protected RecyclerViewPager mRecyclerView;
+    private List<String> listJidianBianhao;
 
     public static MeasureRightFragment newInstance() {
         return new MeasureRightFragment();
@@ -81,7 +84,9 @@ public class MeasureRightFragment extends BaseFragment<MeasureContract.Presenter
 
     private void initToolbar() {
         toolbar.setTitle("测量");
-        toolbar.setNavigationIcon(R.drawable.ic_menu_white_24dp);
+//        toolbar.setNavigationIcon(R.drawable.ic_menu_white_24dp);
+        ((MeasureFragment) getParentFragment()).initToolbartoggle(toolbar);
+
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -89,10 +94,53 @@ public class MeasureRightFragment extends BaseFragment<MeasureContract.Presenter
                 ((MeasureFragment) getParentFragment()).toggle();
             }
         });
+
+        toolbar.inflateMenu(R.menu.menu_measure_fragment);
+        toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.action_stop:
+                        ToastUtils.showToast(_mActivity, "停止");
+                        Dialoghelper.dialog(_mActivity, R.drawable.ic_error_outline_red_400_48dp,
+                                R.string.dialog_stop_title, R.string.dialog_stop_content, R.string.dialog_positiveText,
+                                R.string.dialog_negativeText, new Dialoghelper.Call() {
+                                    @Override
+                                    public void onNegative() {
+                                    }
+
+                                    @Override
+                                    public void onPositive() {
+
+                                    }
+                                });
+                        break;
+
+                    case R.id.action_delete:
+                        ToastUtils.showToast(_mActivity, "删除");
+                        Dialoghelper.dialog(_mActivity, R.drawable.ic_error_outline_red_400_48dp,
+                                R.string.dialog_delete_title, R.string.dialog_delete_content, R.string.dialog_positiveText,
+                                R.string.dialog_negativeText, new Dialoghelper.Call() {
+                                    @Override
+                                    public void onNegative() {
+                                    }
+
+                                    @Override
+                                    public void onPositive() {
+
+                                    }
+                                });
+
+                        break;
+                }
+                return true;
+            }
+        });
     }
 
     private void initData() {
-
+        mPresenter.requestJidianData();
+        AudioPlayer.init(_mActivity);
 
     }
 
@@ -130,18 +178,44 @@ public class MeasureRightFragment extends BaseFragment<MeasureContract.Presenter
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.bt_jidian_measure_right_fragment:
+                Dialoghelper.dialogList(_mActivity, 0, R.string.dialog_select_jidian, listJidianBianhao, R.string.dialog_negativeText, 0, new Dialoghelper.ListCall() {
+                    @Override
+                    public void onSelection(Dialog dialog, View itemView, int which, CharSequence text) {
 
+                    }
+                });
                 break;
             case R.id.bt_zhuandian_measure_right_fragment:
+
+                AudioPlayer.play(8);
                 break;
             case R.id.bt_cedian_measure_right_fragment:
+                AudioPlayer.play(7);
+
                 break;
             case R.id.bt_chongce_measure_right_fragment:
+                AudioPlayer.play(6);
+
                 break;
             case R.id.bt_fance_measure_right_fragment:
+                AudioPlayer.play(5);
+
                 break;
             case R.id.fab:
+                AudioPlayer.play(4);
+
                 break;
         }
+    }
+
+    @Override
+    public void responseJidianData(List<String> listJidianBianhao) {
+        this.listJidianBianhao = listJidianBianhao;
+    }
+
+    @Override
+    public void onDestroy() {
+        AudioPlayer.onDestroy();
+        super.onDestroy();
     }
 }

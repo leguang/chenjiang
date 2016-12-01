@@ -74,8 +74,7 @@
                     android:layout_width="50dp"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:inputType="number"
-                    android:text="6.0"
+                    android:inputType="numberDecimal"
                     android:textSize="18sp" />
 
                 <TextView
@@ -168,8 +167,7 @@
                     android:layout_width="50dp"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:inputType="number"
-                    android:text="50"
+                    android:inputType="numberDecimal"
                     android:textSize="18sp" />
 
                 <TextView
@@ -237,8 +235,7 @@
                     android:layout_width="50dp"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:inputType="number"
-                    android:text="1.5"
+                    android:inputType="numberDecimal"
                     android:textSize="18sp" />
 
                 <TextView
@@ -306,8 +303,7 @@
                     android:layout_width="50dp"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:inputType="number"
-                    android:text="0.4"
+                    android:inputType="numberDecimal"
                     android:textSize="18sp" />
 
                 <TextView
@@ -375,8 +371,7 @@
                     android:layout_width="50dp"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:inputType="number"
-                    android:text="0.6"
+                    android:inputType="numberDecimal"
                     android:textSize="18sp" />
 
                 <TextView
@@ -444,8 +439,7 @@
                     android:layout_width="50dp"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:inputType="number"
-                    android:text="0.55"
+                    android:inputType="numberDecimal"
                     android:textSize="18sp" />
 
                 <TextView

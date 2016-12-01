@@ -34,7 +34,7 @@ public class Constants {
     public static final String DOMAIN_1 = "shtoone.com";
     public static final String DOMAIN_2 = "sh-toone";
     public static final String ISFIRSTENTRY = "is_first_entry";
-    public static final String ISFIRSTGUIDE = "is_first_guide";
+    public static final String IS_INITIALIZE = "is_initialize";
     public static final String USERNAME = "username";
     public static final String PASSWORD = "password";
     public static final String REGISTER_CODE = "register_code";
@@ -69,11 +69,13 @@ public class Constants {
     public static final String STAFF = "STAFF";
 
     //EventBus系列,值是随便取，只要不相同即可。**********************************************************************
-    public static final int EVENT_FINISH_LAUNCH = 10;
-    //检测App升级
-    public static final int EVENT_CHECK_UPDATE = 0;
+    public static final int EVENT_FINISH_LAUNCH = 0;
     //刷新主界面的列表
     public static final int EVENT_REFRESH = 1;
+    //保存测量参数规范
+    public static final int EVENT_SAVE_PARAM = 2;
+    //重置二等水准测量规范
+    public static final int EVENT_RESET_SECOND_CLASS = 3;
     //EventBus系列,值是随便取，只要不相同即可。**********************************************************************
 
     //上传模块

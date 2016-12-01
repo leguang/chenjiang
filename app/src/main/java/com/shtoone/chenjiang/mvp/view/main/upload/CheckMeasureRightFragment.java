@@ -12,8 +12,7 @@ import android.view.ViewGroup;
 
 import com.lsjwzh.widget.recyclerviewpager.RecyclerViewPager;
 import com.shtoone.chenjiang.R;
-import com.shtoone.chenjiang.mvp.contract.measure.MeasureContract;
-import com.shtoone.chenjiang.mvp.presenter.measure.MeasurePresenter;
+import com.shtoone.chenjiang.mvp.contract.base.BaseContract;
 import com.shtoone.chenjiang.mvp.view.base.BaseFragment;
 import com.shtoone.chenjiang.mvp.view.main.measure.LayoutAdapter;
 import com.shtoone.chenjiang.mvp.view.main.measure.MeasureFragment;
@@ -26,7 +25,7 @@ import butterknife.OnClick;
  * Author：leguang on 2016/10/9 0009 15:49
  * Email：langmanleguang@qq.com
  */
-public class CheckMeasureRightFragment extends BaseFragment<MeasureContract.Presenter> implements MeasureContract.View {
+public class CheckMeasureRightFragment extends BaseFragment {
 
     private static final String TAG = CheckMeasureRightFragment.class.getSimpleName();
     @BindView(R.id.toolbar_toolbar)
@@ -39,12 +38,6 @@ public class CheckMeasureRightFragment extends BaseFragment<MeasureContract.Pres
 
     public static CheckMeasureRightFragment newInstance() {
         return new CheckMeasureRightFragment();
-    }
-
-    @NonNull
-    @Override
-    protected MeasureContract.Presenter createPresenter() {
-        return new MeasurePresenter(this);
     }
 
     @Nullable
@@ -68,7 +61,7 @@ public class CheckMeasureRightFragment extends BaseFragment<MeasureContract.Pres
 
     private void initToolbar() {
         toolbar.setTitle("测量");
-        toolbar.setNavigationIcon(R.drawable.ic_menu_white_24dp);
+//        toolbar.setNavigationIcon(R.drawable.ic_menu_white_24dp);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -94,20 +87,6 @@ public class CheckMeasureRightFragment extends BaseFragment<MeasureContract.Pres
         rvp.setLongClickable(true);
     }
 
-    @Override
-    public void showContent() {
-
-    }
-
-    @Override
-    public void showError(Throwable t) {
-    }
-
-
-    @Override
-    public void showLoading() {
-    }
-
     @OnClick(R.id.fab_check_measure_fragment)
     public void onClick() {
         //获取fab在屏幕上的绝对坐标。
@@ -116,5 +95,11 @@ public class CheckMeasureRightFragment extends BaseFragment<MeasureContract.Pres
         int radius = fab.getWidth() / 2;
         //将坐标传给下一个fragment。
         ((CheckMeasureFragment) getParentFragment()).startFragment(MeasuredDataFragment.newInstance(location[0] + radius, location[1] + radius));
+    }
+
+    @NonNull
+    @Override
+    protected BaseContract.Presenter createPresenter() {
+        return null;
     }
 }

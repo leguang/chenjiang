@@ -1,5 +1,6 @@
 package com.shtoone.chenjiang.common;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.support.annotation.NonNull;
@@ -9,8 +10,11 @@ import android.view.View;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.socks.library.KLog;
 import com.trycatch.mysnackbar.Prompt;
 import com.trycatch.mysnackbar.TSnackbar;
+
+import java.util.Collection;
 
 /**
  * Author：leguang on 2016/11/11 0011 18:50
@@ -19,6 +23,7 @@ import com.trycatch.mysnackbar.TSnackbar;
 public class Dialoghelper {
 
     private static MaterialDialog.Builder builder;
+    private static AlertDialog.Builder mBuilder;
     /**
      * Show the TSnackbar from top to down.
      */
@@ -31,10 +36,9 @@ public class Dialoghelper {
 
     public static void showDialog(Context context, int icon, String title, String content, String positiveText, String negativeText, final Call call) {
 
-        if (context != null) {
+        if (builder == null && context != null) {
             builder = new MaterialDialog.Builder(context);
         }
-
         if (icon != 0) {
             builder.iconRes(icon);
             builder.limitIconToDefaultSize();
@@ -77,7 +81,7 @@ public class Dialoghelper {
 
     public static void showDialog(Context context, int icon, int title, int content, int positiveText, int negativeText, final Call call) {
 
-        if (context != null) {
+        if (builder == null && context != null) {
             builder = new MaterialDialog.Builder(context);
         }
 
@@ -122,9 +126,10 @@ public class Dialoghelper {
     }
 
     public static void dialog(Context context, int icon, String title, String content, String positiveText, String negativeText, final Call call) {
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setIcon(icon)
+        if (mBuilder == null && context != null) {
+            mBuilder = new AlertDialog.Builder(context);
+        }
+        mBuilder.setIcon(icon)
                 .setTitle(title)
                 .setMessage(content)
                 .setNegativeButton(positiveText, new DialogInterface.OnClickListener() {
@@ -138,14 +143,15 @@ public class Dialoghelper {
                     public void onClick(DialogInterface dialogInterface, int i) {
                         call.onPositive();
                     }
-                });
-        builder.show();
+                }).show();
     }
 
     public static void dialog(Context context, int icon, int title, int content, int positiveText, int negativeText, final Call call) {
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setIcon(icon)
+        if (mBuilder == null && context != null) {
+            mBuilder = new AlertDialog.Builder(context);
+            KLog.e("11111111111111");
+        }
+        mBuilder.setIcon(icon)
                 .setTitle(title)
                 .setMessage(content)
                 .setNegativeButton(negativeText, new DialogInterface.OnClickListener() {
@@ -159,8 +165,7 @@ public class Dialoghelper {
                     public void onClick(DialogInterface dialogInterface, int i) {
                         call.onPositive();
                     }
-                });
-        builder.show();
+                }).show();
     }
 
     public static void errorSnackbar(View view, CharSequence text, int appearDirection) {
@@ -181,9 +186,95 @@ public class Dialoghelper {
                 .show();
     }
 
-    public interface Call {
-        public void onNegative();
+    public static void dialogList(Context context, int icon, String title, Collection collection, String positiveText, String negativeText, final ListCall listCall) {
+        builder = new MaterialDialog.Builder(context);
 
-        public void onPositive();
+        builder.content("");
+
+        if (icon != 0) {
+            builder.iconRes(icon);
+            builder.limitIconToDefaultSize();
+        }
+
+        if (TextUtils.isEmpty(title)) {
+            builder.title(title);
+        }
+
+        if (collection != null) {
+            builder.items(collection);
+
+        }
+
+        if (TextUtils.isEmpty(positiveText)) {
+            builder.positiveText(positiveText);
+        }
+
+        if (TextUtils.isEmpty(negativeText)) {
+            builder.negativeText(negativeText);
+        }
+
+        if (listCall != null) {
+            builder.itemsCallback(new MaterialDialog.ListCallback() {
+                @Override
+                public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+                    listCall.onSelection(dialog, view, which, text);
+                }
+            });
+        }
+        builder.show();
+    }
+
+    public static Dialog dialogList(Context context, int icon, int title, Collection collection, int positiveText, int negativeText, final ListCall listCall) {
+
+        builder = new MaterialDialog.Builder(context);
+
+        builder.content("");
+
+        if (icon != 0) {
+            builder.iconRes(icon);
+            builder.limitIconToDefaultSize();
+        }
+
+        if (title != 0) {
+            builder.title(title);
+        }
+
+        if (collection != null) {
+            builder.items(collection);
+
+        }
+
+        if (positiveText != 0) {
+            builder.positiveText(positiveText);
+        }
+
+        if (negativeText != 0) {
+            builder.negativeText(negativeText);
+        }
+
+        if (listCall != null) {
+            builder.itemsCallback(new MaterialDialog.ListCallback() {
+                @Override
+                public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+                    listCall.onSelection(dialog, view, which, text);
+                }
+            });
+        }
+        return builder.show();
+    }
+
+
+    public static Dialog progressDialog(Context context, String msg, int progressType) {
+        return new MaterialDialog.Builder(context).content(msg).progress(true, 0).show();
+    }
+
+    public interface Call {
+        void onNegative();
+
+        void onPositive();
+    }
+
+    public interface ListCall {
+        void onSelection(Dialog dialog, View itemView, int which, CharSequence text);
     }
 }
