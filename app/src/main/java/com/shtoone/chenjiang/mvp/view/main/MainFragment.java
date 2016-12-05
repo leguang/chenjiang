@@ -248,7 +248,7 @@ public class MainFragment extends BaseFragment<MainContract.Presenter> implement
 
             @Override
             public void onRightClick(View view, int position) {
-                if (mAdapter.getData().get(position).getEdit().equals(0)) {
+                if (mAdapter.getData().get(position).getStatus().equals(Constants.status_daibianji)) {
                     ViewGroup viewGroup = (ViewGroup) _mActivity.findViewById(android.R.id.content).getRootView();
                     Dialoghelper.warningSnackbar(viewGroup, "请先编辑水准线路再进行测量！", Dialoghelper.APPEAR_FROM_TOP_TO_DOWN);
                 } else {
@@ -417,7 +417,7 @@ public class MainFragment extends BaseFragment<MainContract.Presenter> implement
     public void onMessageEvent(EventData event) {
 
         if (event.position == Constants.EVENT_REFRESH) {
-            mPresenter.start();
+            mPresenter.requestShuizhunxianData(0, strGongdianParam, strMeasureStatusParam, strTimeTypeParam);
         }
     }
 

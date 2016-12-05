@@ -90,28 +90,28 @@ public class MainPresenter extends BasePresenter<MainContract.View> implements M
     }
 
     @Override
-    public void requestShuizhunxianData(final int pagination, final String strGongdianParam, final String strMeasureStatusParam, final String strTimeTypeParam) {
+    public void requestShuizhunxianData(final int pagination, final String strGongdianParam, final String strStatusParam, final String strTypeParam) {
 
         //由于框架支持的原生sql查询老是报错，因此只能用最笨的方式。
         KLog.e("pagination::" + pagination);
         KLog.e("strGongdianParam::" + strGongdianParam);
-        KLog.e("strMeasureStatusParam::" + strMeasureStatusParam);
-        KLog.e("strTimeTypeParam::" + strTimeTypeParam);
+        KLog.e("strStatusParam::" + strStatusParam);
+        KLog.e("strTypeParam::" + strTypeParam);
 
-
+//这一部分是用于过滤状态参数和时间参数的
         mRxManager.add(Observable.create(new Observable.OnSubscribe<List<YusheshuizhunxianData>>() {
             @Override
             public void call(Subscriber<? super List<YusheshuizhunxianData>> subscriber) {
                 List<YusheshuizhunxianData> mShuizhunxianData = null;
                 try {
-                    if (strMeasureStatusParam.equals("全部")) {
+                    if (strStatusParam.equals("全部")) {
 
-                        if (strTimeTypeParam.equals("全部")) {
+                        if (strTypeParam.equals("全部")) {
                             mShuizhunxianData = DataSupport.order("id").limit(Constants.PAGE_SIZE)
                                     .offset(pagination * Constants.PAGE_SIZE)
                                     .find(YusheshuizhunxianData.class);
 
-                        } else if (strTimeTypeParam.equals("近一周")) {
+                        } else if (strTypeParam.equals("近一周")) {
                             DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
                             Calendar mCalendar = Calendar.getInstance();
                             String strEndTime = df.format(mCalendar.getTime());
@@ -123,7 +123,7 @@ public class MainPresenter extends BasePresenter<MainContract.View> implements M
                                     .offset(pagination * Constants.PAGE_SIZE)
                                     .find(YusheshuizhunxianData.class);
 
-                        } else if (strTimeTypeParam.equals("近一月")) {
+                        } else if (strTypeParam.equals("近一月")) {
                             DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
                             Calendar mCalendar = Calendar.getInstance();
                             String strEndTime = df.format(mCalendar.getTime());
@@ -137,33 +137,33 @@ public class MainPresenter extends BasePresenter<MainContract.View> implements M
                         }
                     } else {
 
-                        if (strTimeTypeParam.equals("全部")) {
-                            mShuizhunxianData = DataSupport.where("measureState = ?", strMeasureStatusParam)
+                        if (strTypeParam.equals("全部")) {
+                            mShuizhunxianData = DataSupport.where("measureState = ?", strStatusParam)
                                     .order("id").limit(Constants.PAGE_SIZE)
                                     .offset(pagination * Constants.PAGE_SIZE)
                                     .find(YusheshuizhunxianData.class);
 
 
-                        } else if (strTimeTypeParam.equals("近一周")) {
+                        } else if (strTypeParam.equals("近一周")) {
                             DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
                             Calendar mCalendar = Calendar.getInstance();
                             String strEndTime = df.format(mCalendar.getTime());
                             mCalendar.add(Calendar.DAY_OF_MONTH, -7);
                             String strStartTime = df.format(mCalendar.getTime());
 
-                            mShuizhunxianData = DataSupport.where("measureState = ? and xiugaishijian Between ? and ?", strMeasureStatusParam, strStartTime, strEndTime)
+                            mShuizhunxianData = DataSupport.where("measureState = ? and xiugaishijian Between ? and ?", strStatusParam, strStartTime, strEndTime)
                                     .order("id").limit(Constants.PAGE_SIZE)
                                     .offset(pagination * Constants.PAGE_SIZE)
                                     .find(YusheshuizhunxianData.class);
 
-                        } else if (strTimeTypeParam.equals("近一月")) {
+                        } else if (strTypeParam.equals("近一月")) {
                             DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
                             Calendar mCalendar = Calendar.getInstance();
                             String strEndTime = df.format(mCalendar.getTime());
                             mCalendar.add(Calendar.MONTH, -1);
                             String strStartTime = df.format(mCalendar.getTime());
 
-                            mShuizhunxianData = DataSupport.where("measureState = ? and xiugaishijian Between ? and ?", strMeasureStatusParam, strStartTime, strEndTime)
+                            mShuizhunxianData = DataSupport.where("measureState = ? and xiugaishijian Between ? and ?", strStatusParam, strStartTime, strEndTime)
                                     .order("id").limit(Constants.PAGE_SIZE)
                                     .offset(pagination * Constants.PAGE_SIZE)
                                     .find(YusheshuizhunxianData.class);
@@ -182,13 +182,13 @@ public class MainPresenter extends BasePresenter<MainContract.View> implements M
                                public void call(List<YusheshuizhunxianData> yusheshuizhunxianDatas) {
                                    KLog.e("333333333");
 
-                                   filterShuizhunxianData(pagination, strGongdianParam, yusheshuizhunxianDatas);
+                                   filterAsGongdian(pagination, strGongdianParam, yusheshuizhunxianDatas);
                                }
                            }
                 ));
     }
 
-    public void filterShuizhunxianData(final int pagination, final String strGongdianParam, List<YusheshuizhunxianData> yusheshuizhunxianDatas) {
+    public void filterAsGongdian(final int pagination, final String strGongdianParam, List<YusheshuizhunxianData> yusheshuizhunxianDatas) {
         final List<YusheshuizhunxianData> filteredShuizhunxianData = new ArrayList<YusheshuizhunxianData>();
         KLog.e("222222222222");
 

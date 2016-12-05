@@ -179,7 +179,7 @@ public class EditShuizhunxianFragment extends BaseFragment<ShuizhunxianContract.
         mYusheshuizhunxianData.setTemperature(etTemperature.getText().toString());
         mYusheshuizhunxianData.setPressure(etPressure.getText().toString());
         mYusheshuizhunxianData.setXiugaishijian(tvDate.getText().toString());
-        mYusheshuizhunxianData.setEdit("1");
+        mYusheshuizhunxianData.setStatus("1");
         int rowsAffected = mYusheshuizhunxianData.update(mYusheshuizhunxianData.getId());
         ViewGroup viewGroup = (ViewGroup) _mActivity.findViewById(android.R.id.content).getRootView();
         if (rowsAffected > 0) {

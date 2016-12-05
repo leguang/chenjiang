@@ -25,7 +25,7 @@ public class Constants {
     public static final String PATH_APK_CACHE = PATH_DATA + File.separator + "ApkCache";
 
     //基地址
-    public static final String BASE_URL = "http://192.168.10.35:8081/ljcjqms/";
+    public static final String BASE_URL = "http://192.168.1.111:8081/ljcjqms/";
 
 
     //登录地址
@@ -42,7 +42,7 @@ public class Constants {
     public static final String USER_INFO_BEAN = "user_info_bean";
 
     //网络链接超时时间
-    public static final int DEFAULT_TIMEOUT = 3;
+    public static final int DEFAULT_TIMEOUT = 7;
 
 
     //作为登录的参数，固定这个写法
@@ -91,10 +91,17 @@ public class Constants {
     public static final int FROM_SPLASH = 0;
     public static final int FROM_MAIN = 1;
 
-
     //测量状态
     public static final String measure_state_daiceliang = "0";
     public static final String measure_state_daipingcha = "1";
     public static final String measure_state_deleted = "2";
+
+    //水准线的状态
+    public static final String status_daibianji = "0";
+    public static final String status_daiceliang = "1";
+    public static final String status_daipingcha = "2";
+    public static final String status_yiwancheng = "3";
+    public static final String status_yishanchu = "4";
+
 
 }

@@ -29,6 +29,7 @@ import com.shtoone.chenjiang.mvp.view.main.setting.SettingFragment;
 import com.shtoone.chenjiang.mvp.view.main.upload.UploadFragment;
 import com.shtoone.chenjiang.mvp.view.others.LaunchActivity;
 import com.shtoone.chenjiang.utils.SharedPreferencesUtils;
+import com.socks.library.KLog;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -41,6 +42,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     private TextView tv_phone_number;
     private LinearLayout llNavHeader;
     private ActionBarDrawerToggle toggle;
+    private TextView tv_header;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,6 +67,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         llNavHeader = (LinearLayout) navigationView.getHeaderView(0);
+        tv_header = (TextView) llNavHeader.findViewById(R.id.iv_header_nav_header_main);
         tv_username = (TextView) llNavHeader.findViewById(R.id.tv_username_nav_header_main);
         tv_phone_number = (TextView) llNavHeader.findViewById(R.id.tv_phone_number_nav_header_main);
     }
@@ -73,20 +76,22 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         if (BaseApplication.mUserInfoBean != null) {
             tv_username.setText("姓名：" + BaseApplication.mUserInfoBean.getUserFullName());
             tv_phone_number.setText("电话" + BaseApplication.mUserInfoBean.getUserPhoneNum());
+            String strFamilyName = BaseApplication.mUserInfoBean.getUserFullName().substring(0, 1);
+            tv_header.setText(strFamilyName);
         }
         navigationView.setNavigationItemSelectedListener(this);
-        llNavHeader.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                drawer.closeDrawer(GravityCompat.START);
-                drawer.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-
-                    }
-                }, 250);
-            }
-        });
+//        llNavHeader.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                drawer.closeDrawer(GravityCompat.START);
+//                drawer.postDelayed(new Runnable() {
+//                    @Override
+//                    public void run() {
+//
+//                    }
+//                }, 250);
+//            }
+//        });
     }
 
     public void initToolBar(Toolbar toolbar) {

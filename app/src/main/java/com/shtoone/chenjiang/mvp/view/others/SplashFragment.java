@@ -106,22 +106,22 @@ public class SplashFragment extends BaseFragment<SplashContract.Presenter> imple
         //先删除，保证表里面永远都只有两行数据即可。
         DataSupport.deleteAll(MeasureSpecificationData.class);
         MeasureSpecificationData mStandardData = new MeasureSpecificationData();
-        mStandardData.setQianhoushijuleijicha(6.0f);
-        mStandardData.setShixianchangdu(50);
-        mStandardData.setQianhoushijucha(1.5f);
-        mStandardData.setLiangcidushucha(0.4f);
-        mStandardData.setLiangcigaochazhicha(0.6f);
-        mStandardData.setShixiangaodu(0.55f);
+        mStandardData.setQianhoushijuleijicha(6.0f + "");
+        mStandardData.setShixianchangdu(50 + "");
+        mStandardData.setQianhoushijucha(1.5f + "");
+        mStandardData.setLiangcidushucha(0.4f + "");
+        mStandardData.setLiangcigaochazhicha(0.6f + "");
+        mStandardData.setShixiangaodu(0.55f + "");
 
         //初始化修改后的标准参考值，一开始的参考值是跟国家二等水准测量标准是一样，后面手动修改的则update。因此只要克隆成一模一样的。
 
         MeasureSpecificationData mCurrentData = new MeasureSpecificationData();
-        mCurrentData.setQianhoushijuleijicha(6.0f);
-        mCurrentData.setShixianchangdu(50);
-        mCurrentData.setQianhoushijucha(1.5f);
-        mCurrentData.setLiangcidushucha(0.4f);
-        mCurrentData.setLiangcigaochazhicha(0.6f);
-        mCurrentData.setShixiangaodu(0.55f);
+        mCurrentData.setQianhoushijuleijicha(6.0f + "");
+        mCurrentData.setShixianchangdu(50 + "");
+        mCurrentData.setQianhoushijucha(1.5f + "");
+        mCurrentData.setLiangcidushucha(0.4f + "");
+        mCurrentData.setLiangcigaochazhicha(0.6f + "");
+        mCurrentData.setShixiangaodu(0.55f + "");
 
         if (mStandardData.save() && mCurrentData.save()) {
             SharedPreferencesUtils.put(_mActivity, Constants.IS_INITIALIZE, true);
@@ -138,12 +138,12 @@ public class SplashFragment extends BaseFragment<SplashContract.Presenter> imple
             return;
         }
         if (isFirstentry) {
-//            start(GuideFragment.newInstance());
-            _mActivity.startActivity(new Intent(_mActivity, MainActivity.class));
+            start(GuideFragment.newInstance());
+//            _mActivity.startActivity(new Intent(_mActivity, MainActivity.class));
 
         } else {
-//            start(LoginFragment.newInstance(Constants.FROM_SPLASH));
-            _mActivity.startActivity(new Intent(_mActivity, MainActivity.class));
+            start(LoginFragment.newInstance(Constants.FROM_SPLASH));
+//            _mActivity.startActivity(new Intent(_mActivity, MainActivity.class));
         }
     }
 

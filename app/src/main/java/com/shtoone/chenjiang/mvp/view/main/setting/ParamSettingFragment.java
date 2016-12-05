@@ -83,7 +83,6 @@ public class ParamSettingFragment extends BaseFragment {
         return new ParamSettingFragment();
     }
 
-
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -117,34 +116,19 @@ public class ParamSettingFragment extends BaseFragment {
         listLine.add(view4Liangcigaochazhicha);
         listLine.add(view5Shixiangaodu);
 
-        et0Qianhoushijuleijicha.setText(mCurrentData.getQianhoushijuleijicha() + "");
-        et1Shixianchangdu.setText(mCurrentData.getShixianchangdu() + "");
-        et2Qianhoushijucha.setText(mCurrentData.getQianhoushijucha() + "");
-        et3Liangcidushucha.setText(mCurrentData.getLiangcidushucha() + "");
-        et4Liangcigaochazhicha.setText(mCurrentData.getLiangcigaochazhicha() + "");
-        et5Shixiangaodu.setText(mCurrentData.getShixiangaodu() + "");
+        et0Qianhoushijuleijicha.setText(mCurrentData.getQianhoushijuleijicha());
+        et1Shixianchangdu.setText(mCurrentData.getShixianchangdu());
+        et2Qianhoushijucha.setText(mCurrentData.getQianhoushijucha());
+        et3Liangcidushucha.setText(mCurrentData.getLiangcidushucha());
+        et4Liangcigaochazhicha.setText(mCurrentData.getLiangcigaochazhicha());
+        et5Shixiangaodu.setText(mCurrentData.getShixiangaodu());
 
-        et0Qianhoushijuleijicha.addTextChangedListener(new BaseTextWatcher(tv0Qianhoushijuleijicha, view0Qianhoushijuleijicha, mStandardData.getQianhoushijuleijicha()));
-        et1Shixianchangdu.addTextChangedListener(new BaseTextWatcher(tv1Shixianchangdu, view1Shixianchangdu, mStandardData.getShixianchangdu()));
-        et2Qianhoushijucha.addTextChangedListener(new BaseTextWatcher(tv2Qianhoushijucha, view2Qianhoushijucha, mStandardData.getQianhoushijucha()));
-        et3Liangcidushucha.addTextChangedListener(new BaseTextWatcher(tv3Liangcidushucha, view3liangcidushucha, mStandardData.getLiangcidushucha()));
-        et4Liangcigaochazhicha.addTextChangedListener(new BaseTextWatcher(tv4Liangcigaochazhicha, view4Liangcigaochazhicha, mStandardData.getLiangcigaochazhicha()));
-//        et5Shixiangaodu.addTextChangedListener(new BaseTextWatcher(tv5Shixiangaodu, view5Shixiangaodu, mStandardData.getShixiangaodu()));
-
-        et5Shixiangaodu.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-            }
-        });
+        et0Qianhoushijuleijicha.addTextChangedListener(new BaseTextWatcher(tv0Qianhoushijuleijicha, view0Qianhoushijuleijicha, "0", "6"));
+        et1Shixianchangdu.addTextChangedListener(new BaseTextWatcher(tv1Shixianchangdu, view1Shixianchangdu, "3", "50"));
+        et2Qianhoushijucha.addTextChangedListener(new BaseTextWatcher(tv2Qianhoushijucha, view2Qianhoushijucha, "0", "1.5"));
+        et3Liangcidushucha.addTextChangedListener(new BaseTextWatcher(tv3Liangcidushucha, view3liangcidushucha, "0", "0.4"));
+        et4Liangcigaochazhicha.addTextChangedListener(new BaseTextWatcher(tv4Liangcigaochazhicha, view4Liangcigaochazhicha, "0", "0.6"));
+        et5Shixiangaodu.addTextChangedListener(new BaseTextWatcher(tv5Shixiangaodu, view5Shixiangaodu, "0.55", "2.80"));
     }
 
     @NonNull
@@ -185,12 +169,12 @@ public class ParamSettingFragment extends BaseFragment {
         }
 
         if (isCanSave) {
-            mCurrentData.setQianhoushijuleijicha(Float.parseFloat(et0Qianhoushijuleijicha.getText().toString().trim()));
-            mCurrentData.setShixianchangdu(Float.parseFloat(et1Shixianchangdu.getText().toString().trim()));
-            mCurrentData.setQianhoushijucha(Float.parseFloat(et2Qianhoushijucha.getText().toString().trim()));
-            mCurrentData.setLiangcidushucha(Float.parseFloat(et3Liangcidushucha.getText().toString().trim()));
-            mCurrentData.setLiangcigaochazhicha(Float.parseFloat(et4Liangcigaochazhicha.getText().toString().trim()));
-            mCurrentData.setShixiangaodu(Float.parseFloat(et5Shixiangaodu.getText().toString().trim()));
+            mCurrentData.setQianhoushijuleijicha(et0Qianhoushijuleijicha.getText().toString().trim());
+            mCurrentData.setShixianchangdu(et1Shixianchangdu.getText().toString().trim());
+            mCurrentData.setQianhoushijucha(et2Qianhoushijucha.getText().toString().trim());
+            mCurrentData.setLiangcidushucha(et3Liangcidushucha.getText().toString().trim());
+            mCurrentData.setLiangcigaochazhicha(et4Liangcigaochazhicha.getText().toString().trim());
+            mCurrentData.setShixiangaodu(et5Shixiangaodu.getText().toString().trim());
 
             if (mCurrentData.update(mCurrentData.getId()) > 0) {
                 Dialoghelper.successSnackbar(rootView, "恭喜，保存成功", Dialoghelper.APPEAR_FROM_TOP_TO_DOWN);
@@ -212,29 +196,29 @@ public class ParamSettingFragment extends BaseFragment {
         //先删除，保证表里面永远都只有两行数据即可。
         DataSupport.deleteAll(MeasureSpecificationData.class);
         mStandardData = new MeasureSpecificationData();
-        mStandardData.setQianhoushijuleijicha(6.0f);
-        mStandardData.setShixianchangdu(50);
-        mStandardData.setQianhoushijucha(1.5f);
-        mStandardData.setLiangcidushucha(0.4f);
-        mStandardData.setLiangcigaochazhicha(0.6f);
-        mStandardData.setShixiangaodu(0.55f);
+        mStandardData.setQianhoushijuleijicha(6.0f + "");
+        mStandardData.setShixianchangdu(50 + "");
+        mStandardData.setQianhoushijucha(1.5f + "");
+        mStandardData.setLiangcidushucha(0.4f + "");
+        mStandardData.setLiangcigaochazhicha(0.6f + "");
+        mStandardData.setShixiangaodu(0.55f + "");
 
         mCurrentData = new MeasureSpecificationData();
-        mCurrentData.setQianhoushijuleijicha(6.0f);
-        mCurrentData.setShixianchangdu(50);
-        mCurrentData.setQianhoushijucha(1.5f);
-        mCurrentData.setLiangcidushucha(0.4f);
-        mCurrentData.setLiangcigaochazhicha(0.6f);
-        mCurrentData.setShixiangaodu(0.55f);
+        mCurrentData.setQianhoushijuleijicha(6.0f + "");
+        mCurrentData.setShixianchangdu(50 + "");
+        mCurrentData.setQianhoushijucha(1.5f + "");
+        mCurrentData.setLiangcidushucha(0.4f + "");
+        mCurrentData.setLiangcigaochazhicha(0.6f + "");
+        mCurrentData.setShixiangaodu(0.55f + "");
 
         if (mStandardData.save() && mCurrentData.save()) {
             Dialoghelper.successSnackbar(rootView, "重置成功", Dialoghelper.APPEAR_FROM_TOP_TO_DOWN);
-            et0Qianhoushijuleijicha.setText(mStandardData.getQianhoushijuleijicha() + "");
-            et1Shixianchangdu.setText(mStandardData.getShixianchangdu() + "");
-            et2Qianhoushijucha.setText(mStandardData.getQianhoushijucha() + "");
-            et3Liangcidushucha.setText(mStandardData.getLiangcidushucha() + "");
-            et4Liangcigaochazhicha.setText(mStandardData.getLiangcigaochazhicha() + "");
-            et5Shixiangaodu.setText(mStandardData.getShixiangaodu() + "");
+            et0Qianhoushijuleijicha.setText(mStandardData.getQianhoushijuleijicha());
+            et1Shixianchangdu.setText(mStandardData.getShixianchangdu());
+            et2Qianhoushijucha.setText(mStandardData.getQianhoushijucha());
+            et3Liangcidushucha.setText(mStandardData.getLiangcidushucha());
+            et4Liangcigaochazhicha.setText(mStandardData.getLiangcigaochazhicha());
+            et5Shixiangaodu.setText(mStandardData.getShixiangaodu());
 
         } else {
             //递归10层。
@@ -245,12 +229,14 @@ public class ParamSettingFragment extends BaseFragment {
     class BaseTextWatcher implements TextWatcher {
         TextView mTextView;
         View mView;
-        float mData;
+        String min;
+        String max;
 
-        public BaseTextWatcher(TextView mTextView, View mView, float mData) {
+        public BaseTextWatcher(TextView mTextView, View mView, String min, String max) {
             this.mTextView = mTextView;
             this.mView = mView;
-            this.mData = mData;
+            this.min = min;
+            this.min = max;
         }
 
         @Override
@@ -265,17 +251,17 @@ public class ParamSettingFragment extends BaseFragment {
                     mView.setVisibility(View.VISIBLE);
                     mTextView.setVisibility(View.VISIBLE);
                     mTextView.setText("不能为空");
-                } else if (Float.parseFloat(s.toString()) >= 0 && Float.parseFloat(s.toString()) <= mData) {
+                } else if (Float.parseFloat(s.toString()) >= Float.parseFloat(min) && Float.parseFloat(s.toString()) <= Float.parseFloat(max)) {
                     mView.setVisibility(View.GONE);
                     mTextView.setVisibility(View.GONE);
-                } else if (Float.parseFloat(s.toString()) < 0) {
+                } else if (Float.parseFloat(s.toString()) < Float.parseFloat(min)) {
                     mView.setVisibility(View.VISIBLE);
                     mTextView.setVisibility(View.VISIBLE);
-                    mTextView.setText("不能小于0");
-                } else if (Float.parseFloat(s.toString()) > mData) {
+                    mTextView.setText("不能小于" + min);
+                } else if (Float.parseFloat(s.toString()) > Float.parseFloat(max)) {
                     mView.setVisibility(View.VISIBLE);
                     mTextView.setVisibility(View.VISIBLE);
-                    mTextView.setText("不能大于" + mData);
+                    mTextView.setText("不能大于" + max);
                 }
             } catch (NumberFormatException e) {
                 mView.setVisibility(View.VISIBLE);

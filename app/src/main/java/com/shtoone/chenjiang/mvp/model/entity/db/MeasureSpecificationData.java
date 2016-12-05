@@ -8,11 +8,12 @@ import org.litepal.crud.DataSupport;
  */
 public class MeasureSpecificationData extends DataSupport {
     private long id;
-    private float qianhoushijuleijicha;
-    private float shixianchangdu;
-    private float qianhoushijucha;
-    private float liangcidushucha;
-    private float liangcigaochazhicha;
+    private String qianhoushijuleijicha;
+    private String shixianchangdu;
+    private String qianhoushijucha;
+    private String liangcidushucha;
+    private String shixiangaodu;
+    private String liangcigaochazhicha;
 
     public long getId() {
         return id;
@@ -22,54 +23,51 @@ public class MeasureSpecificationData extends DataSupport {
         this.id = id;
     }
 
-    public float getQianhoushijuleijicha() {
+    public String getQianhoushijuleijicha() {
         return qianhoushijuleijicha;
     }
 
-    public void setQianhoushijuleijicha(float qianhoushijuleijicha) {
+    public void setQianhoushijuleijicha(String qianhoushijuleijicha) {
         this.qianhoushijuleijicha = qianhoushijuleijicha;
     }
 
-    public float getShixianchangdu() {
+    public String getShixianchangdu() {
         return shixianchangdu;
     }
 
-    public void setShixianchangdu(float shixianchangdu) {
+    public void setShixianchangdu(String shixianchangdu) {
         this.shixianchangdu = shixianchangdu;
     }
 
-    public float getQianhoushijucha() {
+    public String getQianhoushijucha() {
         return qianhoushijucha;
     }
 
-    public void setQianhoushijucha(float qianhoushijucha) {
+    public void setQianhoushijucha(String qianhoushijucha) {
         this.qianhoushijucha = qianhoushijucha;
     }
 
-    public float getLiangcidushucha() {
+    public String getLiangcidushucha() {
         return liangcidushucha;
     }
 
-    public void setLiangcidushucha(float liangcidushucha) {
+    public void setLiangcidushucha(String liangcidushucha) {
         this.liangcidushucha = liangcidushucha;
     }
 
-    public float getLiangcigaochazhicha() {
-        return liangcigaochazhicha;
-    }
-
-    public void setLiangcigaochazhicha(float liangcigaochazhicha) {
-        this.liangcigaochazhicha = liangcigaochazhicha;
-    }
-
-    public float getShixiangaodu() {
+    public String getShixiangaodu() {
         return shixiangaodu;
     }
 
-    public void setShixiangaodu(float shixiangaodu) {
+    public void setShixiangaodu(String shixiangaodu) {
         this.shixiangaodu = shixiangaodu;
     }
 
-    private float shixiangaodu;
+    public String getLiangcigaochazhicha() {
+        return liangcigaochazhicha;
+    }
 
+    public void setLiangcigaochazhicha(String liangcigaochazhicha) {
+        this.liangcigaochazhicha = liangcigaochazhicha;
+    }
 }

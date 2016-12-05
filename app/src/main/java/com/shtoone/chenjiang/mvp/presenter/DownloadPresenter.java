@@ -1,5 +1,6 @@
 package com.shtoone.chenjiang.mvp.presenter;
 
+import com.shtoone.chenjiang.common.Constants;
 import com.shtoone.chenjiang.mvp.contract.DownloadContract;
 import com.shtoone.chenjiang.mvp.model.HttpHelper;
 import com.shtoone.chenjiang.mvp.model.entity.db.CedianData;
@@ -291,7 +292,7 @@ public class DownloadPresenter extends BasePresenter<DownloadContract.View> impl
                         mYusheshuizhunxianData.setDepartId(ysszxsBean.getDepartId());
                         mYusheshuizhunxianData.setJidianshu(ysszxsBean.getJidianshu());
                         mYusheshuizhunxianData.setXianluxinxi(ysszxsBean.getXianluxinxi());
-
+                        mYusheshuizhunxianData.setStatus(Constants.status_daibianji);
                         return mYusheshuizhunxianData.save();
                     }
                 })

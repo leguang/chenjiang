@@ -206,6 +206,7 @@ public class DownloadFragment extends BaseFragment<DownloadContract.Presenter> i
             tvDownloadAll.setText("全部下载");
             progressBar.setVisibility(View.GONE);
         }
+        isDownloadAll = false;
     }
 
 
@@ -253,7 +254,7 @@ public class DownloadFragment extends BaseFragment<DownloadContract.Presenter> i
         String strUpdateTime = df.format(new Date());
         tvDate.setText(strUpdateTime);
         SharedPreferencesUtils.put(BaseApplication.mContext, Constants.UPDATA_TIME, strUpdateTime);//保存到sp中
-        
+
         switch (view.getId()) {
             case R.id.bt_download_all_download_fragment:
                 downloadAll();

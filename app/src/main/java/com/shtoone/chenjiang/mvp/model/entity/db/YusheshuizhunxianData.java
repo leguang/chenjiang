@@ -22,7 +22,7 @@ public class YusheshuizhunxianData extends DataSupport implements Serializable {
     private String departId;
     private String jidianshu;
     private String xianluxinxi;
-    private String edit;
+    private String status;//规定有：0.待编辑 1.待测量 2.待平差 3.已完成 4.已删除  这5中状态
     private String routeType;
     private String observeType;
     private String weather;
@@ -30,6 +30,14 @@ public class YusheshuizhunxianData extends DataSupport implements Serializable {
     private String temperature;
     private String staff;
     private String measureState;
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
 
     public String getMeasureState() {
         return measureState;
@@ -85,14 +93,6 @@ public class YusheshuizhunxianData extends DataSupport implements Serializable {
 
     public void setStaff(String staff) {
         this.staff = staff;
-    }
-
-    public String getEdit() {
-        return edit;
-    }
-
-    public void setEdit(String edit) {
-        this.edit = edit;
     }
 
     public long getId() {
