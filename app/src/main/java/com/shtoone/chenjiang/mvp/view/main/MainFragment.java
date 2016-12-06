@@ -159,10 +159,9 @@ public class MainFragment extends BaseFragment<MainContract.Presenter> implement
         gongdianView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                KLog.e(position + "^^^^" + id);
 
                 strGongdianParam = listGongdian.get(position);
-                mPresenter.requestShuizhunxianData(pagination, strGongdianParam, strMeasureStatusParam, strTimeTypeParam);
+                mPresenter.requestShuizhunxianData(0, strGongdianParam, strMeasureStatusParam, strTimeTypeParam);
 
                 gongdianAdapter.setCheckItem(position);
                 dropDownMenu.setTabText(position == 0 ? arrayHeaders[0] : listGongdian.get(position));
@@ -178,10 +177,9 @@ public class MainFragment extends BaseFragment<MainContract.Presenter> implement
         measureStatusView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                KLog.e(position + "^^^^" + id);
 
                 strMeasureStatusParam = arrayMeasureStatus[position];
-                mPresenter.requestShuizhunxianData(pagination, strGongdianParam, strMeasureStatusParam, strTimeTypeParam);
+                mPresenter.requestShuizhunxianData(0, strGongdianParam, strMeasureStatusParam, strTimeTypeParam);
 
                 ageAdapter.setCheckItem(position);
                 dropDownMenu.setTabText(position == 0 ? arrayHeaders[1] : arrayMeasureStatus[position]);
@@ -197,10 +195,9 @@ public class MainFragment extends BaseFragment<MainContract.Presenter> implement
         timeTypeView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                KLog.e(position + "^^^^" + id);
 
                 strTimeTypeParam = arrayTimeType[position];
-                mPresenter.requestShuizhunxianData(pagination, strGongdianParam, strMeasureStatusParam, strTimeTypeParam);
+                mPresenter.requestShuizhunxianData(0, strGongdianParam, strMeasureStatusParam, strTimeTypeParam);
 
                 sexAdapter.setCheckItem(position);
                 dropDownMenu.setTabText(position == 0 ? arrayHeaders[2] : arrayTimeType[position]);
@@ -323,12 +320,14 @@ public class MainFragment extends BaseFragment<MainContract.Presenter> implement
         if (mYusheshuizhunxianData.size() > 0) {
             pagestatelayout.showContent();
             if (pagination == 0) {
-                //刷明是第一页，或者是刷新,把页码重置为0，代表第一页。
-                if (mYusheshuizhunxianData.size() >= Constants.PAGE_SIZE) {
+                this.pagination = 0;//说明是第一页，或者是刷新,把页码重置为0，代表第一页。
+
+                if (mYusheshuizhunxianData.size() > Constants.PAGE_SIZE) {
                     mAdapter.removeAllFooterView();
                     mAdapter.addFooterView(mFooterLoading);
+                } else {
+                    mAdapter.removeAllFooterView();
                 }
-                this.pagination = 0;
                 //重新刷新了，就不需要记录选中状态
                 mAdapter.setNewData(mYusheshuizhunxianData);
             } else {
@@ -356,13 +355,11 @@ public class MainFragment extends BaseFragment<MainContract.Presenter> implement
 
     @Override
     public void responseGongdianData(List<GongdianData> mGongdianData) {
-        if (mGongdianData == null || mGongdianData.size() == 0) {
-            return;
-        }
+        KLog.e("mGongdianData::" + mGongdianData.size());
 
         listGongdian.clear();
         listGongdian.add("全部");
-        if (mGongdianData.size() > 0) {
+        if (mGongdianData != null && mGongdianData.size() > 0) {
             for (GongdianData gongdianData : mGongdianData) {
                 listGongdian.add(gongdianData.getGdmc());
             }
@@ -384,6 +381,15 @@ public class MainFragment extends BaseFragment<MainContract.Presenter> implement
             return true;
         }
         return false;
+    }
+
+    /**
+     * 当一进入界面或者下拉刷新的时候就调用此方法。默认父类中是调用的mPresenter.start();
+     */
+    @Override
+    public void start() {
+        mPresenter.requestGongdianData();
+        mPresenter.requestShuizhunxianData(0, strGongdianParam, strMeasureStatusParam, strTimeTypeParam);
     }
 
     @Override
@@ -418,6 +424,7 @@ public class MainFragment extends BaseFragment<MainContract.Presenter> implement
 
         if (event.position == Constants.EVENT_REFRESH) {
             mPresenter.requestShuizhunxianData(0, strGongdianParam, strMeasureStatusParam, strTimeTypeParam);
+            mPresenter.requestGongdianData();
         }
     }
 

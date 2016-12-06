@@ -15,9 +15,5 @@ public interface SplashContract {
     }
 
     interface Presenter extends BaseContract.Presenter {
-        void checkLogin();
-
-        void checkUpdate();
     }
-
 }

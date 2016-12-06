@@ -41,8 +41,6 @@ public class MainPresenter extends BasePresenter<MainContract.View> implements M
 
     @Override
     public void start() {
-        requestGongdianData();
-        requestShuizhunxianData(0, "全部", "全部", "全部");
     }
 
     @Override
@@ -98,7 +96,7 @@ public class MainPresenter extends BasePresenter<MainContract.View> implements M
         KLog.e("strStatusParam::" + strStatusParam);
         KLog.e("strTypeParam::" + strTypeParam);
 
-//这一部分是用于过滤状态参数和时间参数的
+        //这一部分是用于过滤状态参数和时间参数的
         mRxManager.add(Observable.create(new Observable.OnSubscribe<List<YusheshuizhunxianData>>() {
             @Override
             public void call(Subscriber<? super List<YusheshuizhunxianData>> subscriber) {
@@ -138,7 +136,7 @@ public class MainPresenter extends BasePresenter<MainContract.View> implements M
                     } else {
 
                         if (strTypeParam.equals("全部")) {
-                            mShuizhunxianData = DataSupport.where("measureState = ?", strStatusParam)
+                            mShuizhunxianData = DataSupport.where("status = ?", strStatusParam)
                                     .order("id").limit(Constants.PAGE_SIZE)
                                     .offset(pagination * Constants.PAGE_SIZE)
                                     .find(YusheshuizhunxianData.class);
@@ -151,7 +149,7 @@ public class MainPresenter extends BasePresenter<MainContract.View> implements M
                             mCalendar.add(Calendar.DAY_OF_MONTH, -7);
                             String strStartTime = df.format(mCalendar.getTime());
 
-                            mShuizhunxianData = DataSupport.where("measureState = ? and xiugaishijian Between ? and ?", strStatusParam, strStartTime, strEndTime)
+                            mShuizhunxianData = DataSupport.where("status = ? and xiugaishijian Between ? and ?", strStatusParam, strStartTime, strEndTime)
                                     .order("id").limit(Constants.PAGE_SIZE)
                                     .offset(pagination * Constants.PAGE_SIZE)
                                     .find(YusheshuizhunxianData.class);
@@ -163,7 +161,7 @@ public class MainPresenter extends BasePresenter<MainContract.View> implements M
                             mCalendar.add(Calendar.MONTH, -1);
                             String strStartTime = df.format(mCalendar.getTime());
 
-                            mShuizhunxianData = DataSupport.where("measureState = ? and xiugaishijian Between ? and ?", strStatusParam, strStartTime, strEndTime)
+                            mShuizhunxianData = DataSupport.where("status = ? and xiugaishijian Between ? and ?", strStatusParam, strStartTime, strEndTime)
                                     .order("id").limit(Constants.PAGE_SIZE)
                                     .offset(pagination * Constants.PAGE_SIZE)
                                     .find(YusheshuizhunxianData.class);
@@ -182,7 +180,12 @@ public class MainPresenter extends BasePresenter<MainContract.View> implements M
                                public void call(List<YusheshuizhunxianData> yusheshuizhunxianDatas) {
                                    KLog.e("333333333");
 
-                                   filterAsGongdian(pagination, strGongdianParam, yusheshuizhunxianDatas);
+                                   //这里才开始过滤工点
+                                   if (strGongdianParam.equals("全部")) {
+                                       getView().responseShuizhunxianData(yusheshuizhunxianDatas, pagination);
+                                   } else {
+                                       filterAsGongdian(pagination, strGongdianParam, yusheshuizhunxianDatas);
+                                   }
                                }
                            }
                 ));
@@ -190,22 +193,33 @@ public class MainPresenter extends BasePresenter<MainContract.View> implements M
 
     public void filterAsGongdian(final int pagination, final String strGongdianParam, List<YusheshuizhunxianData> yusheshuizhunxianDatas) {
         final List<YusheshuizhunxianData> filteredShuizhunxianData = new ArrayList<YusheshuizhunxianData>();
-        KLog.e("222222222222");
-
 
         Observable.from(yusheshuizhunxianDatas).filter(new Func1<YusheshuizhunxianData, Boolean>() {
             @Override
             public Boolean call(YusheshuizhunxianData yusheshuizhunxianData) {
                 String[] arrayCedian = yusheshuizhunxianData.getXianluxinxi().split(",");
 
-//                CedianData mCedianData = DataSupport.where("bianhao = ?", arrayCedian[1]).findFirst(CedianData.class);
-                CedianData mCedianData = DataSupport.where("bianhao = ?", "cd18").findFirst(CedianData.class);
+                if (arrayCedian.length == 0) {
+                    return false;
+                }
 
+                CedianData mCedianData = DataSupport.where("bianhao = ?", arrayCedian[1]).findFirst(CedianData.class);
+//                CedianData mCedianData = DataSupport.where("bianhao = ?", "cd18").findFirst(CedianData.class);
+
+                if (mCedianData == null) {
+                    return false;
+                }
 
                 DuanmianData mDuanmianData = DataSupport.where("dmid = ?", mCedianData.getDuanmianid()).findFirst(DuanmianData.class);
-                GongdianData mGongdianData = DataSupport.where("gdid = ?", mDuanmianData.getGongdianid()).findFirst(GongdianData.class);
-                KLog.e("44444444");
 
+                if (mDuanmianData == null) {
+                    return false;
+                }
+                GongdianData mGongdianData = DataSupport.where("gdid = ?", mDuanmianData.getGongdianid()).findFirst(GongdianData.class);
+
+                if (mGongdianData == null) {
+                    return false;
+                }
 
                 KLog.e(mGongdianData.getGdmc() + "::::::::::::" + strGongdianParam);
                 return mGongdianData.getGdmc().equals(strGongdianParam);
@@ -223,13 +237,11 @@ public class MainPresenter extends BasePresenter<MainContract.View> implements M
 
                     @Override
                     public void onNext(YusheshuizhunxianData yusheshuizhunxianData) {
-                        KLog.e("5555555555");
                         filteredShuizhunxianData.add(yusheshuizhunxianData);
                     }
 
                     @Override
                     public void onCompleted() {
-                        KLog.e("11111111111");
                         KLog.e("filteredShuizhunxianData.size()::" + filteredShuizhunxianData.size());
                         KLog.e("pagination::" + pagination);
                         getView().responseShuizhunxianData(filteredShuizhunxianData, pagination);

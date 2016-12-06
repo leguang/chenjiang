@@ -179,7 +179,7 @@ public class EditShuizhunxianFragment extends BaseFragment<ShuizhunxianContract.
         mYusheshuizhunxianData.setTemperature(etTemperature.getText().toString());
         mYusheshuizhunxianData.setPressure(etPressure.getText().toString());
         mYusheshuizhunxianData.setXiugaishijian(tvDate.getText().toString());
-        mYusheshuizhunxianData.setStatus("1");
+        mYusheshuizhunxianData.setStatus(Constants.status_daiceliang);
         int rowsAffected = mYusheshuizhunxianData.update(mYusheshuizhunxianData.getId());
         ViewGroup viewGroup = (ViewGroup) _mActivity.findViewById(android.R.id.content).getRootView();
         if (rowsAffected > 0) {
@@ -203,7 +203,7 @@ public class EditShuizhunxianFragment extends BaseFragment<ShuizhunxianContract.
         tvBianhao.setText(mYusheshuizhunxianData.getXianlubianhao());
         //设置日期
         if (TextUtils.isEmpty(mYusheshuizhunxianData.getXiugaishijian())) {
-            tvDate.setText(new SimpleDateFormat("yyyy-MM-dd HH:mm").format(new Date()));
+            tvDate.setText(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
         } else {
             tvDate.setText(mYusheshuizhunxianData.getXiugaishijian());
         }

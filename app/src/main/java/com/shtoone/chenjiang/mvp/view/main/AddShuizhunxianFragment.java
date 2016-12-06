@@ -8,8 +8,8 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.Snackbar;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -23,6 +23,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.jaredrummler.materialspinner.MaterialSpinner;
 import com.shtoone.chenjiang.BaseApplication;
 import com.shtoone.chenjiang.R;
@@ -31,7 +33,6 @@ import com.shtoone.chenjiang.mvp.contract.ShuizhunxianContract;
 import com.shtoone.chenjiang.mvp.presenter.ShuizhunxianPresenter;
 import com.shtoone.chenjiang.mvp.view.base.BaseFragment;
 import com.shtoone.chenjiang.utils.DensityUtils;
-import com.shtoone.chenjiang.common.ToastUtils;
 import com.socks.library.KLog;
 
 import java.text.SimpleDateFormat;
@@ -41,6 +42,7 @@ import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 /**
  * Author：leguang on 2016/10/9 0009 15:49
@@ -57,12 +59,12 @@ public class AddShuizhunxianFragment extends BaseFragment<ShuizhunxianContract.P
     MaterialSpinner spinnerRouteType;
     @BindView(R.id.spinner_observe_type_add_shuizhunxian_fragment)
     MaterialSpinner spinnerObserveType;
-    @BindView(R.id.spinner_biaoduan_add_shuizhunxian_fragment)
-    MaterialSpinner spinnerBiaoduan;
-    @BindView(R.id.spinner_gongdian_add_shuizhunxian_fragment)
-    MaterialSpinner spinnerGongdian;
-    @BindView(R.id.spinner_jidians_add_shuizhunxian_fragment)
-    MaterialSpinner spinnerJidians;
+    @BindView(R.id.tv_biaoduan_add_shuizhunxian_fragment)
+    TextView tvBiaoduan;
+    @BindView(R.id.tv_gongdian_add_shuizhunxian_fragment)
+    TextView tvGongdian;
+    @BindView(R.id.tv_jidian_add_shuizhunxian_fragment)
+    TextView tvJidian;
     @BindView(R.id.spinner_weather_add_shuizhunxian_fragment)
     MaterialSpinner spinnerWeather;
     @BindView(R.id.spinner_staff_add_shuizhunxian_fragment)
@@ -76,10 +78,17 @@ public class AddShuizhunxianFragment extends BaseFragment<ShuizhunxianContract.P
     @BindView(R.id.ll_add_shuizhunxian_fragment)
     LinearLayout ll;
     private ImageView iv;
-
     private String[] arrayRouteType;
     private String[] arrayObserveType;
     private String[] arrayWeather;
+    private String strSaveStaff;
+    private String strSaveWeather;
+    private String strSaveRouteType;
+    private String strSaveObserveType;
+    private Integer[] arraySelectedGongdian;
+    private Integer[] arraySelectedJidian;
+    private MaterialDialog gongdianDialog;
+    private MaterialDialog jidianDialog;
 
     public static AddShuizhunxianFragment newInstance() {
         return new AddShuizhunxianFragment();
@@ -125,38 +134,35 @@ public class AddShuizhunxianFragment extends BaseFragment<ShuizhunxianContract.P
             public boolean onMenuItemClick(MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.action_save:
-                        KLog.e("111111111111");
                         startAnimation(item);
-                        int index2 = spinnerJidians.getSelectedIndex();
-                        KLog.e("responseDataindex2::" + index2);
 
-                        int index1 = spinnerGongdian.getSelectedIndex();
-                        KLog.e("responseDataindex1::" + index1);
 
-                        int index3 = spinnerStaff.getSelectedIndex();
-                        KLog.e("responseDataindex3::" + index3);
-
-                        ToastUtils.showToast(getContext(), "保存中……………………");
                         break;
                 }
                 return true;
             }
         });
 
-        iv.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                KLog.e("iv^^^^^^^^^^^^^");
-                iv.clearAnimation();
-                toolbar.getMenu().clear();
-                toolbar.inflateMenu(R.menu.menu_save);
-            }
-        });
+//        iv.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                iv.clearAnimation();
+//                toolbar.getMenu().clear();
+//                toolbar.inflateMenu(R.menu.menu_save);
+//            }
+//        });
     }
 
     private void initData() {
-        tvDate.setText(new SimpleDateFormat("yyyy-MM-dd HH:mm").format(new Date()));
+        tvBianhao.setText("SD" + System.currentTimeMillis());
+        tvDate.setText(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+        if (BaseApplication.mUserInfoBean != null && !TextUtils.isEmpty(BaseApplication.mUserInfoBean.getDept().getOrgName())) {
+            tvBiaoduan.setText(BaseApplication.mUserInfoBean.getDept().getOrgName());
+        } else {
+            tvBiaoduan.setBackgroundResource(R.drawable.rect_bg_red_stroke_table);
+        }
         mPresenter.start();
+
         Resources res = getResources();
         arrayRouteType = res.getStringArray(R.array.route_type);
         arrayObserveType = res.getStringArray(R.array.observe_type);
@@ -168,8 +174,7 @@ public class AddShuizhunxianFragment extends BaseFragment<ShuizhunxianContract.P
 
             @Override
             public void onItemSelected(MaterialSpinner view, int position, long id, String item) {
-                Snackbar.make(view, item, Snackbar.LENGTH_LONG).show();
-                KLog.e(arrayRouteType[position]);
+                strSaveRouteType = item;
             }
         });
 
@@ -178,8 +183,7 @@ public class AddShuizhunxianFragment extends BaseFragment<ShuizhunxianContract.P
 
             @Override
             public void onItemSelected(MaterialSpinner view, int position, long id, String item) {
-                Snackbar.make(view, item, Snackbar.LENGTH_LONG).show();
-                KLog.e(arrayObserveType[position]);
+                strSaveObserveType = item;
             }
         });
 
@@ -188,22 +192,17 @@ public class AddShuizhunxianFragment extends BaseFragment<ShuizhunxianContract.P
 
             @Override
             public void onItemSelected(MaterialSpinner view, int position, long id, String item) {
-                Snackbar.make(view, item, Snackbar.LENGTH_LONG).show();
-                KLog.e(arrayWeather[position]);
+                strSaveWeather = item;
             }
         });
 
-//        if (BaseApplication.mUserInfoBean.getDept() == null) {
-//            //还是要把闪屏页的登录检测，用来检测本地登录
-//        }
-//        spinnerBiaoduan.setItems(BaseApplication.mUserInfoBean.getDept().getOrgName());
-        int index1 = spinnerGongdian.getSelectedIndex();
-        int index2 = spinnerJidians.getSelectedIndex();
-        int index3 = spinnerStaff.getSelectedIndex();
+        spinnerStaff.setOnItemSelectedListener(new MaterialSpinner.OnItemSelectedListener<String>() {
 
-        KLog.e("index1::" + index1);
-        KLog.e("index2::" + index2);
-        KLog.e("index3::" + index3);
+            @Override
+            public void onItemSelected(MaterialSpinner view, int position, long id, String item) {
+                strSaveStaff = item;
+            }
+        });
 
     }
 
@@ -213,33 +212,77 @@ public class AddShuizhunxianFragment extends BaseFragment<ShuizhunxianContract.P
         String[] arrayJidianName = map.get(Constants.JIDIAN);
         String[] arrayStaffName = map.get(Constants.STAFF);
 
-        if (arrayGongdianName == null) {
-            spinnerGongdian.setItems("请先下载工点数据");
-        } else {
-            KLog.e("arrayGongdianName长度：：" + arrayGongdianName.length);
-            spinnerGongdian.setItems(arrayGongdianName);
-            int index1 = spinnerGongdian.getSelectedIndex();
-            KLog.e("responseDataindex1::" + index1);
-        }
 
-        if (arrayJidianName == null) {
-            spinnerJidians.setItems("请先下载基点数据");
-        } else {
-            KLog.e("arrayJidianName长度：：" + arrayJidianName.length);
-            spinnerJidians.setItems(arrayJidianName);
-            int index2 = spinnerJidians.getSelectedIndex();
-            KLog.e("responseDataindex2::" + index2);
-        }
+        gongdianDialog = gongdianDialog(arrayGongdianName);
 
+        jidianDialog = jidianDialog(arrayJidianName);
 
         if (arrayStaffName == null) {
             spinnerStaff.setItems("请先下载人员数据");
         } else {
             spinnerStaff.setItems(arrayStaffName);
-            KLog.e("arrayStaffName长度：：" + arrayStaffName.length);
-            int index3 = spinnerStaff.getSelectedIndex();
-            KLog.e("responseDataindex3::" + index3);
         }
+    }
+
+    private MaterialDialog gongdianDialog(String[] arrayGongdianName) {
+        return new MaterialDialog.Builder(_mActivity)
+                .title(R.string.dialog_select_gongdian)
+                .items(arrayGongdianName)
+                .itemsCallbackMultiChoice(arraySelectedGongdian, new MaterialDialog.ListCallbackMultiChoice() {
+                    @Override
+                    public boolean onSelection(MaterialDialog dialog, Integer[] which, CharSequence[] text) {
+                        arraySelectedGongdian = which;
+
+                        for (int i = 0; i < which.length; i++) {
+                            KLog.e(which[i]);
+                            KLog.e(text[i]);
+                        }
+                        return true;
+                    }
+                })
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        dialog.dismiss();
+                    }
+                })
+                .onNeutral(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        dialog.clearSelectedIndices();
+                    }
+                })
+                .positiveText(R.string.dialog_positiveText)
+                .neutralText(R.string.dialog_clear)
+                .autoDismiss(false)
+                .build();
+    }
+
+    private MaterialDialog jidianDialog(String[] arrayJidianName) {
+        return new MaterialDialog.Builder(_mActivity)
+                .title(R.string.dialog_select_jidian)
+                .items(arrayJidianName)
+                .itemsCallbackMultiChoice(arraySelectedJidian, new MaterialDialog.ListCallbackMultiChoice() {
+                    @Override
+                    public boolean onSelection(MaterialDialog dialog, Integer[] which, CharSequence[] text) {
+                        arraySelectedJidian = which;
+                        for (int i = 0; i < which.length; i++) {
+                            KLog.e(which[i]);
+                            KLog.e(text[i]);
+                        }
+                        return true;
+                    }
+                })
+                .onNeutral(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        dialog.clearSelectedIndices();
+                    }
+                })
+                .positiveText(R.string.dialog_positiveText)
+                .neutralText(R.string.dialog_clear)
+                .autoDismiss(false)
+                .build();
     }
 
     @Override
@@ -327,7 +370,7 @@ public class AddShuizhunxianFragment extends BaseFragment<ShuizhunxianContract.P
         ll.post(new Runnable() {
             @Override
             public void run() {
-                if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.LOLLIPOP) {
+                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
                     ll.setVisibility(View.VISIBLE);
                     return;
                 }
@@ -367,5 +410,18 @@ public class AddShuizhunxianFragment extends BaseFragment<ShuizhunxianContract.P
     public boolean onBackPressedSupport() {
         revealClose();
         return super.onBackPressedSupport();
+    }
+
+    @OnClick({R.id.tv_gongdian_add_shuizhunxian_fragment, R.id.tv_jidian_add_shuizhunxian_fragment})
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.tv_gongdian_add_shuizhunxian_fragment:
+                gongdianDialog.show();
+                break;
+            case R.id.tv_jidian_add_shuizhunxian_fragment:
+                jidianDialog.show();
+
+                break;
+        }
     }
 }

@@ -29,7 +29,6 @@ public class YusheshuizhunxianData extends DataSupport implements Serializable {
     private String pressure;
     private String temperature;
     private String staff;
-    private String measureState;
 
     public String getStatus() {
         return status;
@@ -39,13 +38,6 @@ public class YusheshuizhunxianData extends DataSupport implements Serializable {
         this.status = status;
     }
 
-    public String getMeasureState() {
-        return measureState;
-    }
-
-    public void setMeasureState(String measureState) {
-        this.measureState = measureState;
-    }
 
     public String getRouteType() {
         return routeType;

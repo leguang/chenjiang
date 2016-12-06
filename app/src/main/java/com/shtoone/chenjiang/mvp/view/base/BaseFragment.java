@@ -131,10 +131,17 @@ public abstract class BaseFragment<P extends BaseContract.Presenter> extends Swi
 
             @Override
             public void onRefreshBegin(final PtrFrameLayout frame) {
-                mPresenter.start();
+                start();
                 frame.refreshComplete();
             }
         });
+    }
+
+    public void start() {
+        if (mPresenter != null) {
+            mPresenter.start();
+            KLog.e("mPresenter.start();mPresenter.start();mPresenter.start();");
+        }
     }
 
     public boolean isCanDoRefresh() {

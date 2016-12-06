@@ -149,7 +149,6 @@ public class Dialoghelper {
     public static void dialog(Context context, int icon, int title, int content, int positiveText, int negativeText, final Call call) {
         if (mBuilder == null && context != null) {
             mBuilder = new AlertDialog.Builder(context);
-            KLog.e("11111111111111");
         }
         mBuilder.setIcon(icon)
                 .setTitle(title)
