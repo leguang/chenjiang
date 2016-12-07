@@ -84,10 +84,6 @@ public class EditShuizhunxianFragment extends BaseFragment<ShuizhunxianContract.
     private String[] arrayObserveType;
     private String[] arrayWeather;
     private YusheshuizhunxianData mYusheshuizhunxianData;
-    private String strSaveStaff;
-    private String strSaveWeather;
-    private String strSaveRouteType;
-    private String strSaveObserveType;
 
     public static EditShuizhunxianFragment newInstance(YusheshuizhunxianData mYusheshuizhunxianData) {
         Bundle args = new Bundle();
@@ -147,15 +143,14 @@ public class EditShuizhunxianFragment extends BaseFragment<ShuizhunxianContract.
             public boolean onMenuItemClick(MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.action_save:
+                        ViewGroup viewGroup = (ViewGroup) _mActivity.findViewById(android.R.id.content).getRootView();
                         if (TextUtils.isEmpty(etTemperature.getText())) {
                             etTemperature.setBackgroundResource(R.drawable.rect_bg_red_stroke_table);
-                            ViewGroup viewGroup = (ViewGroup) _mActivity.findViewById(android.R.id.content).getRootView();
                             Dialoghelper.warningSnackbar(viewGroup, "温度不能为空", Dialoghelper.APPEAR_FROM_TOP_TO_DOWN);
                             return true;
                         }
                         if (TextUtils.isEmpty(etPressure.getText())) {
                             etPressure.setBackgroundResource(R.drawable.rect_bg_red_stroke_table);
-                            ViewGroup viewGroup = (ViewGroup) _mActivity.findViewById(android.R.id.content).getRootView();
                             Dialoghelper.warningSnackbar(viewGroup, "气压不能为空", Dialoghelper.APPEAR_FROM_TOP_TO_DOWN);
                             return true;
                         }
@@ -172,10 +167,14 @@ public class EditShuizhunxianFragment extends BaseFragment<ShuizhunxianContract.
     }
 
     private void save() {
-        mYusheshuizhunxianData.setRouteType(strSaveRouteType);
-        mYusheshuizhunxianData.setObserveType(strSaveObserveType);
-        mYusheshuizhunxianData.setWeather(strSaveWeather);
-        mYusheshuizhunxianData.setStaff(strSaveStaff);
+        String strRouteType = (String) spinnerRouteType.getItems().get(spinnerRouteType.getSelectedIndex());
+        mYusheshuizhunxianData.setRouteType(strRouteType);
+        String strObserveType = (String) spinnerObserveType.getItems().get(spinnerObserveType.getSelectedIndex());
+        mYusheshuizhunxianData.setObserveType(strObserveType);
+        String strWeather = (String) spinnerWeather.getItems().get(spinnerWeather.getSelectedIndex());
+        mYusheshuizhunxianData.setWeather(strWeather);
+        String strStaff = (String) spinnerStaff.getItems().get(spinnerStaff.getSelectedIndex());
+        mYusheshuizhunxianData.setStaff(strStaff);
         mYusheshuizhunxianData.setTemperature(etTemperature.getText().toString());
         mYusheshuizhunxianData.setPressure(etPressure.getText().toString());
         mYusheshuizhunxianData.setXiugaishijian(tvDate.getText().toString());
@@ -241,14 +240,6 @@ public class EditShuizhunxianFragment extends BaseFragment<ShuizhunxianContract.
             }
         }
 
-        spinnerRouteType.setOnItemSelectedListener(new MaterialSpinner.OnItemSelectedListener<String>() {
-
-            @Override
-            public void onItemSelected(MaterialSpinner view, int position, long id, String item) {
-                strSaveRouteType = item;
-            }
-        });
-
         spinnerObserveType.setItems(arrayObserveType);
         if (!TextUtils.isEmpty(mYusheshuizhunxianData.getObserveType())) {
             for (int i = 0; i < arrayObserveType.length; i++) {
@@ -257,12 +248,6 @@ public class EditShuizhunxianFragment extends BaseFragment<ShuizhunxianContract.
                 }
             }
         }
-        spinnerObserveType.setOnItemSelectedListener(new MaterialSpinner.OnItemSelectedListener<String>() {
-            @Override
-            public void onItemSelected(MaterialSpinner view, int position, long id, String item) {
-                strSaveObserveType = item;
-            }
-        });
 
         spinnerWeather.setItems(arrayWeather);
         if (!TextUtils.isEmpty(mYusheshuizhunxianData.getWeather())) {
@@ -272,26 +257,10 @@ public class EditShuizhunxianFragment extends BaseFragment<ShuizhunxianContract.
                 }
             }
         }
-
-        spinnerWeather.setOnItemSelectedListener(new MaterialSpinner.OnItemSelectedListener<String>() {
-            @Override
-            public void onItemSelected(MaterialSpinner view, int position, long id, String item) {
-                strSaveWeather = item;
-            }
-        });
-
-        spinnerStaff.setOnItemSelectedListener(new MaterialSpinner.OnItemSelectedListener<String>() {
-
-            @Override
-            public void onItemSelected(MaterialSpinner view, int position, long id, String item) {
-                strSaveStaff = item;
-            }
-        });
     }
 
     @Override
     public void responseData(Map<String, String[]> map) {
-
     }
 
     //响应司镜人员数据

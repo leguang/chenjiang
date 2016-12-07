@@ -42,7 +42,7 @@ public class Constants {
     public static final String USER_INFO_BEAN = "user_info_bean";
 
     //网络链接超时时间
-    public static final int DEFAULT_TIMEOUT = 7;
+    public static final int DEFAULT_TIMEOUT = 1;
 
 
     //作为登录的参数，固定这个写法
@@ -103,5 +103,8 @@ public class Constants {
     public static final String status_yiwancheng = "3";
     public static final String status_yishanchu = "4";
 
+    //标示：0为平台，1为App
+    public static final String biaoshi_pingtai = "0";
+    public static final String biaoshi_app = "1";
 
 }

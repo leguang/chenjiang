@@ -122,7 +122,8 @@
                     style="@style/AddShuizhunxian"
                     android:layout_weight="2.5"
                     android:gravity="left|center_vertical"
-                    android:paddingLeft="5dp" />
+                    android:paddingLeft="5dp"
+                    android:singleLine="true" />
 
             </TableRow>
 
@@ -141,7 +142,8 @@
                     style="@style/AddShuizhunxian"
                     android:layout_weight="2.5"
                     android:gravity="left|center_vertical"
-                    android:paddingLeft="5dp" />
+                    android:paddingLeft="5dp"
+                    android:singleLine="true" />
 
             </TableRow>
 
@@ -215,6 +217,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:background="@drawable/rect_bg_stroke_table"
+                        android:inputType="numberDecimal"
                         android:singleLine="true" />
                 </FrameLayout>
 
@@ -239,6 +242,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:background="@drawable/rect_bg_stroke_table"
+                        android:inputType="numberDecimal"
                         android:singleLine="true" />
                 </FrameLayout>
 

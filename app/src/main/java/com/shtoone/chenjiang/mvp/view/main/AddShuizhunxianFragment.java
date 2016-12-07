@@ -29,11 +29,16 @@ import com.jaredrummler.materialspinner.MaterialSpinner;
 import com.shtoone.chenjiang.BaseApplication;
 import com.shtoone.chenjiang.R;
 import com.shtoone.chenjiang.common.Constants;
+import com.shtoone.chenjiang.common.Dialoghelper;
+import com.shtoone.chenjiang.event.EventData;
 import com.shtoone.chenjiang.mvp.contract.ShuizhunxianContract;
+import com.shtoone.chenjiang.mvp.model.entity.db.YusheshuizhunxianData;
 import com.shtoone.chenjiang.mvp.presenter.ShuizhunxianPresenter;
 import com.shtoone.chenjiang.mvp.view.base.BaseFragment;
 import com.shtoone.chenjiang.utils.DensityUtils;
 import com.socks.library.KLog;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -77,16 +82,14 @@ public class AddShuizhunxianFragment extends BaseFragment<ShuizhunxianContract.P
     TextView tvDate;
     @BindView(R.id.ll_add_shuizhunxian_fragment)
     LinearLayout ll;
-    private ImageView iv;
+    private ImageView ivSave;
     private String[] arrayRouteType;
     private String[] arrayObserveType;
     private String[] arrayWeather;
-    private String strSaveStaff;
-    private String strSaveWeather;
-    private String strSaveRouteType;
-    private String strSaveObserveType;
-    private Integer[] arraySelectedGongdian;
-    private Integer[] arraySelectedJidian;
+    private Integer[] gongdianIndices = new Integer[0];
+    private Integer[] jidianIndices = new Integer[0];
+    private CharSequence[] arraySelectedGongdian;
+    private CharSequence[] arraySelectedJidian;
     private MaterialDialog gongdianDialog;
     private MaterialDialog jidianDialog;
 
@@ -106,7 +109,7 @@ public class AddShuizhunxianFragment extends BaseFragment<ShuizhunxianContract.P
         View view = inflater.inflate(R.layout.fragment_add_shuizhunxian, container, false);
         ((MainActivity) _mActivity).closeDrawer();
         //更改menu的view，提前在这里实例化
-        iv = (ImageView) inflater.inflate(R.layout.menu_item_sync, null);
+        ivSave = (ImageView) inflater.inflate(R.layout.menu_item_sync, null);
         ButterKnife.bind(this, view);
         getFragmentManager().beginTransaction()
                 .show(getPreFragment())
@@ -134,23 +137,76 @@ public class AddShuizhunxianFragment extends BaseFragment<ShuizhunxianContract.P
             public boolean onMenuItemClick(MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.action_save:
+                        ViewGroup viewGroup = (ViewGroup) _mActivity.findViewById(android.R.id.content).getRootView();
+
+                        if (TextUtils.isEmpty(tvGongdian.getText())) {
+                            etTemperature.setBackgroundResource(R.drawable.rect_bg_red_stroke_table);
+                            Dialoghelper.warningSnackbar(viewGroup, "工点不能为空", Dialoghelper.APPEAR_FROM_TOP_TO_DOWN);
+                            return true;
+                        }
+                        if (TextUtils.isEmpty(tvJidian.getText())) {
+                            etTemperature.setBackgroundResource(R.drawable.rect_bg_red_stroke_table);
+                            Dialoghelper.warningSnackbar(viewGroup, "基点不能为空", Dialoghelper.APPEAR_FROM_TOP_TO_DOWN);
+                            return true;
+                        }
+
+                        if (TextUtils.isEmpty(etTemperature.getText())) {
+                            etTemperature.setBackgroundResource(R.drawable.rect_bg_red_stroke_table);
+                            Dialoghelper.warningSnackbar(viewGroup, "温度不能为空", Dialoghelper.APPEAR_FROM_TOP_TO_DOWN);
+                            return true;
+                        }
+                        if (TextUtils.isEmpty(etPressure.getText())) {
+                            etPressure.setBackgroundResource(R.drawable.rect_bg_red_stroke_table);
+                            Dialoghelper.warningSnackbar(viewGroup, "气压不能为空", Dialoghelper.APPEAR_FROM_TOP_TO_DOWN);
+                            return true;
+                        }
+                        //恢复原始样式
+                        etTemperature.setBackgroundResource(R.drawable.rect_bg_stroke_table);
+                        etPressure.setBackgroundResource(R.drawable.rect_bg_stroke_table);
                         startAnimation(item);
-
-
+                        save();
                         break;
                 }
                 return true;
             }
         });
+    }
 
-//        iv.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                iv.clearAnimation();
-//                toolbar.getMenu().clear();
-//                toolbar.inflateMenu(R.menu.menu_save);
-//            }
-//        });
+    private void save() {
+        YusheshuizhunxianData mYusheshuizhunxianData = new YusheshuizhunxianData();
+        mYusheshuizhunxianData.setXianlubianhao(tvBianhao.getText().toString());
+        String strRouteType = (String) spinnerRouteType.getItems().get(spinnerRouteType.getSelectedIndex());
+        mYusheshuizhunxianData.setRouteType(strRouteType);
+        String strObserveType = (String) spinnerObserveType.getItems().get(spinnerObserveType.getSelectedIndex());
+        mYusheshuizhunxianData.setObserveType(strObserveType);
+        String strWeather = (String) spinnerWeather.getItems().get(spinnerWeather.getSelectedIndex());
+        mYusheshuizhunxianData.setWeather(strWeather);
+        String strStaff = (String) spinnerStaff.getItems().get(spinnerStaff.getSelectedIndex());
+        mYusheshuizhunxianData.setStaff(strStaff);
+        mYusheshuizhunxianData.setTemperature(etTemperature.getText().toString());
+        mYusheshuizhunxianData.setPressure(etPressure.getText().toString());
+        mYusheshuizhunxianData.setChuangjianshijian(tvDate.getText().toString());
+        mYusheshuizhunxianData.setXiugaishijian(tvDate.getText().toString());
+        mYusheshuizhunxianData.setStatus(Constants.status_daiceliang);
+        mYusheshuizhunxianData.setXianlumingcheng(tvBiaoduan.getText().toString() + tvBianhao.getText().toString());
+        mYusheshuizhunxianData.setBiaoshi(Constants.biaoshi_app);
+        if (BaseApplication.mUserInfoBean != null && !TextUtils.isEmpty(BaseApplication.mUserInfoBean.getUserFullName())) {
+            mYusheshuizhunxianData.setShezhiren(BaseApplication.mUserInfoBean.getUserFullName());
+            mYusheshuizhunxianData.setDepartId(BaseApplication.mUserInfoBean.getDept().getOrgId());
+        }
+
+        ViewGroup viewGroup = (ViewGroup) _mActivity.findViewById(android.R.id.content).getRootView();
+        if (mYusheshuizhunxianData.save()) {
+            Dialoghelper.successSnackbar(viewGroup, "恭喜，保存成功", Dialoghelper.APPEAR_FROM_TOP_TO_DOWN);
+            EventBus.getDefault().post(new EventData(Constants.EVENT_REFRESH));
+        } else {
+            Dialoghelper.errorSnackbar(viewGroup, "保存失败，请重新保存", Dialoghelper.APPEAR_FROM_TOP_TO_DOWN);
+        }
+
+        //清除动画，恢复初始状态。
+        ivSave.clearAnimation();
+        toolbar.getMenu().clear();
+        toolbar.inflateMenu(R.menu.menu_save);
     }
 
     private void initData() {
@@ -167,43 +223,9 @@ public class AddShuizhunxianFragment extends BaseFragment<ShuizhunxianContract.P
         arrayRouteType = res.getStringArray(R.array.route_type);
         arrayObserveType = res.getStringArray(R.array.observe_type);
         arrayWeather = res.getStringArray(R.array.weather);
-
-
         spinnerRouteType.setItems(arrayRouteType);
-        spinnerRouteType.setOnItemSelectedListener(new MaterialSpinner.OnItemSelectedListener<String>() {
-
-            @Override
-            public void onItemSelected(MaterialSpinner view, int position, long id, String item) {
-                strSaveRouteType = item;
-            }
-        });
-
         spinnerObserveType.setItems(arrayObserveType);
-        spinnerObserveType.setOnItemSelectedListener(new MaterialSpinner.OnItemSelectedListener<String>() {
-
-            @Override
-            public void onItemSelected(MaterialSpinner view, int position, long id, String item) {
-                strSaveObserveType = item;
-            }
-        });
-
         spinnerWeather.setItems(arrayWeather);
-        spinnerWeather.setOnItemSelectedListener(new MaterialSpinner.OnItemSelectedListener<String>() {
-
-            @Override
-            public void onItemSelected(MaterialSpinner view, int position, long id, String item) {
-                strSaveWeather = item;
-            }
-        });
-
-        spinnerStaff.setOnItemSelectedListener(new MaterialSpinner.OnItemSelectedListener<String>() {
-
-            @Override
-            public void onItemSelected(MaterialSpinner view, int position, long id, String item) {
-                strSaveStaff = item;
-            }
-        });
-
     }
 
     @Override
@@ -211,12 +233,8 @@ public class AddShuizhunxianFragment extends BaseFragment<ShuizhunxianContract.P
         String[] arrayGongdianName = map.get(Constants.GONGDIAN);
         String[] arrayJidianName = map.get(Constants.JIDIAN);
         String[] arrayStaffName = map.get(Constants.STAFF);
-
-
         gongdianDialog = gongdianDialog(arrayGongdianName);
-
         jidianDialog = jidianDialog(arrayJidianName);
-
         if (arrayStaffName == null) {
             spinnerStaff.setItems("请先下载人员数据");
         } else {
@@ -228,15 +246,19 @@ public class AddShuizhunxianFragment extends BaseFragment<ShuizhunxianContract.P
         return new MaterialDialog.Builder(_mActivity)
                 .title(R.string.dialog_select_gongdian)
                 .items(arrayGongdianName)
-                .itemsCallbackMultiChoice(arraySelectedGongdian, new MaterialDialog.ListCallbackMultiChoice() {
+                .itemsCallbackMultiChoice(gongdianIndices, new MaterialDialog.ListCallbackMultiChoice() {
                     @Override
                     public boolean onSelection(MaterialDialog dialog, Integer[] which, CharSequence[] text) {
-                        arraySelectedGongdian = which;
-
+                        gongdianIndices = which;
+                        arraySelectedGongdian = text;
+                        StringBuilder sb = new StringBuilder();
                         for (int i = 0; i < which.length; i++) {
-                            KLog.e(which[i]);
-                            KLog.e(text[i]);
+                            sb.append(text[i]);
+                            if (i != which.length - 1) {
+                                sb.append("/");
+                            }
                         }
+                        tvGongdian.setText(sb.toString());
                         return true;
                     }
                 })
@@ -246,15 +268,14 @@ public class AddShuizhunxianFragment extends BaseFragment<ShuizhunxianContract.P
                         dialog.dismiss();
                     }
                 })
-                .onNeutral(new MaterialDialog.SingleButtonCallback() {
+                .onNegative(new MaterialDialog.SingleButtonCallback() {
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        dialog.clearSelectedIndices();
+                        dialog.dismiss();
                     }
                 })
                 .positiveText(R.string.dialog_positiveText)
-                .neutralText(R.string.dialog_clear)
-                .autoDismiss(false)
+                .negativeText(R.string.dialog_negativeText)
                 .build();
     }
 
@@ -262,39 +283,49 @@ public class AddShuizhunxianFragment extends BaseFragment<ShuizhunxianContract.P
         return new MaterialDialog.Builder(_mActivity)
                 .title(R.string.dialog_select_jidian)
                 .items(arrayJidianName)
-                .itemsCallbackMultiChoice(arraySelectedJidian, new MaterialDialog.ListCallbackMultiChoice() {
+                .itemsCallbackMultiChoice(jidianIndices, new MaterialDialog.ListCallbackMultiChoice() {
                     @Override
                     public boolean onSelection(MaterialDialog dialog, Integer[] which, CharSequence[] text) {
-                        arraySelectedJidian = which;
+                        jidianIndices = which;
+                        arraySelectedJidian = text;
+
+                        StringBuilder sb = new StringBuilder();
                         for (int i = 0; i < which.length; i++) {
-                            KLog.e(which[i]);
-                            KLog.e(text[i]);
+                            sb.append(text[i]);
+                            if (i != which.length - 1) {
+                                sb.append("/");
+                            }
                         }
+                        tvJidian.setText(sb.toString());
                         return true;
                     }
                 })
-                .onNeutral(new MaterialDialog.SingleButtonCallback() {
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        dialog.clearSelectedIndices();
+                        dialog.dismiss();
+                    }
+                })
+                .onNegative(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        dialog.dismiss();
                     }
                 })
                 .positiveText(R.string.dialog_positiveText)
-                .neutralText(R.string.dialog_clear)
-                .autoDismiss(false)
+                .negativeText(R.string.dialog_negativeText)
                 .build();
     }
 
     @Override
     public void responseStaffData(List<String> mStaffData) {
-
     }
 
     private void startAnimation(MenuItem item) {
-        iv.clearAnimation();
-        iv.setImageResource(R.drawable.ic_sync_white_24dp);
-        item.setActionView(iv);
-        ObjectAnimator animator = ObjectAnimator.ofFloat(iv, "rotation", 360f, 0f);
+        ivSave.clearAnimation();
+        ivSave.setImageResource(R.drawable.ic_sync_white_24dp);
+        item.setActionView(ivSave);
+        ObjectAnimator animator = ObjectAnimator.ofFloat(ivSave, "rotation", 360f, 0f);
         animator.setDuration(1000);
         animator.setRepeatMode(Animation.RESTART);
         animator.setRepeatCount(Animation.INFINITE);
@@ -378,7 +409,6 @@ public class AddShuizhunxianFragment extends BaseFragment<ShuizhunxianContract.P
                 int intTemp = DensityUtils.dp2px(BaseApplication.mContext, 26);
                 int cx = ll.getRight() - intTemp;
                 int cy = intTemp;
-                KLog.e("intTemp::" + intTemp);
                 int w = ll.getWidth();
                 int h = ll.getHeight();
 
@@ -416,11 +446,12 @@ public class AddShuizhunxianFragment extends BaseFragment<ShuizhunxianContract.P
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.tv_gongdian_add_shuizhunxian_fragment:
+                gongdianDialog.setSelectedIndices(gongdianIndices);
                 gongdianDialog.show();
                 break;
             case R.id.tv_jidian_add_shuizhunxian_fragment:
+                jidianDialog.setSelectedIndices(jidianIndices);
                 jidianDialog.show();
-
                 break;
         }
     }

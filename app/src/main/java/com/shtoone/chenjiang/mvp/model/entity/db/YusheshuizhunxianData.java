@@ -38,7 +38,6 @@ public class YusheshuizhunxianData extends DataSupport implements Serializable {
         this.status = status;
     }
 
-
     public String getRouteType() {
         return routeType;
     }
