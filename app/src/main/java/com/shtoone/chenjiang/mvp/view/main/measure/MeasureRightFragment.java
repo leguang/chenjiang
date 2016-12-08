@@ -16,12 +16,18 @@ import android.widget.Button;
 import com.lsjwzh.widget.recyclerviewpager.RecyclerViewPager;
 import com.shtoone.chenjiang.R;
 import com.shtoone.chenjiang.common.AudioPlayer;
+import com.shtoone.chenjiang.common.Constants;
 import com.shtoone.chenjiang.common.Dialoghelper;
 import com.shtoone.chenjiang.common.ToastUtils;
 import com.shtoone.chenjiang.mvp.contract.measure.MeasureContract;
+import com.shtoone.chenjiang.mvp.model.entity.db.CezhanData;
+import com.shtoone.chenjiang.mvp.model.entity.db.YusheshuizhunxianData;
 import com.shtoone.chenjiang.mvp.presenter.measure.MeasurePresenter;
+import com.shtoone.chenjiang.mvp.view.adapter.MeasureRVPAdapter;
 import com.shtoone.chenjiang.mvp.view.base.BaseFragment;
+import com.socks.library.KLog;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -51,9 +57,27 @@ public class MeasureRightFragment extends BaseFragment<MeasureContract.Presenter
     FloatingActionButton fab;
     protected RecyclerViewPager mRecyclerView;
     private List<String> listJidianBianhao;
+    private MeasureRVPAdapter mAdapter;
+    private ArrayList<CezhanData> listCezhan;
+    private YusheshuizhunxianData mYusheshuizhunxianData;
 
-    public static MeasureRightFragment newInstance() {
-        return new MeasureRightFragment();
+    public static MeasureRightFragment newInstance(YusheshuizhunxianData mYusheshuizhunxianData) {
+        Bundle args = new Bundle();
+        args.putSerializable(Constants.YUSHESHUIZHUNXIAN, mYusheshuizhunxianData);
+
+        MeasureRightFragment fragment = new MeasureRightFragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        Bundle args = getArguments();
+        if (args != null) {
+            mYusheshuizhunxianData = (YusheshuizhunxianData) args.getSerializable(Constants.YUSHESHUIZHUNXIAN);
+        }
     }
 
     @NonNull
@@ -78,15 +102,13 @@ public class MeasureRightFragment extends BaseFragment<MeasureContract.Presenter
         super.onViewCreated(view, savedInstanceState);
         initToolbar();
         initData();
-        initViewPager(view);
+        initRecyclerViewPager(view);
 
     }
 
     private void initToolbar() {
         toolbar.setTitle("测量");
-//        toolbar.setNavigationIcon(R.drawable.ic_menu_white_24dp);
         ((MeasureFragment) getParentFragment()).initToolbartoggle(toolbar);
-
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -107,6 +129,9 @@ public class MeasureRightFragment extends BaseFragment<MeasureContract.Presenter
                                 R.string.dialog_negativeText, new Dialoghelper.Call() {
                                     @Override
                                     public void onNegative() {
+                                        for (CezhanData cezhanData : listCezhan) {
+                                            KLog.e(cezhanData.getNumber());
+                                        }
                                     }
 
                                     @Override
@@ -140,24 +165,28 @@ public class MeasureRightFragment extends BaseFragment<MeasureContract.Presenter
 
     private void initData() {
         mPresenter.requestJidianData();
-        AudioPlayer.init(_mActivity);
-
+        mPresenter.requestCezhanData(mYusheshuizhunxianData);
     }
 
-    protected void initViewPager(View view) {
+    protected void initRecyclerViewPager(View view) {
         mRecyclerView = (RecyclerViewPager) view.findViewById(R.id.viewpager);
 
-        LinearLayoutManager layout = new LinearLayoutManager(_mActivity, LinearLayoutManager.VERTICAL, false);
         //数字越大，触发滚向下一页所需偏移就越大
         mRecyclerView.setTriggerOffset(0.1f);
         //数字越大，就越容易滚动
         mRecyclerView.setFlingFactor(0.0f);
-        mRecyclerView.setLayoutManager(layout);
-        mRecyclerView.setAdapter(new LayoutAdapter(_mActivity, mRecyclerView));
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(_mActivity, LinearLayoutManager.VERTICAL, false));
+        mRecyclerView.setAdapter(mAdapter = new MeasureRVPAdapter());
+
+        listCezhan = new ArrayList<CezhanData>();
+
+        for (int i = 0; i < 10; i++) {
+            listCezhan.add(new CezhanData());
+        }
+
+        mAdapter.setNewData(listCezhan);
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setLongClickable(true);
-
-
     }
 
     @Override
@@ -167,6 +196,8 @@ public class MeasureRightFragment extends BaseFragment<MeasureContract.Presenter
 
     @Override
     public void showError(Throwable t) {
+        ViewGroup viewGroup = (ViewGroup) _mActivity.findViewById(android.R.id.content).getRootView();
+        Dialoghelper.warningSnackbar(viewGroup, "数据初始化失败", Dialoghelper.APPEAR_FROM_TOP_TO_DOWN);
     }
 
 
@@ -211,6 +242,11 @@ public class MeasureRightFragment extends BaseFragment<MeasureContract.Presenter
     @Override
     public void responseJidianData(List<String> listJidianBianhao) {
         this.listJidianBianhao = listJidianBianhao;
+    }
+
+    @Override
+    public void responseCezhanData(List<CezhanData> listCezhan) {
+
     }
 
     @Override

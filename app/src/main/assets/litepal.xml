@@ -18,5 +18,6 @@
         <mapping class="com.shtoone.chenjiang.mvp.model.entity.db.OriginalData"></mapping>
         <mapping class="com.shtoone.chenjiang.mvp.model.entity.db.ResultData"></mapping>
         <mapping class="com.shtoone.chenjiang.mvp.model.entity.db.DeviceData"></mapping>
+        <mapping class="com.shtoone.chenjiang.mvp.model.entity.db.CezhanData"></mapping>
     </list>
 </litepal>

@@ -5,11 +5,13 @@ import android.content.Context;
 import com.github.moduth.blockcanary.BlockCanary;
 import com.shtoone.chenjiang.common.AppContext;
 import com.shtoone.chenjiang.mvp.model.entity.bean.UserInfoBean;
+import com.shtoone.chenjiang.mvp.model.entity.db.StaffData;
 import com.socks.library.KLog;
 import com.squareup.leakcanary.LeakCanary;
 import com.squareup.leakcanary.RefWatcher;
 
 import org.litepal.LitePalApplication;
+import org.litepal.crud.DataSupport;
 
 /**
  * Author：leguang on 2016/10/9 0009 15:49
@@ -68,7 +70,7 @@ public class BaseApplication extends LitePalApplication {
 //        }
 //
 ////
-//        DataSupport.deleteAll(StaffData.class);
+        DataSupport.deleteAll(StaffData.class);
 //        for (int i = 0; i < 100; i++) {
 //            ShuizhunxianData f = new ShuizhunxianData();
 //            f.setBeizhu("备注" + (i + 1));

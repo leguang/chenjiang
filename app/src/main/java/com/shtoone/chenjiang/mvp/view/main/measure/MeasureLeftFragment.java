@@ -110,7 +110,7 @@ public class MeasureLeftFragment extends BaseFragment {
             tvPressure.setText(mYusheshuizhunxianData.getPressure());
             tvTemperature.setText(mYusheshuizhunxianData.getTemperature());
             tvDate.setText(mYusheshuizhunxianData.getXiugaishijian());
-//            tvBianhao.setText(mYusheshuizhunxianData.getBiaoshi());  要设置工点。最后想办法
+            tvBianhao.setText(mYusheshuizhunxianData.getBiaoshi());
         }
     }
 

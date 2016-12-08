@@ -97,8 +97,6 @@ public class MeasureFragment extends BaseFragment {
         indicator.setColor(Color.WHITE);
 
 
-
-
         //设置滑动视差 可选
         slidingPaneLayout.setParallaxDistance(400);
         //菜单滑动的颜色渐变设置 可选
@@ -109,19 +107,15 @@ public class MeasureFragment extends BaseFragment {
         slidingPaneLayout.setPanelSlideListener(new SlidingPaneLayout.PanelSlideListener() {
             @Override
             public void onPanelSlide(View panel, float slideOffset) {
-                KLog.e("slideOffset::" + slideOffset);
                 indicator.setProgress(slideOffset);
-
             }
 
             @Override
             public void onPanelOpened(View panel) {
-                System.out.println("opened");
             }
 
             @Override
             public void onPanelClosed(View panel) {
-                System.out.println("closed");
             }
         });
     }

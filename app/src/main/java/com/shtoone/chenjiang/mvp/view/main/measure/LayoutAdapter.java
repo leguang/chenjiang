@@ -19,8 +19,10 @@ package com.shtoone.chenjiang.mvp.view.main.measure;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.support.v7.widget.RecyclerView.ViewHolder;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.shtoone.chenjiang.BaseApplication;
 import com.shtoone.chenjiang.R;
@@ -29,7 +31,7 @@ import com.shtoone.chenjiang.common.ToastUtils;
 import java.util.ArrayList;
 import java.util.List;
 
-public class LayoutAdapter extends RecyclerView.Adapter<LayoutAdapter.SimpleViewHolder> {
+public class LayoutAdapter extends RecyclerView.Adapter<ViewHolder> {
     private static final int DEFAULT_ITEM_COUNT = 100;
 
     private final Context mContext;
@@ -37,12 +39,6 @@ public class LayoutAdapter extends RecyclerView.Adapter<LayoutAdapter.SimpleView
     private final List<Integer> mItems;
     private int mCurrentItemId = 0;
 
-    public static class SimpleViewHolder extends RecyclerView.ViewHolder {
-
-        public SimpleViewHolder(View view) {
-            super(view);
-        }
-    }
 
     public LayoutAdapter(Context context, RecyclerView recyclerView) {
         this(context, recyclerView, DEFAULT_ITEM_COUNT);
@@ -70,13 +66,13 @@ public class LayoutAdapter extends RecyclerView.Adapter<LayoutAdapter.SimpleView
     }
 
     @Override
-    public SimpleViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        final View view = LayoutInflater.from(mContext).inflate(R.layout.item_rv_measure_right_fragment, parent, false);
-        return new SimpleViewHolder(view);
+    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        final View view = LayoutInflater.from(mContext).inflate(R.layout.item_rvp_measure_right_fragment, parent, false);
+        return new ItemViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(SimpleViewHolder holder, final int position) {
+    public void onBindViewHolder(ViewHolder holder, final int position) {
         final View itemView = holder.itemView;
 //        itemView.setBackgroundResource(position % 2 == 0 ? R.color.material_red_50 : R.color.material_green_50);
         itemView.setOnClickListener(new View.OnClickListener() {
@@ -91,5 +87,22 @@ public class LayoutAdapter extends RecyclerView.Adapter<LayoutAdapter.SimpleView
     @Override
     public int getItemCount() {
         return mItems.size();
+    }
+
+    static class ItemViewHolder extends ViewHolder {
+        TextView tv_material_name;
+        TextView tv_reality;
+        TextView tv_matching;
+        TextView tv_deviation;
+        TextView tv_deviation_rate;
+
+        public ItemViewHolder(View view) {
+            super(view);
+//            tv_material_name = (TextView) view.findViewById(R.id.tv_material_name_item_recyclerview_produce_query_detal_activity);
+//            tv_reality = (TextView) view.findViewById(R.id.tv_reality_item_recyclerview_produce_query_detal_activity);
+//            tv_matching = (TextView) view.findViewById(R.id.tv_matching_item_recyclerview_produce_query_detal_activity);
+//            tv_deviation = (TextView) view.findViewById(R.id.tv_deviation_item_recyclerview_produce_query_detal_activity);
+//            tv_deviation_rate = (TextView) view.findViewById(R.id.tv_deviation_rate_item_recyclerview_produce_query_detal_activity);
+        }
     }
 }

@@ -25,13 +25,14 @@
                     android:src="@drawable/ic_keyboard_arrow_up_light_green_a400_48dp" />
 
                 <TextView
+                    android:id="@+id/tv_number_item_rvp_measure_right_fragment"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_marginBottom="10dp"
                     android:background="@drawable/oval_bg_measure_number"
                     android:gravity="center"
-                    android:text="77"
+                    android:text="1"
                     android:textColor="@color/base_color"
                     android:textSize="25sp" />
 
@@ -42,6 +43,7 @@
         <TableRow>
 
             <TextView
+                android:id="@+id/tv_measure_direction_item_rvp_measure_right_fragment"
                 android:layout_width="0dp"
                 android:layout_height="64dp"
                 android:layout_weight="1"
@@ -59,30 +61,39 @@
                 android:orientation="vertical">
 
                 <TextView
+                    android:id="@+id/tv_qianshi_item_rvp_measure_right_fragment"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="1"
                     android:background="@drawable/rect_bg_stroke_table"
-                    android:gravity="center"
-                    android:text="1111" />
+                    android:gravity="center_vertical"
+                    android:paddingLeft="5dp"
+                    android:singleLine="true"
+                    android:text="前视:"
+                    android:textSize="16sp" />
 
                 <TextView
+                    android:id="@+id/tv_houshi_item_rvp_measure_right_fragment"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="1"
                     android:background="@drawable/rect_bg_stroke_table"
-                    android:gravity="center"
-                    android:text="222222" />
+                    android:gravity="center_vertical"
+                    android:paddingLeft="5dp"
+                    android:singleLine="true"
+                    android:text="后视:"
+
+                    android:textSize="16sp" />
             </LinearLayout>
 
 
             <TextView
+                android:id="@+id/tv_observe_type_item_rvp_measure_right_fragment"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:background="@drawable/rect_bg_stroke_table"
                 android:gravity="center"
-                android:text="BFFB"
                 android:textColor="@color/black"
                 android:textSize="22sp" />
 
@@ -98,7 +109,7 @@
                 android:text="B1  HD：" />
 
             <TextView
-                android:id="@+id/tv_bianhao_add_shuizhunxian_fragment"
+                android:id="@+id/tv_b1hd"
                 style="@style/MeasureTable"
                 android:layout_weight="1"
                 android:gravity="left|center_vertical"
@@ -112,6 +123,7 @@
                 android:text="后视距和：" />
 
             <TextView
+                android:id="@+id/tv_houshijuhe"
                 style="@style/MeasureTable"
                 android:layout_weight="1"
                 android:gravity="right|center_vertical"
@@ -129,6 +141,7 @@
                 android:text="B2  HD：" />
 
             <TextView
+                android:id="@+id/tv_b2hd"
                 style="@style/MeasureTable"
                 android:layout_weight="1"
                 android:gravity="left|center_vertical"
@@ -142,6 +155,7 @@
                 android:text="前视距和：" />
 
             <TextView
+                android:id="@+id/tv_qianshijuhe"
                 style="@style/MeasureTable"
                 android:layout_weight="1"
                 android:gravity="right|center_vertical"
@@ -160,6 +174,7 @@
                 android:text="F1  HD：" />
 
             <TextView
+                android:id="@+id/tv_f1hd"
                 style="@style/MeasureTable"
                 android:layout_weight="1"
                 android:gravity="left|center_vertical"
@@ -173,6 +188,7 @@
                 android:text="高差1：" />
 
             <TextView
+                android:id="@+id/tv_gaocha1"
                 style="@style/MeasureTable"
                 android:layout_weight="1"
                 android:gravity="right|center_vertical"
@@ -192,6 +208,7 @@
 
 
             <TextView
+                android:id="@+id/tv_f2hd"
                 style="@style/MeasureTable"
                 android:layout_weight="1"
                 android:gravity="left|center_vertical"
@@ -205,6 +222,7 @@
                 android:text="高差2：" />
 
             <TextView
+                android:id="@+id/tv_gaocha2"
                 style="@style/MeasureTable"
                 android:layout_weight="1"
                 android:gravity="right|center_vertical"
@@ -222,6 +240,7 @@
                 android:text="B1  R：" />
 
             <TextView
+                android:id="@+id/tv_b1r"
                 style="@style/MeasureTable"
                 android:layout_weight="1"
                 android:gravity="left|center_vertical"
@@ -235,6 +254,7 @@
                 android:text="测站高差：" />
 
             <TextView
+                android:id="@+id/tv_cezhangaocha"
                 style="@style/MeasureTable"
                 android:layout_weight="1"
                 android:gravity="right|center_vertical"
@@ -253,6 +273,7 @@
                 android:text="B2  R：" />
 
             <TextView
+                android:id="@+id/tv_b2r"
                 style="@style/MeasureTable"
                 android:layout_weight="1"
                 android:gravity="left|center_vertical"
@@ -266,6 +287,7 @@
                 android:text="高程值：" />
 
             <TextView
+                android:id="@+id/tv_gaochengzhi"
                 style="@style/MeasureTable"
                 android:layout_weight="1"
                 android:gravity="right|center_vertical"
@@ -284,6 +306,7 @@
                 android:text="F1  R：" />
 
             <TextView
+                android:id="@+id/tv_f1r"
                 style="@style/MeasureTable"
                 android:layout_weight="1"
                 android:gravity="left|center_vertical"
@@ -297,6 +320,7 @@
                 android:text="FR读数差:" />
 
             <TextView
+                android:id="@+id/tv_frdushucha"
                 style="@style/MeasureTable"
                 android:layout_weight="1"
                 android:gravity="right|center_vertical"
@@ -315,6 +339,7 @@
                 android:text="F2  R：" />
 
             <TextView
+                android:id="@+id/tv_f2r"
                 style="@style/MeasureTable"
                 android:layout_weight="1"
                 android:gravity="left|center_vertical"
@@ -328,6 +353,7 @@
                 android:text="BR读数差:" />
 
             <TextView
+                android:id="@+id/tv_brdushucha"
                 style="@style/MeasureTable"
                 android:layout_weight="1"
                 android:gravity="right|center_vertical"

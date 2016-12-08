@@ -154,6 +154,12 @@ public class EditShuizhunxianFragment extends BaseFragment<ShuizhunxianContract.
                             Dialoghelper.warningSnackbar(viewGroup, "气压不能为空", Dialoghelper.APPEAR_FROM_TOP_TO_DOWN);
                             return true;
                         }
+                        String strStaff = (String) spinnerStaff.getItems().get(spinnerStaff.getSelectedIndex());
+                        if (strStaff.equals("请先下载人员数据")) {
+                            spinnerStaff.setBackgroundResource(R.drawable.rect_bg_red_stroke_table);
+                            Dialoghelper.warningSnackbar(viewGroup, "司镜人员不能为空", Dialoghelper.APPEAR_FROM_TOP_TO_DOWN);
+                            return true;
+                        }
                         //恢复原始样式
                         etTemperature.setBackgroundResource(R.drawable.rect_bg_stroke_table);
                         etPressure.setBackgroundResource(R.drawable.rect_bg_stroke_table);

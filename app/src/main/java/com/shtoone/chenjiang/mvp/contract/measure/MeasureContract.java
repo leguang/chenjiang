@@ -1,7 +1,8 @@
 package com.shtoone.chenjiang.mvp.contract.measure;
 
-
 import com.shtoone.chenjiang.mvp.contract.base.BaseContract;
+import com.shtoone.chenjiang.mvp.model.entity.db.CezhanData;
+import com.shtoone.chenjiang.mvp.model.entity.db.YusheshuizhunxianData;
 
 import java.util.List;
 
@@ -12,9 +13,13 @@ import java.util.List;
 public interface MeasureContract {
     interface View extends BaseContract.View {
         void responseJidianData(List<String> listJidianBianhao);
+
+        void responseCezhanData(List<CezhanData> listCezhan);
     }
 
     interface Presenter extends BaseContract.Presenter {
         void requestJidianData();
+
+        void requestCezhanData(YusheshuizhunxianData mYusheshuizhunxianData);
     }
 }
