@@ -113,7 +113,8 @@
                 style="@style/MeasureTable"
                 android:layout_weight="1"
                 android:gravity="left|center_vertical"
-                android:paddingLeft="5dp" />
+                android:paddingLeft="5dp"
+                android:textColor="@color/red" />
 
             <TextView
                 style="@style/MeasureTable"
@@ -127,8 +128,7 @@
                 style="@style/MeasureTable"
                 android:layout_weight="1"
                 android:gravity="right|center_vertical"
-                android:paddingRight="5dp"
-                android:text="" />
+                android:paddingRight="5dp" />
         </TableRow>
 
         <TableRow>
@@ -145,7 +145,8 @@
                 style="@style/MeasureTable"
                 android:layout_weight="1"
                 android:gravity="left|center_vertical"
-                android:paddingLeft="5dp" />
+                android:paddingLeft="5dp"
+                android:textColor="@color/red" />
 
             <TextView
                 style="@style/MeasureTable"
@@ -159,8 +160,7 @@
                 style="@style/MeasureTable"
                 android:layout_weight="1"
                 android:gravity="right|center_vertical"
-                android:paddingRight="5dp"
-                android:text="" />
+                android:paddingRight="5dp" />
 
         </TableRow>
 
@@ -178,7 +178,8 @@
                 style="@style/MeasureTable"
                 android:layout_weight="1"
                 android:gravity="left|center_vertical"
-                android:paddingLeft="5dp" />
+                android:paddingLeft="5dp"
+                android:textColor="@color/red" />
 
             <TextView
                 style="@style/MeasureTable"
@@ -192,8 +193,7 @@
                 style="@style/MeasureTable"
                 android:layout_weight="1"
                 android:gravity="right|center_vertical"
-                android:paddingRight="5dp"
-                android:text="" />
+                android:paddingRight="5dp" />
 
         </TableRow>
 
@@ -212,7 +212,8 @@
                 style="@style/MeasureTable"
                 android:layout_weight="1"
                 android:gravity="left|center_vertical"
-                android:paddingLeft="5dp" />
+                android:paddingLeft="5dp"
+                android:textColor="@color/red" />
 
             <TextView
                 style="@style/MeasureTable"
@@ -226,8 +227,7 @@
                 style="@style/MeasureTable"
                 android:layout_weight="1"
                 android:gravity="right|center_vertical"
-                android:paddingRight="5dp"
-                android:text="" />
+                android:paddingRight="5dp" />
         </TableRow>
 
         <TableRow android:background="@color/material_cyan_50">
@@ -244,7 +244,8 @@
                 style="@style/MeasureTable"
                 android:layout_weight="1"
                 android:gravity="left|center_vertical"
-                android:paddingLeft="5dp" />
+                android:paddingLeft="5dp"
+                android:textColor="@color/red" />
 
             <TextView
                 style="@style/MeasureTable"
@@ -258,8 +259,7 @@
                 style="@style/MeasureTable"
                 android:layout_weight="1"
                 android:gravity="right|center_vertical"
-                android:paddingRight="5dp"
-                android:text="" />
+                android:paddingRight="5dp" />
 
         </TableRow>
 
@@ -277,7 +277,8 @@
                 style="@style/MeasureTable"
                 android:layout_weight="1"
                 android:gravity="left|center_vertical"
-                android:paddingLeft="5dp" />
+                android:paddingLeft="5dp"
+                android:textColor="@color/red" />
 
             <TextView
                 style="@style/MeasureTable"
@@ -291,8 +292,7 @@
                 style="@style/MeasureTable"
                 android:layout_weight="1"
                 android:gravity="right|center_vertical"
-                android:paddingRight="5dp"
-                android:text="" />
+                android:paddingRight="5dp" />
 
         </TableRow>
 
@@ -310,7 +310,8 @@
                 style="@style/MeasureTable"
                 android:layout_weight="1"
                 android:gravity="left|center_vertical"
-                android:paddingLeft="5dp" />
+                android:paddingLeft="5dp"
+                android:textColor="@color/red" />
 
             <TextView
                 style="@style/MeasureTable"
@@ -324,8 +325,7 @@
                 style="@style/MeasureTable"
                 android:layout_weight="1"
                 android:gravity="right|center_vertical"
-                android:paddingRight="5dp"
-                android:text="" />
+                android:paddingRight="5dp" />
 
         </TableRow>
 
@@ -343,7 +343,8 @@
                 style="@style/MeasureTable"
                 android:layout_weight="1"
                 android:gravity="left|center_vertical"
-                android:paddingLeft="5dp" />
+                android:paddingLeft="5dp"
+                android:textColor="@color/red" />
 
             <TextView
                 style="@style/MeasureTable"
@@ -357,8 +358,7 @@
                 style="@style/MeasureTable"
                 android:layout_weight="1"
                 android:gravity="right|center_vertical"
-                android:paddingRight="5dp"
-                android:text="" />
+                android:paddingRight="5dp" />
 
         </TableRow>
 

@@ -25,7 +25,7 @@ public class Constants {
     public static final String PATH_APK_CACHE = PATH_DATA + File.separator + "ApkCache";
 
     //基地址
-    public static final String BASE_URL = "http://192.168.11.126:8081/ljcjqms/";
+    public static final String BASE_URL = "http://192.168.11.108:8080/ljcjqms/";
 
 
     //登录地址

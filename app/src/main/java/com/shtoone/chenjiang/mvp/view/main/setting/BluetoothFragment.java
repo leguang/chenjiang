@@ -17,6 +17,7 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.shtoone.chenjiang.BaseApplication;
 import com.shtoone.chenjiang.R;
 import com.shtoone.chenjiang.common.Dialoghelper;
 import com.shtoone.chenjiang.mvp.contract.base.BaseContract;
@@ -58,6 +59,7 @@ public class BluetoothFragment extends BaseFragment {
     private Dialog progressDialog;
     private List<String> listResponse = new ArrayList<>();
     private ArrayAdapter<String> mAdapter;
+    private Dialog dialogList;
 
     public static BluetoothFragment newInstance() {
         return new BluetoothFragment();
@@ -81,7 +83,7 @@ public class BluetoothFragment extends BaseFragment {
     private void initData() {
         initToolbarBackNavigation(toolbar);
         toolbar.setTitle("蓝牙调试");
-        mSmoothBluetooth = new SmoothBluetooth(_mActivity);
+        mSmoothBluetooth = new SmoothBluetooth(BaseApplication.mContext);
         mSmoothBluetooth.setListener(mListener);
         mAdapter = new ArrayAdapter<>(_mActivity, android.R.layout.simple_list_item_1, listResponse);
         lvResponses.setAdapter(mAdapter);
@@ -160,14 +162,17 @@ public class BluetoothFragment extends BaseFragment {
                 listDeviceInfo.add(deviceList.get(i).getName() + "(" + deviceList.get(i).getAddress() + ")");
             }
 
-            Dialoghelper.dialogList(_mActivity, 0, R.string.dialog_select_bluetooth, listDeviceInfo, R.string.dialog_negativeText, 0, new Dialoghelper.ListCall() {
-                @Override
-                public void onSelection(Dialog dialog, View itemView, int which, CharSequence text) {
-                    connectionCallback.connectTo(deviceList.get(which));
-                    dialog.dismiss();
-                }
-            });
-
+            if (dialogList == null) {
+                dialogList = Dialoghelper.dialogList(_mActivity, 0, R.string.dialog_select_bluetooth, listDeviceInfo, R.string.dialog_negativeText, 0, new Dialoghelper.ListCall() {
+                    @Override
+                    public void onSelection(Dialog dialog, View itemView, int which, CharSequence text) {
+                        connectionCallback.connectTo(deviceList.get(which));
+                        dialog.dismiss();
+                    }
+                });
+            } else {
+                dialogList.show();
+            }
 
         }
 
@@ -176,7 +181,6 @@ public class BluetoothFragment extends BaseFragment {
             if (data > 0) {
                 listResponse.add(0, str);
                 mAdapter.notifyDataSetChanged();
-
             }
         }
     };
@@ -206,5 +210,15 @@ public class BluetoothFragment extends BaseFragment {
     public void onDestroy() {
         mSmoothBluetooth.stop();
         super.onDestroy();
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == BT_REQUEST) {
+            if (resultCode == RESULT_OK) {
+                mSmoothBluetooth.tryConnection();
+            }
+        }
     }
 }

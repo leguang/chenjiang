@@ -83,10 +83,7 @@ public class MeasureFragment extends BaseFragment {
         super.onViewCreated(view, savedInstanceState);
         if (savedInstanceState == null) {
             loadRootFragment(R.id.fl_left_measure_fragment, MeasureLeftFragment.newInstance(mYusheshuizhunxianData));
-        }
-
-        if (savedInstanceState == null) {
-            loadRootFragment(R.id.fl_right_measure_fragment, MeasureRightFragment.newInstance());
+            loadRootFragment(R.id.fl_right_measure_fragment, MeasureRightFragment.newInstance(mYusheshuizhunxianData));
         }
         initData();
     }

@@ -58,7 +58,6 @@ import in.srain.cube.views.ptr.PtrFrameLayout;
  * Email：langmanleguang@qq.com
  */
 public class MainFragment extends BaseFragment<MainContract.Presenter> implements MainContract.View {
-
     private static final String TAG = MainFragment.class.getSimpleName();
     // 再点一次退出程序时间设置
     private static final long WAIT_TIME = 2000L;

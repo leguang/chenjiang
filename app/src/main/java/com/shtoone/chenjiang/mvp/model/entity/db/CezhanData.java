@@ -31,22 +31,6 @@ public class CezhanData extends DataSupport {
     private String brdushucha;
     private long shuizhunxianID;
 
-    public long getShuizhunxianID() {
-        return shuizhunxianID;
-    }
-
-    public void setShuizhunxianID(long shuizhunxianID) {
-        this.shuizhunxianID = shuizhunxianID;
-    }
-
-    public String getQianshijuhe() {
-        return qianshijuhe;
-    }
-
-    public void setQianshijuhe(String qianshijuhe) {
-        this.qianshijuhe = qianshijuhe;
-    }
-
     public String getNumber() {
         return number;
     }
@@ -159,6 +143,14 @@ public class CezhanData extends DataSupport {
         this.houshijuhe = houshijuhe;
     }
 
+    public String getQianshijuhe() {
+        return qianshijuhe;
+    }
+
+    public void setQianshijuhe(String qianshijuhe) {
+        this.qianshijuhe = qianshijuhe;
+    }
+
     public String getGaocha1() {
         return gaocha1;
     }
@@ -205,5 +197,13 @@ public class CezhanData extends DataSupport {
 
     public void setBrdushucha(String brdushucha) {
         this.brdushucha = brdushucha;
+    }
+
+    public long getShuizhunxianID() {
+        return shuizhunxianID;
+    }
+
+    public void setShuizhunxianID(long shuizhunxianID) {
+        this.shuizhunxianID = shuizhunxianID;
     }
 }

@@ -179,6 +179,19 @@ public class Dialoghelper {
                 .show();
     }
 
+    public static void loadingSnackbar(View view, CharSequence text, int appearDirection) {
+        TSnackbar.make(view, text, TSnackbar.LENGTH_SHORT, appearDirection)
+                .setAction("取消", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                    }
+                })
+                .setPromptThemBackground(Prompt.SUCCESS)
+                .addIconProgressLoading(0, true, false)
+                .show();
+    }
+
     public static void warningSnackbar(View view, CharSequence text, int appearDirection) {
         TSnackbar.make(view, text, TSnackbar.LENGTH_SHORT, appearDirection)
                 .setPromptThemBackground(Prompt.WARNING)
@@ -224,10 +237,7 @@ public class Dialoghelper {
     }
 
     public static Dialog dialogList(Context context, int icon, int title, Collection collection, int positiveText, int negativeText, final ListCall listCall) {
-
         builder = new MaterialDialog.Builder(context);
-
-        builder.content("");
 
         if (icon != 0) {
             builder.iconRes(icon);
@@ -263,8 +273,22 @@ public class Dialoghelper {
     }
 
 
+    public static Dialog progress(Context context, int title, int content, boolean isHorizontal) {
+        return new MaterialDialog.Builder(context)
+                .title(title)
+                .content(content)
+                .progress(true, 0)
+                .cancelable(false)
+                .progressIndeterminateStyle(isHorizontal)
+                .build();
+    }
+
+
     public static Dialog progressDialog(Context context, String msg, int progressType) {
-        return new MaterialDialog.Builder(context).content(msg).progress(true, 0).show();
+        return new MaterialDialog.Builder(context)
+                .content(msg)
+                .progress(true, 0)
+                .show();
     }
 
     public interface Call {
