@@ -180,7 +180,7 @@ public class Dialoghelper {
     }
 
     public static void loadingSnackbar(View view, CharSequence text, int appearDirection) {
-        TSnackbar.make(view, text, TSnackbar.LENGTH_SHORT, appearDirection)
+        TSnackbar.make(view, text, TSnackbar.LENGTH_INDEFINITE, appearDirection)
                 .setAction("取消", new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {

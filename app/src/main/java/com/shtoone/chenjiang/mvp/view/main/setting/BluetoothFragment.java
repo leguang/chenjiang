@@ -2,10 +2,12 @@ package com.shtoone.chenjiang.mvp.view.main.setting;
 
 import android.app.Dialog;
 import android.bluetooth.BluetoothAdapter;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,6 +26,7 @@ import com.shtoone.chenjiang.mvp.contract.base.BaseContract;
 import com.shtoone.chenjiang.mvp.view.base.BaseFragment;
 import com.shtoone.chenjiang.widget.bluetooth.Device;
 import com.shtoone.chenjiang.widget.bluetooth.SmoothBluetooth;
+import com.socks.library.KLog;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -59,7 +62,7 @@ public class BluetoothFragment extends BaseFragment {
     private Dialog progressDialog;
     private List<String> listResponse = new ArrayList<>();
     private ArrayAdapter<String> mAdapter;
-    private Dialog dialogList;
+    private AlertDialog.Builder deviceListBuilder;
 
     public static BluetoothFragment newInstance() {
         return new BluetoothFragment();
@@ -156,24 +159,43 @@ public class BluetoothFragment extends BaseFragment {
 
         @Override
         public void onDevicesFound(final List<Device> deviceList, final SmoothBluetooth.ConnectionCallback connectionCallback) {
-            List<String> listDeviceInfo = new ArrayList<>();
+            KLog.e("onDevicesFound^^^^^^^^^^^^^^^^^^^^^");
+            String[] arrayDeviceInfo = new String[deviceList.size()];
 
             for (int i = 0; i < deviceList.size(); i++) {
-                listDeviceInfo.add(deviceList.get(i).getName() + "(" + deviceList.get(i).getAddress() + ")");
+                arrayDeviceInfo[i] = deviceList.get(i).getName() + "(" + deviceList.get(i).getAddress() + ")";
             }
 
-            if (dialogList == null) {
-                dialogList = Dialoghelper.dialogList(_mActivity, 0, R.string.dialog_select_bluetooth, listDeviceInfo, R.string.dialog_negativeText, 0, new Dialoghelper.ListCall() {
+            if (deviceListBuilder == null) {
+                deviceListBuilder = new AlertDialog.Builder(_mActivity)
+                        .setTitle(R.string.dialog_select_bluetooth)
+                        .setItems(arrayDeviceInfo, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                connectionCallback.connectTo(deviceList.get(which));
+                                dialog.dismiss();
+                            }
+                        }).setPositiveButton(R.string.dialog_negativeText, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+
+                            }
+                        }).setNeutralButton("扫描", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                mSmoothBluetooth.doDiscovery();
+                            }
+                        });
+            } else {
+                deviceListBuilder.setItems(arrayDeviceInfo, new DialogInterface.OnClickListener() {
                     @Override
-                    public void onSelection(Dialog dialog, View itemView, int which, CharSequence text) {
+                    public void onClick(DialogInterface dialog, int which) {
                         connectionCallback.connectTo(deviceList.get(which));
                         dialog.dismiss();
                     }
                 });
-            } else {
-                dialogList.show();
             }
-
+            deviceListBuilder.show();
         }
 
         @Override

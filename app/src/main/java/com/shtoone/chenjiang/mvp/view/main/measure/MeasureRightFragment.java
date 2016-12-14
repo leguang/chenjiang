@@ -2,11 +2,13 @@ package com.shtoone.chenjiang.mvp.view.main.measure;
 
 import android.app.Dialog;
 import android.bluetooth.BluetoothAdapter;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
@@ -32,7 +34,6 @@ import com.shtoone.chenjiang.widget.bluetooth.Device;
 import com.shtoone.chenjiang.widget.bluetooth.SmoothBluetooth;
 import com.socks.library.KLog;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -66,9 +67,10 @@ public class MeasureRightFragment extends BaseFragment<MeasureContract.Presenter
     private LinearLayoutManager mLinearLayoutManager;
     private Dialog progressDialog;
     private SmoothBluetooth mSmoothBluetooth;
-    private Dialog dialogList;
     public static final int BT_REQUEST = 11;
     private ViewGroup viewGroup;
+    private AlertDialog.Builder deviceListBuilder;
+    private int measureIndex = 1;
 
     public static MeasureRightFragment newInstance(YusheshuizhunxianData mYusheshuizhunxianData) {
         Bundle args = new Bundle();
@@ -114,7 +116,6 @@ public class MeasureRightFragment extends BaseFragment<MeasureContract.Presenter
         initData();
         initBluetooth();
     }
-
 
     private void initToolbar() {
         toolbar.setTitle("测量");
@@ -193,8 +194,6 @@ public class MeasureRightFragment extends BaseFragment<MeasureContract.Presenter
 
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setLongClickable(true);
-
-
     }
 
     @Override
@@ -237,14 +236,23 @@ public class MeasureRightFragment extends BaseFragment<MeasureContract.Presenter
 
                 break;
             case R.id.fab:
-                //连接策略是：优先连接已配对的，当配对中没有的时候，再扫描。
-                mSmoothBluetooth.tryConnection();
+                //连接策略是：优先显示已配对的，当配对中没有的时候，提供扫描按钮。
+                if (!mSmoothBluetooth.isConnected()) {
+                    mSmoothBluetooth.tryConnection();
+                    return;
+                }
+                if (measureIndex > 4) {
+                    measureIndex = 1;
+                    //此处还要判断是往测还是反测。
+                    mRecyclerView.smoothScrollToPosition(mRecyclerView.getCurrentPosition() + 1);
+                }
 
-//                if (progressDialog == null) {
-//                    progressDialog = Dialoghelper.progress(_mActivity, R.string.dialog_wait, R.string.dialog_measureing, true);
-//                }
-//                progressDialog.show();
-//                mAdapter.measure(mRecyclerView.getCurrentPosition(), 1);
+                if (progressDialog == null) {
+                    progressDialog = Dialoghelper.progress(_mActivity, R.string.dialog_wait, R.string.dialog_measureing, true);
+                }
+                progressDialog.show();
+                mAdapter.measure(mRecyclerView.getCurrentPosition(), measureIndex);
+                mSmoothBluetooth.send(measureIndex + "");
                 break;
         }
     }
@@ -252,6 +260,7 @@ public class MeasureRightFragment extends BaseFragment<MeasureContract.Presenter
     @Override
     public void responseJidianData(List<String> listJidianBianhao) {
         this.listJidianBianhao = listJidianBianhao;
+        //应该在这里初始化Dialog，不应该在点击那里写Dialog代码
     }
 
     @Override
@@ -265,6 +274,7 @@ public class MeasureRightFragment extends BaseFragment<MeasureContract.Presenter
         super.onDestroy();
     }
 
+    //***********************蓝牙所有状态的回调都在这里*********************************
     private SmoothBluetooth.Listener mListener = new SmoothBluetooth.Listener() {
         @Override
         public void onBluetoothNotSupported() {
@@ -319,30 +329,61 @@ public class MeasureRightFragment extends BaseFragment<MeasureContract.Presenter
 
         @Override
         public void onDevicesFound(final List<Device> deviceList, final SmoothBluetooth.ConnectionCallback connectionCallback) {
-            List<String> listDeviceInfo = new ArrayList<>();
+            String[] arrayDeviceInfo = new String[deviceList.size()];
 
             for (int i = 0; i < deviceList.size(); i++) {
-                listDeviceInfo.add(deviceList.get(i).getName() + "(" + deviceList.get(i).getAddress() + ")");
+                arrayDeviceInfo[i] = deviceList.get(i).getName() + "(" + deviceList.get(i).getAddress() + ")";
             }
 
-            if (dialogList == null) {
-                dialogList = Dialoghelper.dialogList(_mActivity, 0, R.string.dialog_select_bluetooth, listDeviceInfo, R.string.dialog_negativeText, 0, new Dialoghelper.ListCall() {
+            if (deviceListBuilder == null) {
+                deviceListBuilder = new AlertDialog.Builder(_mActivity)
+                        .setTitle(R.string.dialog_select_bluetooth)
+                        .setItems(arrayDeviceInfo, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                connectionCallback.connectTo(deviceList.get(which));
+                                dialog.dismiss();
+                            }
+                        }).setPositiveButton(R.string.dialog_negativeText, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+
+                            }
+                        }).setNeutralButton(R.string.dialog_neutralText, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                mSmoothBluetooth.doDiscovery();
+                            }
+                        });
+            } else {
+                deviceListBuilder.setItems(arrayDeviceInfo, new DialogInterface.OnClickListener() {
                     @Override
-                    public void onSelection(Dialog dialog, View itemView, int which, CharSequence text) {
+                    public void onClick(DialogInterface dialog, int which) {
                         connectionCallback.connectTo(deviceList.get(which));
                         dialog.dismiss();
                     }
                 });
-            } else {
-                dialogList.show();
             }
-
+            deviceListBuilder.show();
         }
 
         @Override
         public void onDataReceived(int data, String str) {
             KLog.e("data::" + data);
             KLog.e("str::" + str);
+            measureIndex++;
+            /**
+             * 考虑把以下这些代码封装到mAdapter中去。
+             */
+            List<CezhanData> listCezhanData = mAdapter.getData();
+            int position = mRecyclerView.getCurrentPosition();
+            CezhanData mCezhanData = listCezhanData.get(position);
+            mCezhanData.setB1hd(str);
+            mCezhanData.setB1r(str);
+            mAdapter.notifyDataSetChanged();
+            if (progressDialog != null) {
+                progressDialog.dismiss();
+            }
         }
     };
 

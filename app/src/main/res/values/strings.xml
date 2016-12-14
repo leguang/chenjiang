@@ -47,6 +47,7 @@
     <string name="dialog_content">当前网络非Wifi网络，下载会消耗流量，请问是否继续下载？</string>
     <string name="dialog_positiveText">确定</string>
     <string name="dialog_negativeText">取消</string>
+    <string name="dialog_neutralText">扫描</string>
     <string name="dialog_clear">清除</string>
     <string name="dialog_delete_title">确定删除吗？</string>
     <string name="dialog_stop_title">确定终止吗？</string>
