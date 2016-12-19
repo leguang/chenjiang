@@ -256,7 +256,7 @@ public class MeasureRightFragment extends BaseFragment<MeasureContract.Presenter
                 break;
         }
     }
-
+    
     @Override
     public void responseJidianData(List<String> listJidianBianhao) {
         this.listJidianBianhao = listJidianBianhao;
