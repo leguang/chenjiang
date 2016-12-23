@@ -141,8 +141,7 @@ class BluetoothService {
      * @param socket The BluetoothSocket on which the connection was made
      * @param device The BluetoothDevice that has been connected
      */
-    public synchronized void connected(BluetoothSocket socket, BluetoothDevice
-            device, final String socketType) {
+    public synchronized void connected(BluetoothSocket socket, BluetoothDevice device, final String socketType) {
         // Cancel the thread that completed the connection
         if (mConnectThread != null) {
             mConnectThread.cancel();
@@ -269,8 +268,7 @@ class BluetoothService {
                             case BluetoothService.STATE_LISTEN:
                             case BluetoothService.STATE_CONNECTING:
                                 // Situation normal. Start the connected thread.
-                                connected(socket, socket.getRemoteDevice(),
-                                        mSocketType);
+                                connected(socket, socket.getRemoteDevice(), mSocketType);
                                 break;
                             case BluetoothService.STATE_NONE:
                             case BluetoothService.STATE_CONNECTED:
