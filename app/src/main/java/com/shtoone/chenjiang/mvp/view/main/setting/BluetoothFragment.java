@@ -24,8 +24,8 @@ import com.shtoone.chenjiang.R;
 import com.shtoone.chenjiang.common.Dialoghelper;
 import com.shtoone.chenjiang.mvp.contract.base.BaseContract;
 import com.shtoone.chenjiang.mvp.view.base.BaseFragment;
-import com.shtoone.chenjiang.widget.bluetooth.Device;
-import com.shtoone.chenjiang.widget.bluetooth.SmoothBluetooth;
+import com.shtoone.chenjiang.widget.bluetooth.classic.Device;
+import com.shtoone.chenjiang.widget.bluetooth.classic.SmoothBluetooth;
 import com.socks.library.KLog;
 
 import java.util.ArrayList;

@@ -30,8 +30,8 @@ import com.shtoone.chenjiang.mvp.model.entity.db.YusheshuizhunxianData;
 import com.shtoone.chenjiang.mvp.presenter.measure.MeasurePresenter;
 import com.shtoone.chenjiang.mvp.view.adapter.MeasureRVPAdapter;
 import com.shtoone.chenjiang.mvp.view.base.BaseFragment;
-import com.shtoone.chenjiang.widget.bluetooth.Device;
-import com.shtoone.chenjiang.widget.bluetooth.SmoothBluetooth;
+import com.shtoone.chenjiang.widget.bluetooth.classic.Device;
+import com.shtoone.chenjiang.widget.bluetooth.classic.SmoothBluetooth;
 import com.socks.library.KLog;
 
 import java.util.List;

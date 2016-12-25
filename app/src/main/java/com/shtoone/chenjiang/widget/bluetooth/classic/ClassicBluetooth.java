@@ -1,19 +1,4 @@
-/*
- * Copyright (C) 2014 Mantas Palaima
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-package com.shtoone.chenjiang.widget.bluetooth;
+package com.shtoone.chenjiang.widget.bluetooth.classic;
 
 import android.annotation.SuppressLint;
 import android.bluetooth.BluetoothAdapter;
@@ -26,12 +11,14 @@ import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 
+import com.shtoone.chenjiang.widget.bluetooth.IBluetooth;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
 
-public class SmoothBluetooth {
+public class ClassicBluetooth {
 
     public enum Connection {
         SECURE,
@@ -95,16 +82,16 @@ public class SmoothBluetooth {
 
     private Device mCurrentDevice;
 
-    public SmoothBluetooth(Context context) {
+    public ClassicBluetooth(Context context) {
         this(context, ConnectionTo.OTHER_DEVICE, Connection.SECURE, null);
     }
 
-    public SmoothBluetooth(Context context, Listener listener) {
+    public ClassicBluetooth(Context context, Listener listener) {
         this(context, ConnectionTo.OTHER_DEVICE, Connection.SECURE, listener);
     }
 
-    public SmoothBluetooth(Context context, ConnectionTo connectionTo, Connection connection,
-                           Listener listener) {
+    public ClassicBluetooth(Context context, ConnectionTo connectionTo, Connection connection,
+                            Listener listener) {
         mContext = context;
         mListener = listener;
         mIsAndroid = connectionTo == ConnectionTo.ANDROID_DEVICE;
