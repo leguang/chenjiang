@@ -10,6 +10,7 @@ import java.util.List;
  * Email：langmanleguang@qq.com
  */
 public interface BluetoothListener {
+    
     void onBluetoothNotSupported();
 
     void onBluetoothNotEnabled();
