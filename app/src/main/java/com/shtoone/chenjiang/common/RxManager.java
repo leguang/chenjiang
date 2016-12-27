@@ -8,6 +8,8 @@ import rx.subscriptions.CompositeSubscription;
  * Email：langmanleguang@qq.com
  */
 public class RxManager {
+    private static final String TAG = RxManager.class.getSimpleName();
+
     /*管理Observables 和 Subscribers订阅*/
     private CompositeSubscription mCompositeSubscription = new CompositeSubscription();
 

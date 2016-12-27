@@ -2,6 +2,7 @@ package com.shtoone.chenjiang.mvp.view.main.setting;
 
 import android.app.Dialog;
 import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -24,6 +25,8 @@ import com.shtoone.chenjiang.R;
 import com.shtoone.chenjiang.common.Dialoghelper;
 import com.shtoone.chenjiang.mvp.contract.base.BaseContract;
 import com.shtoone.chenjiang.mvp.view.base.BaseFragment;
+import com.shtoone.chenjiang.widget.bluetooth.BluetoothListener;
+import com.shtoone.chenjiang.widget.bluetooth.classic.ClassicBluetooth;
 import com.shtoone.chenjiang.widget.bluetooth.classic.Device;
 import com.shtoone.chenjiang.widget.bluetooth.classic.SmoothBluetooth;
 import com.socks.library.KLog;
@@ -58,7 +61,7 @@ public class BluetoothFragment extends BaseFragment {
     CheckBox cbCarrage;
     @BindView(R.id.bt_send)
     Button btSend;
-    private SmoothBluetooth mSmoothBluetooth;
+    private ClassicBluetooth mBluetooth;
     private Dialog progressDialog;
     private List<String> listResponse = new ArrayList<>();
     private ArrayAdapter<String> mAdapter;
@@ -86,8 +89,8 @@ public class BluetoothFragment extends BaseFragment {
     private void initData() {
         initToolbarBackNavigation(toolbar);
         toolbar.setTitle("蓝牙调试");
-        mSmoothBluetooth = new SmoothBluetooth(BaseApplication.mContext);
-        mSmoothBluetooth.setListener(mListener);
+        mBluetooth = new ClassicBluetooth(BaseApplication.mContext);
+        mBluetooth.setListener(mListener);
         mAdapter = new ArrayAdapter<>(_mActivity, android.R.layout.simple_list_item_1, listResponse);
         lvResponses.setAdapter(mAdapter);
     }
@@ -99,7 +102,7 @@ public class BluetoothFragment extends BaseFragment {
     }
 
 
-    private SmoothBluetooth.Listener mListener = new SmoothBluetooth.Listener() {
+    private BluetoothListener mListener = new BluetoothListener() {
         @Override
         public void onBluetoothNotSupported() {
             toolbar.setTitle("未找到蓝牙设备");
@@ -134,10 +137,10 @@ public class BluetoothFragment extends BaseFragment {
         }
 
         @Override
-        public void onConnectionFailed(Device device) {
+        public void onConnectionFailed(BluetoothDevice device) {
             toolbar.setTitle("蓝牙连接失败");
-            if (device != null && device.isPaired()) {
-                mSmoothBluetooth.doDiscovery();
+            if (device != null) {
+                mBluetooth.startScan();
             }
         }
 
@@ -158,7 +161,7 @@ public class BluetoothFragment extends BaseFragment {
         }
 
         @Override
-        public void onDevicesFound(final List<Device> deviceList, final SmoothBluetooth.ConnectionCallback connectionCallback) {
+        public void onDevicesFound(final List<BluetoothDevice> deviceList) {
             KLog.e("onDevicesFound^^^^^^^^^^^^^^^^^^^^^");
             String[] arrayDeviceInfo = new String[deviceList.size()];
 
@@ -172,7 +175,7 @@ public class BluetoothFragment extends BaseFragment {
                         .setItems(arrayDeviceInfo, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                connectionCallback.connectTo(deviceList.get(which));
+                                mBluetooth.connect(deviceList.get(which).getAddress());
                                 dialog.dismiss();
                             }
                         }).setPositiveButton(R.string.dialog_negativeText, new DialogInterface.OnClickListener() {
@@ -183,14 +186,14 @@ public class BluetoothFragment extends BaseFragment {
                         }).setNeutralButton("扫描", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                mSmoothBluetooth.doDiscovery();
+                                mBluetooth.startScan();
                             }
                         });
             } else {
                 deviceListBuilder.setItems(arrayDeviceInfo, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        connectionCallback.connectTo(deviceList.get(which));
+                        mBluetooth.connect(deviceList.get(which).getAddress());
                         dialog.dismiss();
                     }
                 });
@@ -200,6 +203,9 @@ public class BluetoothFragment extends BaseFragment {
 
         @Override
         public void onDataReceived(int data, String str) {
+            KLog.e("currentThreadName::" + Thread.currentThread().getName());
+
+            KLog.e(str);
             if (data > 0) {
                 listResponse.add(0, str);
                 mAdapter.notifyDataSetChanged();
@@ -211,18 +217,50 @@ public class BluetoothFragment extends BaseFragment {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.tv_disconnect:
-                mSmoothBluetooth.disconnect();
+                mBluetooth.disconnect();
                 listResponse.clear();
                 mAdapter.notifyDataSetChanged();
                 break;
             case R.id.tv_scan:
-                mSmoothBluetooth.doDiscovery();
+                mBluetooth.startScan();
                 break;
             case R.id.tv_paired:
-                mSmoothBluetooth.tryConnection();
+
+                final String[] arrayDeviceInfo = new String[mBluetooth.getBondedDevices().size()];
+
+                int i = 0;
+
+                for (BluetoothDevice bluetoothDevice : mBluetooth.getBondedDevices()) {
+                    arrayDeviceInfo[i] = bluetoothDevice.getAddress();
+                    i++;
+                }
+
+
+                new AlertDialog.Builder(_mActivity)
+                        .setTitle(R.string.dialog_select_bluetooth)
+                        .setItems(arrayDeviceInfo, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                mBluetooth.connect(arrayDeviceInfo[which]);
+                                dialog.dismiss();
+                            }
+                        }).setPositiveButton(R.string.dialog_negativeText, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                    }
+                }).setNeutralButton("扫描", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        mBluetooth.startScan();
+                    }
+                }).show();
+
+
                 break;
             case R.id.bt_send:
-                mSmoothBluetooth.send(etMessage.getText().toString(), cbCarrage.isChecked());
+                //看此处的bytes编码   会不会引起乱码
+                mBluetooth.sendData(etMessage.getText().toString().getBytes());
                 etMessage.setText("");
                 break;
         }
@@ -230,7 +268,7 @@ public class BluetoothFragment extends BaseFragment {
 
     @Override
     public void onDestroy() {
-        mSmoothBluetooth.stop();
+        mBluetooth.close();
         super.onDestroy();
     }
 
@@ -239,7 +277,8 @@ public class BluetoothFragment extends BaseFragment {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == BT_REQUEST) {
             if (resultCode == RESULT_OK) {
-                mSmoothBluetooth.tryConnection();
+//                mSmoothBluetooth.tryConnection();
+//                mBluetooth.startScan();
             }
         }
     }

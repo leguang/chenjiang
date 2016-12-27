@@ -21,6 +21,7 @@ import java.util.Collection;
  * Email：langmanleguang@qq.com
  */
 public class Dialoghelper {
+    private static final String TAG = Dialoghelper.class.getSimpleName();
 
     private static MaterialDialog.Builder builder;
     private static AlertDialog.Builder mBuilder;

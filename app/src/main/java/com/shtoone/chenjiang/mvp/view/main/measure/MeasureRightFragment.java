@@ -271,10 +271,13 @@ public class MeasureRightFragment extends BaseFragment<MeasureContract.Presenter
     @Override
     public void onDestroy() {
         AudioPlayer.onDestroy();
+        mSmoothBluetooth.stop();
         super.onDestroy();
     }
 
-    //***********************蓝牙所有状态的回调都在这里*********************************
+    /**
+     *********************蓝牙所有状态的回调都在这里*********************************
+     */
     private SmoothBluetooth.Listener mListener = new SmoothBluetooth.Listener() {
         @Override
         public void onBluetoothNotSupported() {

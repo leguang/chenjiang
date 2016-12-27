@@ -1,8 +1,11 @@
 package com.shtoone.chenjiang.widget.bluetooth;
 
+import android.bluetooth.BluetoothDevice;
+
 import com.shtoone.chenjiang.widget.bluetooth.classic.Device;
 import com.shtoone.chenjiang.widget.bluetooth.classic.SmoothBluetooth;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -10,7 +13,7 @@ import java.util.List;
  * Email：langmanleguang@qq.com
  */
 public interface BluetoothListener {
-    
+
     void onBluetoothNotSupported();
 
     void onBluetoothNotEnabled();
@@ -21,7 +24,7 @@ public interface BluetoothListener {
 
     void onDisconnected();
 
-    void onConnectionFailed(Device device);
+    void onConnectionFailed(BluetoothDevice device);
 
     void onDiscoveryStarted();
 
@@ -29,7 +32,7 @@ public interface BluetoothListener {
 
     void onNoDevicesFound();
 
-    void onDevicesFound(List<Device> deviceList, SmoothBluetooth.ConnectionCallback connectionCallback);
+    void onDevicesFound(List<BluetoothDevice> deviceList);
 
     void onDataReceived(int data, String str);
 }

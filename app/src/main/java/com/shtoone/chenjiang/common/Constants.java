@@ -11,6 +11,7 @@ import java.io.File;
  * Email：langmanleguang@qq.com
  */
 public class Constants {
+    private static final String TAG = Constants.class.getSimpleName();
 
     /**
      * 不允许new

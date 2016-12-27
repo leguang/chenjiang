@@ -26,7 +26,8 @@ import com.shtoone.chenjiang.BuildConfig;
 import java.util.List;
 
 public class AppContext extends BlockCanaryContext {
-    private static final String TAG = "AppContext";
+    private static final String TAG = AppContext.class.getSimpleName();
+
 
     @Override
     public String provideQualifier() {

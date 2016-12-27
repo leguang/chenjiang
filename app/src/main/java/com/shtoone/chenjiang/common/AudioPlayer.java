@@ -11,6 +11,8 @@ import com.shtoone.chenjiang.R;
  * Email：langmanleguang@qq.com
  */
 public class AudioPlayer {
+    private static final String TAG = AudioPlayer.class.getSimpleName();
+
     private static SoundPool mSoundPool;
 
     /**

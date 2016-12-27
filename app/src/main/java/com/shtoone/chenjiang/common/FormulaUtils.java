@@ -6,6 +6,7 @@ import java.text.DecimalFormat;
  * Created by Administrator on 2016-12-01.
  */
 public class FormulaUtils {
+    private static final String TAG = FormulaUtils.class.getSimpleName();
 
     private static FormulaUtils formulaUtils;
 

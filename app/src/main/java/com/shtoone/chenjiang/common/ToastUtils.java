@@ -10,6 +10,8 @@ import com.sdsmdg.tastytoast.TastyToast;
  * Email：langmanleguang@qq.com
  */
 public class ToastUtils {
+    private static final String TAG = ToastUtils.class.getSimpleName();
+
     public static Toast mToast;
 
     public static void showToast(Context mContext, String msg) {

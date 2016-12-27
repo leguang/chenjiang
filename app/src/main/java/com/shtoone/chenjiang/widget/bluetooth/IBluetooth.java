@@ -12,9 +12,9 @@ public interface IBluetooth {
 
     boolean isAvailable();
 
-    void open();
-
     boolean isOpened();
+
+    void open();
 
     Set<BluetoothDevice> getBondedDevices();
 
@@ -24,13 +24,11 @@ public interface IBluetooth {
 
     boolean stopScan();
 
-    void connect();
+    void connect(String address);
 
     void disconnect();
 
-    boolean isConnected();
+    boolean close();
 
-    void close();
-
-    void send(byte[] data);
+    void sendData(byte[] data);
 }

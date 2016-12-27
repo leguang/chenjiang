@@ -1,102 +1,188 @@
 package com.shtoone.chenjiang.widget.bluetooth.classic;
 
-import android.annotation.SuppressLint;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
+import android.bluetooth.BluetoothSocket;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 
+import com.shtoone.chenjiang.widget.bluetooth.BluetoothListener;
 import com.shtoone.chenjiang.widget.bluetooth.IBluetooth;
+import com.socks.library.KLog;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 
+import rx.Observable;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
 
-public class ClassicBluetooth {
-
-    public enum Connection {
-        SECURE,
-        INSECURE
-    }
-
-    public enum ConnectionTo {
-        ANDROID_DEVICE,
-        OTHER_DEVICE
-    }
-
-    public interface ConnectionCallback {
-        void connectTo(Device device);
-    }
-
-    public interface Listener {
-        void onBluetoothNotSupported();
-
-        void onBluetoothNotEnabled();
-
-        void onConnecting(Device device);
-
-        void onConnected(Device device);
-
-        void onDisconnected();
-
-        void onConnectionFailed(Device device);
-
-        void onDiscoveryStarted();
-
-        void onDiscoveryFinished();
-
-        void onNoDevicesFound();
-
-        void onDevicesFound(List<Device> deviceList, ConnectionCallback connectionCallback);
-
-        void onDataReceived(int data, String str);
-    }
-
-    private static final String TAG = "BluetoothManager";
-
-    private BluetoothAdapter mBluetoothAdapter;
-
-    private BluetoothService mBluetoothService;
-
-    private boolean isServiceRunning;
-
-    private boolean mIsAndroid;
-
-    private boolean mIsSecure;
-
-    private boolean isConnected;
-
-    private boolean isConnecting;
-
+public class ClassicBluetooth implements IBluetooth {
+    private static final String TAG = ClassicBluetooth.class.getSimpleName();
     private final Context mContext;
-
-    private Listener mListener;
-
-    private ArrayList<Device> mDevices = new ArrayList<>();
-
-    private Device mCurrentDevice;
+    private BluetoothListener mListener;
+    private BluetoothAdapter mBluetoothAdapter;
+    private ArrayList<BluetoothDevice> mDevices = new ArrayList<>();
+    private BluetoothDevice mCurrentDevice;
+    private static final UUID UUID_DEVICE = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
+    private ConnectThread mConnectThread;
+    private ConnectedThread mConnectedThread;
+    public static final int STATE_NONE = 0;        // we're doing nothing
+    public static final int STATE_LISTEN = 1;        // now listening for incoming connections
+    public static final int STATE_CONNECTING = 2;    // now initiating an outgoing connection
+    public static final int STATE_CONNECTED = 3;    // now connected to a remote device
+    private int mState;
 
     public ClassicBluetooth(Context context) {
-        this(context, ConnectionTo.OTHER_DEVICE, Connection.SECURE, null);
+        this(context, null);
     }
 
-    public ClassicBluetooth(Context context, Listener listener) {
-        this(context, ConnectionTo.OTHER_DEVICE, Connection.SECURE, listener);
-    }
-
-    public ClassicBluetooth(Context context, ConnectionTo connectionTo, Connection connection,
-                            Listener listener) {
+    public ClassicBluetooth(Context context, BluetoothListener listener) {
         mContext = context;
         mListener = listener;
-        mIsAndroid = connectionTo == ConnectionTo.ANDROID_DEVICE;
-        mIsSecure = connection == Connection.SECURE;
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+        mState = STATE_NONE;
+    }
+
+    public void setListener(BluetoothListener listener) {
+        mListener = listener;
+    }
+
+    @Override
+    public boolean isAvailable() {
+        try {
+            if (mBluetoothAdapter == null || mBluetoothAdapter.getAddress().equals(null))
+                return false;
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public boolean isOpened() {
+        return mBluetoothAdapter.isEnabled();
+    }
+
+    @Override
+    public void open() {
+        mBluetoothAdapter.enable();
+    }
+
+
+    /**
+     * 看是否要转换成list列表
+     *
+     * @return
+     */
+    @Override
+    public Set<BluetoothDevice> getBondedDevices() {
+        return mBluetoothAdapter.getBondedDevices();
+    }
+
+    @Override
+    public boolean startScan() {
+        if (!checkBluetooth()) {
+            return false;
+        }
+        mCurrentDevice = null;
+        mDevices.clear();
+        if (mListener != null) {
+            mListener.onDiscoveryStarted();
+        }
+        Log.e(TAG, "doDiscovery()");
+
+        if (isScaning()) {
+            mContext.unregisterReceiver(mReceiver);
+            mBluetoothAdapter.cancelDiscovery();
+        }
+        IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
+        mContext.registerReceiver(mReceiver, filter);
+
+        filter = new IntentFilter(BluetoothAdapter.ACTION_DISCOVERY_FINISHED);
+        mContext.registerReceiver(mReceiver, filter);
+
+        // 开始搜索
+        return mBluetoothAdapter.startDiscovery();
+
+    }
+
+    @Override
+    public boolean isScaning() {
+        return mBluetoothAdapter.isDiscovering();
+    }
+
+    @Override
+    public boolean stopScan() {
+        return mBluetoothAdapter.cancelDiscovery();
+    }
+
+    @Override
+    public synchronized void connect(String address) {
+        if (mState == STATE_CONNECTING) {
+            if (mConnectThread != null) {
+                mConnectThread.cancel();
+                mConnectThread = null;
+            }
+        }
+        if (mConnectedThread != null) {
+            mConnectedThread.cancel();
+            mConnectedThread = null;
+        }
+
+        if (BluetoothAdapter.checkBluetoothAddress(address)) {
+            BluetoothDevice device = mBluetoothAdapter.getRemoteDevice(address);
+            mCurrentDevice = device;
+            mConnectThread = new ConnectThread(device);
+            mConnectThread.start();
+        }
+
+        mState = STATE_CONNECTING;
+    }
+
+    @Override
+    public void disconnect() {
+        mCurrentDevice = null;
+        if (mConnectThread != null) {
+            mConnectThread.cancel();
+            mConnectThread = null;
+        }
+
+        if (mConnectedThread != null) {
+            mConnectedThread.cancel();
+            mConnectedThread = null;
+        }
+
+        mState = STATE_NONE;
+        Log.e(TAG, " mState-> " + mState);
+    }
+
+    @Override
+    public synchronized boolean close() {
+        if (mState != STATE_NONE) {
+            disconnect();
+        }
+
+        return mBluetoothAdapter.disable();
+    }
+
+    @Override
+    public void sendData(byte[] data) {
+        ConnectedThread r;
+        synchronized (this) {
+            if (mState != STATE_CONNECTED) return;
+            r = mConnectedThread;
+        }
+        r.write(data);
     }
 
     private boolean checkBluetooth() {
@@ -107,47 +193,13 @@ public class ClassicBluetooth {
             return false;
         }
 
-        if (!isBluetoothEnabled()) {
+        if (!isOpened()) {
             if (mListener != null) {
                 mListener.onBluetoothNotEnabled();
             }
             return false;
         }
         return true;
-    }
-
-    public void tryConnection() {
-        if (!checkBluetooth()) {
-            return;
-        }
-
-        mDevices.clear();
-
-        Set<BluetoothDevice> pairedDevices = mBluetoothAdapter.getBondedDevices();
-
-        if (pairedDevices.size() > 0) {
-            for (BluetoothDevice device : pairedDevices) {
-                String name = device.getName();
-                String address = device.getAddress();
-                if (name != null && address != null) {
-                    mDevices.add(new Device(name, address, true));
-                }
-            }
-        }
-
-        Log.d(TAG, "Paired devices: " + mDevices.size());
-        if (!mDevices.isEmpty()) {
-            mListener.onDevicesFound(mDevices, new ConnectionCallback() {
-                @Override
-                public void connectTo(Device device) {
-                    if (device != null) {
-                        connect(device, mIsAndroid, mIsSecure);
-                    }
-                }
-            });
-        } else {
-            doDiscovery();
-        }
     }
 
     public boolean isBluetoothAvailable() {
@@ -160,110 +212,34 @@ public class ClassicBluetooth {
         return true;
     }
 
-    public boolean isBluetoothEnabled() {
-        return mBluetoothAdapter.isEnabled();
-    }
-
-    public boolean isServiceAvailable() {
-        return mBluetoothService != null;
-    }
-
-    public boolean startDiscovery() {
-        return mBluetoothAdapter.startDiscovery();
-    }
-
-    public boolean isDiscovery() {
-        return mBluetoothAdapter.isDiscovering();
-    }
-
-    public boolean cancelDiscovery() {
-        return mBluetoothAdapter.cancelDiscovery();
-    }
-
-    public void setListener(Listener listener) {
-        mListener = listener;
-    }
-
-    private void connect(Device device, boolean android, boolean secure) {
-        mCurrentDevice = device;
-        if (mListener != null) {
-            mListener.onConnecting(device);
-        }
-        connect(device.getAddress(), android, secure);
-    }
-
-    public boolean isConnected() {
-        return mCurrentDevice != null;
-    }
-
-    public void doDiscovery() {
-        if (!checkBluetooth()) {
-            return;
-        }
-        mCurrentDevice = null;
-        mDevices.clear();
-        if (mListener != null) {
-            mListener.onDiscoveryStarted();
-        }
-        Log.d(TAG, "doDiscovery()");
-
-        if (isDiscovery()) {
-            mContext.unregisterReceiver(mReceiver);
-            cancelDiscovery();
-        }
-        IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
-        mContext.registerReceiver(mReceiver, filter);
-
-        filter = new IntentFilter(BluetoothAdapter.ACTION_DISCOVERY_FINISHED);
-        mContext.registerReceiver(mReceiver, filter);
-
-        startDiscovery();
-    }
-
     private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
 
-            // When discovery finds a device
             if (BluetoothDevice.ACTION_FOUND.equals(action)) {
-                // Get the BluetoothDevice object from the Intent
                 BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
-                // If it's already paired, skip it, because it's been listed already
-                Log.d(TAG, "Device found: " + device.getName() + " " + device.getAddress());
+                Log.e(TAG, "Device found: " + device.getName() + " " + device.getAddress());
                 if (!deviceExist(device)) {
-                    mDevices.add(new Device(device.getName(), device.getAddress(), false));
+                    mDevices.add(device);
                 }
             } else if (BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action)) {
                 Log.d(TAG, "Discovery finished: " + mDevices.size());
                 mContext.unregisterReceiver(mReceiver);
                 if (mListener != null) {
                     mListener.onDiscoveryFinished();
+                    if (mDevices.isEmpty()) {
+                        mListener.onNoDevicesFound();
+                    } else {
+                        mListener.onDevicesFound(mDevices);
+                    }
                 }
-                connectAction(mDevices, mIsAndroid, mIsSecure);
             }
         }
     };
 
-    private void connectAction(List<Device> devices, final boolean android, final boolean secure) {
-        if (mListener != null) {
-            if (devices.isEmpty()) {
-                mListener.onNoDevicesFound();
-            } else {
-                mListener.onDevicesFound(devices, new ConnectionCallback() {
-                    @Override
-                    public void connectTo(Device device) {
-                        if (device != null) {
-                            connect(device, android, secure);
-                        }
-                    }
-                });
-            }
-        }
-    }
-
     private boolean deviceExist(BluetoothDevice device) {
-        for (Device mDevice : mDevices) {
+        for (BluetoothDevice mDevice : mDevices) {
             if (mDevice.getAddress().contains(device.getAddress())) {
                 return true;
             }
@@ -271,142 +247,189 @@ public class ClassicBluetooth {
         return false;
     }
 
-    public BluetoothAdapter getBluetoothAdapter() {
-        return mBluetoothAdapter;
-    }
+    private class ConnectThread extends Thread {
+        private final BluetoothSocket mmSocket;
+        private final BluetoothDevice mmDevice;
+        private String mSocketType;
 
-    private void setupService() {
-        mBluetoothService = new BluetoothService(mHandler);
-    }
+        public ConnectThread(final BluetoothDevice device) {
+            KLog.e("创建连接线程");
+            mmDevice = device;
+            BluetoothSocket tmp = null;
 
-    private void startService(boolean isAndroid, boolean secure) {
-        if (isServiceAvailable()) {
-            if (mBluetoothService.getState() == BluetoothService.STATE_NONE) {
-                isServiceRunning = true;
-                mBluetoothService.start(isAndroid, secure);
+            try {
+                tmp = device.createInsecureRfcommSocketToServiceRecord(UUID_DEVICE);
+            } catch (IOException e) {
+                KLog.e("Socket Type: " + mSocketType + "create() failed", e);
+                e.printStackTrace();
+                //此处也要放到主线程当中
+
+                Observable.just("1")
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(new Action1<String>() {
+                            @Override
+                            public void call(String receiveData) {
+                                KLog.e("currentThreadName::" + Thread.currentThread().getName());
+                                mListener.onConnectionFailed(device);
+
+
+                            }
+                        });
+
+            }
+            mmSocket = tmp;
+        }
+
+        public void run() {
+            KLog.e("BEGIN mConnectThread SocketType:" + mSocketType);
+            setName("ConnectThread");
+            mBluetoothAdapter.cancelDiscovery();
+            try {
+                KLog.e("开始阻塞的方式进行连接");
+                mmSocket.connect();
+                KLog.e("结束阻塞的方式进行连接");
+
+                KLog.e("mmSocket.connect();");
+            } catch (IOException e) {
+                try {
+                    mmSocket.close();
+                } catch (IOException e2) {
+                    KLog.e("unable to close() " + mSocketType + " socket during connection failure", e2);
+                }
+                mListener.onConnectionFailed(mmDevice);
+                return;
+            }
+
+            synchronized (this) {
+                mConnectThread = null;
+            }
+
+            KLog.e("connected(mmSocket, mmDevice, mSocketType);");
+            connected(mmSocket, mmDevice);
+        }
+
+        public void cancel() {
+            try {
+                mmSocket.close();
+            } catch (IOException e) {
+                Log.e(TAG, "close() of connect " + mSocketType + " socket failed", e);
             }
         }
     }
 
-    public void stop() {
-        mCurrentDevice = null;
-        if (isServiceAvailable()) {
-            isServiceRunning = false;
-            mBluetoothService.stop();
+    public synchronized void connected(BluetoothSocket socket, BluetoothDevice device) {
+        if (mConnectThread != null) {
+            mConnectThread.cancel();
+            mConnectThread = null;
         }
-        new Handler().postDelayed(new Runnable() {
-            public void run() {
-                if (isServiceAvailable()) {
-                    isServiceRunning = false;
-                    mBluetoothService.stop();
+
+        if (mConnectedThread != null) {
+            mConnectedThread.cancel();
+            mConnectedThread = null;
+        }
+
+        mConnectedThread = new ConnectedThread(socket);
+        mConnectedThread.start();
+
+//        Message msg = mHandler.obtainMessage(MESSAGE_DEVICE_NAME);
+//        mHandler.sendMessage(msg);
+
+        mState = STATE_CONNECTED;
+        Log.e(TAG, " mState-> " + mState);
+    }
+
+    private class ConnectedThread extends Thread {
+        private final BluetoothSocket mmSocket;
+        private final InputStream mmInStream;
+        private final OutputStream mmOutStream;
+
+        public ConnectedThread(BluetoothSocket socket) {
+            KLog.e("这是一个客户端socket");
+            mmSocket = socket;
+            InputStream tmpIn = null;
+            OutputStream tmpOut = null;
+
+            try {
+                tmpIn = socket.getInputStream();
+                tmpOut = socket.getOutputStream();
+                KLog.e("获取客户端的socket的输入输出流");
+            } catch (IOException e) {
+                KLog.e("temp sockets not created", e);
+            }
+
+            mmInStream = tmpIn;
+            mmOutStream = tmpOut;
+        }
+
+        public void run() {
+            KLog.e("BEGIN mConnectedThread");
+            byte[] buffer = new byte[1024];
+            int bytes;
+
+            while (mState == STATE_CONNECTED) {
+                KLog.e("进入循环**********");
+                try {
+
+                    KLog.e("开始读取流…………………………………………………………");
+                    // Read from the InputStream
+                    bytes = mmInStream.read(buffer);
+                    KLog.e("结束读取流…………………………………………………………");
+                    final String readMessage = new String(buffer, 0, bytes);
+                    KLog.e(bytes);
+                    KLog.e(readMessage);
+
+
+                    final int finalBytes = bytes;
+                    Observable.just(readMessage)
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribe(new Action1<String>() {
+                                @Override
+                                public void call(String receiveData) {
+                                    KLog.e("currentThreadName::" + Thread.currentThread().getName());
+                                    mListener.onDataReceived(finalBytes, readMessage);
+
+                                }
+                            });
+
+
+                    // Send the obtained bytes to the UI Activity
+//                    mHandler.obtainMessage(BluetoothChat.MESSAGE_READ, bytes, -1, buffer).sendToTarget();
+                } catch (IOException e) {
+                    KLog.e("进入异常");
+                    KLog.e(e);
+                    //连接断开通知UI
+                    mListener.onDisconnected();
+                    break;
                 }
             }
-        }, 500);
-    }
+        }
 
-    private void connect(String address, boolean android, boolean secure) {
-        if (isConnecting) {
-            return;
+        /**
+         * Write to the connected OutStream.
+         *
+         * @param buffer The bytes to write
+         */
+        public void write(byte[] buffer) {
+            try {
+                mmOutStream.write(buffer);
+                KLog.e("write::" + new String(buffer));
+                KLog.e(mmOutStream);
+                // Share the sent message back to the UI Activity
+//                mHandler.obtainMessage(BluetoothChat.MESSAGE_WRITE, -1, -1, buffer)
+//                        .sendToTarget();
+            } catch (IOException e) {
+                Log.e(TAG, "Exception during write", e);
+            }
         }
-        if (!isServiceAvailable()) {
-            setupService();
-        }
-        startService(android, secure);
-        if (BluetoothAdapter.checkBluetoothAddress(address)) {
-            BluetoothDevice device = mBluetoothAdapter.getRemoteDevice(address);
-            mBluetoothService.connect(device);
-        }
-    }
 
-    public void disconnect() {
-        mCurrentDevice = null;
-        if (isServiceAvailable()) {
-            isServiceRunning = false;
-            mBluetoothService.stop();
-            if (mBluetoothService.getState() == BluetoothService.STATE_NONE) {
-                isServiceRunning = true;
-                mBluetoothService.start(mIsAndroid, mIsSecure);
+        public void cancel() {
+            try {
+                mmSocket.close();
+            } catch (IOException e) {
+                Log.e(TAG, "close() of connect socket failed", e);
             }
         }
     }
 
-    public void send(String data) {
-        send(data, false);
-    }
-
-    public void send(byte[] data) {
-        send(data, false);
-    }
-
-    public void send(byte[] data, boolean CRLF) {
-        if (isServiceAvailable() && mBluetoothService.getState() == BluetoothService.STATE_CONNECTED) {
-            if (CRLF) {
-                byte[] data2 = new byte[data.length + 2];
-                System.arraycopy(data, 0, data2, 0, data.length);
-                data2[data2.length] = 0x0A;
-                data2[data2.length] = 0x0D;
-                mBluetoothService.write(data2);
-            } else {
-                mBluetoothService.write(data);
-            }
-        }
-    }
-
-    public void send(String data, boolean CRLF) {
-        if (isServiceAvailable() && mBluetoothService.getState() == BluetoothService.STATE_CONNECTED) {
-            if (CRLF)
-                data += "\r\n";
-            mBluetoothService.write(data.getBytes());
-        }
-    }
-
-    @SuppressLint("HandlerLeak")
-    private final Handler mHandler = new Handler() {
-        public void handleMessage(Message msg) {
-            switch (msg.what) {
-                case BluetoothService.MESSAGE_WRITE:
-                    break;
-                case BluetoothService.MESSAGE_READ:
-
-                    byte[] readBuf = (byte[]) msg.obj;
-                    // construct a string from the valid bytes in the buffer
-                    String readMessage = new String(readBuf, 0, msg.arg1);
-
-                    if (readBuf != null) {
-                        if (mListener != null)
-                            mListener.onDataReceived(msg.arg1, readMessage);
-                    }
-                    break;
-                case BluetoothService.MESSAGE_DEVICE_NAME:
-                    if (mListener != null) {
-                        mListener.onConnected(mCurrentDevice);
-                    }
-                    isConnected = true;
-                    break;
-                case BluetoothService.MESSAGE_STATE_CHANGE:
-                    /*if(mBluetoothStateListener != null)
-                        mBluetoothStateListener.onServiceStateChanged(msg.arg1);*/
-                    if (isConnected && msg.arg1 != BluetoothService.STATE_CONNECTED) {
-                        isConnected = false;
-                        if (mListener != null) {
-                            mListener.onDisconnected();
-                            mCurrentDevice = null;
-                        }
-                    }
-                    if (!isConnecting && msg.arg1 == BluetoothService.STATE_CONNECTING) {
-                        isConnecting = true;
-                    } else if (isConnecting) {
-                        isConnecting = false;
-                        if (msg.arg1 != BluetoothService.STATE_CONNECTED) {
-                            if (mListener != null) {
-                                mListener.onConnectionFailed(mCurrentDevice);
-                                mCurrentDevice = null;
-                            }
-                        }
-                    }
-                    break;
-            }
-        }
-    };
 
 }

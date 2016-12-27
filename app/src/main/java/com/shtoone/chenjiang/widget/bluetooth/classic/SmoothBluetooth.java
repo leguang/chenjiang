@@ -218,7 +218,7 @@ public class SmoothBluetooth {
         if (mListener != null) {
             mListener.onDiscoveryStarted();
         }
-        Log.d(TAG, "doDiscovery()");
+        Log.e(TAG, "doDiscovery()");
 
         if (isDiscovery()) {
             mContext.unregisterReceiver(mReceiver);
