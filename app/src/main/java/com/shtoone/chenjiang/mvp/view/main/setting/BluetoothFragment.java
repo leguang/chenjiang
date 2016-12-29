@@ -26,9 +26,12 @@ import com.shtoone.chenjiang.common.Dialoghelper;
 import com.shtoone.chenjiang.mvp.contract.base.BaseContract;
 import com.shtoone.chenjiang.mvp.view.base.BaseFragment;
 import com.shtoone.chenjiang.widget.bluetooth.BluetoothListener;
+import com.shtoone.chenjiang.widget.bluetooth.BluetoothManager;
+import com.shtoone.chenjiang.widget.bluetooth.IBluetooth;
 import com.shtoone.chenjiang.widget.bluetooth.classic.ClassicBluetooth;
 import com.shtoone.chenjiang.widget.bluetooth.classic.Device;
 import com.shtoone.chenjiang.widget.bluetooth.classic.SmoothBluetooth;
+import com.shtoone.chenjiang.widget.bluetooth.le.LeBluetooth;
 import com.socks.library.KLog;
 
 import java.util.ArrayList;
@@ -61,7 +64,7 @@ public class BluetoothFragment extends BaseFragment {
     CheckBox cbCarrage;
     @BindView(R.id.bt_send)
     Button btSend;
-    private ClassicBluetooth mBluetooth;
+    private IBluetooth mBluetooth;
     private Dialog progressDialog;
     private List<String> listResponse = new ArrayList<>();
     private ArrayAdapter<String> mAdapter;
@@ -89,7 +92,9 @@ public class BluetoothFragment extends BaseFragment {
     private void initData() {
         initToolbarBackNavigation(toolbar);
         toolbar.setTitle("蓝牙调试");
-        mBluetooth = new ClassicBluetooth(BaseApplication.mContext);
+//        mBluetooth = BluetoothManager.getBluetooth(BaseApplication.mContext);
+        mBluetooth = LeBluetooth.newInstance(BaseApplication.mContext);
+
         mBluetooth.setListener(mListener);
         mAdapter = new ArrayAdapter<>(_mActivity, android.R.layout.simple_list_item_1, listResponse);
         lvResponses.setAdapter(mAdapter);
@@ -115,12 +120,12 @@ public class BluetoothFragment extends BaseFragment {
         }
 
         @Override
-        public void onConnecting(Device device) {
+        public void onConnecting(BluetoothDevice device) {
             toolbar.setTitle("正连接:" + device.getName());
         }
 
         @Override
-        public void onConnected(Device device) {
+        public void onConnected(BluetoothDevice device) {
             toolbar.setTitle("已连接:" + device.getName());
             tvPaired.setVisibility(View.GONE);
             tvScan.setVisibility(View.GONE);
@@ -139,9 +144,6 @@ public class BluetoothFragment extends BaseFragment {
         @Override
         public void onConnectionFailed(BluetoothDevice device) {
             toolbar.setTitle("蓝牙连接失败");
-            if (device != null) {
-                mBluetooth.startScan();
-            }
         }
 
         @Override
@@ -162,7 +164,6 @@ public class BluetoothFragment extends BaseFragment {
 
         @Override
         public void onDevicesFound(final List<BluetoothDevice> deviceList) {
-            KLog.e("onDevicesFound^^^^^^^^^^^^^^^^^^^^^");
             String[] arrayDeviceInfo = new String[deviceList.size()];
 
             for (int i = 0; i < deviceList.size(); i++) {
@@ -269,6 +270,7 @@ public class BluetoothFragment extends BaseFragment {
     @Override
     public void onDestroy() {
         mBluetooth.close();
+        mBluetooth = null;
         super.onDestroy();
     }
 

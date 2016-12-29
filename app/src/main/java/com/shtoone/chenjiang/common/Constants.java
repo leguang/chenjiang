@@ -108,4 +108,9 @@ public class Constants {
     public static final String biaoshi_pingtai = "0";
     public static final String biaoshi_app = "1";
 
+    //蓝牙模块
+    public static final String BLUETOOTH_TYPE = "BLUETOOTH_TYPE";
+    public static final int BLUETOOTH_CLASSIC = 0;
+    public static final int BLUETOOTH_LE = 1;
+
 }

@@ -18,9 +18,9 @@ public interface BluetoothListener {
 
     void onBluetoothNotEnabled();
 
-    void onConnecting(Device device);
+    void onConnecting(BluetoothDevice device);
 
-    void onConnected(Device device);
+    void onConnected(BluetoothDevice device);
 
     void onDisconnected();
 

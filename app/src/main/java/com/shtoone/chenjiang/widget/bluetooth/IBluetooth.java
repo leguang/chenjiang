@@ -31,4 +31,6 @@ public interface IBluetooth {
     boolean close();
 
     void sendData(byte[] data);
+
+    void setListener(BluetoothListener listener);
 }
