@@ -2,6 +2,7 @@ package com.shtoone.chenjiang.mvp.view.main.measure;
 
 import android.app.Dialog;
 import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -22,7 +23,7 @@ import com.shtoone.chenjiang.BaseApplication;
 import com.shtoone.chenjiang.R;
 import com.shtoone.chenjiang.common.AudioPlayer;
 import com.shtoone.chenjiang.common.Constants;
-import com.shtoone.chenjiang.common.Dialoghelper;
+import com.shtoone.chenjiang.common.DialogHelper;
 import com.shtoone.chenjiang.common.ToastUtils;
 import com.shtoone.chenjiang.mvp.contract.measure.MeasureContract;
 import com.shtoone.chenjiang.mvp.model.entity.db.CezhanData;
@@ -30,6 +31,7 @@ import com.shtoone.chenjiang.mvp.model.entity.db.YusheshuizhunxianData;
 import com.shtoone.chenjiang.mvp.presenter.measure.MeasurePresenter;
 import com.shtoone.chenjiang.mvp.view.adapter.MeasureRVPAdapter;
 import com.shtoone.chenjiang.mvp.view.base.BaseFragment;
+import com.shtoone.chenjiang.utils.SharedPreferencesUtils;
 import com.shtoone.chenjiang.widget.bluetooth.classic.Device;
 import com.shtoone.chenjiang.widget.bluetooth.classic.SmoothBluetooth;
 import com.socks.library.KLog;
@@ -66,7 +68,6 @@ public class MeasureRightFragment extends BaseFragment<MeasureContract.Presenter
     private YusheshuizhunxianData mYusheshuizhunxianData;
     private LinearLayoutManager mLinearLayoutManager;
     private Dialog progressDialog;
-    private SmoothBluetooth mSmoothBluetooth;
     public static final int BT_REQUEST = 11;
     private ViewGroup viewGroup;
     private AlertDialog.Builder deviceListBuilder;
@@ -114,10 +115,10 @@ public class MeasureRightFragment extends BaseFragment<MeasureContract.Presenter
         initToolbar();
         initRecyclerViewPager(view);
         initData();
-        initBluetooth();
     }
 
     private void initToolbar() {
+        mPresenter.start();
         toolbar.setTitle("测量");
         ((MeasureFragment) getParentFragment()).initToolbartoggle(toolbar);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -135,9 +136,9 @@ public class MeasureRightFragment extends BaseFragment<MeasureContract.Presenter
                 switch (item.getItemId()) {
                     case R.id.action_stop:
                         ToastUtils.showToast(_mActivity, "停止");
-                        Dialoghelper.dialog(_mActivity, R.drawable.ic_error_outline_red_400_48dp,
+                        DialogHelper.dialog(_mActivity, R.drawable.ic_error_outline_red_400_48dp,
                                 R.string.dialog_stop_title, R.string.dialog_stop_content, R.string.dialog_positiveText,
-                                R.string.dialog_negativeText, new Dialoghelper.Call() {
+                                R.string.dialog_negativeText, new DialogHelper.Call() {
                                     @Override
                                     public void onNegative() {
                                     }
@@ -151,9 +152,9 @@ public class MeasureRightFragment extends BaseFragment<MeasureContract.Presenter
 
                     case R.id.action_delete:
                         ToastUtils.showToast(_mActivity, "删除");
-                        Dialoghelper.dialog(_mActivity, R.drawable.ic_error_outline_red_400_48dp,
+                        DialogHelper.dialog(_mActivity, R.drawable.ic_error_outline_red_400_48dp,
                                 R.string.dialog_delete_title, R.string.dialog_delete_content, R.string.dialog_positiveText,
-                                R.string.dialog_negativeText, new Dialoghelper.Call() {
+                                R.string.dialog_negativeText, new DialogHelper.Call() {
                                     @Override
                                     public void onNegative() {
                                     }
@@ -174,12 +175,6 @@ public class MeasureRightFragment extends BaseFragment<MeasureContract.Presenter
     private void initData() {
         mPresenter.requestJidianData();
         mPresenter.requestCezhanData(mYusheshuizhunxianData);
-    }
-
-
-    private void initBluetooth() {
-        mSmoothBluetooth = new SmoothBluetooth(BaseApplication.mContext);
-        mSmoothBluetooth.setListener(mListener);
     }
 
     protected void initRecyclerViewPager(View view) {
@@ -203,7 +198,7 @@ public class MeasureRightFragment extends BaseFragment<MeasureContract.Presenter
 
     @Override
     public void showError(Throwable t) {
-        Dialoghelper.warningSnackbar(viewGroup, "数据初始化失败", Dialoghelper.APPEAR_FROM_TOP_TO_DOWN);
+        DialogHelper.warningSnackbar(viewGroup, "数据初始化失败", DialogHelper.APPEAR_FROM_TOP_TO_DOWN);
     }
 
 
@@ -215,7 +210,7 @@ public class MeasureRightFragment extends BaseFragment<MeasureContract.Presenter
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.bt_jidian_measure_right_fragment:
-                Dialoghelper.dialogList(_mActivity, 0, R.string.dialog_select_jidian, listJidianBianhao, R.string.dialog_negativeText, 0, new Dialoghelper.ListCall() {
+                DialogHelper.dialogList(_mActivity, 0, R.string.dialog_select_jidian, listJidianBianhao, R.string.dialog_negativeText, 0, new DialogHelper.ListCall() {
                     @Override
                     public void onSelection(Dialog dialog, View itemView, int which, CharSequence text) {
 
@@ -237,10 +232,7 @@ public class MeasureRightFragment extends BaseFragment<MeasureContract.Presenter
                 break;
             case R.id.fab:
                 //连接策略是：优先显示已配对的，当配对中没有的时候，提供扫描按钮。
-                if (!mSmoothBluetooth.isConnected()) {
-                    mSmoothBluetooth.tryConnection();
-                    return;
-                }
+                mPresenter.connectPaired(_mActivity);
                 if (measureIndex > 4) {
                     measureIndex = 1;
                     //此处还要判断是往测还是反测。
@@ -248,11 +240,11 @@ public class MeasureRightFragment extends BaseFragment<MeasureContract.Presenter
                 }
 
                 if (progressDialog == null) {
-                    progressDialog = Dialoghelper.progress(_mActivity, R.string.dialog_wait, R.string.dialog_measureing, true);
+                    progressDialog = DialogHelper.progress(_mActivity, R.string.dialog_wait, R.string.dialog_measureing, true);
                 }
                 progressDialog.show();
                 mAdapter.measure(mRecyclerView.getCurrentPosition(), measureIndex);
-                mSmoothBluetooth.send(measureIndex + "");
+                mPresenter.sendData((measureIndex + "").getBytes());
                 break;
         }
     }
@@ -269,134 +261,94 @@ public class MeasureRightFragment extends BaseFragment<MeasureContract.Presenter
     }
 
     @Override
-    public void onDestroy() {
-        AudioPlayer.onDestroy();
-        mSmoothBluetooth.stop();
-        super.onDestroy();
+    public void setDialog(String tips) {
+        DialogHelper.warningSnackbar(viewGroup, tips, DialogHelper.APPEAR_FROM_TOP_TO_DOWN);
     }
 
-    /**
-     *********************蓝牙所有状态的回调都在这里*********************************
-     */
-    private SmoothBluetooth.Listener mListener = new SmoothBluetooth.Listener() {
-        @Override
-        public void onBluetoothNotSupported() {
-            Dialoghelper.errorSnackbar(viewGroup, "不支持蓝牙设备", Dialoghelper.APPEAR_FROM_TOP_TO_DOWN);
-        }
-
-        @Override
-        public void onBluetoothNotEnabled() {
-            Intent enableBluetooth = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-            startActivityForResult(enableBluetooth, BT_REQUEST);
-        }
-
-        @Override
-        public void onConnecting(Device device) {
-            Dialoghelper.loadingSnackbar(viewGroup, "正连接:" + device.getName(), Dialoghelper.APPEAR_FROM_TOP_TO_DOWN);
-        }
-
-        @Override
-        public void onConnected(Device device) {
-            Dialoghelper.successSnackbar(viewGroup, "已连接:" + device.getName(), Dialoghelper.APPEAR_FROM_TOP_TO_DOWN);
-        }
-
-        @Override
-        public void onDisconnected() {
-            Dialoghelper.warningSnackbar(viewGroup, "蓝牙连接已断开", Dialoghelper.APPEAR_FROM_TOP_TO_DOWN);
-        }
-
-        @Override
-        public void onConnectionFailed(Device device) {
-            Dialoghelper.errorSnackbar(viewGroup, "蓝牙连接失败", Dialoghelper.APPEAR_FROM_TOP_TO_DOWN);
-
-            if (device != null && device.isPaired()) {
-                mSmoothBluetooth.doDiscovery();
-            }
-        }
-
-        @Override
-        public void onDiscoveryStarted() {
-            progressDialog = Dialoghelper.progressDialog(_mActivity, "正在玩命查找设备...", 0);
-            progressDialog.setCanceledOnTouchOutside(false);
-        }
-
-        @Override
-        public void onDiscoveryFinished() {
-            progressDialog.dismiss();
-        }
-
-        @Override
-        public void onNoDevicesFound() {
-            Dialoghelper.errorSnackbar(viewGroup, "未找到蓝牙设备", Dialoghelper.APPEAR_FROM_TOP_TO_DOWN);
-        }
-
-        @Override
-        public void onDevicesFound(final List<Device> deviceList, final SmoothBluetooth.ConnectionCallback connectionCallback) {
-            String[] arrayDeviceInfo = new String[deviceList.size()];
-
-            for (int i = 0; i < deviceList.size(); i++) {
-                arrayDeviceInfo[i] = deviceList.get(i).getName() + "(" + deviceList.get(i).getAddress() + ")";
-            }
-
-            if (deviceListBuilder == null) {
-                deviceListBuilder = new AlertDialog.Builder(_mActivity)
-                        .setTitle(R.string.dialog_select_bluetooth)
-                        .setItems(arrayDeviceInfo, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                connectionCallback.connectTo(deviceList.get(which));
-                                dialog.dismiss();
-                            }
-                        }).setPositiveButton(R.string.dialog_negativeText, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-
-                            }
-                        }).setNeutralButton(R.string.dialog_neutralText, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                mSmoothBluetooth.doDiscovery();
-                            }
-                        });
-            } else {
-                deviceListBuilder.setItems(arrayDeviceInfo, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        connectionCallback.connectTo(deviceList.get(which));
-                        dialog.dismiss();
-                    }
-                });
-            }
-            deviceListBuilder.show();
-        }
-
-        @Override
-        public void onDataReceived(int data, String str) {
-            KLog.e("data::" + data);
-            KLog.e("str::" + str);
-            measureIndex++;
-            /**
-             * 考虑把以下这些代码封装到mAdapter中去。
-             */
-            List<CezhanData> listCezhanData = mAdapter.getData();
-            int position = mRecyclerView.getCurrentPosition();
-            CezhanData mCezhanData = listCezhanData.get(position);
-            mCezhanData.setB1hd(str);
-            mCezhanData.setB1r(str);
-            mAdapter.notifyDataSetChanged();
-            if (progressDialog != null) {
-                progressDialog.dismiss();
-            }
-        }
-    };
+    @Override
+    public void onConnecting(BluetoothDevice device) {
+        DialogHelper.loadingSnackbar(viewGroup, "正连接:" + device.getName(), DialogHelper.APPEAR_FROM_TOP_TO_DOWN);
+    }
 
     @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == BT_REQUEST) {
-            if (resultCode == RESULT_OK) {
-                mSmoothBluetooth.tryConnection();
-            }
+    public void onConnected(BluetoothDevice device) {
+        DialogHelper.successSnackbar(viewGroup, "已连接:" + device.getName(), DialogHelper.APPEAR_FROM_TOP_TO_DOWN);
+    }
+
+    @Override
+    public void onDisconnected() {
+        DialogHelper.successSnackbar(viewGroup, "蓝牙连接已断开", DialogHelper.APPEAR_FROM_TOP_TO_DOWN);
+    }
+
+    @Override
+    public void onDiscoveryStarted() {
+        progressDialog = DialogHelper.progressDialog(_mActivity, "正在玩命查找设备...", 0);
+        progressDialog.setCanceledOnTouchOutside(false);
+    }
+
+    @Override
+    public void onDiscoveryFinished() {
+        progressDialog.dismiss();
+    }
+
+    @Override
+    public void onDevicesFound(final List<BluetoothDevice> deviceList) {
+        String[] arrayDeviceInfo = new String[deviceList.size()];
+
+        for (int i = 0; i < deviceList.size(); i++) {
+            arrayDeviceInfo[i] = deviceList.get(i).getName() + "(" + deviceList.get(i).getAddress() + ")";
         }
+
+        if (deviceListBuilder == null) {
+            deviceListBuilder = new AlertDialog.Builder(_mActivity)
+                    .setTitle(R.string.dialog_select_bluetooth)
+                    .setItems(arrayDeviceInfo, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            mPresenter.connect(deviceList.get(which).getAddress());
+                            dialog.dismiss();
+                        }
+                    }).setPositiveButton(R.string.dialog_negativeText, null)
+                    .setNeutralButton(R.string.dialog_scan, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            mPresenter.startScan();
+                        }
+                    });
+        } else {
+            deviceListBuilder.setItems(arrayDeviceInfo, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    mPresenter.connect(deviceList.get(which).getAddress());
+                    dialog.dismiss();
+                }
+            });
+        }
+        deviceListBuilder.show();
+    }
+
+    @Override
+    public void onDataReceived(int data, String str) {
+        KLog.e("data::" + data);
+        KLog.e("str::" + str);
+        measureIndex++;
+        /**
+         * 考虑把以下这些代码封装到mAdapter中去。
+         */
+        List<CezhanData> listCezhanData = mAdapter.getData();
+        int position = mRecyclerView.getCurrentPosition();
+        CezhanData mCezhanData = listCezhanData.get(position);
+        mCezhanData.setB1hd(str);
+        mCezhanData.setB1r(str);
+        mAdapter.notifyDataSetChanged();
+        if (progressDialog != null) {
+            progressDialog.dismiss();
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        AudioPlayer.onDestroy();
+        super.onDestroy();
     }
 }

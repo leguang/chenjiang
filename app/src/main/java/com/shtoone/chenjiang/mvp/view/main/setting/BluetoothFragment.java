@@ -22,16 +22,15 @@ import android.widget.TextView;
 
 import com.shtoone.chenjiang.BaseApplication;
 import com.shtoone.chenjiang.R;
-import com.shtoone.chenjiang.common.Dialoghelper;
+import com.shtoone.chenjiang.common.Constants;
+import com.shtoone.chenjiang.common.DialogHelper;
 import com.shtoone.chenjiang.mvp.contract.base.BaseContract;
+import com.shtoone.chenjiang.mvp.contract.setting.BluetoothContract;
+import com.shtoone.chenjiang.mvp.presenter.setting.BluetoothPresenter;
 import com.shtoone.chenjiang.mvp.view.base.BaseFragment;
+import com.shtoone.chenjiang.utils.SharedPreferencesUtils;
 import com.shtoone.chenjiang.widget.bluetooth.BluetoothListener;
 import com.shtoone.chenjiang.widget.bluetooth.BluetoothManager;
-import com.shtoone.chenjiang.widget.bluetooth.IBluetooth;
-import com.shtoone.chenjiang.widget.bluetooth.classic.ClassicBluetooth;
-import com.shtoone.chenjiang.widget.bluetooth.classic.Device;
-import com.shtoone.chenjiang.widget.bluetooth.classic.SmoothBluetooth;
-import com.shtoone.chenjiang.widget.bluetooth.le.LeBluetooth;
 import com.socks.library.KLog;
 
 import java.util.ArrayList;
@@ -44,10 +43,10 @@ import butterknife.OnClick;
 /**
  * Author：leguang on 2016/10/9 0009 15:49
  * Email：langmanleguang@qq.com
+ * 该界面留作调试指令用
  */
-public class BluetoothFragment extends BaseFragment {
+public class BluetoothFragment extends BaseFragment<BluetoothContract.Presenter> implements BluetoothContract.View {
     private static final String TAG = BluetoothFragment.class.getSimpleName();
-    public static final int BT_REQUEST = 1;
     @BindView(R.id.tv_disconnect)
     TextView tvDisconnect;
     @BindView(R.id.tv_scan)
@@ -64,11 +63,11 @@ public class BluetoothFragment extends BaseFragment {
     CheckBox cbCarrage;
     @BindView(R.id.bt_send)
     Button btSend;
-    private IBluetooth mBluetooth;
     private Dialog progressDialog;
     private List<String> listResponse = new ArrayList<>();
     private ArrayAdapter<String> mAdapter;
     private AlertDialog.Builder deviceListBuilder;
+    private ViewGroup viewGroup;
 
     public static BluetoothFragment newInstance() {
         return new BluetoothFragment();
@@ -80,6 +79,7 @@ public class BluetoothFragment extends BaseFragment {
         View view = inflater.inflate(R.layout.fragment_bluetooth_setting, container, false);
         ButterKnife.bind(this, view);
         initStateBar(toolbar);
+        viewGroup = (ViewGroup) _mActivity.findViewById(android.R.id.content).getRootView();
         return attachToSwipeBack(view);
     }
 
@@ -92,196 +92,134 @@ public class BluetoothFragment extends BaseFragment {
     private void initData() {
         initToolbarBackNavigation(toolbar);
         toolbar.setTitle("蓝牙调试");
-//        mBluetooth = BluetoothManager.getBluetooth(BaseApplication.mContext);
-        mBluetooth = LeBluetooth.newInstance(BaseApplication.mContext);
-
-        mBluetooth.setListener(mListener);
         mAdapter = new ArrayAdapter<>(_mActivity, android.R.layout.simple_list_item_1, listResponse);
         lvResponses.setAdapter(mAdapter);
+        mPresenter.start();
     }
 
-    @NonNull
-    @Override
-    protected BaseContract.Presenter createPresenter() {
-        return null;
-    }
-
-
-    private BluetoothListener mListener = new BluetoothListener() {
-        @Override
-        public void onBluetoothNotSupported() {
-            toolbar.setTitle("未找到蓝牙设备");
-        }
-
-        @Override
-        public void onBluetoothNotEnabled() {
-            Intent enableBluetooth = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-            startActivityForResult(enableBluetooth, BT_REQUEST);
-        }
-
-        @Override
-        public void onConnecting(BluetoothDevice device) {
-            toolbar.setTitle("正连接:" + device.getName());
-        }
-
-        @Override
-        public void onConnected(BluetoothDevice device) {
-            toolbar.setTitle("已连接:" + device.getName());
-            tvPaired.setVisibility(View.GONE);
-            tvScan.setVisibility(View.GONE);
-            tvDisconnect.setVisibility(View.VISIBLE);
-        }
-
-        @Override
-        public void onDisconnected() {
-            toolbar.setTitle("蓝牙连接已断开");
-
-            tvPaired.setVisibility(View.VISIBLE);
-            tvScan.setVisibility(View.VISIBLE);
-            tvDisconnect.setVisibility(View.GONE);
-        }
-
-        @Override
-        public void onConnectionFailed(BluetoothDevice device) {
-            toolbar.setTitle("蓝牙连接失败");
-        }
-
-        @Override
-        public void onDiscoveryStarted() {
-            progressDialog = Dialoghelper.progressDialog(_mActivity, "正在玩命查找设备...", 0);
-            progressDialog.setCanceledOnTouchOutside(false);
-        }
-
-        @Override
-        public void onDiscoveryFinished() {
-            progressDialog.dismiss();
-        }
-
-        @Override
-        public void onNoDevicesFound() {
-            toolbar.setTitle("未找到蓝牙设备");
-        }
-
-        @Override
-        public void onDevicesFound(final List<BluetoothDevice> deviceList) {
-            String[] arrayDeviceInfo = new String[deviceList.size()];
-
-            for (int i = 0; i < deviceList.size(); i++) {
-                arrayDeviceInfo[i] = deviceList.get(i).getName() + "(" + deviceList.get(i).getAddress() + ")";
-            }
-
-            if (deviceListBuilder == null) {
-                deviceListBuilder = new AlertDialog.Builder(_mActivity)
-                        .setTitle(R.string.dialog_select_bluetooth)
-                        .setItems(arrayDeviceInfo, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                mBluetooth.connect(deviceList.get(which).getAddress());
-                                dialog.dismiss();
-                            }
-                        }).setPositiveButton(R.string.dialog_negativeText, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-
-                            }
-                        }).setNeutralButton("扫描", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                mBluetooth.startScan();
-                            }
-                        });
-            } else {
-                deviceListBuilder.setItems(arrayDeviceInfo, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        mBluetooth.connect(deviceList.get(which).getAddress());
-                        dialog.dismiss();
-                    }
-                });
-            }
-            deviceListBuilder.show();
-        }
-
-        @Override
-        public void onDataReceived(int data, String str) {
-            KLog.e("currentThreadName::" + Thread.currentThread().getName());
-
-            KLog.e(str);
-            if (data > 0) {
-                listResponse.add(0, str);
-                mAdapter.notifyDataSetChanged();
-            }
-        }
-    };
 
     @OnClick({R.id.tv_disconnect, R.id.tv_scan, R.id.tv_paired, R.id.bt_send})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.tv_disconnect:
-                mBluetooth.disconnect();
+                mPresenter.disconnect();
                 listResponse.clear();
                 mAdapter.notifyDataSetChanged();
                 break;
             case R.id.tv_scan:
-                mBluetooth.startScan();
+                mPresenter.startScan();
                 break;
             case R.id.tv_paired:
-
-                final String[] arrayDeviceInfo = new String[mBluetooth.getBondedDevices().size()];
-
-                int i = 0;
-
-                for (BluetoothDevice bluetoothDevice : mBluetooth.getBondedDevices()) {
-                    arrayDeviceInfo[i] = bluetoothDevice.getAddress();
-                    i++;
-                }
-
-
-                new AlertDialog.Builder(_mActivity)
-                        .setTitle(R.string.dialog_select_bluetooth)
-                        .setItems(arrayDeviceInfo, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                mBluetooth.connect(arrayDeviceInfo[which]);
-                                dialog.dismiss();
-                            }
-                        }).setPositiveButton(R.string.dialog_negativeText, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-
-                    }
-                }).setNeutralButton("扫描", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        mBluetooth.startScan();
-                    }
-                }).show();
-
-
+                mPresenter.connectPaired(_mActivity);
                 break;
             case R.id.bt_send:
                 //看此处的bytes编码   会不会引起乱码
-                mBluetooth.sendData(etMessage.getText().toString().getBytes());
+                mPresenter.sendData(etMessage.getText().toString().getBytes());
                 etMessage.setText("");
                 break;
         }
     }
 
+    @NonNull
     @Override
-    public void onDestroy() {
-        mBluetooth.close();
-        mBluetooth = null;
-        super.onDestroy();
+    protected BluetoothContract.Presenter createPresenter() {
+        return new BluetoothPresenter(this);
     }
 
     @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == BT_REQUEST) {
-            if (resultCode == RESULT_OK) {
-//                mSmoothBluetooth.tryConnection();
-//                mBluetooth.startScan();
-            }
+    public void showContent() {
+
+    }
+
+    @Override
+    public void showError(Throwable t) {
+
+    }
+
+    @Override
+    public void showLoading() {
+
+    }
+
+    @Override
+    public void setDialog(String tips) {
+        DialogHelper.warningSnackbar(viewGroup, tips, DialogHelper.APPEAR_FROM_TOP_TO_DOWN);
+    }
+
+    @Override
+    public void onConnecting(BluetoothDevice device) {
+        DialogHelper.loadingSnackbar(viewGroup, "正连接:" + device.getName(), DialogHelper.APPEAR_FROM_TOP_TO_DOWN);
+    }
+
+    @Override
+    public void onConnected(BluetoothDevice device) {
+        DialogHelper.successSnackbar(viewGroup, "已连接:" + device.getName(), DialogHelper.APPEAR_FROM_TOP_TO_DOWN);
+        tvPaired.setVisibility(View.GONE);
+        tvScan.setVisibility(View.GONE);
+        tvDisconnect.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void onDisconnected() {
+        DialogHelper.successSnackbar(viewGroup, "蓝牙连接已断开", DialogHelper.APPEAR_FROM_TOP_TO_DOWN);
+        tvPaired.setVisibility(View.VISIBLE);
+        tvScan.setVisibility(View.VISIBLE);
+        tvDisconnect.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void onDiscoveryStarted() {
+        progressDialog = DialogHelper.progressDialog(_mActivity, "正在玩命查找设备...", 0);
+        progressDialog.setCanceledOnTouchOutside(false);
+    }
+
+    @Override
+    public void onDiscoveryFinished() {
+        progressDialog.dismiss();
+    }
+
+    @Override
+    public void onDevicesFound(final List<BluetoothDevice> deviceList) {
+        String[] arrayDeviceInfo = new String[deviceList.size()];
+
+        for (int i = 0; i < deviceList.size(); i++) {
+            arrayDeviceInfo[i] = deviceList.get(i).getName() + "(" + deviceList.get(i).getAddress() + ")";
+        }
+
+        if (deviceListBuilder == null) {
+            deviceListBuilder = new AlertDialog.Builder(_mActivity)
+                    .setTitle(R.string.dialog_select_bluetooth)
+                    .setItems(arrayDeviceInfo, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            mPresenter.connect(deviceList.get(which).getAddress());
+                            dialog.dismiss();
+                        }
+                    }).setPositiveButton(R.string.dialog_negativeText, null)
+                    .setNeutralButton(R.string.dialog_scan, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            mPresenter.startScan();
+                        }
+                    });
+        } else {
+            deviceListBuilder.setItems(arrayDeviceInfo, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    mPresenter.connect(deviceList.get(which).getAddress());
+                    dialog.dismiss();
+                }
+            });
+        }
+        deviceListBuilder.show();
+    }
+
+    @Override
+    public void onDataReceived(int data, String str) {
+        KLog.e(str);
+        if (data > 0) {
+            listResponse.add(0, str);
+            mAdapter.notifyDataSetChanged();
         }
     }
 }

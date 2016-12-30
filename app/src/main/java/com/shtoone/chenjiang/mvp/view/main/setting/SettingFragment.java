@@ -30,7 +30,6 @@ import butterknife.ButterKnife;
  * Email：langmanleguang@qq.com
  */
 public class SettingFragment extends BaseFragment {
-
     private static final String TAG = SettingFragment.class.getSimpleName();
     @BindView(R.id.toolbar_toolbar_tablayout)
     Toolbar toolbar;
@@ -73,7 +72,8 @@ public class SettingFragment extends BaseFragment {
         toolbar.setTitle("系统设置");
 
         toolbar.inflateMenu(R.menu.menu_setting);
-        toolbar.getMenu().findItem(R.id.action_bluetooth_setting).setVisible(false);
+        toolbar.getMenu().findItem(R.id.action_save_param).setVisible(false);
+        toolbar.getMenu().findItem(R.id.action_reset_param).setVisible(false);
 
         toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
@@ -105,11 +105,11 @@ public class SettingFragment extends BaseFragment {
             @Override
             public void onPageSelected(int position) {
                 toolbar.invalidate();
-                if (position == 0) {
+                if (position == 1) {
                     toolbar.getMenu().findItem(R.id.action_bluetooth_setting).setVisible(false);
                     toolbar.getMenu().findItem(R.id.action_save_param).setVisible(true);
                     toolbar.getMenu().findItem(R.id.action_reset_param).setVisible(true);
-                } else if (position == 1) {
+                } else if (position == 0) {
                     toolbar.getMenu().findItem(R.id.action_save_param).setVisible(false);
                     toolbar.getMenu().findItem(R.id.action_reset_param).setVisible(false);
                     toolbar.getMenu().findItem(R.id.action_bluetooth_setting).setVisible(true);

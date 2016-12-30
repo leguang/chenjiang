@@ -54,10 +54,9 @@ public class VersionPresenter extends BasePresenter<VersionContract.View> implem
 
             @Override
             public void onFailure(Call<CheckUpdateBean> call, Throwable t) {
-                if (getView() == null) {
-                    return;
+                if (isViewAttached()) {
+                    getView().showError(t);
                 }
-                getView().showError(t);
             }
         });
     }

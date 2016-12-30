@@ -1,11 +1,10 @@
-package com.shtoone.chenjiang.mvp.contract.measure;
+package com.shtoone.chenjiang.mvp.contract.setting;
+
 
 import android.app.Activity;
 import android.bluetooth.BluetoothDevice;
 
 import com.shtoone.chenjiang.mvp.contract.base.BaseContract;
-import com.shtoone.chenjiang.mvp.model.entity.db.CezhanData;
-import com.shtoone.chenjiang.mvp.model.entity.db.YusheshuizhunxianData;
 
 import java.util.List;
 
@@ -13,12 +12,8 @@ import java.util.List;
  * Author：leguang on 2016/10/9 0009 15:49
  * Email：langmanleguang@qq.com
  */
-public interface MeasureContract {
+public interface BluetoothContract {
     interface View extends BaseContract.View {
-        void responseJidianData(List<String> listJidianBianhao);
-
-        void responseCezhanData(List<CezhanData> listCezhan);
-
         void setDialog(String tips);
 
         void  onConnecting(BluetoothDevice device);
@@ -37,10 +32,6 @@ public interface MeasureContract {
     }
 
     interface Presenter extends BaseContract.Presenter {
-        void requestJidianData();
-
-        void requestCezhanData(YusheshuizhunxianData mYusheshuizhunxianData);
-
         void disconnect();
 
         void startScan();
@@ -50,5 +41,6 @@ public interface MeasureContract {
         void connectPaired(Activity mActivity);
 
         void sendData(byte[] data);
+
     }
 }

@@ -41,7 +41,6 @@ public class ClassicBluetooth implements IBluetooth {
     public static final int STATE_CONNECTING = 2;    // now initiating an outgoing connection
     public static final int STATE_CONNECTED = 3;    // now connected to a remote device
     private int mState;
-    public RxManager mRxManager = new RxManager();
 
     private ClassicBluetooth(Context context) {
         mContext = context;
@@ -61,8 +60,8 @@ public class ClassicBluetooth implements IBluetooth {
     }
 
     @Override
-    public void setListener(BluetoothListener listener) {
-        mListener = listener;
+    public void setListener(BluetoothListener mListener) {
+        this.mListener = mListener;
     }
 
     @Override
@@ -76,8 +75,8 @@ public class ClassicBluetooth implements IBluetooth {
     }
 
     @Override
-    public void open() {
-        mBluetoothAdapter.enable();
+    public boolean open() {
+        return mBluetoothAdapter.enable();
     }
 
     @Override
@@ -139,6 +138,9 @@ public class ClassicBluetooth implements IBluetooth {
             mCurrentDevice = device;
             mConnectThread = new ConnectThread(device);
             mConnectThread.start();
+        } else {
+            KLog.e("地址格式不对");
+            mListener.onDisconnected();
         }
 
         mState = STATE_CONNECTING;
@@ -168,7 +170,6 @@ public class ClassicBluetooth implements IBluetooth {
         if (mState != STATE_NONE) {
             disconnect();
         }
-        mRxManager.clear();
         return mBluetoothAdapter.disable();
     }
 
@@ -261,7 +262,7 @@ public class ClassicBluetooth implements IBluetooth {
                 KLog.e(e);
                 e.printStackTrace();
                 //此处也要放到主线程当中
-                mRxManager.add(Observable.just("1")
+                Observable.just("1")
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(new Action1<String>() {
                             @Override
@@ -269,7 +270,7 @@ public class ClassicBluetooth implements IBluetooth {
                                 KLog.e("currentThreadName::" + Thread.currentThread().getName());
                                 mListener.onConnectionFailed(device);
                             }
-                        }));
+                        });
                 disconnect();
             }
             mmSocket = tmp;
@@ -291,7 +292,7 @@ public class ClassicBluetooth implements IBluetooth {
                     e.printStackTrace();
                 }
                 KLog.e("连接失败………………………………………………");
-                mRxManager.add(Observable.just("1")
+                Observable.just("1")
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(new Action1<String>() {
                             @Override
@@ -300,7 +301,7 @@ public class ClassicBluetooth implements IBluetooth {
                                 KLog.e("currentThreadName::" + Thread.currentThread().getName());
                                 mListener.onConnectionFailed(mmDevice);
                             }
-                        }));
+                        });
                 disconnect();
                 return;
             }
@@ -309,7 +310,17 @@ public class ClassicBluetooth implements IBluetooth {
             }
             mState = STATE_CONNECTED;
             KLog.e(" mState-> " + mState);
-            connected(mmSocket, mmDevice);
+            if (mListener != null) {
+                Observable.just("1")
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(new Action1<String>() {
+                            @Override
+                            public void call(String s) {
+                                mListener.onConnected(mmDevice);
+                            }
+                        });
+            }
+            connected(mmSocket);
         }
 
         public void cancel() {
@@ -321,7 +332,7 @@ public class ClassicBluetooth implements IBluetooth {
         }
     }
 
-    public synchronized void connected(BluetoothSocket socket, final BluetoothDevice device) {
+    public synchronized void connected(BluetoothSocket socket) {
         if (mConnectThread != null) {
             mConnectThread.cancel();
             mConnectThread = null;
@@ -333,17 +344,6 @@ public class ClassicBluetooth implements IBluetooth {
         }
         mConnectedThread = new ConnectedThread(socket);
         mConnectedThread.start();
-        if (mListener != null) {
-            mRxManager.add(Observable.just("1")
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(new Action1<String>() {
-                        @Override
-                        public void call(String s) {
-                            KLog.e("currentThreadName::" + Thread.currentThread().getName());
-                            mListener.onConnected(device);
-                        }
-                    }));
-        }
     }
 
     private class ConnectedThread extends Thread {
@@ -384,7 +384,7 @@ public class ClassicBluetooth implements IBluetooth {
                     KLog.e(bytes);
                     KLog.e(readMessage);
                     final int finalBytes = bytes;
-                    mRxManager.add(Observable.just(readMessage)
+                    Observable.just(readMessage)
                             .observeOn(AndroidSchedulers.mainThread())
                             .subscribe(new Action1<String>() {
                                 @Override
@@ -392,13 +392,13 @@ public class ClassicBluetooth implements IBluetooth {
                                     KLog.e("currentThreadName::" + Thread.currentThread().getName());
                                     mListener.onDataReceived(finalBytes, readMessage);
                                 }
-                            }));
+                            });
 
                 } catch (IOException e) {
                     KLog.e(e);
                     e.printStackTrace();
                     //连接断开通知UI
-                    mRxManager.add(Observable.just("1")
+                    Observable.just("1")
                             .observeOn(AndroidSchedulers.mainThread())
                             .subscribe(new Action1<String>() {
                                 @Override
@@ -406,7 +406,7 @@ public class ClassicBluetooth implements IBluetooth {
                                     KLog.e("currentThreadName::" + Thread.currentThread().getName());
                                     mListener.onDisconnected();
                                 }
-                            }));
+                            });
                     disconnect();
                     break;
                 }

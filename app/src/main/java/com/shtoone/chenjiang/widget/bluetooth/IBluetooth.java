@@ -14,7 +14,7 @@ public interface IBluetooth {
 
     boolean isOpened();
 
-    void open();
+    boolean open();
 
     Set<BluetoothDevice> getBondedDevices();
 

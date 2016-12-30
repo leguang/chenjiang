@@ -104,8 +104,8 @@ public class LeBluetooth implements IBluetooth {
     }
 
     @Override
-    public void open() {
-        mBluetoothAdapter.enable();
+    public boolean open() {
+        return mBluetoothAdapter.enable();
     }
 
     @Override
@@ -115,7 +115,7 @@ public class LeBluetooth implements IBluetooth {
 
     @Override
     public boolean startScan() {
-        Log.d(TAG, "scanBleDevices: 扫描蓝牙");
+        Log.e(TAG, "scanBleDevices: 扫描蓝牙");
         mCurrentDevice = null;
         mDevices.clear();
         mBluetoothAdapter.startLeScan(mBleScanCallback);

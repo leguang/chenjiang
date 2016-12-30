@@ -2,10 +2,6 @@ package com.shtoone.chenjiang.widget.bluetooth;
 
 import android.bluetooth.BluetoothDevice;
 
-import com.shtoone.chenjiang.widget.bluetooth.classic.Device;
-import com.shtoone.chenjiang.widget.bluetooth.classic.SmoothBluetooth;
-
-import java.util.ArrayList;
 import java.util.List;
 
 /**

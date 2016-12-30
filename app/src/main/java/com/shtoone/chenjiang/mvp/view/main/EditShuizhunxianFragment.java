@@ -26,7 +26,7 @@ import com.jaredrummler.materialspinner.MaterialSpinner;
 import com.shtoone.chenjiang.BaseApplication;
 import com.shtoone.chenjiang.R;
 import com.shtoone.chenjiang.common.Constants;
-import com.shtoone.chenjiang.common.Dialoghelper;
+import com.shtoone.chenjiang.common.DialogHelper;
 import com.shtoone.chenjiang.event.EventData;
 import com.shtoone.chenjiang.mvp.contract.ShuizhunxianContract;
 import com.shtoone.chenjiang.mvp.model.entity.db.YusheshuizhunxianData;
@@ -146,18 +146,18 @@ public class EditShuizhunxianFragment extends BaseFragment<ShuizhunxianContract.
                         ViewGroup viewGroup = (ViewGroup) _mActivity.findViewById(android.R.id.content).getRootView();
                         if (TextUtils.isEmpty(etTemperature.getText())) {
                             etTemperature.setBackgroundResource(R.drawable.rect_bg_red_stroke_table);
-                            Dialoghelper.warningSnackbar(viewGroup, "温度不能为空", Dialoghelper.APPEAR_FROM_TOP_TO_DOWN);
+                            DialogHelper.warningSnackbar(viewGroup, "温度不能为空", DialogHelper.APPEAR_FROM_TOP_TO_DOWN);
                             return true;
                         }
                         if (TextUtils.isEmpty(etPressure.getText())) {
                             etPressure.setBackgroundResource(R.drawable.rect_bg_red_stroke_table);
-                            Dialoghelper.warningSnackbar(viewGroup, "气压不能为空", Dialoghelper.APPEAR_FROM_TOP_TO_DOWN);
+                            DialogHelper.warningSnackbar(viewGroup, "气压不能为空", DialogHelper.APPEAR_FROM_TOP_TO_DOWN);
                             return true;
                         }
                         String strStaff = (String) spinnerStaff.getItems().get(spinnerStaff.getSelectedIndex());
                         if (strStaff.equals("请先下载人员数据")) {
                             spinnerStaff.setBackgroundResource(R.drawable.rect_bg_red_stroke_table);
-                            Dialoghelper.warningSnackbar(viewGroup, "司镜人员不能为空", Dialoghelper.APPEAR_FROM_TOP_TO_DOWN);
+                            DialogHelper.warningSnackbar(viewGroup, "司镜人员不能为空", DialogHelper.APPEAR_FROM_TOP_TO_DOWN);
                             return true;
                         }
                         //恢复原始样式
@@ -188,10 +188,10 @@ public class EditShuizhunxianFragment extends BaseFragment<ShuizhunxianContract.
         int rowsAffected = mYusheshuizhunxianData.update(mYusheshuizhunxianData.getId());
         ViewGroup viewGroup = (ViewGroup) _mActivity.findViewById(android.R.id.content).getRootView();
         if (rowsAffected > 0) {
-            Dialoghelper.successSnackbar(viewGroup, "恭喜，保存成功", Dialoghelper.APPEAR_FROM_TOP_TO_DOWN);
+            DialogHelper.successSnackbar(viewGroup, "恭喜，保存成功", DialogHelper.APPEAR_FROM_TOP_TO_DOWN);
             EventBus.getDefault().post(new EventData(Constants.EVENT_REFRESH));
         } else {
-            Dialoghelper.errorSnackbar(viewGroup, "保存失败，请重新保存", Dialoghelper.APPEAR_FROM_TOP_TO_DOWN);
+            DialogHelper.errorSnackbar(viewGroup, "保存失败，请重新保存", DialogHelper.APPEAR_FROM_TOP_TO_DOWN);
         }
 
         //清除动画，恢复初始状态。

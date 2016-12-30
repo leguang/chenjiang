@@ -20,7 +20,7 @@ import com.robinhood.ticker.TickerView;
 import com.shtoone.chenjiang.BaseApplication;
 import com.shtoone.chenjiang.R;
 import com.shtoone.chenjiang.common.Constants;
-import com.shtoone.chenjiang.common.Dialoghelper;
+import com.shtoone.chenjiang.common.DialogHelper;
 import com.shtoone.chenjiang.event.EventData;
 import com.shtoone.chenjiang.mvp.contract.DownloadContract;
 import com.shtoone.chenjiang.mvp.model.entity.db.DuanmianData;
@@ -221,9 +221,9 @@ public class DownloadFragment extends BaseFragment<DownloadContract.Presenter> i
     public void onClick(final View view) {
         if (BaseApplication.isShowDialog && NetworkUtils.isWifiConnected(BaseApplication.mContext)) {
             BaseApplication.isShowDialog = false;
-            Dialoghelper.showDialog(_mActivity, R.drawable.ic_error_outline_red_400_48dp,
+            DialogHelper.showDialog(_mActivity, R.drawable.ic_error_outline_red_400_48dp,
                     R.string.dialog_title, R.string.dialog_content, R.string.dialog_positiveText,
-                    R.string.dialog_negativeText, new Dialoghelper.Call() {
+                    R.string.dialog_negativeText, new DialogHelper.Call() {
                         @Override
                         public void onNegative() {
 

@@ -6,13 +6,14 @@ import android.support.v4.app.FragmentPagerAdapter;
 
 import com.shtoone.chenjiang.mvp.view.main.setting.DeviceSettingFragment;
 import com.shtoone.chenjiang.mvp.view.main.setting.ParamSettingFragment;
+import com.socks.library.KLog;
 
 /**
  * Created by leguang on 2016/6/9 0009.
  */
 public class SettingFragmentVPAdapter extends FragmentPagerAdapter {
     private static final String TAG = SettingFragmentVPAdapter.class.getSimpleName();
-    private String[] arrTabTitle = {"参数设置", "设备设置"};
+    private String[] arrTabTitle = {"设备设置", "参数设置"};
 
     public SettingFragmentVPAdapter(FragmentManager fm) {
         super(fm);
@@ -20,14 +21,12 @@ public class SettingFragmentVPAdapter extends FragmentPagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
+        KLog.e("position::" + position);
         if (null != arrTabTitle && arrTabTitle.length > 0) {
-
             if (0 == position) {
-                return ParamSettingFragment.newInstance();
-
-            } else if (1 == position) {
-
                 return DeviceSettingFragment.newInstance();
+            } else if (1 == position) {
+                return ParamSettingFragment.newInstance();
             }
         }
         return null;

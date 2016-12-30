@@ -5,14 +5,11 @@ import android.bluetooth.BluetoothDevice;
 
 import com.shtoone.chenjiang.BaseApplication;
 import com.shtoone.chenjiang.common.Constants;
-import com.shtoone.chenjiang.mvp.contract.setting.SettingContract;
+import com.shtoone.chenjiang.mvp.contract.setting.BluetoothContract;
 import com.shtoone.chenjiang.mvp.presenter.base.BasePresenter;
 import com.shtoone.chenjiang.utils.SharedPreferencesUtils;
 import com.shtoone.chenjiang.widget.bluetooth.BluetoothListener;
 import com.shtoone.chenjiang.widget.bluetooth.BluetoothManager;
-import com.shtoone.chenjiang.widget.bluetooth.IBluetooth;
-import com.shtoone.chenjiang.widget.bluetooth.classic.ClassicBluetooth;
-import com.shtoone.chenjiang.widget.bluetooth.le.LeBluetooth;
 import com.socks.library.KLog;
 
 import java.util.List;
@@ -21,11 +18,11 @@ import java.util.List;
  * Author：leguang on 2016/10/9 0009 15:49
  * Email：langmanleguang@qq.com
  */
-public class SettingPresenter extends BasePresenter<SettingContract.View> implements SettingContract.Presenter {
-    private static final String TAG = SettingPresenter.class.getSimpleName();
+public class BluetoothPresenter extends BasePresenter<BluetoothContract.View> implements BluetoothContract.Presenter {
+    private static final String TAG = BluetoothPresenter.class.getSimpleName();
     private BluetoothManager mBluetoothManager;
 
-    public SettingPresenter(SettingContract.View mView) {
+    public BluetoothPresenter(BluetoothContract.View mView) {
         super(mView);
     }
 
@@ -33,33 +30,7 @@ public class SettingPresenter extends BasePresenter<SettingContract.View> implem
     public void start() {
         mBluetoothManager = BluetoothManager.newInstance(BaseApplication.mContext);
         mBluetoothManager.open();
-        int intBluetoothType = (int) SharedPreferencesUtils.get(BaseApplication.mContext, Constants.BLUETOOTH_TYPE, 0);
-        if (intBluetoothType == Constants.BLUETOOTH_CLASSIC) {
-            getView().checkClassicBluetooth();
-            mBluetoothManager.switch2Classic();
-        } else if (intBluetoothType == Constants.BLUETOOTH_LE) {
-            getView().checkLeBluetooth();
-            mBluetoothManager.switch2Le();
-        } else {
-            getView().checkClassicBluetooth();
-            mBluetoothManager.switch2Classic();
-        }
         mBluetoothManager.setListener(mListener);
-    }
-
-    @Override
-    public void switch2Classic() {
-        SharedPreferencesUtils.put(BaseApplication.mContext, Constants.BLUETOOTH_TYPE, Constants.BLUETOOTH_CLASSIC);
-        mBluetoothManager.switch2Classic();
-        mBluetoothManager.setListener(mListener);
-    }
-
-    @Override
-    public void switch2Le() {
-        SharedPreferencesUtils.put(BaseApplication.mContext, Constants.BLUETOOTH_TYPE, Constants.BLUETOOTH_LE);
-        mBluetoothManager.switch2Le();
-        mBluetoothManager.setListener(mListener);
-
     }
 
     @Override
@@ -95,6 +66,7 @@ public class SettingPresenter extends BasePresenter<SettingContract.View> implem
 
         @Override
         public void onBluetoothNotEnabled() {
+//            DialogHelper.successSnackbar(viewGroup, "蓝牙未打开，请打开手机蓝牙", DialogHelper.APPEAR_FROM_TOP_TO_DOWN);
         }
 
         @Override
@@ -112,7 +84,6 @@ public class SettingPresenter extends BasePresenter<SettingContract.View> implem
         @Override
         public void onDisconnected() {
             if (isViewAttached()) {
-                getView().setDialog("蓝牙连接已断开");
                 getView().onDisconnected();
             }
         }
@@ -144,6 +115,8 @@ public class SettingPresenter extends BasePresenter<SettingContract.View> implem
 
         @Override
         public void onDataReceived(int data, String str) {
+            getView().onDataReceived(data, str);
+            KLog.e("currentThreadName::" + Thread.currentThread().getName());
         }
     };
 

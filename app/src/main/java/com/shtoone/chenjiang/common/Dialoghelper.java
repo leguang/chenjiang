@@ -10,7 +10,6 @@ import android.view.View;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.socks.library.KLog;
 import com.trycatch.mysnackbar.Prompt;
 import com.trycatch.mysnackbar.TSnackbar;
 
@@ -20,8 +19,8 @@ import java.util.Collection;
  * Author：leguang on 2016/11/11 0011 18:50
  * Email：langmanleguang@qq.com
  */
-public class Dialoghelper {
-    private static final String TAG = Dialoghelper.class.getSimpleName();
+public class DialogHelper {
+    private static final String TAG = DialogHelper.class.getSimpleName();
 
     private static MaterialDialog.Builder builder;
     private static AlertDialog.Builder mBuilder;

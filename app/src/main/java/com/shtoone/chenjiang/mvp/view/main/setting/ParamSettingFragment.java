@@ -14,7 +14,7 @@ import android.widget.TextView;
 
 import com.shtoone.chenjiang.R;
 import com.shtoone.chenjiang.common.Constants;
-import com.shtoone.chenjiang.common.Dialoghelper;
+import com.shtoone.chenjiang.common.DialogHelper;
 import com.shtoone.chenjiang.event.EventData;
 import com.shtoone.chenjiang.mvp.contract.base.BaseContract;
 import com.shtoone.chenjiang.mvp.model.entity.db.MeasureSpecificationData;
@@ -104,7 +104,7 @@ public class ParamSettingFragment extends BaseFragment {
         mCurrentData = DataSupport.findLast(MeasureSpecificationData.class);
 
         if (mCurrentData == null) {
-            Dialoghelper.warningSnackbar(rootView, "数据读取失败，请点击重置", Dialoghelper.APPEAR_FROM_TOP_TO_DOWN);
+            DialogHelper.warningSnackbar(rootView, "数据读取失败，请点击重置", DialogHelper.APPEAR_FROM_TOP_TO_DOWN);
             return;
         }
 
@@ -177,20 +177,20 @@ public class ParamSettingFragment extends BaseFragment {
             mCurrentData.setShixiangaodu(et5Shixiangaodu.getText().toString().trim());
 
             if (mCurrentData.update(mCurrentData.getId()) > 0) {
-                Dialoghelper.successSnackbar(rootView, "恭喜，保存成功", Dialoghelper.APPEAR_FROM_TOP_TO_DOWN);
+                DialogHelper.successSnackbar(rootView, "恭喜，保存成功", DialogHelper.APPEAR_FROM_TOP_TO_DOWN);
             } else {
-                Dialoghelper.errorSnackbar(rootView, "抱歉，保存失败，请重试", Dialoghelper.APPEAR_FROM_TOP_TO_DOWN);
+                DialogHelper.errorSnackbar(rootView, "抱歉，保存失败，请重试", DialogHelper.APPEAR_FROM_TOP_TO_DOWN);
             }
 
         } else {
-            Dialoghelper.warningSnackbar(rootView, "请按照标准范围设置参考值", Dialoghelper.APPEAR_FROM_TOP_TO_DOWN);
+            DialogHelper.warningSnackbar(rootView, "请按照标准范围设置参考值", DialogHelper.APPEAR_FROM_TOP_TO_DOWN);
         }
     }
 
     private void reset() {
         intRetry++;
         if (intRetry > 10) {
-            Dialoghelper.errorSnackbar(rootView, "重置失败", Dialoghelper.APPEAR_FROM_TOP_TO_DOWN);
+            DialogHelper.errorSnackbar(rootView, "重置失败", DialogHelper.APPEAR_FROM_TOP_TO_DOWN);
             return;
         }
         //先删除，保证表里面永远都只有两行数据即可。
@@ -212,7 +212,7 @@ public class ParamSettingFragment extends BaseFragment {
         mCurrentData.setShixiangaodu(0.55f + "");
 
         if (mStandardData.save() && mCurrentData.save()) {
-            Dialoghelper.successSnackbar(rootView, "重置成功", Dialoghelper.APPEAR_FROM_TOP_TO_DOWN);
+            DialogHelper.successSnackbar(rootView, "重置成功", DialogHelper.APPEAR_FROM_TOP_TO_DOWN);
             et0Qianhoushijuleijicha.setText(mStandardData.getQianhoushijuleijicha());
             et1Shixianchangdu.setText(mStandardData.getShixianchangdu());
             et2Qianhoushijucha.setText(mStandardData.getQianhoushijucha());

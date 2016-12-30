@@ -36,6 +36,10 @@
     <string name="communicate_test">通讯调试</string>
     <string name="level_line">水准线路</string>
     <string name="measurel_station">测站</string>
+    <string name="bluetooth_setting">蓝牙设置</string>
+    <string name="data_setting">数据设置</string>
+    <string name="classic_bluetooth">传统蓝牙</string>
+    <string name="le_bluetooth">低功耗蓝牙</string>
 
     <!--项目模块-->
     <string name="gongdian">工点</string>
@@ -59,6 +63,7 @@
     <string name="dialog_select_gongdian">请选择工点</string>
     <string name="dialog_wait">请稍后</string>
     <string name="dialog_measureing">正在读取数据，请耐心等待…</string>
+    <string name="dialog_scan">扫描</string>
 
     <!--测量模块-->
     <string name="zhuandian">转点</string>

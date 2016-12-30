@@ -5,188 +5,189 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <android.support.v7.widget.CardView
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginTop="10dp"
+        android:background="@color/lightest_gray">
+
+        <View
+            android:layout_width="8dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentStart="true"
+            android:background="#2fa881" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="50dp"
+            android:text="@string/data_setting"
+            android:textColor="@color/material_yellow_800"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+    </RelativeLayout>
+
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="3dp"
-        android:layout_marginRight="3dp"
-        android:layout_marginTop="3dp"
-        android:foreground="?android:attr/selectableItemBackground"
-        app:cardCornerRadius="@dimen/card_Corner_Radius"
-        app:cardElevation="3dp"
-        app:cardPreventCornerOverlap="false"
-        app:cardUseCompatPadding="true"
-        app:contentPadding="8dp"
-        app:contentPaddingLeft="20dp">
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="波特率：9600"
+            android:textSize="20sp" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="数据位：8位"
+            android:textSize="20sp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="停止位：1位"
+            android:textSize="20sp" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="校验位：无"
+            android:textSize="20sp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="GSI格式："
+            android:textSize="20sp" />
+
+        <RadioGroup
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/rb_8_device_setting_fragment"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:checked="true"
+                android:text="GSI-8"
+                android:textSize="20sp" />
+
+            <RadioButton
+                android:id="@+id/rb_16_device_setting_fragment"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="GSI-16"
+                android:textSize="20sp" />
+
+        </RadioGroup>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginTop="10dp"
+            android:background="@color/lightest_gray">
+
+            <View
+                android:layout_width="8dp"
+                android:layout_height="match_parent"
+                android:layout_alignParentStart="true"
+                android:background="#2fa881" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="50dp"
+                android:text="@string/bluetooth_setting"
+                android:textColor="@color/material_yellow_800"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+        </RelativeLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_margin="10dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
 
-            <LinearLayout
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="类型："
+                android:textSize="20sp" />
+
+            <RadioGroup
+                android:id="@+id/rg_bluetooth_type_device_setting_fragment"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:orientation="horizontal"
-                android:padding="3dp">
+                android:orientation="horizontal">
 
-                <TextView
+                <RadioButton
+                    android:id="@+id/rb_classic_device_setting_fragment"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="波特率：9600"
+                    android:checked="true"
+                    android:text="@string/classic_bluetooth"
                     android:textSize="20sp" />
 
-                <TextView
+                <RadioButton
+                    android:id="@+id/rb_le_device_setting_fragment"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="数据位：8位"
+                    android:text="@string/le_bluetooth"
                     android:textSize="20sp" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:orientation="horizontal"
-                android:padding="3dp">
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="停止位：1位"
-                    android:textSize="20sp" />
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="校验位：无"
-                    android:textSize="20sp" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:orientation="horizontal"
-                android:padding="3dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="GSI格式："
-                    android:textSize="20sp" />
-
-                <RadioGroup
-                    android:id="@+id/rg_handle_dialog"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <RadioButton
-                        android:id="@+id/rb_8_device_setting_fragment"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:checked="true"
-                        android:text="GSI-8"
-                        android:textSize="20sp" />
-
-                    <RadioButton
-                        android:id="@+id/rb_16_device_setting_fragment"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="GSI-16"
-                        android:textSize="20sp" />
-
-                </RadioGroup>
-
-            </LinearLayout>
-
+            </RadioGroup>
 
         </LinearLayout>
-    </android.support.v7.widget.CardView>
-
-    <android.support.v7.widget.CardView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="3dp"
-        android:layout_marginRight="3dp"
-        android:layout_marginTop="3dp"
-        android:foreground="?android:attr/selectableItemBackground"
-        app:cardCornerRadius="@dimen/card_Corner_Radius"
-        app:cardElevation="3dp"
-        app:cardPreventCornerOverlap="false"
-        app:cardUseCompatPadding="true"
-        app:contentPadding="8dp"
-        app:contentPaddingLeft="20dp">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:orientation="horizontal"
-                android:padding="3dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="类      型："
-                    android:textSize="20sp" />
-
-                <RadioGroup
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <RadioButton
-                        android:id="@+id/rb_bluetooth_device_setting_fragment"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:checked="true"
-                        android:text="蓝牙"
-                        android:textSize="20sp" />
-
-                    <RadioButton
-                        android:id="@+id/rb_rs232_device_setting_fragment"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="RS232"
-                        android:textSize="20sp" />
-
-
-                </RadioGroup>
-
-            </LinearLayout>
-
-            <com.jaredrummler.materialspinner.MaterialSpinner
-                android:id="@+id/spinner_device_setting_fragment"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="25dp"
-                app:ms_background_color="@color/light_gray"
-                app:ms_dropdown_height="wrap_content"
-                app:ms_dropdown_max_height="350dp" />
-
-        </LinearLayout>
-    </android.support.v7.widget.CardView>
+    </LinearLayout>
 
     <com.dd.CircularProgressButton
-        android:id="@+id/bt_update_version_fragment"
+        android:id="@+id/bt_connect_device_setting_fragment"
         android:layout_width="180dp"
         android:layout_height="40dp"
         android:layout_gravity="center_horizontal"

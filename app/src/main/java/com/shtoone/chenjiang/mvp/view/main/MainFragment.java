@@ -1,6 +1,5 @@
 package com.shtoone.chenjiang.mvp.view.main;
 
-import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.Environment;
@@ -23,7 +22,7 @@ import com.qiangxi.checkupdatelibrary.dialog.UpdateDialog;
 import com.shtoone.chenjiang.BaseApplication;
 import com.shtoone.chenjiang.R;
 import com.shtoone.chenjiang.common.Constants;
-import com.shtoone.chenjiang.common.Dialoghelper;
+import com.shtoone.chenjiang.common.DialogHelper;
 import com.shtoone.chenjiang.common.ToastUtils;
 import com.shtoone.chenjiang.event.EventData;
 import com.shtoone.chenjiang.mvp.contract.MainContract;
@@ -222,9 +221,9 @@ public class MainFragment extends BaseFragment<MainContract.Presenter> implement
             @Override
             public void onLeftClick(View view, final int position) {
                 KLog.e("onLeftClick" + position);
-                Dialoghelper.dialog(_mActivity, R.drawable.ic_error_outline_red_400_48dp,
+                DialogHelper.dialog(_mActivity, R.drawable.ic_error_outline_red_400_48dp,
                         R.string.dialog_delete_title, R.string.dialog_delete_shuizhunxian, R.string.dialog_positiveText,
-                        R.string.dialog_negativeText, new Dialoghelper.Call() {
+                        R.string.dialog_negativeText, new DialogHelper.Call() {
                             @Override
                             public void onNegative() {
 
@@ -247,7 +246,7 @@ public class MainFragment extends BaseFragment<MainContract.Presenter> implement
             public void onRightClick(View view, int position) {
                 if (mAdapter.getData().get(position).getStatus().equals(Constants.status_daibianji)) {
                     ViewGroup viewGroup = (ViewGroup) _mActivity.findViewById(android.R.id.content).getRootView();
-                    Dialoghelper.warningSnackbar(viewGroup, "请先编辑水准线路再进行测量！", Dialoghelper.APPEAR_FROM_TOP_TO_DOWN);
+                    DialogHelper.warningSnackbar(viewGroup, "请先编辑水准线路再进行测量！", DialogHelper.APPEAR_FROM_TOP_TO_DOWN);
                 } else {
                     start(MeasureFragment.newInstance(mAdapter.getData().get(position)));
                 }
