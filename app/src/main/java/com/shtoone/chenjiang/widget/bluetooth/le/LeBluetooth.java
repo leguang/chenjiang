@@ -241,13 +241,18 @@ public class LeBluetooth implements IBluetooth {
 
     }
 
+    @Override
+    public boolean isConnected() {
+        return mState == STATE_CONNECTED;
+    }
+
     /**
      * 搜索到蓝牙设备后的回调
      */
     private BluetoothAdapter.LeScanCallback mBleScanCallback = new BluetoothAdapter.LeScanCallback() {
         @Override
         public void onLeScan(BluetoothDevice bleDevice, int rssi, byte[] scanRecord) {
-            KLog.e(TAG, "Device found: " + bleDevice.getName() + "::" + bleDevice.getAddress());
+            KLog.e(" found: " + bleDevice.getName() + "::" + bleDevice.getAddress());
             KLog.e("rssi::" + rssi);
             if (!deviceExist(bleDevice)) {
                 mDevices.add(bleDevice);

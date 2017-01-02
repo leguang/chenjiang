@@ -19,7 +19,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.lsjwzh.widget.recyclerviewpager.RecyclerViewPager;
-import com.shtoone.chenjiang.BaseApplication;
 import com.shtoone.chenjiang.R;
 import com.shtoone.chenjiang.common.AudioPlayer;
 import com.shtoone.chenjiang.common.Constants;
@@ -31,9 +30,6 @@ import com.shtoone.chenjiang.mvp.model.entity.db.YusheshuizhunxianData;
 import com.shtoone.chenjiang.mvp.presenter.measure.MeasurePresenter;
 import com.shtoone.chenjiang.mvp.view.adapter.MeasureRVPAdapter;
 import com.shtoone.chenjiang.mvp.view.base.BaseFragment;
-import com.shtoone.chenjiang.utils.SharedPreferencesUtils;
-import com.shtoone.chenjiang.widget.bluetooth.classic.Device;
-import com.shtoone.chenjiang.widget.bluetooth.classic.SmoothBluetooth;
 import com.socks.library.KLog;
 
 import java.util.List;
@@ -232,7 +228,6 @@ public class MeasureRightFragment extends BaseFragment<MeasureContract.Presenter
                 break;
             case R.id.fab:
                 //连接策略是：优先显示已配对的，当配对中没有的时候，提供扫描按钮。
-                mPresenter.connectPaired(_mActivity);
                 if (measureIndex > 4) {
                     measureIndex = 1;
                     //此处还要判断是往测还是反测。
@@ -332,6 +327,7 @@ public class MeasureRightFragment extends BaseFragment<MeasureContract.Presenter
         KLog.e("data::" + data);
         KLog.e("str::" + str);
         measureIndex++;
+
         /**
          * 考虑把以下这些代码封装到mAdapter中去。
          */

@@ -44,7 +44,9 @@ public class MeasurePresenter extends BasePresenter<MeasureContract.View> implem
     public void start() {
         mBluetoothManager = BluetoothManager.newInstance(BaseApplication.mContext);
         mBluetoothManager.setListener(mListener);
-        mBluetoothManager.connectDefault();
+        if (!mBluetoothManager.isConnected()) {
+            mBluetoothManager.connectDefault();
+        }
     }
 
     @Override
@@ -221,7 +223,7 @@ public class MeasurePresenter extends BasePresenter<MeasureContract.View> implem
 
     @Override
     public void detachView() {
-//        mBluetoothManager.onDestroy();
+        mBluetoothManager.onDestroy();
         mBluetoothManager = null;
         mListener = null;
         KLog.e("mBluetoothManager被销毁");

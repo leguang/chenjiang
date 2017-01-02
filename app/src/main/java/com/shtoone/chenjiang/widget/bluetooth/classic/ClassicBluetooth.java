@@ -119,6 +119,11 @@ public class ClassicBluetooth implements IBluetooth {
     }
 
     @Override
+    public boolean isConnected() {
+        return mState == STATE_CONNECTED;
+    }
+
+    @Override
     public synchronized void connect(String address) {
         if (mState == STATE_CONNECTING) {
             if (mConnectThread != null) {
@@ -219,7 +224,7 @@ public class ClassicBluetooth implements IBluetooth {
 
             if (BluetoothDevice.ACTION_FOUND.equals(action)) {
                 BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
-                KLog.e(TAG, "Device found: " + device.getName() + " " + device.getAddress());
+                KLog.e("found: " + device.getName() + " " + device.getAddress());
                 if (!deviceExist(device)) {
                     mDevices.add(device);
                 }

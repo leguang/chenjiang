@@ -148,4 +148,8 @@ public class BluetoothManager {
     public void open() {
         mBluetooth.open();
     }
+
+    public boolean isConnected() {
+        return mBluetooth.isConnected();
+    }
 }
