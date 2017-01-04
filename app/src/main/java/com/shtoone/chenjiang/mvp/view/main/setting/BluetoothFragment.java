@@ -1,10 +1,8 @@
 package com.shtoone.chenjiang.mvp.view.main.setting;
 
 import android.app.Dialog;
-import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -20,17 +18,11 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.shtoone.chenjiang.BaseApplication;
 import com.shtoone.chenjiang.R;
-import com.shtoone.chenjiang.common.Constants;
 import com.shtoone.chenjiang.common.DialogHelper;
-import com.shtoone.chenjiang.mvp.contract.base.BaseContract;
 import com.shtoone.chenjiang.mvp.contract.setting.BluetoothContract;
 import com.shtoone.chenjiang.mvp.presenter.setting.BluetoothPresenter;
 import com.shtoone.chenjiang.mvp.view.base.BaseFragment;
-import com.shtoone.chenjiang.utils.SharedPreferencesUtils;
-import com.shtoone.chenjiang.widget.bluetooth.BluetoothListener;
-import com.shtoone.chenjiang.widget.bluetooth.BluetoothManager;
 import com.socks.library.KLog;
 
 import java.util.ArrayList;
@@ -63,6 +55,10 @@ public class BluetoothFragment extends BaseFragment<BluetoothContract.Presenter>
     CheckBox cbCarrage;
     @BindView(R.id.bt_send)
     Button btSend;
+    @BindView(R.id.bt_send1)
+    Button btSend1;
+    @BindView(R.id.bt_send2)
+    Button btSend2;
     private Dialog progressDialog;
     private List<String> listResponse = new ArrayList<>();
     private ArrayAdapter<String> mAdapter;
@@ -98,7 +94,7 @@ public class BluetoothFragment extends BaseFragment<BluetoothContract.Presenter>
     }
 
 
-    @OnClick({R.id.tv_disconnect, R.id.tv_scan, R.id.tv_paired, R.id.bt_send})
+    @OnClick({R.id.tv_disconnect, R.id.tv_scan, R.id.tv_paired, R.id.bt_send, R.id.bt_send1, R.id.bt_send2})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.tv_disconnect:
@@ -116,6 +112,14 @@ public class BluetoothFragment extends BaseFragment<BluetoothContract.Presenter>
                 //看此处的bytes编码   会不会引起乱码
                 mPresenter.sendData(etMessage.getText().toString().getBytes());
                 etMessage.setText("");
+                break;
+
+            case R.id.bt_send1:
+                mPresenter.sendData("GET/I/WI12".getBytes());
+                break;
+            case R.id.bt_send2:
+                mPresenter.sendData("GET/M/WI32/WI330\n".getBytes());
+
                 break;
         }
     }
@@ -215,9 +219,9 @@ public class BluetoothFragment extends BaseFragment<BluetoothContract.Presenter>
     }
 
     @Override
-    public void onDataReceived(int data, String str) {
+    public void onDataReceived(String str) {
         KLog.e(str);
-        if (data > 0) {
+        if (str.length() > 0) {
             listResponse.add(0, str);
             mAdapter.notifyDataSetChanged();
         }

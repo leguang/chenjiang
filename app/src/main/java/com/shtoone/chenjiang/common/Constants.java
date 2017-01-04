@@ -26,7 +26,7 @@ public class Constants {
     public static final String PATH_APK_CACHE = PATH_DATA + File.separator + "ApkCache";
 
     //基地址
-    public static final String BASE_URL = "http://192.168.11.108:8080/ljcjqms/";
+    public static final String BASE_URL = "http://192.168.11.112:8081/ljcjqms/";
 
 
     //登录地址
@@ -113,5 +113,18 @@ public class Constants {
     public static final int BLUETOOTH_CLASSIC = 0;
     public static final int BLUETOOTH_LE = 1;
     public static final String BLUETOOTH_ADDRESS = "bluetooth_address";
+
+    //音频
+    public static final int AUDIO_CONNECT = 2;
+    public static final int AUDIO_NEXTB = 3;
+    public static final int AUDIO_NEXTF = 4;
+    public static final int AUDIO_DISCONNECT = 7;
+    public static final int AUDIO_WARNING = 8;
+
+    //奇偶站顺序
+    public static final int b1 = 1;
+    public static final int b2 = 2;
+    public static final int f1 = 3;
+    public static final int f2 = 4;
 
 }

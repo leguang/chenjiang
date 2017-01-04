@@ -88,6 +88,42 @@
             android:textColor="#259b2c" />
     </LinearLayout>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="GET/I/WI12" />
+
+        <Button
+            android:id="@+id/bt_send1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="指令1"
+            android:textColor="#259b2c" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="GET/M/WI32/WI330" />
+
+        <Button
+            android:id="@+id/bt_send2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="指令2"
+            android:textColor="#259b2c" />
+    </LinearLayout>
+
     <ListView
         android:id="@+id/lv_responses"
         android:layout_width="match_parent"

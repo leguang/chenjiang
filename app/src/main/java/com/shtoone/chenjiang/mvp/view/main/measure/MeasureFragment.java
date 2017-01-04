@@ -143,4 +143,8 @@ public class MeasureFragment extends BaseFragment {
         }
         return super.onBackPressedSupport();
     }
+
+    public void finish(){
+        pop();
+    }
 }

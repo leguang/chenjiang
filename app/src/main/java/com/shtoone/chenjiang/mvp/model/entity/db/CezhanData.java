@@ -8,6 +8,7 @@ import org.litepal.crud.DataSupport;
  * Email：langmanleguang@qq.com
  */
 public class CezhanData extends DataSupport {
+    private long id;
     private String number;
     private String measureDirection;
     private String observeType;
@@ -30,6 +31,14 @@ public class CezhanData extends DataSupport {
     private String frdushucha;
     private String brdushucha;
     private long shuizhunxianID;
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
 
     public String getNumber() {
         return number;

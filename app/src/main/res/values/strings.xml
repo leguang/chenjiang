@@ -64,6 +64,8 @@
     <string name="dialog_wait">请稍后</string>
     <string name="dialog_measureing">正在读取数据，请耐心等待…</string>
     <string name="dialog_scan">扫描</string>
+    <string name="dialog_title_exit">确定要退出吗？</string>
+    <string name="dialog_content_exit">当前正在测量，如果退出将造成数据丢失，请问是否退出？</string>
 
     <!--测量模块-->
     <string name="zhuandian">转点</string>

@@ -143,7 +143,7 @@ public class SettingPresenter extends BasePresenter<SettingContract.View> implem
         }
 
         @Override
-        public void onDataReceived(int data, String str) {
+        public void onDataReceived(String str) {
         }
     };
 

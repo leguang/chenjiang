@@ -3,6 +3,7 @@ package com.shtoone.chenjiang.mvp.view.adapter;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.shtoone.chenjiang.R;
+import com.shtoone.chenjiang.common.Constants;
 import com.shtoone.chenjiang.mvp.model.entity.db.CezhanData;
 import com.socks.library.KLog;
 
@@ -10,6 +11,9 @@ public class MeasureRVPAdapter extends BaseQuickAdapter<CezhanData, BaseViewHold
     private static final String TAG = MeasureRVPAdapter.class.getSimpleName();
     private int currentPosition = 0;
     private int measureIndex = 0;
+    private int[] arrayOdd = {0, Constants.b1, Constants.f1, Constants.f2, Constants.b2};
+    private int[] arrayEven = {0, Constants.f1, Constants.b1, Constants.b2, Constants.f2};
+    int[] arraySequence = {0};
 
     public MeasureRVPAdapter() {
         super(R.layout.item_rvp_measure_right_fragment, null);
@@ -18,7 +22,6 @@ public class MeasureRVPAdapter extends BaseQuickAdapter<CezhanData, BaseViewHold
     @Override
     protected void convert(BaseViewHolder holder, CezhanData mCezhanData) {
         int position = holder.getLayoutPosition() - this.getHeaderLayoutCount();
-        mCezhanData.setNumber((position + 1) + "");
         //设置数据
         holder.setText(R.id.tv_number_item_rvp_measure_right_fragment, mCezhanData.getNumber())
                 .setText(R.id.tv_measure_direction_item_rvp_measure_right_fragment, mCezhanData.getMeasureDirection())
@@ -52,20 +55,21 @@ public class MeasureRVPAdapter extends BaseQuickAdapter<CezhanData, BaseViewHold
                 .setBackgroundRes(R.id.tv_f2r, R.drawable.rect_bg_stroke_table);
         //设置样式
         if (currentPosition == position) {
-            switch (measureIndex) {
-                case 1:
+
+            switch (arraySequence[measureIndex]) {
+                case Constants.b1:
                     holder.setBackgroundRes(R.id.tv_b1hd, R.drawable.rect_bg_red_stroke_table)
                             .setBackgroundRes(R.id.tv_b1r, R.drawable.rect_bg_red_stroke_table);
                     break;
-                case 2:
+                case Constants.b2:
                     holder.setBackgroundRes(R.id.tv_b2hd, R.drawable.rect_bg_red_stroke_table)
                             .setBackgroundRes(R.id.tv_b2r, R.drawable.rect_bg_red_stroke_table);
                     break;
-                case 3:
+                case Constants.f1:
                     holder.setBackgroundRes(R.id.tv_f1hd, R.drawable.rect_bg_red_stroke_table)
                             .setBackgroundRes(R.id.tv_f1r, R.drawable.rect_bg_red_stroke_table);
                     break;
-                case 4:
+                case Constants.f2:
                     holder.setBackgroundRes(R.id.tv_f2hd, R.drawable.rect_bg_red_stroke_table)
                             .setBackgroundRes(R.id.tv_f2r, R.drawable.rect_bg_red_stroke_table);
                     break;
@@ -73,9 +77,48 @@ public class MeasureRVPAdapter extends BaseQuickAdapter<CezhanData, BaseViewHold
         }
     }
 
-    public void measure(int currentPosition, int measureIndex) {
+    public void measure(int currentPosition, int measureIndex, String result) {
+        KLog.e("currentPosition::" + currentPosition);
+        KLog.e("measureIndex::" + measureIndex);
         this.currentPosition = currentPosition;
         this.measureIndex = measureIndex;
+        CezhanData mCezhanData = mData.get(currentPosition);
+
+
+        if ((currentPosition + 1) % 2 == 0) {
+            //偶数站
+            arraySequence = arrayEven;
+            KLog.e("//偶数站//偶数站//偶数站//偶数站//偶数站//偶数站");
+        } else {
+            //奇数站
+            arraySequence = arrayOdd;
+            KLog.e("//奇数站//奇数站//奇数站//奇数站//奇数站//奇数站//奇数站//奇数站//奇数站//奇数站//奇数站");
+        }
+
+        switch (arraySequence[measureIndex]) {
+            case Constants.b1:
+                mCezhanData.setB1hd(result);
+                mCezhanData.setB1r(result);
+                KLog.e("b1b1b1b1b1b1b1b1b1b1b1b1");
+                break;
+            case Constants.b2:
+                mCezhanData.setB2hd(result);
+                mCezhanData.setB2r(result);
+                KLog.e("b2b2b2b2b2b2b2b2b2b2b2b2");
+                break;
+            case Constants.f1:
+                mCezhanData.setF1hd(result);
+                mCezhanData.setF1r(result);
+                KLog.e("f1f1f1f1f1f1f1f1f1f1");
+                break;
+            case Constants.f2:
+                mCezhanData.setF2hd(result);
+                mCezhanData.setF2r(result);
+                KLog.e("f2f2f2f2f2f2f2f2f2");
+                break;
+        }
+
+
         notifyDataSetChanged();
     }
 }

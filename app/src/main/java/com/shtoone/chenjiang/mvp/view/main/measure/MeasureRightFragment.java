@@ -1,10 +1,8 @@
 package com.shtoone.chenjiang.mvp.view.main.measure;
 
 import android.app.Dialog;
-import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -17,17 +15,17 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.lsjwzh.widget.recyclerviewpager.RecyclerViewPager;
 import com.shtoone.chenjiang.R;
 import com.shtoone.chenjiang.common.AudioPlayer;
 import com.shtoone.chenjiang.common.Constants;
 import com.shtoone.chenjiang.common.DialogHelper;
-import com.shtoone.chenjiang.common.ToastUtils;
 import com.shtoone.chenjiang.mvp.contract.measure.MeasureContract;
 import com.shtoone.chenjiang.mvp.model.entity.db.CezhanData;
 import com.shtoone.chenjiang.mvp.model.entity.db.YusheshuizhunxianData;
-import com.shtoone.chenjiang.mvp.presenter.measure.MeasurePresenter;
+import com.shtoone.chenjiang.mvp.presenter.measure.MeasureRightPresenter;
 import com.shtoone.chenjiang.mvp.view.adapter.MeasureRVPAdapter;
 import com.shtoone.chenjiang.mvp.view.base.BaseFragment;
 import com.socks.library.KLog;
@@ -59,15 +57,17 @@ public class MeasureRightFragment extends BaseFragment<MeasureContract.Presenter
     @BindView(R.id.fab)
     FloatingActionButton fab;
     protected RecyclerViewPager mRecyclerView;
+    @BindView(R.id.tv_connect_measure_right_fragment)
+    TextView tvConnect;
     private List<String> listJidianBianhao;
     private MeasureRVPAdapter mAdapter;
     private YusheshuizhunxianData mYusheshuizhunxianData;
     private LinearLayoutManager mLinearLayoutManager;
     private Dialog progressDialog;
-    public static final int BT_REQUEST = 11;
     private ViewGroup viewGroup;
     private AlertDialog.Builder deviceListBuilder;
     private int measureIndex = 1;
+
 
     public static MeasureRightFragment newInstance(YusheshuizhunxianData mYusheshuizhunxianData) {
         Bundle args = new Bundle();
@@ -91,7 +91,7 @@ public class MeasureRightFragment extends BaseFragment<MeasureContract.Presenter
     @NonNull
     @Override
     protected MeasureContract.Presenter createPresenter() {
-        return new MeasurePresenter(this);
+        return new MeasureRightPresenter(this);
     }
 
     @Nullable
@@ -130,29 +130,17 @@ public class MeasureRightFragment extends BaseFragment<MeasureContract.Presenter
             @Override
             public boolean onMenuItemClick(MenuItem item) {
                 switch (item.getItemId()) {
-                    case R.id.action_stop:
-                        ToastUtils.showToast(_mActivity, "停止");
-                        DialogHelper.dialog(_mActivity, R.drawable.ic_error_outline_red_400_48dp,
-                                R.string.dialog_stop_title, R.string.dialog_stop_content, R.string.dialog_positiveText,
-                                R.string.dialog_negativeText, new DialogHelper.Call() {
-                                    @Override
-                                    public void onNegative() {
-                                    }
+                    case R.id.action_pingcha:
 
-                                    @Override
-                                    public void onPositive() {
-
-                                    }
-                                });
                         break;
 
                     case R.id.action_delete:
-                        ToastUtils.showToast(_mActivity, "删除");
                         DialogHelper.dialog(_mActivity, R.drawable.ic_error_outline_red_400_48dp,
                                 R.string.dialog_delete_title, R.string.dialog_delete_content, R.string.dialog_positiveText,
                                 R.string.dialog_negativeText, new DialogHelper.Call() {
                                     @Override
                                     public void onNegative() {
+
                                     }
 
                                     @Override
@@ -202,9 +190,21 @@ public class MeasureRightFragment extends BaseFragment<MeasureContract.Presenter
     public void showLoading() {
     }
 
-    @OnClick({R.id.bt_jidian_measure_right_fragment, R.id.bt_zhuandian_measure_right_fragment, R.id.bt_cedian_measure_right_fragment, R.id.bt_chongce_measure_right_fragment, R.id.bt_fance_measure_right_fragment, R.id.fab})
+    @OnClick({R.id.bt_jidian_measure_right_fragment, R.id.bt_zhuandian_measure_right_fragment,
+            R.id.bt_cedian_measure_right_fragment, R.id.bt_chongce_measure_right_fragment,
+            R.id.bt_fance_measure_right_fragment, R.id.fab, R.id.tv_connect_measure_right_fragment})
     public void onClick(View view) {
         switch (view.getId()) {
+
+            case R.id.tv_connect_measure_right_fragment:
+                if (tvConnect.getText().toString().equals("连接")) {
+                    mPresenter.connectPaired(_mActivity);
+                } else {
+                    mPresenter.disconnect();
+                    tvConnect.setText("连接");
+                }
+                break;
+
             case R.id.bt_jidian_measure_right_fragment:
                 DialogHelper.dialogList(_mActivity, 0, R.string.dialog_select_jidian, listJidianBianhao, R.string.dialog_negativeText, 0, new DialogHelper.ListCall() {
                     @Override
@@ -223,23 +223,10 @@ public class MeasureRightFragment extends BaseFragment<MeasureContract.Presenter
 
                 break;
             case R.id.bt_fance_measure_right_fragment:
-                mAdapter.measure(mRecyclerView.getCurrentPosition(), 2);
+//                mAdapter.measure(mRecyclerView.getCurrentPosition(), 2);
 
                 break;
             case R.id.fab:
-                //连接策略是：优先显示已配对的，当配对中没有的时候，提供扫描按钮。
-                if (measureIndex > 4) {
-                    measureIndex = 1;
-                    //此处还要判断是往测还是反测。
-                    mRecyclerView.smoothScrollToPosition(mRecyclerView.getCurrentPosition() + 1);
-                }
-
-                if (progressDialog == null) {
-                    progressDialog = DialogHelper.progress(_mActivity, R.string.dialog_wait, R.string.dialog_measureing, true);
-                }
-                progressDialog.show();
-                mAdapter.measure(mRecyclerView.getCurrentPosition(), measureIndex);
-                mPresenter.sendData((measureIndex + "").getBytes());
                 break;
         }
     }
@@ -268,11 +255,13 @@ public class MeasureRightFragment extends BaseFragment<MeasureContract.Presenter
     @Override
     public void onConnected(BluetoothDevice device) {
         DialogHelper.successSnackbar(viewGroup, "已连接:" + device.getName(), DialogHelper.APPEAR_FROM_TOP_TO_DOWN);
+        tvConnect.setText("断开");
     }
 
     @Override
     public void onDisconnected() {
-        DialogHelper.successSnackbar(viewGroup, "蓝牙连接已断开", DialogHelper.APPEAR_FROM_TOP_TO_DOWN);
+        DialogHelper.errorSnackbar(viewGroup, "蓝牙连接已断开", DialogHelper.APPEAR_FROM_TOP_TO_DOWN);
+        tvConnect.setText("连接");
     }
 
     @Override
@@ -323,28 +312,56 @@ public class MeasureRightFragment extends BaseFragment<MeasureContract.Presenter
     }
 
     @Override
-    public void onDataReceived(int data, String str) {
-        KLog.e("data::" + data);
-        KLog.e("str::" + str);
-        measureIndex++;
+    public void onDataReceived(String str) {
+        KLog.e("str::###############################################################" + str);
 
-        /**
-         * 考虑把以下这些代码封装到mAdapter中去。
-         */
-        List<CezhanData> listCezhanData = mAdapter.getData();
-        int position = mRecyclerView.getCurrentPosition();
-        CezhanData mCezhanData = listCezhanData.get(position);
-        mCezhanData.setB1hd(str);
-        mCezhanData.setB1r(str);
-        mAdapter.notifyDataSetChanged();
-        if (progressDialog != null) {
-            progressDialog.dismiss();
+        mAdapter.measure(mRecyclerView.getCurrentPosition(), measureIndex, str);
+
+        //调试用的，或者发送指令
+        mPresenter.sendData((measureIndex + "\n").getBytes());
+        measureIndex = measureIndex + 1;
+
+        KLog.e("onDataReceived：：" + measureIndex);
+
+        if (measureIndex >= 5) {
+            measureIndex = 1;
+            //此处还要判断是往测还是反测。
+            KLog.e("onDataReceived滚动到下一页");
+
+
+            mRecyclerView.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    mRecyclerView.smoothScrollToPosition(mRecyclerView.getCurrentPosition() + 1);
+                }
+            }, 500);
         }
     }
 
     @Override
     public void onDestroy() {
         AudioPlayer.onDestroy();
+        DialogHelper.warningSnackbar(viewGroup, "蓝牙连接已断开", DialogHelper.APPEAR_FROM_TOP_TO_DOWN);
         super.onDestroy();
+    }
+
+    @Override
+    public boolean onBackPressedSupport() {
+        new AlertDialog.Builder(_mActivity)
+                .setIcon(R.drawable.ic_error_outline_red_400_48dp)
+                .setTitle(R.string.dialog_title_exit)
+                .setMessage(R.string.dialog_content_exit)
+                .setNegativeButton(R.string.dialog_positiveText, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        if (getParentFragment() instanceof MeasureFragment) {
+                            ((MeasureFragment) getParentFragment()).finish();
+                        }
+                    }
+                })
+                .setPositiveButton(R.string.dialog_negativeText, null)
+                .show();
+
+        return true;
     }
 }

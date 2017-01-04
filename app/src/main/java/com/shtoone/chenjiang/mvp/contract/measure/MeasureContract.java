@@ -21,7 +21,7 @@ public interface MeasureContract {
 
         void setDialog(String tips);
 
-        void  onConnecting(BluetoothDevice device);
+        void onConnecting(BluetoothDevice device);
 
         void onConnected(BluetoothDevice device);
 
@@ -33,7 +33,7 @@ public interface MeasureContract {
 
         void onDevicesFound(List<BluetoothDevice> deviceList);
 
-        void onDataReceived(int data, String str);
+        void onDataReceived(String str);
     }
 
     interface Presenter extends BaseContract.Presenter {

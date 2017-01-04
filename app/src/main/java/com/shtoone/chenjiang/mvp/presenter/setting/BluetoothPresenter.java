@@ -114,8 +114,8 @@ public class BluetoothPresenter extends BasePresenter<BluetoothContract.View> im
         }
 
         @Override
-        public void onDataReceived(int data, String str) {
-            getView().onDataReceived(data, str);
+        public void onDataReceived(String str) {
+            getView().onDataReceived(str);
             KLog.e("currentThreadName::" + Thread.currentThread().getName());
         }
     };

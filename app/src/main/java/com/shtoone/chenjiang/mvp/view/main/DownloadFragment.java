@@ -96,7 +96,9 @@ public class DownloadFragment extends BaseFragment<DownloadContract.Presenter> i
     private TextView messageTextView;
     private TextView downloadTextView;
     private boolean isDownloadAll;
+    //加上“全部下载”在内，一共7个下载提示。
     private View[] arrayTextView = new View[7];
+    private SimpleDateFormat df;
 
     @Nullable
     @Override
@@ -137,7 +139,7 @@ public class DownloadFragment extends BaseFragment<DownloadContract.Presenter> i
         Typeface tf = Typeface.createFromAsset(_mActivity.getAssets(), "fonts/OpenSans-Light.ttf");
         tvDate.setTypeface(tf);
         tvDate.setCharacterList(TickerUtils.getDefaultNumberList());
-
+        df = new SimpleDateFormat("MM-dd HH:mm");
         arrayTextView[0] = tvGongdianDownload;
         arrayTextView[1] = tvDuanmianDownload;
         arrayTextView[2] = tvCedianDownload;
@@ -149,7 +151,6 @@ public class DownloadFragment extends BaseFragment<DownloadContract.Presenter> i
         String strUpdateTime = (String) SharedPreferencesUtils.get(BaseApplication.mContext, Constants.UPDATA_TIME, "");
 
         if (TextUtils.isEmpty(strUpdateTime)) {
-            DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm");
             strUpdateTime = df.format(new Date());
             tvDate.setText(strUpdateTime);
             SharedPreferencesUtils.put(BaseApplication.mContext, Constants.UPDATA_TIME, strUpdateTime);
@@ -250,7 +251,6 @@ public class DownloadFragment extends BaseFragment<DownloadContract.Presenter> i
         }
 
         //更改时间
-        DateFormat df = new SimpleDateFormat("MM-dd HH:mm");
         String strUpdateTime = df.format(new Date());
         tvDate.setText(strUpdateTime);
         SharedPreferencesUtils.put(BaseApplication.mContext, Constants.UPDATA_TIME, strUpdateTime);//保存到sp中

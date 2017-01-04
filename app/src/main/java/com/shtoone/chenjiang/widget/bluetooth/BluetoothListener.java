@@ -30,5 +30,5 @@ public interface BluetoothListener {
 
     void onDevicesFound(List<BluetoothDevice> deviceList);
 
-    void onDataReceived(int data, String str);
+    void onDataReceived(String str);
 }

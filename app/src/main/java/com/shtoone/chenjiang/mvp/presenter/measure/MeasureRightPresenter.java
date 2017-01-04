@@ -22,7 +22,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import rx.Observable;
-import rx.Observer;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Func1;
@@ -32,11 +31,11 @@ import rx.schedulers.Schedulers;
  * Author：leguang on 2016/10/9 0009 15:49
  * Email：langmanleguang@qq.com
  */
-public class MeasurePresenter extends BasePresenter<MeasureContract.View> implements MeasureContract.Presenter {
-    private static final String TAG = MeasurePresenter.class.getSimpleName();
+public class MeasureRightPresenter extends BasePresenter<MeasureContract.View> implements MeasureContract.Presenter {
+    private static final String TAG = MeasureRightPresenter.class.getSimpleName();
     private BluetoothManager mBluetoothManager;
 
-    public MeasurePresenter(MeasureContract.View mView) {
+    public MeasureRightPresenter(MeasureContract.View mView) {
         super(mView);
     }
 
@@ -127,6 +126,7 @@ public class MeasurePresenter extends BasePresenter<MeasureContract.View> implem
                             for (int i = 0; i < arrayJidianAndCedian.length - 1; i++) {
 
                                 CezhanData mCezhanData = new CezhanData();
+                                mCezhanData.setNumber((i + 1) + "");
                                 mCezhanData.setShuizhunxianID(mYusheshuizhunxianData.getId());
                                 mCezhanData.setMeasureDirection("往测");
                                 //其实不是这样的，应该根据水准线的观测类型，还要根据奇数站和偶数站的时候不同的前后后前的顺序不一样就会显示不一样,后期再处理。
@@ -137,6 +137,27 @@ public class MeasurePresenter extends BasePresenter<MeasureContract.View> implem
                                 listCezhan.add(mCezhanData);
 
                             }
+
+                            for (CezhanData cezhanData : listCezhan) {
+                                cezhanData.getId();
+                            }
+
+
+                            for (int i = listCezhan.size() - 1; i > 0; i--) {
+
+                                CezhanData mCezhanData = new CezhanData();
+                                mCezhanData.setNumber((i + 1) + "");
+                                mCezhanData.setShuizhunxianID(mYusheshuizhunxianData.getId());
+                                mCezhanData.setMeasureDirection("往测");
+                                //其实不是这样的，应该根据水准线的观测类型，还要根据奇数站和偶数站的时候不同的前后后前的顺序不一样就会显示不一样,后期再处理。
+                                mCezhanData.setObserveType(mYusheshuizhunxianData.getObserveType());
+
+                                mCezhanData.setQianshi(arrayJidianAndCedian[i - 1]);
+                                mCezhanData.setHoushi(arrayJidianAndCedian[(i)]);
+                                listCezhan.add(mCezhanData);
+
+                            }
+
                             subscriber.onNext(listCezhan);
 
                         } catch (Exception ex) {
@@ -162,7 +183,9 @@ public class MeasurePresenter extends BasePresenter<MeasureContract.View> implem
     private BluetoothListener mListener = new BluetoothListener() {
         @Override
         public void onBluetoothNotSupported() {
-            getView().setDialog("未找到蓝牙设备");
+            if (isViewAttached()) {
+                getView().setDialog("未找到蓝牙设备");
+            }
         }
 
         @Override
@@ -172,51 +195,70 @@ public class MeasurePresenter extends BasePresenter<MeasureContract.View> implem
 
         @Override
         public void onConnecting(BluetoothDevice device) {
-            getView().onConnecting(device);
+            if (isViewAttached()) {
+                getView().onConnecting(device);
+            }
         }
 
         @Override
         public void onConnected(BluetoothDevice device) {
             KLog.e("已经连接：" + device.getName());
             SharedPreferencesUtils.put(BaseApplication.mContext, Constants.BLUETOOTH_ADDRESS, device.getAddress());
-            getView().onConnected(device);
+            if (isViewAttached()) {
+                getView().onConnected(device);
+            }
+            AudioPlayer.play(Constants.AUDIO_CONNECT);
         }
 
         @Override
         public void onDisconnected() {
-            if (isViewAttached()) {
-                getView().onDisconnected();
-            }
+            KLog.e("onDisconnectedonDisconnectedonDisconnectedonDisconnectedonDisconnectedonDisconnectedonDisconnectedonDisconnectedonDisconnectedonDisconnected");
+
+            getView().onDisconnected();
+            AudioPlayer.play(Constants.AUDIO_DISCONNECT);
+
         }
 
         @Override
         public void onConnectionFailed(BluetoothDevice device) {
-            getView().setDialog("蓝牙连接失败");
+            if (isViewAttached()) {
+                getView().setDialog("蓝牙连接失败");
+            }
         }
 
         @Override
         public void onDiscoveryStarted() {
-            getView().onDiscoveryStarted();
+            if (isViewAttached()) {
+                getView().onDiscoveryStarted();
+            }
         }
 
         @Override
         public void onDiscoveryFinished() {
-            getView().onDiscoveryFinished();
+            if (isViewAttached()) {
+                getView().onDiscoveryFinished();
+            }
         }
 
         @Override
         public void onNoDevicesFound() {
-            getView().setDialog("未发现蓝牙设备");
+            if (isViewAttached()) {
+                getView().setDialog("未发现蓝牙设备");
+            }
         }
 
         @Override
         public void onDevicesFound(List<BluetoothDevice> deviceList) {
-            getView().onDevicesFound(deviceList);
+            if (isViewAttached()) {
+                getView().onDevicesFound(deviceList);
+            }
         }
 
         @Override
-        public void onDataReceived(int data, String str) {
-            getView().onDataReceived(data, str);
+        public void onDataReceived(String str) {
+            if (isViewAttached()) {
+                getView().onDataReceived(str);
+            }
             KLog.e("currentThreadName::" + Thread.currentThread().getName());
         }
     };

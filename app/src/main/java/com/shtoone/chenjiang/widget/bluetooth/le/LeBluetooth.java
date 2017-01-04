@@ -355,7 +355,7 @@ public class LeBluetooth implements IBluetooth {
                 @Override
                 public void run() {
                     if (mListener != null) {
-                        mListener.onDataReceived(receiveData.length(), receiveData);
+                        mListener.onDataReceived(receiveData);
                     }
                 }
             });

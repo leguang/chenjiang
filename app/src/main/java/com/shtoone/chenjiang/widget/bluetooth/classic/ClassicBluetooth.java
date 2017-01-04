@@ -7,17 +7,25 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.os.Environment;
 import android.util.Log;
 
+import com.shtoone.chenjiang.common.Constants;
 import com.shtoone.chenjiang.common.RxManager;
 import com.shtoone.chenjiang.widget.bluetooth.BluetoothListener;
 import com.shtoone.chenjiang.widget.bluetooth.IBluetooth;
 import com.socks.library.KLog;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Locale;
 import java.util.Set;
 import java.util.UUID;
 
@@ -375,7 +383,7 @@ public class ClassicBluetooth implements IBluetooth {
         public void run() {
             setName("ConnectedThread");
             byte[] buffer = new byte[1024];
-            int bytes;
+            int length;
 
             while (mState == STATE_CONNECTED) {
                 KLog.e("进入循环**********");
@@ -383,19 +391,50 @@ public class ClassicBluetooth implements IBluetooth {
 
                     KLog.e("开始读取流…………………………………………………………");
                     // Read from the InputStream
-                    bytes = mmInStream.read(buffer);
+                    length = mmInStream.read(buffer);
                     KLog.e("结束读取流…………………………………………………………");
-                    final String readMessage = new String(buffer, 0, bytes);
-                    KLog.e(bytes);
+                    final String readMessage = new String(buffer, 0, length);
+
+//                    final String readMessage = new String(buffer, 0, length, "GBK");
+//
+//                    String readMessage1 = new String(readMessage.getBytes("GBK"), "UTF-8");
+                    KLog.e(length);
                     KLog.e(readMessage);
-                    final int finalBytes = bytes;
+
+                    //**************************************************************************************************************************************
+
+                    DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss", Locale.CHINA);
+
+                    try {
+                        long timestamp = System.currentTimeMillis();
+                        String time = formatter.format(new Date());
+                        String fileName = time + "-" + timestamp + ".log";
+                        if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
+                            String path = Environment.getExternalStorageDirectory().getPath() + "/SHTW/";
+                            Log.d(TAG, "path=" + path);
+                            File dir = new File(path);
+                            if (!dir.exists()) {
+                                dir.mkdirs();
+                            }
+                            FileOutputStream fos = new FileOutputStream(path + fileName);
+                            fos.write(readMessage.getBytes());
+                            fos.close();
+                        }
+                    } catch (Exception e) {
+                        Log.e(TAG, "an error occured while writing file...", e);
+                    }
+
+
+                    //*******************************************************************************************************************************************************
+
+
                     Observable.just(readMessage)
                             .observeOn(AndroidSchedulers.mainThread())
                             .subscribe(new Action1<String>() {
                                 @Override
                                 public void call(String receiveData) {
                                     KLog.e("currentThreadName::" + Thread.currentThread().getName());
-                                    mListener.onDataReceived(finalBytes, readMessage);
+                                    mListener.onDataReceived(readMessage);
                                 }
                             });
 
@@ -422,7 +461,6 @@ public class ClassicBluetooth implements IBluetooth {
             try {
                 mmOutStream.write(buffer);
                 KLog.e("write::" + new String(buffer));
-                KLog.e(mmOutStream);
             } catch (IOException e) {
                 e.printStackTrace();
                 KLog.e("Exception during write", e);
