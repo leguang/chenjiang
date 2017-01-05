@@ -2,6 +2,7 @@ package com.shtoone.chenjiang.mvp.contract;
 
 
 import com.shtoone.chenjiang.mvp.contract.base.BaseContract;
+import com.shtoone.chenjiang.mvp.model.entity.db.YusheshuizhunxianData;
 
 import java.util.List;
 import java.util.Map;
@@ -15,9 +16,13 @@ public interface ShuizhunxianContract {
         void responseData(Map<String, String[]> map);
 
         void responseStaffData(List<String> mStaffData);
+
+        void responseSave(int rowsAffected);
     }
 
     interface Presenter extends BaseContract.Presenter {
         void requestStaffData();
+
+        void save(YusheshuizhunxianData mYusheshuizhunxianData);
     }
 }

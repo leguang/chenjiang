@@ -70,7 +70,7 @@ public class BaseApplication extends LitePalApplication {
 //        }
 //
 ////
-        DataSupport.deleteAll(StaffData.class);
+//        DataSupport.deleteAll(StaffData.class);
 //        for (int i = 0; i < 100; i++) {
 //            ShuizhunxianData f = new ShuizhunxianData();
 //            f.setBeizhu("备注" + (i + 1));

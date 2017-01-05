@@ -29,6 +29,7 @@ public class YusheshuizhunxianData extends DataSupport implements Serializable {
     private String pressure;
     private String temperature;
     private String staff;
+    private int measurePosition;//用于记录上一次测量的测站位置，对应的是测站表中的number
 
     public String getStatus() {
         return status;
@@ -188,6 +189,14 @@ public class YusheshuizhunxianData extends DataSupport implements Serializable {
 
     public void setXianluxinxi(String xianluxinxi) {
         this.xianluxinxi = xianluxinxi;
+    }
+
+    public int getMeasurePosition() {
+        return measurePosition;
+    }
+
+    public void setMeasurePosition(int measurePosition) {
+        this.measurePosition = measurePosition;
     }
 }
 

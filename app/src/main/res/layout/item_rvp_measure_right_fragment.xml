@@ -61,18 +61,6 @@
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/tv_qianshi_item_rvp_measure_right_fragment"
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
-                    android:background="@drawable/rect_bg_stroke_table"
-                    android:gravity="center_vertical"
-                    android:paddingLeft="5dp"
-                    android:singleLine="true"
-                    android:text="前视:"
-                    android:textSize="16sp" />
-
-                <TextView
                     android:id="@+id/tv_houshi_item_rvp_measure_right_fragment"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
@@ -82,7 +70,18 @@
                     android:paddingLeft="5dp"
                     android:singleLine="true"
                     android:text="后视:"
+                    android:textSize="16sp" />
 
+                <TextView
+                    android:id="@+id/tv_qianshi_item_rvp_measure_right_fragment"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/rect_bg_stroke_table"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="5dp"
+                    android:singleLine="true"
+                    android:text="前视:"
                     android:textSize="16sp" />
             </LinearLayout>
 

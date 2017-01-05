@@ -51,7 +51,6 @@ import butterknife.OnClick;
  * Email：langmanleguang@qq.com
  */
 public class EditShuizhunxianFragment extends BaseFragment<ShuizhunxianContract.Presenter> implements ShuizhunxianContract.View {
-
     private static final String TAG = EditShuizhunxianFragment.class.getSimpleName();
     @BindView(R.id.toolbar_toolbar)
     Toolbar toolbar;
@@ -185,19 +184,7 @@ public class EditShuizhunxianFragment extends BaseFragment<ShuizhunxianContract.
         mYusheshuizhunxianData.setPressure(etPressure.getText().toString());
         mYusheshuizhunxianData.setXiugaishijian(tvDate.getText().toString());
         mYusheshuizhunxianData.setStatus(Constants.status_daiceliang);
-        int rowsAffected = mYusheshuizhunxianData.update(mYusheshuizhunxianData.getId());
-        ViewGroup viewGroup = (ViewGroup) _mActivity.findViewById(android.R.id.content).getRootView();
-        if (rowsAffected > 0) {
-            DialogHelper.successSnackbar(viewGroup, "恭喜，保存成功", DialogHelper.APPEAR_FROM_TOP_TO_DOWN);
-            EventBus.getDefault().post(new EventData(Constants.EVENT_REFRESH));
-        } else {
-            DialogHelper.errorSnackbar(viewGroup, "保存失败，请重新保存", DialogHelper.APPEAR_FROM_TOP_TO_DOWN);
-        }
-
-        //清除动画，恢复初始状态。
-        ivSave.clearAnimation();
-        toolbar.getMenu().clear();
-        toolbar.inflateMenu(R.menu.menu_save);
+        mPresenter.save(mYusheshuizhunxianData);
     }
 
     private void initData() {
@@ -282,6 +269,22 @@ public class EditShuizhunxianFragment extends BaseFragment<ShuizhunxianContract.
         }
     }
 
+    @Override
+    public void responseSave(int rowsAffected) {
+        ViewGroup viewGroup = (ViewGroup) _mActivity.findViewById(android.R.id.content).getRootView();
+        if (rowsAffected > 0) {
+            DialogHelper.successSnackbar(viewGroup, "恭喜，保存成功", DialogHelper.APPEAR_FROM_TOP_TO_DOWN);
+            EventBus.getDefault().post(new EventData(Constants.EVENT_REFRESH));
+        } else {
+            DialogHelper.errorSnackbar(viewGroup, "保存失败，请重新保存", DialogHelper.APPEAR_FROM_TOP_TO_DOWN);
+        }
+
+        //清除动画，恢复初始状态。
+        ivSave.clearAnimation();
+        toolbar.getMenu().clear();
+        toolbar.inflateMenu(R.menu.menu_save);
+    }
+
     private void startAnimation(MenuItem item) {
         ivSave.clearAnimation();
         ivSave.setImageResource(R.drawable.ic_sync_white_24dp);
@@ -302,7 +305,12 @@ public class EditShuizhunxianFragment extends BaseFragment<ShuizhunxianContract.
 
     @Override
     public void showError(Throwable t) {
-
+        ViewGroup viewGroup = (ViewGroup) _mActivity.findViewById(android.R.id.content).getRootView();
+        DialogHelper.errorSnackbar(viewGroup, "保存失败，请重新保存", DialogHelper.APPEAR_FROM_TOP_TO_DOWN);
+        //清除动画，恢复初始状态。
+        ivSave.clearAnimation();
+        toolbar.getMenu().clear();
+        toolbar.inflateMenu(R.menu.menu_save);
     }
 
     @Override

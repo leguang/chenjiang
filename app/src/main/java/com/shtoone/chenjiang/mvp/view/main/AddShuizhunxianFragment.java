@@ -328,6 +328,10 @@ public class AddShuizhunxianFragment extends BaseFragment<ShuizhunxianContract.P
     public void responseStaffData(List<String> mStaffData) {
     }
 
+    @Override
+    public void responseSave(int rowsAffected) {
+    }
+
     private void startAnimation(MenuItem item) {
         ivSave.clearAnimation();
         ivSave.setImageResource(R.drawable.ic_sync_white_24dp);

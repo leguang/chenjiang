@@ -1,11 +1,13 @@
 package com.shtoone.chenjiang.mvp.view.base;
 
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.view.WindowManager;
 
 import com.shtoone.chenjiang.BaseApplication;
 import com.shtoone.chenjiang.R;
@@ -149,9 +151,11 @@ public abstract class BaseFragment<P extends BaseContract.Presenter> extends Swi
     }
 
     public void initStateBar(View view) {
-        view.setPadding(view.getPaddingLeft(),
-                view.getPaddingTop() + ScreenUtils.getStatusBarHeight(BaseApplication.mContext),
-                view.getPaddingRight(), view.getPaddingBottom());
+        if (Build.VERSION_CODES.KITKAT <= Build.VERSION.SDK_INT) {
+            view.setPadding(view.getPaddingLeft(),
+                    view.getPaddingTop() + ScreenUtils.getStatusBarHeight(BaseApplication.mContext),
+                    view.getPaddingRight(), view.getPaddingBottom());
+        }
     }
 
     public void initPageStateLayout(final PageStateLayout mPageStateLayout) {

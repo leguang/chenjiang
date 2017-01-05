@@ -2,10 +2,13 @@ package com.shtoone.chenjiang.mvp.presenter;
 
 import com.shtoone.chenjiang.common.Constants;
 import com.shtoone.chenjiang.mvp.contract.ShuizhunxianContract;
+import com.shtoone.chenjiang.mvp.model.entity.db.CezhanData;
 import com.shtoone.chenjiang.mvp.model.entity.db.GongdianData;
 import com.shtoone.chenjiang.mvp.model.entity.db.JidianData;
 import com.shtoone.chenjiang.mvp.model.entity.db.StaffData;
+import com.shtoone.chenjiang.mvp.model.entity.db.YusheshuizhunxianData;
 import com.shtoone.chenjiang.mvp.presenter.base.BasePresenter;
+import com.socks.library.KLog;
 
 import org.litepal.crud.DataSupport;
 
@@ -110,6 +113,91 @@ public class ShuizhunxianPresenter extends BasePresenter<ShuizhunxianContract.Vi
                                 getView().responseStaffData(staffDatas);
                             }
                         })
+        );
+    }
+
+    @Override
+    public void save(final YusheshuizhunxianData mYusheshuizhunxianData) {
+        mRxManager.add(Observable.create(new Observable.OnSubscribe<Integer>() {
+                    @Override
+                    public void call(Subscriber<? super Integer> subscriber) {
+                        //生成测站并存到数据库中这种操作应考虑放到编辑水准线，保存的那里。后面点击测量的时候应该读取数据库，而产生数据后应该是修改相应测站的行。
+                        try {
+                            String[] arrayJidianAndCedian = mYusheshuizhunxianData.getXianluxinxi().split(",");
+
+                            int intNumber = 0;
+
+                            List<CezhanData> listCezhan = new ArrayList<>();
+
+                            for (int j = 0; j < 100; j++) {
+
+
+                                for (int i = 0; i < arrayJidianAndCedian.length - 1; i++) {
+                                    intNumber++;
+                                    CezhanData mCezhanData = new CezhanData();
+                                    mCezhanData.setNumber(intNumber + "");
+                                    mCezhanData.setShuizhunxianID(mYusheshuizhunxianData.getId() + "");
+                                    mCezhanData.setMeasureDirection("往测");
+                                    //其实不是这样的，应该根据水准线的观测类型，还要根据奇数站和偶数站的时候不同的前后后前的顺序不一样就会显示不一样,后期再处理。
+                                    if (intNumber % 2 == 0) {
+                                        mCezhanData.setObserveType(Constants.FBBF);
+                                    } else {
+                                        mCezhanData.setObserveType(Constants.BFFB);
+                                    }
+                                    mCezhanData.setQianshi(arrayJidianAndCedian[i + 1]);
+                                    mCezhanData.setHoushi(arrayJidianAndCedian[i]);
+                                    listCezhan.add(mCezhanData);
+                                }
+
+                            }
+//                            for (CezhanData cezhanData : listCezhan) {
+//                                KLog.e("Number::" + cezhanData.getNumber());
+//                            }
+                            for (int j = 0; j < 100; j++) {
+                                for (int i = arrayJidianAndCedian.length - 1; i > 0; i--) {
+                                    intNumber++;
+                                    CezhanData mCezhanData = new CezhanData();
+                                    mCezhanData.setNumber(intNumber + "");
+                                    mCezhanData.setShuizhunxianID(mYusheshuizhunxianData.getId() + "");
+                                    mCezhanData.setMeasureDirection("反测");
+                                    //其实不是这样的，应该根据水准线的观测类型，还要根据奇数站和偶数站的时候不同的前后后前的顺序不一样就会显示不一样,后期再处理。
+                                    if (intNumber % 2 == 0) {
+                                        mCezhanData.setObserveType(Constants.FBBF);
+                                    } else {
+                                        mCezhanData.setObserveType(Constants.BFFB);
+                                    }
+                                    mCezhanData.setQianshi(arrayJidianAndCedian[i - 1]);
+                                    mCezhanData.setHoushi(arrayJidianAndCedian[i]);
+                                    listCezhan.add(mCezhanData);
+                                }
+                            }
+
+                            for (CezhanData cezhanData : listCezhan) {
+                                KLog.e("Number::" + cezhanData.getNumber());
+                            }
+
+                            DataSupport.deleteAll(CezhanData.class, "shuizhunxianID = ? ", String.valueOf(mYusheshuizhunxianData.getId()));
+                            DataSupport.saveAll(listCezhan);
+                            int rowsAffected = mYusheshuizhunxianData.update(mYusheshuizhunxianData.getId());
+
+                            subscriber.onNext(rowsAffected);
+
+                        } catch (Exception ex) {
+                            subscriber.onError(ex);
+                        }
+
+                    }
+                }).subscribeOn(Schedulers.computation())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(new RxSubscriber<Integer>() {
+                            @Override
+                            public void _onNext(Integer rowsAffected) {
+                                if (isViewAttached()) {
+                                    getView().responseSave(rowsAffected);
+                                }
+                            }
+                        })
+
         );
     }
 }

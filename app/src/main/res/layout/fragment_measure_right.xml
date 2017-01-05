@@ -100,7 +100,8 @@
         android:layout_marginBottom="66dp"
         android:layout_marginRight="16dp"
         android:src="@drawable/ic_location_searching_white_24dp"
-        android:tint="@color/white" />
+        android:tint="@color/white"
+        android:visibility="gone" />
 </android.support.design.widget.CoordinatorLayout>
 
 

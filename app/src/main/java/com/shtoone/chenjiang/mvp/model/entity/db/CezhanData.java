@@ -30,7 +30,7 @@ public class CezhanData extends DataSupport {
     private String gaochengzhi;
     private String frdushucha;
     private String brdushucha;
-    private long shuizhunxianID;
+    private String shuizhunxianID;
 
     public long getId() {
         return id;
@@ -208,11 +208,11 @@ public class CezhanData extends DataSupport {
         this.brdushucha = brdushucha;
     }
 
-    public long getShuizhunxianID() {
+    public String getShuizhunxianID() {
         return shuizhunxianID;
     }
 
-    public void setShuizhunxianID(long shuizhunxianID) {
+    public void setShuizhunxianID(String shuizhunxianID) {
         this.shuizhunxianID = shuizhunxianID;
     }
 }

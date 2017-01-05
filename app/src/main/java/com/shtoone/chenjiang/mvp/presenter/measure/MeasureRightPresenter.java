@@ -120,43 +120,15 @@ public class MeasureRightPresenter extends BasePresenter<MeasureContract.View> i
                     public void call(Subscriber<? super List<CezhanData>> subscriber) {
                         //生成测站并存到数据库中这种操作应考虑放到编辑水准线，保存的那里。后面点击测量的时候应该读取数据库，而产生数据后应该是修改相应测站的行。
                         try {
-                            String[] arrayJidianAndCedian = mYusheshuizhunxianData.getXianluxinxi().split(",");
+                            List<CezhanData> listCezhan = DataSupport.where("shuizhunxianID = ? ", String.valueOf(mYusheshuizhunxianData.getId()))
+                                    .order("number").find(CezhanData.class);
 
-                            List<CezhanData> listCezhan = new ArrayList<>();
-                            for (int i = 0; i < arrayJidianAndCedian.length - 1; i++) {
-
-                                CezhanData mCezhanData = new CezhanData();
-                                mCezhanData.setNumber((i + 1) + "");
-                                mCezhanData.setShuizhunxianID(mYusheshuizhunxianData.getId());
-                                mCezhanData.setMeasureDirection("往测");
-                                //其实不是这样的，应该根据水准线的观测类型，还要根据奇数站和偶数站的时候不同的前后后前的顺序不一样就会显示不一样,后期再处理。
-                                mCezhanData.setObserveType(mYusheshuizhunxianData.getObserveType());
-
-                                mCezhanData.setQianshi(arrayJidianAndCedian[i]);
-                                mCezhanData.setHoushi(arrayJidianAndCedian[(i + 1)]);
-                                listCezhan.add(mCezhanData);
-
-                            }
+                            KLog.e("size::" + listCezhan.size());
 
                             for (CezhanData cezhanData : listCezhan) {
-                                cezhanData.getId();
+                                KLog.e("cezhanData::" + cezhanData.getNumber());
                             }
 
-
-                            for (int i = listCezhan.size() - 1; i > 0; i--) {
-
-                                CezhanData mCezhanData = new CezhanData();
-                                mCezhanData.setNumber((i + 1) + "");
-                                mCezhanData.setShuizhunxianID(mYusheshuizhunxianData.getId());
-                                mCezhanData.setMeasureDirection("往测");
-                                //其实不是这样的，应该根据水准线的观测类型，还要根据奇数站和偶数站的时候不同的前后后前的顺序不一样就会显示不一样,后期再处理。
-                                mCezhanData.setObserveType(mYusheshuizhunxianData.getObserveType());
-
-                                mCezhanData.setQianshi(arrayJidianAndCedian[i - 1]);
-                                mCezhanData.setHoushi(arrayJidianAndCedian[(i)]);
-                                listCezhan.add(mCezhanData);
-
-                            }
 
                             subscriber.onNext(listCezhan);
 

@@ -53,10 +53,10 @@
     <string name="dialog_negativeText">取消</string>
     <string name="dialog_neutralText">扫描</string>
     <string name="dialog_clear">清除</string>
-    <string name="dialog_delete_title">确定删除吗？</string>
+    <string name="dialog_title_delete">确定删除吗？</string>
     <string name="dialog_stop_title">确定终止吗？</string>
     <string name="dialog_delete_shuizhunxian">删除当前水准线后不可恢复，请问是否继续删除？</string>
-    <string name="dialog_delete_content">删除操作不可恢复，请问是否继续删除？</string>
+    <string name="dialog_content_delete">删除操作不可恢复，请问是否继续删除？</string>
     <string name="dialog_stop_content">终止操作不可恢复，请问是否继续终止？</string>
     <string name="dialog_select_jidian">请选择基点</string>
     <string name="dialog_select_bluetooth">请选择蓝牙设备</string>
@@ -65,7 +65,9 @@
     <string name="dialog_measureing">正在读取数据，请耐心等待…</string>
     <string name="dialog_scan">扫描</string>
     <string name="dialog_title_exit">确定要退出吗？</string>
-    <string name="dialog_content_exit">当前正在测量，如果退出将造成数据丢失，请问是否退出？</string>
+    <string name="dialog_content_exit">当前正在测量，如果退出可能会造成数据丢失，请问是否退出？</string>
+    <string name="dialog_title_remeasure">确定重新测量水准线吗？</string>
+    <string name="dialog_content_remeasure">重新测量水准线会清除之前测量数据，请问是否重新测量？</string>
 
     <!--测量模块-->
     <string name="zhuandian">转点</string>

@@ -81,7 +81,6 @@ public class MeasureRightFragment extends BaseFragment<MeasureContract.Presenter
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         Bundle args = getArguments();
         if (args != null) {
             mYusheshuizhunxianData = (YusheshuizhunxianData) args.getSerializable(Constants.YUSHESHUIZHUNXIAN);
@@ -134,20 +133,36 @@ public class MeasureRightFragment extends BaseFragment<MeasureContract.Presenter
 
                         break;
 
+                    case R.id.action_remeasure:
+                        new AlertDialog.Builder(_mActivity)
+                                .setIcon(R.drawable.ic_error_outline_red_400_48dp)
+                                .setTitle(R.string.dialog_title_remeasure)
+                                .setMessage(R.string.dialog_content_remeasure)
+                                .setNegativeButton(R.string.dialog_positiveText, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                                    }
+                                })
+                                .setPositiveButton(R.string.dialog_negativeText, null)
+                                .show();
+
+                        break;
+
                     case R.id.action_delete:
-                        DialogHelper.dialog(_mActivity, R.drawable.ic_error_outline_red_400_48dp,
-                                R.string.dialog_delete_title, R.string.dialog_delete_content, R.string.dialog_positiveText,
-                                R.string.dialog_negativeText, new DialogHelper.Call() {
+                        new AlertDialog.Builder(_mActivity)
+                                .setIcon(R.drawable.ic_error_outline_red_400_48dp)
+                                .setTitle(R.string.dialog_title_delete)
+                                .setMessage(R.string.dialog_content_delete)
+                                .setNegativeButton(R.string.dialog_positiveText, new DialogInterface.OnClickListener() {
                                     @Override
-                                    public void onNegative() {
+                                    public void onClick(DialogInterface dialogInterface, int i) {
 
                                     }
+                                })
+                                .setPositiveButton(R.string.dialog_negativeText, null)
+                                .show();
 
-                                    @Override
-                                    public void onPositive() {
-
-                                    }
-                                });
 
                         break;
                 }
@@ -163,14 +178,12 @@ public class MeasureRightFragment extends BaseFragment<MeasureContract.Presenter
 
     protected void initRecyclerViewPager(View view) {
         mRecyclerView = (RecyclerViewPager) view.findViewById(R.id.viewpager);
-
         //数字越大，触发滚向下一页所需偏移就越大
         mRecyclerView.setTriggerOffset(0.1f);
         //数字越大，就越容易滚动
         mRecyclerView.setFlingFactor(0.0f);
         mRecyclerView.setLayoutManager(mLinearLayoutManager = new LinearLayoutManager(_mActivity, LinearLayoutManager.VERTICAL, false));
         mRecyclerView.setAdapter(mAdapter = new MeasureRVPAdapter());
-
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setLongClickable(true);
     }
@@ -240,6 +253,7 @@ public class MeasureRightFragment extends BaseFragment<MeasureContract.Presenter
     @Override
     public void responseCezhanData(List<CezhanData> listCezhan) {
         mAdapter.setNewData(listCezhan);
+        mRecyclerView.scrollToPosition(mYusheshuizhunxianData.getMeasurePosition() - 1);
     }
 
     @Override
@@ -341,7 +355,7 @@ public class MeasureRightFragment extends BaseFragment<MeasureContract.Presenter
     @Override
     public void onDestroy() {
         AudioPlayer.onDestroy();
-        DialogHelper.warningSnackbar(viewGroup, "蓝牙连接已断开", DialogHelper.APPEAR_FROM_TOP_TO_DOWN);
+        DialogHelper.successSnackbar(viewGroup, "蓝牙已关闭", DialogHelper.APPEAR_FROM_TOP_TO_DOWN);
         super.onDestroy();
     }
 

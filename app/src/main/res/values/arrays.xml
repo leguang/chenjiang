@@ -25,11 +25,7 @@
     </string-array>
 
     <string-array name="observe_type">
-        <item>aBFFB</item>
-        <item>aFBBF</item>
         <item>BFFB</item>
-        <item>aBF</item>
-        <item>BF</item>
     </string-array>
 
     <string-array name="weather">
