@@ -83,13 +83,14 @@
             android:text="@string/chongce"
             android:textColor="@color/base_color" />
 
-        <Button
-            android:id="@+id/bt_fance_measure_right_fragment"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/fance"
-            android:textColor="@color/base_color" />
+        <!--   <Button
+               android:id="@+id/bt_fance_measure_right_fragment"
+               android:layout_width="0dp"
+               android:layout_height="wrap_content"
+               android:layout_weight="1"
+               android:text="@string/fance"
+               android:textColor="@color/base_color"
+               android:visibility="gone" />-->
     </LinearLayout>
 
     <android.support.design.widget.FloatingActionButton

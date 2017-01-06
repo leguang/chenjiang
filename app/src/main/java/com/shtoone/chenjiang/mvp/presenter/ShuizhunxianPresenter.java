@@ -129,47 +129,42 @@ public class ShuizhunxianPresenter extends BasePresenter<ShuizhunxianContract.Vi
 
                             List<CezhanData> listCezhan = new ArrayList<>();
 
-                            for (int j = 0; j < 100; j++) {
 
-
-                                for (int i = 0; i < arrayJidianAndCedian.length - 1; i++) {
-                                    intNumber++;
-                                    CezhanData mCezhanData = new CezhanData();
-                                    mCezhanData.setNumber(intNumber + "");
-                                    mCezhanData.setShuizhunxianID(mYusheshuizhunxianData.getId() + "");
-                                    mCezhanData.setMeasureDirection("往测");
-                                    //其实不是这样的，应该根据水准线的观测类型，还要根据奇数站和偶数站的时候不同的前后后前的顺序不一样就会显示不一样,后期再处理。
-                                    if (intNumber % 2 == 0) {
-                                        mCezhanData.setObserveType(Constants.FBBF);
-                                    } else {
-                                        mCezhanData.setObserveType(Constants.BFFB);
-                                    }
-                                    mCezhanData.setQianshi(arrayJidianAndCedian[i + 1]);
-                                    mCezhanData.setHoushi(arrayJidianAndCedian[i]);
-                                    listCezhan.add(mCezhanData);
+                            for (int i = 0; i < arrayJidianAndCedian.length - 1; i++) {
+                                intNumber++;
+                                CezhanData mCezhanData = new CezhanData();
+                                mCezhanData.setNumber(intNumber);
+                                mCezhanData.setShuizhunxianID(mYusheshuizhunxianData.getId() + "");
+                                mCezhanData.setMeasureDirection("往测");
+                                //其实不是这样的，应该根据水准线的观测类型，还要根据奇数站和偶数站的时候不同的前后后前的顺序不一样就会显示不一样,后期再处理。
+                                if (intNumber % 2 == 0) {
+                                    mCezhanData.setObserveType(Constants.FBBF);
+                                } else {
+                                    mCezhanData.setObserveType(Constants.BFFB);
                                 }
-
+                                mCezhanData.setQianshi(arrayJidianAndCedian[i + 1]);
+                                mCezhanData.setHoushi(arrayJidianAndCedian[i]);
+                                listCezhan.add(mCezhanData);
                             }
+
 //                            for (CezhanData cezhanData : listCezhan) {
 //                                KLog.e("Number::" + cezhanData.getNumber());
 //                            }
-                            for (int j = 0; j < 100; j++) {
-                                for (int i = arrayJidianAndCedian.length - 1; i > 0; i--) {
-                                    intNumber++;
-                                    CezhanData mCezhanData = new CezhanData();
-                                    mCezhanData.setNumber(intNumber + "");
-                                    mCezhanData.setShuizhunxianID(mYusheshuizhunxianData.getId() + "");
-                                    mCezhanData.setMeasureDirection("反测");
-                                    //其实不是这样的，应该根据水准线的观测类型，还要根据奇数站和偶数站的时候不同的前后后前的顺序不一样就会显示不一样,后期再处理。
-                                    if (intNumber % 2 == 0) {
-                                        mCezhanData.setObserveType(Constants.FBBF);
-                                    } else {
-                                        mCezhanData.setObserveType(Constants.BFFB);
-                                    }
-                                    mCezhanData.setQianshi(arrayJidianAndCedian[i - 1]);
-                                    mCezhanData.setHoushi(arrayJidianAndCedian[i]);
-                                    listCezhan.add(mCezhanData);
+                            for (int i = arrayJidianAndCedian.length - 1; i > 0; i--) {
+                                intNumber++;
+                                CezhanData mCezhanData = new CezhanData();
+                                mCezhanData.setNumber(intNumber);
+                                mCezhanData.setShuizhunxianID(mYusheshuizhunxianData.getId() + "");
+                                mCezhanData.setMeasureDirection("反测");
+                                //其实不是这样的，应该根据水准线的观测类型，还要根据奇数站和偶数站的时候不同的前后后前的顺序不一样就会显示不一样,后期再处理。
+                                if (intNumber % 2 == 0) {
+                                    mCezhanData.setObserveType(Constants.FBBF);
+                                } else {
+                                    mCezhanData.setObserveType(Constants.BFFB);
                                 }
+                                mCezhanData.setQianshi(arrayJidianAndCedian[i - 1]);
+                                mCezhanData.setHoushi(arrayJidianAndCedian[i]);
+                                listCezhan.add(mCezhanData);
                             }
 
                             for (CezhanData cezhanData : listCezhan) {

@@ -13,7 +13,10 @@ public class MeasureRVPAdapter extends BaseQuickAdapter<CezhanData, BaseViewHold
     private int measureIndex = 0;
     private int[] arrayOdd = {0, Constants.b1, Constants.f1, Constants.f2, Constants.b2};
     private int[] arrayEven = {0, Constants.f1, Constants.b1, Constants.b2, Constants.f2};
+    private int[] arrayAudioOdd = {0, Constants.AUDIO_NEXTB, Constants.AUDIO_NEXTB, Constants.AUDIO_NEXTF};
+    private int[] arrayAudioEven = {0, Constants.AUDIO_NEXTF, Constants.AUDIO_NEXTF, Constants.AUDIO_NEXTB};
     int[] arraySequence = {0};
+    int[] arrayAudio = {0};
 
     public MeasureRVPAdapter() {
         super(R.layout.item_rvp_measure_right_fragment, null);
@@ -23,7 +26,7 @@ public class MeasureRVPAdapter extends BaseQuickAdapter<CezhanData, BaseViewHold
     protected void convert(BaseViewHolder holder, CezhanData mCezhanData) {
         int position = holder.getLayoutPosition() - this.getHeaderLayoutCount();
         //设置数据
-        holder.setText(R.id.tv_number_item_rvp_measure_right_fragment, mCezhanData.getNumber())
+        holder.setText(R.id.tv_number_item_rvp_measure_right_fragment, mCezhanData.getNumber() + "")
                 .setText(R.id.tv_measure_direction_item_rvp_measure_right_fragment, mCezhanData.getMeasureDirection())
                 .setText(R.id.tv_qianshi_item_rvp_measure_right_fragment, "前视:" + mCezhanData.getQianshi())
                 .setText(R.id.tv_houshi_item_rvp_measure_right_fragment, "后视:" + mCezhanData.getHoushi())
@@ -78,47 +81,54 @@ public class MeasureRVPAdapter extends BaseQuickAdapter<CezhanData, BaseViewHold
     }
 
     public void measure(int currentPosition, int measureIndex, String result) {
+        KLog.e("measuremeasuremeasuremeasuremeasuremeasuremeasuremeasuremeasuremeasuremeasuremeasuremeasure");
+        if (currentPosition > mData.size() - 1) {
+            return;
+        }
         KLog.e("currentPosition::" + currentPosition);
         KLog.e("measureIndex::" + measureIndex);
         this.currentPosition = currentPosition;
         this.measureIndex = measureIndex;
         CezhanData mCezhanData = mData.get(currentPosition);
 
-
         if ((currentPosition + 1) % 2 == 0) {
             //偶数站
             arraySequence = arrayEven;
-            KLog.e("//偶数站//偶数站//偶数站//偶数站//偶数站//偶数站");
+            arrayAudio = arrayAudioEven;
         } else {
             //奇数站
             arraySequence = arrayOdd;
-            KLog.e("//奇数站//奇数站//奇数站//奇数站//奇数站//奇数站//奇数站//奇数站//奇数站//奇数站//奇数站");
+            arrayAudio = arrayAudioOdd;
         }
 
         switch (arraySequence[measureIndex]) {
             case Constants.b1:
+
+                //后面根据算法再加声音提示。
                 mCezhanData.setB1hd(result);
                 mCezhanData.setB1r(result);
-                KLog.e("b1b1b1b1b1b1b1b1b1b1b1b1");
                 break;
             case Constants.b2:
                 mCezhanData.setB2hd(result);
                 mCezhanData.setB2r(result);
-                KLog.e("b2b2b2b2b2b2b2b2b2b2b2b2");
                 break;
             case Constants.f1:
                 mCezhanData.setF1hd(result);
                 mCezhanData.setF1r(result);
-                KLog.e("f1f1f1f1f1f1f1f1f1f1");
                 break;
             case Constants.f2:
                 mCezhanData.setF2hd(result);
                 mCezhanData.setF2r(result);
-                KLog.e("f2f2f2f2f2f2f2f2f2");
                 break;
         }
+        notifyDataSetChanged();
+    }
 
-
+    public void chongce(int currentPosition, int measureIndex) {
+        this.currentPosition = currentPosition;
+        this.measureIndex = measureIndex;
+        CezhanData mCezhanData = mData.get(currentPosition);
+        mCezhanData.clean();
         notifyDataSetChanged();
     }
 }

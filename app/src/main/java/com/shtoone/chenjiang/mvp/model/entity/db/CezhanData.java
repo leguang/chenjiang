@@ -9,7 +9,7 @@ import org.litepal.crud.DataSupport;
  */
 public class CezhanData extends DataSupport {
     private long id;
-    private String number;
+    private int number;
     private String measureDirection;
     private String observeType;
     private String qianshi;
@@ -40,11 +40,11 @@ public class CezhanData extends DataSupport {
         this.id = id;
     }
 
-    public String getNumber() {
+    public int getNumber() {
         return number;
     }
 
-    public void setNumber(String number) {
+    public void setNumber(int number) {
         this.number = number;
     }
 
@@ -214,5 +214,24 @@ public class CezhanData extends DataSupport {
 
     public void setShuizhunxianID(String shuizhunxianID) {
         this.shuizhunxianID = shuizhunxianID;
+    }
+
+    public void clean() {
+        b1hd = "";
+        b2hd = "";
+        b1r = "";
+        b2r = "";
+        f1hd = "";
+        f2hd = "";
+        f1r = "";
+        f2r = "";
+        houshijuhe = "";
+        qianshijuhe = "";
+        gaocha1 = "";
+        gaocha2 = "";
+        cezhangaocha = "";
+        gaochengzhi = "";
+        frdushucha = "";
+        brdushucha = "";
     }
 }

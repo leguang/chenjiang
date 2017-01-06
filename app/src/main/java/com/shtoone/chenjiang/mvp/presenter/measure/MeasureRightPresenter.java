@@ -122,20 +122,11 @@ public class MeasureRightPresenter extends BasePresenter<MeasureContract.View> i
                         try {
                             List<CezhanData> listCezhan = DataSupport.where("shuizhunxianID = ? ", String.valueOf(mYusheshuizhunxianData.getId()))
                                     .order("number").find(CezhanData.class);
-
-                            KLog.e("size::" + listCezhan.size());
-
-                            for (CezhanData cezhanData : listCezhan) {
-                                KLog.e("cezhanData::" + cezhanData.getNumber());
-                            }
-
-
                             subscriber.onNext(listCezhan);
 
                         } catch (Exception ex) {
                             subscriber.onError(ex);
                         }
-
                     }
                 }).subscribeOn(Schedulers.computation())
                         .observeOn(AndroidSchedulers.mainThread())
@@ -184,11 +175,10 @@ public class MeasureRightPresenter extends BasePresenter<MeasureContract.View> i
 
         @Override
         public void onDisconnected() {
-            KLog.e("onDisconnectedonDisconnectedonDisconnectedonDisconnectedonDisconnectedonDisconnectedonDisconnectedonDisconnectedonDisconnectedonDisconnected");
-
-            getView().onDisconnected();
-            AudioPlayer.play(Constants.AUDIO_DISCONNECT);
-
+            if (isViewAttached()) {
+                getView().onDisconnected();
+                AudioPlayer.play(Constants.AUDIO_DISCONNECT);
+            }
         }
 
         @Override
@@ -240,7 +230,6 @@ public class MeasureRightPresenter extends BasePresenter<MeasureContract.View> i
         mBluetoothManager.onDestroy();
         mBluetoothManager = null;
         mListener = null;
-        KLog.e("mBluetoothManager被销毁");
         super.detachView();
     }
 }

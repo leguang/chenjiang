@@ -265,10 +265,8 @@ public class ClassicBluetooth implements IBluetooth {
         private final BluetoothDevice mmDevice;
 
         public ConnectThread(final BluetoothDevice device) {
-            KLog.e("创建连接线程");
             mmDevice = device;
             BluetoothSocket tmp = null;
-            KLog.e("currentThreadName::" + Thread.currentThread().getName());
             try {
                 tmp = device.createInsecureRfcommSocketToServiceRecord(UUID_DEVICE);
             } catch (IOException e) {

@@ -22,6 +22,7 @@ import com.shtoone.chenjiang.R;
 import com.shtoone.chenjiang.common.AudioPlayer;
 import com.shtoone.chenjiang.common.Constants;
 import com.shtoone.chenjiang.common.DialogHelper;
+import com.shtoone.chenjiang.common.ToastUtils;
 import com.shtoone.chenjiang.mvp.contract.measure.MeasureContract;
 import com.shtoone.chenjiang.mvp.model.entity.db.CezhanData;
 import com.shtoone.chenjiang.mvp.model.entity.db.YusheshuizhunxianData;
@@ -29,6 +30,8 @@ import com.shtoone.chenjiang.mvp.presenter.measure.MeasureRightPresenter;
 import com.shtoone.chenjiang.mvp.view.adapter.MeasureRVPAdapter;
 import com.shtoone.chenjiang.mvp.view.base.BaseFragment;
 import com.socks.library.KLog;
+
+import org.litepal.crud.DataSupport;
 
 import java.util.List;
 
@@ -52,8 +55,6 @@ public class MeasureRightFragment extends BaseFragment<MeasureContract.Presenter
     Button btCedian;
     @BindView(R.id.bt_chongce_measure_right_fragment)
     Button btChongce;
-    @BindView(R.id.bt_fance_measure_right_fragment)
-    Button btFance;
     @BindView(R.id.fab)
     FloatingActionButton fab;
     protected RecyclerViewPager mRecyclerView;
@@ -66,7 +67,7 @@ public class MeasureRightFragment extends BaseFragment<MeasureContract.Presenter
     private Dialog progressDialog;
     private ViewGroup viewGroup;
     private AlertDialog.Builder deviceListBuilder;
-    private int measureIndex = 1;
+    private int measureIndex;
 
 
     public static MeasureRightFragment newInstance(YusheshuizhunxianData mYusheshuizhunxianData) {
@@ -84,6 +85,7 @@ public class MeasureRightFragment extends BaseFragment<MeasureContract.Presenter
         Bundle args = getArguments();
         if (args != null) {
             mYusheshuizhunxianData = (YusheshuizhunxianData) args.getSerializable(Constants.YUSHESHUIZHUNXIAN);
+            KLog.e("位置position：：" + mYusheshuizhunxianData.getMeasurePosition());
         }
     }
 
@@ -138,13 +140,13 @@ public class MeasureRightFragment extends BaseFragment<MeasureContract.Presenter
                                 .setIcon(R.drawable.ic_error_outline_red_400_48dp)
                                 .setTitle(R.string.dialog_title_remeasure)
                                 .setMessage(R.string.dialog_content_remeasure)
-                                .setNegativeButton(R.string.dialog_positiveText, new DialogInterface.OnClickListener() {
+                                .setNegativeButton(R.string.dialog_negativeText, null)
+                                .setPositiveButton(R.string.dialog_positiveText, new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialogInterface, int i) {
 
                                     }
                                 })
-                                .setPositiveButton(R.string.dialog_negativeText, null)
                                 .show();
 
                         break;
@@ -154,13 +156,13 @@ public class MeasureRightFragment extends BaseFragment<MeasureContract.Presenter
                                 .setIcon(R.drawable.ic_error_outline_red_400_48dp)
                                 .setTitle(R.string.dialog_title_delete)
                                 .setMessage(R.string.dialog_content_delete)
-                                .setNegativeButton(R.string.dialog_positiveText, new DialogInterface.OnClickListener() {
+                                .setNegativeButton(R.string.dialog_negativeText, null)
+                                .setPositiveButton(R.string.dialog_positiveText, new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialogInterface, int i) {
 
                                     }
                                 })
-                                .setPositiveButton(R.string.dialog_negativeText, null)
                                 .show();
 
 
@@ -174,6 +176,7 @@ public class MeasureRightFragment extends BaseFragment<MeasureContract.Presenter
     private void initData() {
         mPresenter.requestJidianData();
         mPresenter.requestCezhanData(mYusheshuizhunxianData);
+        measureIndex = mYusheshuizhunxianData.getMeasureIndex();
     }
 
     protected void initRecyclerViewPager(View view) {
@@ -205,7 +208,7 @@ public class MeasureRightFragment extends BaseFragment<MeasureContract.Presenter
 
     @OnClick({R.id.bt_jidian_measure_right_fragment, R.id.bt_zhuandian_measure_right_fragment,
             R.id.bt_cedian_measure_right_fragment, R.id.bt_chongce_measure_right_fragment,
-            R.id.bt_fance_measure_right_fragment, R.id.fab, R.id.tv_connect_measure_right_fragment})
+            R.id.fab, R.id.tv_connect_measure_right_fragment})
     public void onClick(View view) {
         switch (view.getId()) {
 
@@ -233,11 +236,22 @@ public class MeasureRightFragment extends BaseFragment<MeasureContract.Presenter
 
                 break;
             case R.id.bt_chongce_measure_right_fragment:
+                mRecyclerView.scrollToPosition(mYusheshuizhunxianData.getMeasurePosition());
+                new AlertDialog.Builder(_mActivity)
+                        .setIcon(R.drawable.ic_error_outline_red_400_48dp)
+                        .setTitle(R.string.dialog_title_exit)
+                        .setMessage(R.string.dialog_content_exit)
+                        .setNegativeButton(R.string.dialog_negativeText, null)
+                        .setPositiveButton(R.string.dialog_positiveText, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                measureIndex = 0;
+                                mYusheshuizhunxianData.setMeasureIndex(measureIndex);
+                                mAdapter.chongce(mYusheshuizhunxianData.getMeasurePosition(),measureIndex);
 
-                break;
-            case R.id.bt_fance_measure_right_fragment:
-//                mAdapter.measure(mRecyclerView.getCurrentPosition(), 2);
-
+                            }
+                        })
+                        .show();
                 break;
             case R.id.fab:
                 break;
@@ -253,7 +267,7 @@ public class MeasureRightFragment extends BaseFragment<MeasureContract.Presenter
     @Override
     public void responseCezhanData(List<CezhanData> listCezhan) {
         mAdapter.setNewData(listCezhan);
-        mRecyclerView.scrollToPosition(mYusheshuizhunxianData.getMeasurePosition() - 1);
+        mRecyclerView.scrollToPosition(mYusheshuizhunxianData.getMeasurePosition());
     }
 
     @Override
@@ -306,7 +320,7 @@ public class MeasureRightFragment extends BaseFragment<MeasureContract.Presenter
                             mPresenter.connect(deviceList.get(which).getAddress());
                             dialog.dismiss();
                         }
-                    }).setPositiveButton(R.string.dialog_negativeText, null)
+                    }).setNegativeButton(R.string.dialog_negativeText, null)
                     .setNeutralButton(R.string.dialog_scan, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
@@ -327,30 +341,33 @@ public class MeasureRightFragment extends BaseFragment<MeasureContract.Presenter
 
     @Override
     public void onDataReceived(String str) {
-        KLog.e("str::###############################################################" + str);
-
-        mAdapter.measure(mRecyclerView.getCurrentPosition(), measureIndex, str);
-
+        mRecyclerView.scrollToPosition(mYusheshuizhunxianData.getMeasurePosition());
+        if (mYusheshuizhunxianData.getMeasurePosition() == mAdapter.getData().size() - 1 && measureIndex == 4) {
+            ToastUtils.showToast(_mActivity, "已经测完了");
+            return;
+        }
+        measureIndex++;
+        mAdapter.measure(mYusheshuizhunxianData.getMeasurePosition(), measureIndex, str);
         //调试用的，或者发送指令
         mPresenter.sendData((measureIndex + "\n").getBytes());
-        measureIndex = measureIndex + 1;
-
-        KLog.e("onDataReceived：：" + measureIndex);
-
-        if (measureIndex >= 5) {
-            measureIndex = 1;
+        if (measureIndex == 4) {
             //此处还要判断是往测还是反测。
-            KLog.e("onDataReceived滚动到下一页");
-
-
-            mRecyclerView.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    mRecyclerView.smoothScrollToPosition(mRecyclerView.getCurrentPosition() + 1);
-                }
-            }, 500);
+            if (mYusheshuizhunxianData.getMeasurePosition() < mAdapter.getData().size() - 1) {
+                measureIndex = 0;
+                mYusheshuizhunxianData.setMeasurePosition(mYusheshuizhunxianData.getMeasurePosition() + 1);
+                mRecyclerView.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        mRecyclerView.smoothScrollToPosition(mYusheshuizhunxianData.getMeasurePosition());
+                    }
+                }, 618);
+            } else {
+                ToastUtils.showToast(_mActivity, "已经测完了");
+            }
         }
+        storeData();
     }
+
 
     @Override
     public void onDestroy() {
@@ -359,13 +376,21 @@ public class MeasureRightFragment extends BaseFragment<MeasureContract.Presenter
         super.onDestroy();
     }
 
+    private void storeData() {
+        mYusheshuizhunxianData.setMeasureIndex(measureIndex);
+        mYusheshuizhunxianData.save();
+        DataSupport.saveAll(mAdapter.getData());
+    }
+
     @Override
     public boolean onBackPressedSupport() {
+        storeData();
         new AlertDialog.Builder(_mActivity)
                 .setIcon(R.drawable.ic_error_outline_red_400_48dp)
                 .setTitle(R.string.dialog_title_exit)
                 .setMessage(R.string.dialog_content_exit)
-                .setNegativeButton(R.string.dialog_positiveText, new DialogInterface.OnClickListener() {
+                .setNegativeButton(R.string.dialog_negativeText, null)
+                .setPositiveButton(R.string.dialog_positiveText, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         if (getParentFragment() instanceof MeasureFragment) {
@@ -373,9 +398,7 @@ public class MeasureRightFragment extends BaseFragment<MeasureContract.Presenter
                         }
                     }
                 })
-                .setPositiveButton(R.string.dialog_negativeText, null)
                 .show();
-
         return true;
     }
 }
