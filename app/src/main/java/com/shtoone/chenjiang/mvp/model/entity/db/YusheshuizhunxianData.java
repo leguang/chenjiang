@@ -31,6 +31,7 @@ public class YusheshuizhunxianData extends DataSupport implements Serializable {
     private String staff;
     private int measurePosition;//用于记录上一次测量的测站位置，对应的是测站表中的number
     private int measureIndex;//用于记录上一次测量的测站方向
+    private int zhuandianIndex;//用于记录上一次测量的测站方向
 
     public String getStatus() {
         return status;
@@ -206,6 +207,14 @@ public class YusheshuizhunxianData extends DataSupport implements Serializable {
 
     public void setMeasureIndex(int measureIndex) {
         this.measureIndex = measureIndex;
+    }
+
+    public int getZhuandianIndex() {
+        return zhuandianIndex;
+    }
+
+    public void setZhuandianIndex(int zhuandianIndex) {
+        this.zhuandianIndex = zhuandianIndex;
     }
 }
 

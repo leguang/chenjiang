@@ -67,8 +67,6 @@ public class MeasureRightFragment extends BaseFragment<MeasureContract.Presenter
     private Dialog progressDialog;
     private ViewGroup viewGroup;
     private AlertDialog.Builder deviceListBuilder;
-    private int measureIndex;
-
 
     public static MeasureRightFragment newInstance(YusheshuizhunxianData mYusheshuizhunxianData) {
         Bundle args = new Bundle();
@@ -176,7 +174,6 @@ public class MeasureRightFragment extends BaseFragment<MeasureContract.Presenter
     private void initData() {
         mPresenter.requestJidianData();
         mPresenter.requestCezhanData(mYusheshuizhunxianData);
-        measureIndex = mYusheshuizhunxianData.getMeasureIndex();
     }
 
     protected void initRecyclerViewPager(View view) {
@@ -210,8 +207,8 @@ public class MeasureRightFragment extends BaseFragment<MeasureContract.Presenter
             R.id.bt_cedian_measure_right_fragment, R.id.bt_chongce_measure_right_fragment,
             R.id.fab, R.id.tv_connect_measure_right_fragment})
     public void onClick(View view) {
+        mRecyclerView.scrollToPosition(mYusheshuizhunxianData.getMeasurePosition());
         switch (view.getId()) {
-
             case R.id.tv_connect_measure_right_fragment:
                 if (tvConnect.getText().toString().equals("连接")) {
                     mPresenter.connectPaired(_mActivity);
@@ -230,13 +227,25 @@ public class MeasureRightFragment extends BaseFragment<MeasureContract.Presenter
                 });
                 break;
             case R.id.bt_zhuandian_measure_right_fragment:
-
+                new AlertDialog.Builder(_mActivity)
+                        .setIcon(R.drawable.ic_error_outline_red_400_48dp)
+                        .setTitle(R.string.dialog_title_zhuandian)
+                        .setMessage(R.string.dialog_content_zhuandian)
+                        .setNegativeButton(R.string.dialog_negativeText, null)
+                        .setPositiveButton(R.string.dialog_positiveText, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                mAdapter.addZhuandian(mYusheshuizhunxianData);
+                                DialogHelper.successSnackbar(viewGroup, "增加转点成功，请重新测量本站", DialogHelper.APPEAR_FROM_TOP_TO_DOWN);
+                                storeData();
+                            }
+                        })
+                        .show();
                 break;
             case R.id.bt_cedian_measure_right_fragment:
 
                 break;
             case R.id.bt_chongce_measure_right_fragment:
-                mRecyclerView.scrollToPosition(mYusheshuizhunxianData.getMeasurePosition());
                 new AlertDialog.Builder(_mActivity)
                         .setIcon(R.drawable.ic_error_outline_red_400_48dp)
                         .setTitle(R.string.dialog_title_exit)
@@ -245,10 +254,9 @@ public class MeasureRightFragment extends BaseFragment<MeasureContract.Presenter
                         .setPositiveButton(R.string.dialog_positiveText, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
-                                measureIndex = 0;
-                                mYusheshuizhunxianData.setMeasureIndex(measureIndex);
-                                mAdapter.chongce(mYusheshuizhunxianData.getMeasurePosition(),measureIndex);
-
+                                mAdapter.chongce(mYusheshuizhunxianData);
+                                DialogHelper.successSnackbar(viewGroup, "清除成功，请重新测量本站", DialogHelper.APPEAR_FROM_TOP_TO_DOWN);
+                                storeData();
                             }
                         })
                         .show();
@@ -342,18 +350,18 @@ public class MeasureRightFragment extends BaseFragment<MeasureContract.Presenter
     @Override
     public void onDataReceived(String str) {
         mRecyclerView.scrollToPosition(mYusheshuizhunxianData.getMeasurePosition());
-        if (mYusheshuizhunxianData.getMeasurePosition() == mAdapter.getData().size() - 1 && measureIndex == 4) {
+        if (mYusheshuizhunxianData.getMeasurePosition() == mAdapter.getData().size() - 1 && mYusheshuizhunxianData.getMeasureIndex() == 4) {
             ToastUtils.showToast(_mActivity, "已经测完了");
             return;
         }
-        measureIndex++;
-        mAdapter.measure(mYusheshuizhunxianData.getMeasurePosition(), measureIndex, str);
+        mYusheshuizhunxianData.setMeasureIndex(mYusheshuizhunxianData.getMeasureIndex() + 1);
+        mAdapter.measure(mYusheshuizhunxianData.getMeasurePosition(), mYusheshuizhunxianData.getMeasureIndex(), str);
         //调试用的，或者发送指令
-        mPresenter.sendData((measureIndex + "\n").getBytes());
-        if (measureIndex == 4) {
+        mPresenter.sendData((mYusheshuizhunxianData.getMeasureIndex() + "\n").getBytes());
+        if (mYusheshuizhunxianData.getMeasureIndex() == 4) {
             //此处还要判断是往测还是反测。
             if (mYusheshuizhunxianData.getMeasurePosition() < mAdapter.getData().size() - 1) {
-                measureIndex = 0;
+                mYusheshuizhunxianData.setMeasureIndex(0);
                 mYusheshuizhunxianData.setMeasurePosition(mYusheshuizhunxianData.getMeasurePosition() + 1);
                 mRecyclerView.postDelayed(new Runnable() {
                     @Override
@@ -377,7 +385,6 @@ public class MeasureRightFragment extends BaseFragment<MeasureContract.Presenter
     }
 
     private void storeData() {
-        mYusheshuizhunxianData.setMeasureIndex(measureIndex);
         mYusheshuizhunxianData.save();
         DataSupport.saveAll(mAdapter.getData());
     }

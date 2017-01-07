@@ -3,8 +3,10 @@ package com.shtoone.chenjiang.mvp.view.adapter;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.shtoone.chenjiang.R;
+import com.shtoone.chenjiang.common.AudioPlayer;
 import com.shtoone.chenjiang.common.Constants;
 import com.shtoone.chenjiang.mvp.model.entity.db.CezhanData;
+import com.shtoone.chenjiang.mvp.model.entity.db.YusheshuizhunxianData;
 import com.socks.library.KLog;
 
 public class MeasureRVPAdapter extends BaseQuickAdapter<CezhanData, BaseViewHolder> {
@@ -13,8 +15,8 @@ public class MeasureRVPAdapter extends BaseQuickAdapter<CezhanData, BaseViewHold
     private int measureIndex = 0;
     private int[] arrayOdd = {0, Constants.b1, Constants.f1, Constants.f2, Constants.b2};
     private int[] arrayEven = {0, Constants.f1, Constants.b1, Constants.b2, Constants.f2};
-    private int[] arrayAudioOdd = {0, Constants.AUDIO_NEXTB, Constants.AUDIO_NEXTB, Constants.AUDIO_NEXTF};
-    private int[] arrayAudioEven = {0, Constants.AUDIO_NEXTF, Constants.AUDIO_NEXTF, Constants.AUDIO_NEXTB};
+    private int[] arrayAudioOdd = {0, Constants.AUDIO_NEXTB, Constants.AUDIO_NEXTB, Constants.AUDIO_NEXTF, 0};
+    private int[] arrayAudioEven = {0, Constants.AUDIO_NEXTF, Constants.AUDIO_NEXTF, Constants.AUDIO_NEXTB, 0};//对于这个0是否会报错，后面再看
     int[] arraySequence = {0};
     int[] arrayAudio = {0};
 
@@ -104,7 +106,19 @@ public class MeasureRVPAdapter extends BaseQuickAdapter<CezhanData, BaseViewHold
         switch (arraySequence[measureIndex]) {
             case Constants.b1:
 
-                //后面根据算法再加声音提示。
+                //后面根据算法再加声音提示。其散发可以参考两种，一种是如下
+//                if(measureIndex<3){
+//
+//                    switch (arrayAudio[measureIndex+1]) {
+//                        case Constants.f1:
+//                            AudioPlayer.play(Constants.AUDIO_NEXTF);
+//                        case Constants.b1:
+//                            AudioPlayer.play(Constants.AUDIO_NEXTB);
+//                        //**********
+//                    }
+//                }
+
+
                 mCezhanData.setB1hd(result);
                 mCezhanData.setB1r(result);
                 break;
@@ -121,14 +135,70 @@ public class MeasureRVPAdapter extends BaseQuickAdapter<CezhanData, BaseViewHold
                 mCezhanData.setF2r(result);
                 break;
         }
+
+        //声音的另一种实现,把这个封装起来，方便在计算的时候调用
+
+//        AudioPlayer.play(arrayAudio[measureIndex]);
+        //到第四次获取数据时进行一系列运算。
+        if (measureIndex == 4) {
+//            mCezhanData
+        }
+
         notifyDataSetChanged();
     }
 
-    public void chongce(int currentPosition, int measureIndex) {
-        this.currentPosition = currentPosition;
-        this.measureIndex = measureIndex;
+    public void chongce(YusheshuizhunxianData mYusheshuizhunxianData) {
+        this.currentPosition = mYusheshuizhunxianData.getMeasurePosition();
+        mYusheshuizhunxianData.setMeasureIndex(0);
+        this.measureIndex = 0;
         CezhanData mCezhanData = mData.get(currentPosition);
         mCezhanData.clean();
+        notifyDataSetChanged();
+    }
+
+    public void addZhuandian(YusheshuizhunxianData mYusheshuizhunxianData) {
+        this.currentPosition = mYusheshuizhunxianData.getMeasurePosition();
+        mYusheshuizhunxianData.setMeasureIndex(0);
+        this.measureIndex = 0;
+
+        KLog.e("currentPosition::" + currentPosition);
+
+
+        //首先清除当前站并修改当前测站的相关值，目的是为了保证当前站被测量过的数据清除后重新开始测量。
+        CezhanData currentCezhanData = mData.get(currentPosition);
+        currentCezhanData.clean();
+
+        int zhuandianIndex = mYusheshuizhunxianData.getZhuandianIndex() + 1;
+        mYusheshuizhunxianData.setZhuandianIndex(zhuandianIndex);
+        String zhuandianName = "ZD" + zhuandianIndex;
+
+        CezhanData tempCezhan = null;
+        //将后面的测站依次推后一位。
+        for (int i = (currentPosition + 1); i < mData.size(); i++) {
+            tempCezhan = mData.get(i);
+            tempCezhan.setNumber(tempCezhan.getNumber() + 1);
+
+            if (tempCezhan.getObserveType().equals(Constants.BFFB)) {
+                tempCezhan.setObserveType(Constants.FBBF);
+            } else {
+                tempCezhan.setObserveType(Constants.BFFB);
+            }
+        }
+
+        CezhanData zhuandianCezhan = new CezhanData();
+        zhuandianCezhan.setNumber(currentPosition + 2);
+        zhuandianCezhan.setShuizhunxianID(mYusheshuizhunxianData.getId() + "");
+        zhuandianCezhan.setMeasureDirection(currentCezhanData.getMeasureDirection());
+        //其实不是这样的，应该根据水准线的观测类型，还要根据奇数站和偶数站的时候不同的前后后前的顺序不一样就会显示不一样,后期再处理。
+        if (zhuandianCezhan.getNumber() % 2 == 0) {
+            zhuandianCezhan.setObserveType(Constants.FBBF);
+        } else {
+            zhuandianCezhan.setObserveType(Constants.BFFB);
+        }
+        zhuandianCezhan.setQianshi(currentCezhanData.getQianshi());
+        zhuandianCezhan.setHoushi(zhuandianName);
+        mData.add(currentPosition + 1, zhuandianCezhan);
+        currentCezhanData.setQianshi(zhuandianName);
         notifyDataSetChanged();
     }
 }

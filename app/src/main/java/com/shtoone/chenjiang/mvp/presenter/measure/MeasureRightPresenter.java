@@ -136,7 +136,6 @@ public class MeasureRightPresenter extends BasePresenter<MeasureContract.View> i
                                 getView().responseCezhanData(mCezhanData);
                             }
                         })
-
         );
     }
 
@@ -153,7 +152,6 @@ public class MeasureRightPresenter extends BasePresenter<MeasureContract.View> i
 
         @Override
         public void onBluetoothNotEnabled() {
-//            DialogHelper.successSnackbar(viewGroup, "蓝牙未打开，请打开手机蓝牙", DialogHelper.APPEAR_FROM_TOP_TO_DOWN);
         }
 
         @Override
