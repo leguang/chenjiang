@@ -126,7 +126,7 @@
                 android:id="@+id/tv_houshijuhe"
                 style="@style/MeasureTable"
                 android:layout_weight="1"
-                android:gravity="right|center_vertical"
+                android:gravity="left|center_vertical"
                 android:paddingRight="5dp" />
         </TableRow>
 
@@ -158,7 +158,7 @@
                 android:id="@+id/tv_qianshijuhe"
                 style="@style/MeasureTable"
                 android:layout_weight="1"
-                android:gravity="right|center_vertical"
+                android:gravity="left|center_vertical"
                 android:paddingRight="5dp" />
 
         </TableRow>
@@ -191,7 +191,7 @@
                 android:id="@+id/tv_gaocha1"
                 style="@style/MeasureTable"
                 android:layout_weight="1"
-                android:gravity="right|center_vertical"
+                android:gravity="left|center_vertical"
                 android:paddingRight="5dp" />
 
         </TableRow>
@@ -225,7 +225,7 @@
                 android:id="@+id/tv_gaocha2"
                 style="@style/MeasureTable"
                 android:layout_weight="1"
-                android:gravity="right|center_vertical"
+                android:gravity="left|center_vertical"
                 android:paddingRight="5dp" />
         </TableRow>
 
@@ -257,7 +257,7 @@
                 android:id="@+id/tv_cezhangaocha"
                 style="@style/MeasureTable"
                 android:layout_weight="1"
-                android:gravity="right|center_vertical"
+                android:gravity="left|center_vertical"
                 android:paddingRight="5dp" />
 
         </TableRow>
@@ -290,7 +290,7 @@
                 android:id="@+id/tv_gaochengzhi"
                 style="@style/MeasureTable"
                 android:layout_weight="1"
-                android:gravity="right|center_vertical"
+                android:gravity="left|center_vertical"
                 android:paddingRight="5dp" />
 
         </TableRow>
@@ -323,7 +323,7 @@
                 android:id="@+id/tv_frdushucha"
                 style="@style/MeasureTable"
                 android:layout_weight="1"
-                android:gravity="right|center_vertical"
+                android:gravity="left|center_vertical"
                 android:paddingRight="5dp" />
 
         </TableRow>
@@ -356,7 +356,7 @@
                 android:id="@+id/tv_brdushucha"
                 style="@style/MeasureTable"
                 android:layout_weight="1"
-                android:gravity="right|center_vertical"
+                android:gravity="left|center_vertical"
                 android:paddingRight="5dp" />
 
         </TableRow>
@@ -372,6 +372,4 @@
 
         <Space android:layout_height="25dp" />
     </TableLayout>
-
-
 </FrameLayout>

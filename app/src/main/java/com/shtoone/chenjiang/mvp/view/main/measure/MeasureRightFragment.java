@@ -33,6 +33,8 @@ import com.socks.library.KLog;
 
 import org.litepal.crud.DataSupport;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import butterknife.BindView;
@@ -67,6 +69,7 @@ public class MeasureRightFragment extends BaseFragment<MeasureContract.Presenter
     private Dialog progressDialog;
     private ViewGroup viewGroup;
     private AlertDialog.Builder deviceListBuilder;
+    private SimpleDateFormat df;
 
     public static MeasureRightFragment newInstance(YusheshuizhunxianData mYusheshuizhunxianData) {
         Bundle args = new Bundle();
@@ -174,6 +177,7 @@ public class MeasureRightFragment extends BaseFragment<MeasureContract.Presenter
     private void initData() {
         mPresenter.requestJidianData();
         mPresenter.requestCezhanData(mYusheshuizhunxianData);
+        df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     }
 
     protected void initRecyclerViewPager(View view) {
@@ -385,6 +389,7 @@ public class MeasureRightFragment extends BaseFragment<MeasureContract.Presenter
     }
 
     private void storeData() {
+        mYusheshuizhunxianData.setXiugaishijian(df.format(new Date()));
         mYusheshuizhunxianData.save();
         DataSupport.saveAll(mAdapter.getData());
     }

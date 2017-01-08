@@ -5,18 +5,23 @@ import com.chad.library.adapter.base.BaseViewHolder;
 import com.shtoone.chenjiang.R;
 import com.shtoone.chenjiang.common.AudioPlayer;
 import com.shtoone.chenjiang.common.Constants;
+import com.shtoone.chenjiang.common.Formula;
 import com.shtoone.chenjiang.mvp.model.entity.db.CezhanData;
 import com.shtoone.chenjiang.mvp.model.entity.db.YusheshuizhunxianData;
 import com.socks.library.KLog;
 
+/**
+ * Author：leguang on 2016/10/9 0009 15:49
+ * Email：langmanleguang@qq.com
+ */
 public class MeasureRVPAdapter extends BaseQuickAdapter<CezhanData, BaseViewHolder> {
     private static final String TAG = MeasureRVPAdapter.class.getSimpleName();
     private int currentPosition = 0;
     private int measureIndex = 0;
     private int[] arrayOdd = {0, Constants.b1, Constants.f1, Constants.f2, Constants.b2};
     private int[] arrayEven = {0, Constants.f1, Constants.b1, Constants.b2, Constants.f2};
-    private int[] arrayAudioOdd = {0, Constants.AUDIO_NEXTB, Constants.AUDIO_NEXTB, Constants.AUDIO_NEXTF, 0};
-    private int[] arrayAudioEven = {0, Constants.AUDIO_NEXTF, Constants.AUDIO_NEXTF, Constants.AUDIO_NEXTB, 0};//对于这个0是否会报错，后面再看
+    private int[] arrayAudioEven = {0, Constants.AUDIO_NEXTB, Constants.AUDIO_NEXTB, Constants.AUDIO_NEXTF, 0};
+    private int[] arrayAudioOdd = {0, Constants.AUDIO_NEXTF, Constants.AUDIO_NEXTF, Constants.AUDIO_NEXTB, 0};//对于这个0是否会报错，后面再看
     int[] arraySequence = {0};
     int[] arrayAudio = {0};
 
@@ -138,10 +143,29 @@ public class MeasureRVPAdapter extends BaseQuickAdapter<CezhanData, BaseViewHold
 
         //声音的另一种实现,把这个封装起来，方便在计算的时候调用
 
-//        AudioPlayer.play(arrayAudio[measureIndex]);
+        AudioPlayer.play(arrayAudio[measureIndex]);
         //到第四次获取数据时进行一系列运算。
         if (measureIndex == 4) {
-//            mCezhanData
+            Formula mFormula = Formula.getInstance(mCezhanData);
+            mCezhanData.setGaocha1(mFormula.gaocha1());
+            mCezhanData.setGaocha2(mFormula.gaocha2());
+            mCezhanData.setCezhangaocha(mFormula.cezhangaocha());
+            mCezhanData.setFrdushucha(mFormula.frdushucha());
+            mCezhanData.setBrdushucha(mFormula.brdushucha());
+            float houshijuhe;
+            float qianshijuhe;
+            if (currentPosition == 0) {
+                houshijuhe = 0;
+                qianshijuhe = 0;
+            } else {
+                CezhanData preCezhanData = mData.get(currentPosition - 1);
+                houshijuhe = Float.parseFloat(preCezhanData.getHoushijuhe());
+                qianshijuhe = Float.parseFloat(preCezhanData.getQianshijuhe());
+            }
+            mCezhanData.setHoushijuhe(mFormula.houshijuhe(houshijuhe));
+            mCezhanData.setQianshijuhe(mFormula.qianshijuhe(qianshijuhe));
+
+//            mCezhanData.setGaocha1(mFormula.gaocha1());
         }
 
         notifyDataSetChanged();
