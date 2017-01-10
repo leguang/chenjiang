@@ -5,6 +5,7 @@ import android.content.Context;
 import com.github.moduth.blockcanary.BlockCanary;
 import com.shtoone.chenjiang.common.AppContext;
 import com.shtoone.chenjiang.mvp.model.entity.bean.UserInfoBean;
+import com.shtoone.chenjiang.mvp.model.entity.db.ShuizhunxianData;
 import com.shtoone.chenjiang.mvp.model.entity.db.StaffData;
 import com.socks.library.KLog;
 import com.squareup.leakcanary.LeakCanary;
@@ -70,18 +71,18 @@ public class BaseApplication extends LitePalApplication {
 //        }
 //
 ////
-//        DataSupport.deleteAll(StaffData.class);
-//        for (int i = 0; i < 100; i++) {
-//            ShuizhunxianData f = new ShuizhunxianData();
-//            f.setBeizhu("备注" + (i + 1));
-//            f.setEditDate("2011-11-11 11:22:22");
-//            f.setDepartId("2e2d1s5fdfs2e5s6");
-//            f.setDepartName("先期标" + (i + 1));
-//            f.setBianhao("L7004" + i);
-//            f.setRouteType("附和");
-//            boolean isis = f.save();
-//            KLog.e(isis);
-//        }
+        DataSupport.deleteAll(ShuizhunxianData.class);
+        for (int i = 0; i < 100; i++) {
+            ShuizhunxianData f = new ShuizhunxianData();
+            f.setBeizhu("备注" + (i + 1));
+            f.setEditDate("2011-11-11 11:22:22");
+            f.setDepartId("2e2d1s5fdfs2e5s6");
+            f.setDepartName("先期标" + (i + 1));
+            f.setBianhao("L7004" + i);
+            f.setRouteType("附和");
+            boolean isis = f.save();
+            KLog.e(isis);
+        }
 //        DataSupport.deleteAll(OriginalData.class);
 //
 //        for (int i = 0; i < 100; i++) {

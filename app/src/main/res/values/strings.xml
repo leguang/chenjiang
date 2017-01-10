@@ -70,6 +70,10 @@
     <string name="dialog_content_remeasure">重新测量水准线会清除之前测量数据，请问是否重新测量？</string>
     <string name="dialog_title_zhuandian">增加转点</string>
     <string name="dialog_content_zhuandian">确定增加转点吗？</string>
+    <string name="dialog_title_pingcha">确定平差处理吗？</string>
+    <string name="dialog_content_pingcha">当前水准线已测量完毕，请问是否进行平差处理？</string>
+    <string name="dialog_title_no_pingcha">不能平差</string>
+    <string name="dialog_content_no_pingcha">当前水准线未测量完毕，请测量完毕后再进行平差处理。</string>
 
     <!--测量模块-->
     <string name="zhuandian">转点</string>

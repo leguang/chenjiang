@@ -25,6 +25,7 @@ import android.widget.ListView;
 import com.shtoone.chenjiang.BaseApplication;
 import com.shtoone.chenjiang.R;
 import com.shtoone.chenjiang.common.Constants;
+import com.shtoone.chenjiang.common.DialogHelper;
 import com.shtoone.chenjiang.mvp.contract.upload.UploadContract;
 import com.shtoone.chenjiang.mvp.model.entity.db.GongdianData;
 import com.shtoone.chenjiang.mvp.model.entity.db.ShuizhunxianData;
@@ -56,7 +57,6 @@ import in.srain.cube.views.ptr.PtrFrameLayout;
  * Email：langmanleguang@qq.com
  */
 public class UploadFragment extends BaseFragment<UploadContract.Presenter> implements UploadContract.View {
-
     private static final String TAG = UploadFragment.class.getSimpleName();
     @BindView(R.id.toolbar_toolbar)
     Toolbar toolbar;
@@ -84,7 +84,7 @@ public class UploadFragment extends BaseFragment<UploadContract.Presenter> imple
     private ListDropDownLVAdapter gongdianAdapter;
     private List<ShuizhunxianData> listChecked = new ArrayList<>();
     private int pagination = 0;
-    private ObjectAnimator animator;
+    private ViewGroup viewGroup;
 
     public static UploadFragment newInstance() {
         return new UploadFragment();
@@ -324,10 +324,7 @@ public class UploadFragment extends BaseFragment<UploadContract.Presenter> imple
 
     @Override
     public void onUploaded(int intMessage, String strMessage) {
-        animator.end();
-        ivUpload.setImageResource(R.drawable.ic_backup_white_24dp);
-
-        ViewGroup viewGroup = (ViewGroup) _mActivity.findViewById(android.R.id.content).getRootView();
+        viewGroup = (ViewGroup) _mActivity.findViewById(android.R.id.content).getRootView();
         TSnackbar snackBar = TSnackbar.make(viewGroup, strMessage, TSnackbar.LENGTH_SHORT, TSnackbar.APPEAR_FROM_TOP_TO_DOWN);
         if (intMessage == Constants.UPLAND_SUCCESS) {
             snackBar.setPromptThemBackground(Prompt.SUCCESS);
@@ -388,8 +385,8 @@ public class UploadFragment extends BaseFragment<UploadContract.Presenter> imple
     }
 
     //只能用OnClickListener不能用OnCheckedChangeListener，因为最终会onBindViewHolder中调用notifyDataSetChanged ，
-    // 因为我是在convert通过接口的形式传出数据，然后OnCheckedChangeListener这个会随着状态的改变自动调用onCheckedChanged，所以会循环调用自己
-    // 所以会报Cannot call this method while RecyclerView is computing a layout or scrolling
+    //因为我是在convert通过接口的形式传出数据，然后OnCheckedChangeListener这个会随着状态的改变自动调用onCheckedChanged，所以会循环调用自己
+    //所以会报Cannot call this method while RecyclerView is computing a layout or scrolling
     @OnClick({R.id.cb_check_all_upload_fragment, R.id.iv_upload_upload_fragment, R.id.fab})
     public void onClick(View view) {
         switch (view.getId()) {
@@ -414,28 +411,8 @@ public class UploadFragment extends BaseFragment<UploadContract.Presenter> imple
                     mSnackbar.show();
                     return;
                 }
-
                 mPresenter.upload(listChecked);
-
-                ViewGroup viewGroup = (ViewGroup) _mActivity.findViewById(android.R.id.content).getRootView();
-
-
-                TSnackbar snackBar = TSnackbar.make(viewGroup, "上传中，请稍后...", TSnackbar.LENGTH_LONG, TSnackbar.APPEAR_FROM_TOP_TO_DOWN);
-                snackBar.setPromptThemBackground(Prompt.SUCCESS);
-                snackBar.addIconProgressLoading(0, true, false);
-                snackBar.show();
-
-                //开启旋转动画
-                ivUpload.setImageResource(R.drawable.ic_sync_white_24dp);
-                //不需要重复创建ObjectAnimator对象。
-                if (animator == null) {
-                    animator = ObjectAnimator.ofFloat(ivUpload, "rotation", 360f, 0f);
-                    animator.setDuration(1000);
-                    animator.setRepeatMode(Animation.RESTART);
-                    animator.setRepeatCount(Animation.INFINITE);
-                    animator.setInterpolator(new LinearInterpolator());
-                }
-                animator.start();
+                DialogHelper.loadingSnackbar(viewGroup, "正在努力上传，请稍后…", DialogHelper.APPEAR_FROM_TOP_TO_DOWN);
                 break;
         }
     }

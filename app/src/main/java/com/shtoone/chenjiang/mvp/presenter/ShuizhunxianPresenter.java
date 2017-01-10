@@ -124,12 +124,8 @@ public class ShuizhunxianPresenter extends BasePresenter<ShuizhunxianContract.Vi
                         //生成测站并存到数据库中这种操作应考虑放到编辑水准线，保存的那里。后面点击测量的时候应该读取数据库，而产生数据后应该是修改相应测站的行。
                         try {
                             String[] arrayJidianAndCedian = mYusheshuizhunxianData.getXianluxinxi().split(",");
-
                             int intNumber = 0;
-
                             List<CezhanData> listCezhan = new ArrayList<>();
-
-
                             for (int i = 0; i < arrayJidianAndCedian.length - 1; i++) {
                                 intNumber++;
                                 CezhanData mCezhanData = new CezhanData();
@@ -147,9 +143,6 @@ public class ShuizhunxianPresenter extends BasePresenter<ShuizhunxianContract.Vi
                                 listCezhan.add(mCezhanData);
                             }
 
-//                            for (CezhanData cezhanData : listCezhan) {
-//                                KLog.e("Number::" + cezhanData.getNumber());
-//                            }
                             for (int i = arrayJidianAndCedian.length - 1; i > 0; i--) {
                                 intNumber++;
                                 CezhanData mCezhanData = new CezhanData();
@@ -167,10 +160,6 @@ public class ShuizhunxianPresenter extends BasePresenter<ShuizhunxianContract.Vi
                                 listCezhan.add(mCezhanData);
                             }
 
-                            for (CezhanData cezhanData : listCezhan) {
-                                KLog.e("Number::" + cezhanData.getNumber());
-                            }
-
                             DataSupport.deleteAll(CezhanData.class, "shuizhunxianID = ? ", String.valueOf(mYusheshuizhunxianData.getId()));
                             DataSupport.saveAll(listCezhan);
                             int rowsAffected = mYusheshuizhunxianData.update(mYusheshuizhunxianData.getId());
@@ -180,7 +169,6 @@ public class ShuizhunxianPresenter extends BasePresenter<ShuizhunxianContract.Vi
                         } catch (Exception ex) {
                             subscriber.onError(ex);
                         }
-
                     }
                 }).subscribeOn(Schedulers.computation())
                         .observeOn(AndroidSchedulers.mainThread())
@@ -192,7 +180,6 @@ public class ShuizhunxianPresenter extends BasePresenter<ShuizhunxianContract.Vi
                                 }
                             }
                         })
-
         );
     }
 }

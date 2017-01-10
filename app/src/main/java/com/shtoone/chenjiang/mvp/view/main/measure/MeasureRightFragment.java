@@ -70,6 +70,7 @@ public class MeasureRightFragment extends BaseFragment<MeasureContract.Presenter
     private ViewGroup viewGroup;
     private AlertDialog.Builder deviceListBuilder;
     private SimpleDateFormat df;
+    private AlertDialog pingchaDialog;
 
     public static MeasureRightFragment newInstance(YusheshuizhunxianData mYusheshuizhunxianData) {
         Bundle args = new Bundle();
@@ -133,6 +134,19 @@ public class MeasureRightFragment extends BaseFragment<MeasureContract.Presenter
             public boolean onMenuItemClick(MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.action_pingcha:
+                        if (mYusheshuizhunxianData.getStatus().equals(Constants.status_daipingcha)
+                                || mYusheshuizhunxianData.getStatus().equals(Constants.status_daishanchu)) {
+                            //进行平差
+                            ToastUtils.showToast(_mActivity, "正在进行平差处理，请稍后……");
+                            storeData();
+                        } else {
+                            new AlertDialog.Builder(_mActivity)
+                                    .setIcon(R.drawable.ic_error_outline_red_400_48dp)
+                                    .setTitle(R.string.dialog_title_no_pingcha)
+                                    .setMessage(R.string.dialog_content_no_pingcha)
+                                    .setNegativeButton(R.string.dialog_negativeText, null)
+                                    .show();
+                        }
 
                         break;
 
@@ -355,7 +369,7 @@ public class MeasureRightFragment extends BaseFragment<MeasureContract.Presenter
     public void onDataReceived(String str) {
         mRecyclerView.scrollToPosition(mYusheshuizhunxianData.getMeasurePosition());
         if (mYusheshuizhunxianData.getMeasurePosition() == mAdapter.getData().size() - 1 && mYusheshuizhunxianData.getMeasureIndex() == 4) {
-            ToastUtils.showToast(_mActivity, "已经测完了");
+            pingchaDialog();
             return;
         }
         mYusheshuizhunxianData.setMeasureIndex(mYusheshuizhunxianData.getMeasureIndex() + 1);
@@ -374,7 +388,7 @@ public class MeasureRightFragment extends BaseFragment<MeasureContract.Presenter
                     }
                 }, 618);
             } else {
-                ToastUtils.showToast(_mActivity, "已经测完了");
+                pingchaDialog();
             }
         }
         storeData();
@@ -412,5 +426,30 @@ public class MeasureRightFragment extends BaseFragment<MeasureContract.Presenter
                 })
                 .show();
         return true;
+    }
+
+    private void pingchaDialog() {
+        mYusheshuizhunxianData.setStatus(Constants.status_daipingcha);
+        if (pingchaDialog == null) {
+            pingchaDialog = new AlertDialog.Builder(_mActivity)
+                    .setIcon(R.drawable.ic_error_outline_red_400_48dp)
+                    .setTitle(R.string.dialog_title_pingcha)
+                    .setMessage(R.string.dialog_content_pingcha)
+                    .setNegativeButton(R.string.dialog_negativeText, null)
+                    .setPositiveButton(R.string.dialog_positiveText, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            ToastUtils.showToast(_mActivity, "正在进行平差处理，请稍后……");
+
+                            //平差完了之后就是待上传
+
+                            mYusheshuizhunxianData.setStatus(Constants.status_daishanchu);
+                            storeData();
+                        }
+                    })
+                    .show();
+        } else {
+            pingchaDialog.show();
+        }
     }
 }

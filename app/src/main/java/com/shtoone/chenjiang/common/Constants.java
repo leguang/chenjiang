@@ -26,7 +26,7 @@ public class Constants {
     public static final String PATH_APK_CACHE = PATH_DATA + File.separator + "ApkCache";
 
     //基地址
-    public static final String BASE_URL = "http://192.168.11.115:8081/ljcjqms/";
+    public static final String BASE_URL = "http://192.168.11.112:8081/ljcjqms/";
 
 
     //登录地址
@@ -43,7 +43,7 @@ public class Constants {
     public static final String USER_INFO_BEAN = "user_info_bean";
 
     //网络链接超时时间
-    public static final int DEFAULT_TIMEOUT = 1;
+    public static final int DEFAULT_TIMEOUT = 10;
 
 
     //作为登录的参数，固定这个写法
@@ -97,12 +97,15 @@ public class Constants {
     public static final String measure_state_daipingcha = "1";
     public static final String measure_state_deleted = "2";
 
-    //水准线的状态
+    //水准线的状态:下载下来默认是待编辑
+    //            -->编辑完了之后就是待测量（此时就可以点进测量页面）
+    //            -->测量完了之后就是待平差（此时点平差就不需要弹框提示）
+    //            -->平差完了之后就是待上传（待上传的水准线才会出现在上传页面，同时未上传的水准线也就无法进入待编辑状态，也就无法继续第二次测量了）
+    //            -->上传完了之后就又回到待编辑状态，如此周而复始。
     public static final String status_daibianji = "0";
     public static final String status_daiceliang = "1";
     public static final String status_daipingcha = "2";
-    public static final String status_yiwancheng = "3";
-    public static final String status_yishanchu = "4";
+    public static final String status_daishanchu = "3";
 
     //标示：0为平台，1为App
     public static final String biaoshi_pingtai = "0";

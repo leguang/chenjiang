@@ -56,7 +56,7 @@ public class FormulaUtils {
         return formula;
     }
 
-    public void initData(float back1, float back2, float front1, float front2, float Rback1, float Rback2
+    private void initData(float back1, float back2, float front1, float front2, float Rback1, float Rback2
             , float Rfront1, float Rfront2, float beforeBackValue, float beforeFrontValue, float beforeGaoCheng) {
         this.back1 = round(back1, 3);
         this.back2 = round(back2, 3);
@@ -119,5 +119,4 @@ public class FormulaUtils {
         }
         return Float.parseFloat(new DecimalFormat("#." + str).format(value));
     }
-
 }
