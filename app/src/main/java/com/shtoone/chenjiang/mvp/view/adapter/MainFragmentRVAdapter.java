@@ -58,8 +58,8 @@ public class MainFragmentRVAdapter extends BaseQuickAdapter<YusheshuizhunxianDat
             mImageViewLeft.setImageDrawable(DrawableUtils.getTintDrawable(mImageViewLeft.getDrawable(), 0xff808080, true));
             mImageViewRight.setImageDrawable(DrawableUtils.getTintDrawable(mImageViewRight.getDrawable(), 0xff808080, true));
         } else {
-            mImageViewLeft.setImageDrawable(DrawableUtils.getTintDrawable(mImageViewLeft.getDrawable(), 0xff4CAF50, true));
-            mImageViewRight.setImageDrawable(DrawableUtils.getTintDrawable(mImageViewRight.getDrawable(), 0xff4CAF50, true));
+            mImageViewLeft.setImageDrawable(DrawableUtils.getTintDrawable(mImageViewLeft.getDrawable(), 0xff4caf50, true));
+            mImageViewRight.setImageDrawable(DrawableUtils.getTintDrawable(mImageViewRight.getDrawable(), 0xff4caf50, true));
         }
     }
 

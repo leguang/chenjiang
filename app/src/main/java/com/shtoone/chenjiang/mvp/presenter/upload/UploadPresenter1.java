@@ -33,65 +33,82 @@ import rx.schedulers.Schedulers;
  * Author：leguang on 2016/10/9 0009 15:49
  * Email：langmanleguang@qq.com
  */
-public class UploadPresenter extends BasePresenter<UploadContract.View> implements UploadContract.Presenter {
+public class UploadPresenter1 extends BasePresenter<UploadContract.View> implements UploadContract.Presenter {
 
-    private static final String TAG = UploadPresenter.class.getSimpleName();
+    private static final String TAG = UploadPresenter1.class.getSimpleName();
     private Gson mGson;
 
-    public UploadPresenter(UploadContract.View mView) {
+    public UploadPresenter1(UploadContract.View mView) {
         super(mView);
     }
 
     @Override
     public void start() {
+        requestGongdianData();
         requestShuizhunxianData(0);
+    }
+
+    public void requestGongdianData() {
+        mRxManager.add(Observable.create(new Observable.OnSubscribe<List<GongdianData>>() {
+            @Override
+            public void call(Subscriber<? super List<GongdianData>> subscriber) {
+                try {
+                    List<GongdianData> mGongdianData = DataSupport.findAll(GongdianData.class);
+                    subscriber.onNext(mGongdianData);
+                } catch (Exception ex) {
+                    subscriber.onError(ex);
+                }
+                subscriber.onCompleted();
+            }
+        }).subscribeOn(Schedulers.computation())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new RxSubscriber<List<GongdianData>>() {
+
+                               @Override
+                               public void _onNext(List<GongdianData> mGongdianData) {
+//                                   getView().responseGongdianData(mGongdianData);
+                                   //下载完工点后就下载水准线
+                               }
+                           }
+                ));
     }
 
     @Override
     public void requestShuizhunxianData(final int pagination) {
-        mRxManager.add(Observable.create(new Observable.OnSubscribe<List<YusheshuizhunxianData>>() {
+        mRxManager.add(Observable.create(new Observable.OnSubscribe<List<ShuizhunxianData>>() {
 
                     @Override
-                    public void call(Subscriber<? super List<YusheshuizhunxianData>> subscriber) {
-                        List<YusheshuizhunxianData> mYusheshuizhunxianData = null;
+                    public void call(Subscriber<? super List<ShuizhunxianData>> subscriber) {
+                        List<ShuizhunxianData> mShuizhunxianData = null;
                         try {
                             //分页查询每次查询PAGE_SIZE条，从0开始。
-                            mYusheshuizhunxianData = DataSupport.where("status = ? ", Constants.status_daishanchu)
+                            mShuizhunxianData = DataSupport.select("*")
                                     .order("id").limit(Constants.PAGE_SIZE)
                                     .offset(pagination * Constants.PAGE_SIZE)
-                                    .find(YusheshuizhunxianData.class);
-
-                            subscriber.onNext(mYusheshuizhunxianData);
+                                    .find(ShuizhunxianData.class);
+                            subscriber.onNext(mShuizhunxianData);
                         } catch (Exception ex) {
                             subscriber.onError(ex);
                         }
                         //做此判断的目的是为了不让最后onCompleted()调用的showContent()遮住了showEmpty()的显示。
-                        if (mYusheshuizhunxianData != null && mYusheshuizhunxianData.size() > 0) {
+                        if (mShuizhunxianData != null && mShuizhunxianData.size() > 0) {
                             subscriber.onCompleted();
                         }
                     }
                 }).subscribeOn(Schedulers.computation())
                         .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(new RxSubscriber<List<YusheshuizhunxianData>>() {
+                        .subscribe(new RxSubscriber<List<ShuizhunxianData>>() {
                             @Override
-                            public void _onNext(List<YusheshuizhunxianData> mYusheshuizhunxianData) {
-                                getView().responseShuizhunxianData(mYusheshuizhunxianData, pagination);
+                            public void _onNext(List<ShuizhunxianData> mShuizhunxianData) {
+//                                getView().responseShuizhunxianData(mShuizhunxianData, pagination);
                             }
                         })
+
         );
     }
 
     @Override
     public void upload(List<YusheshuizhunxianData> listShuizhunxian) {
-
-
-
-
-
-
-
-
-
         if (mGson == null) {
             mGson = new Gson();
         }

@@ -9,6 +9,7 @@ import com.shtoone.chenjiang.common.Constants;
 import com.shtoone.chenjiang.mvp.contract.measure.MeasureContract;
 import com.shtoone.chenjiang.mvp.model.entity.db.CezhanData;
 import com.shtoone.chenjiang.mvp.model.entity.db.JidianData;
+import com.shtoone.chenjiang.mvp.model.entity.db.ShuizhunxianData;
 import com.shtoone.chenjiang.mvp.model.entity.db.YusheshuizhunxianData;
 import com.shtoone.chenjiang.mvp.presenter.base.BasePresenter;
 import com.shtoone.chenjiang.utils.SharedPreferencesUtils;
@@ -120,7 +121,12 @@ public class MeasureRightPresenter extends BasePresenter<MeasureContract.View> i
                     public void call(Subscriber<? super List<CezhanData>> subscriber) {
                         //生成测站并存到数据库中这种操作应考虑放到编辑水准线，保存的那里。后面点击测量的时候应该读取数据库，而产生数据后应该是修改相应测站的行。
                         try {
-                            List<CezhanData> listCezhan = DataSupport.where("shuizhunxianID = ? ", String.valueOf(mYusheshuizhunxianData.getId()))
+
+                            ShuizhunxianData mShuizhunxianData = DataSupport.where("yusheshuizhunxianID = ? and chuangjianshijian = ? "
+                                    , String.valueOf(mYusheshuizhunxianData.getId()), mYusheshuizhunxianData.getXiugaishijian())
+                                    .findFirst(ShuizhunxianData.class);
+
+                            List<CezhanData> listCezhan = DataSupport.where("shuizhunxianID = ? ", String.valueOf(mShuizhunxianData.getId()))
                                     .order("number").find(CezhanData.class);
                             subscriber.onNext(listCezhan);
 

@@ -70,19 +70,14 @@ public class BaseApplication extends LitePalApplication {
 //            KLog.e(is);
 //        }
 //
-////
-        DataSupport.deleteAll(ShuizhunxianData.class);
-        for (int i = 0; i < 100; i++) {
-            ShuizhunxianData f = new ShuizhunxianData();
-            f.setBeizhu("备注" + (i + 1));
-            f.setEditDate("2011-11-11 11:22:22");
-            f.setDepartId("2e2d1s5fdfs2e5s6");
-            f.setDepartName("先期标" + (i + 1));
-            f.setBianhao("L7004" + i);
-            f.setRouteType("附和");
-            boolean isis = f.save();
-            KLog.e(isis);
-        }
+//
+//        DataSupport.deleteAll(ShuizhunxianData.class);
+//        for (int i = 0; i < 100; i++) {
+//            ShuizhunxianData f = new ShuizhunxianData();
+//            f.setRouteType("附和");
+//            boolean isis = f.save();
+//            KLog.e(isis);
+//        }
 //        DataSupport.deleteAll(OriginalData.class);
 //
 //        for (int i = 0; i < 100; i++) {

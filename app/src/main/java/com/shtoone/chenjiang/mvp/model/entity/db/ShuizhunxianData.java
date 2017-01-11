@@ -3,57 +3,133 @@ package com.shtoone.chenjiang.mvp.model.entity.db;
 import org.litepal.crud.DataSupport;
 
 /**
- * Created by Administrator on 2016-11-14.
+ * Author：leguang on 2017/01/10 0025 10:30
+ * Email：langmanleguang@qq.com
  */
 public class ShuizhunxianData extends DataSupport {
-
-    private String bianhao;
-    private String editDate;
-    private String observeDate;
-    private String departName;
-    private String observeType;
-    private String routeType;
-    private String beizhu;
+    private long id;
+    private String biaoshi;
+    private String ysszxid;
+    private String xianlubianhao;
+    private String cedianshu;
+    private String leixing;
+    private String shezhiren;
+    private String xianlumingcheng;
+    private String chuangjianshijian;
+    private String xiugaishijian;
     private String departId;
+    private String jidianshu;
+    private String xianluxinxi;
+    private String routeType;
+    private String observeType;
+    private String weather;
+    private String pressure;
+    private String temperature;
+    private String staff;
+    private long yusheshuizhunxianID;
 
-    public String getBianhao() {
-        return bianhao;
+    public String getYsszxid() {
+        return ysszxid;
     }
 
-    public void setBianhao(String bianhao) {
-        this.bianhao = bianhao;
+    public String getXiugaishijian() {
+        return xiugaishijian;
     }
 
-    public String getEditDate() {
-        return editDate;
+    public void setXiugaishijian(String xiugaishijian) {
+        this.xiugaishijian = xiugaishijian;
     }
 
-    public void setEditDate(String editDate) {
-        this.editDate = editDate;
+    public String getChuangjianshijian() {
+        return chuangjianshijian;
     }
 
-    public String getObserveDate() {
-        return observeDate;
+    public void setChuangjianshijian(String chuangjianshijian) {
+        this.chuangjianshijian = chuangjianshijian;
     }
 
-    public void setObserveDate(String observeDate) {
-        this.observeDate = observeDate;
+    public void setYsszxid(String ysszxid) {
+        this.ysszxid = ysszxid;
     }
 
-    public String getDepartName() {
-        return departName;
+    public long getId() {
+        return id;
     }
 
-    public void setDepartName(String departName) {
-        this.departName = departName;
+    public void setId(long id) {
+        this.id = id;
     }
 
-    public String getObserveType() {
-        return observeType;
+    public String getBiaoshi() {
+        return biaoshi;
     }
 
-    public void setObserveType(String observeType) {
-        this.observeType = observeType;
+    public void setBiaoshi(String biaoshi) {
+        this.biaoshi = biaoshi;
+    }
+
+    public String getXianlubianhao() {
+        return xianlubianhao;
+    }
+
+    public void setXianlubianhao(String xianlubianhao) {
+        this.xianlubianhao = xianlubianhao;
+    }
+
+    public String getCedianshu() {
+        return cedianshu;
+    }
+
+    public void setCedianshu(String cedianshu) {
+        this.cedianshu = cedianshu;
+    }
+
+    public String getLeixing() {
+        return leixing;
+    }
+
+    public void setLeixing(String leixing) {
+        this.leixing = leixing;
+    }
+
+    public String getShezhiren() {
+        return shezhiren;
+    }
+
+    public void setShezhiren(String shezhiren) {
+        this.shezhiren = shezhiren;
+    }
+
+    public String getXianlumingcheng() {
+        return xianlumingcheng;
+    }
+
+    public void setXianlumingcheng(String xianlumingcheng) {
+        this.xianlumingcheng = xianlumingcheng;
+    }
+
+    public String getDepartId() {
+        return departId;
+    }
+
+    public void setDepartId(String departId) {
+        this.departId = departId;
+    }
+
+    public String getJidianshu() {
+        return jidianshu;
+    }
+
+    public void setJidianshu(String jidianshu) {
+        this.jidianshu = jidianshu;
+    }
+
+    public String getXianluxinxi() {
+        return xianluxinxi;
+    }
+
+    public void setXianluxinxi(String xianluxinxi) {
+        this.xianluxinxi = xianluxinxi;
     }
 
     public String getRouteType() {
@@ -64,19 +140,51 @@ public class ShuizhunxianData extends DataSupport {
         this.routeType = routeType;
     }
 
-    public String getBeizhu() {
-        return beizhu;
+    public String getObserveType() {
+        return observeType;
     }
 
-    public void setBeizhu(String beizhu) {
-        this.beizhu = beizhu;
+    public void setObserveType(String observeType) {
+        this.observeType = observeType;
     }
 
-    public String getDepartId() {
-        return departId;
+    public String getWeather() {
+        return weather;
     }
 
-    public void setDepartId(String departId) {
-        this.departId = departId;
+    public void setWeather(String weather) {
+        this.weather = weather;
+    }
+
+    public String getPressure() {
+        return pressure;
+    }
+
+    public void setPressure(String pressure) {
+        this.pressure = pressure;
+    }
+
+    public String getTemperature() {
+        return temperature;
+    }
+
+    public void setTemperature(String temperature) {
+        this.temperature = temperature;
+    }
+
+    public String getStaff() {
+        return staff;
+    }
+
+    public void setStaff(String staff) {
+        this.staff = staff;
+    }
+
+    public long getYusheshuizhunxianID() {
+        return yusheshuizhunxianID;
+    }
+
+    public void setYusheshuizhunxianID(long yusheshuizhunxianID) {
+        this.yusheshuizhunxianID = yusheshuizhunxianID;
     }
 }

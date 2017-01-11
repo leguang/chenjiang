@@ -182,9 +182,7 @@ public class EditShuizhunxianFragment extends BaseFragment<ShuizhunxianContract.
         mYusheshuizhunxianData.setStaff(strStaff);
         mYusheshuizhunxianData.setTemperature(etTemperature.getText().toString());
         mYusheshuizhunxianData.setPressure(etPressure.getText().toString());
-        mYusheshuizhunxianData.setXiugaishijian(tvDate.getText().toString());
-        mYusheshuizhunxianData.setStatus(Constants.status_daiceliang);
-        mPresenter.save(mYusheshuizhunxianData);
+        mPresenter.save(mYusheshuizhunxianData, tvDate.getText().toString());
     }
 
     private void initData() {

@@ -23,6 +23,6 @@ public interface ShuizhunxianContract {
     interface Presenter extends BaseContract.Presenter {
         void requestStaffData();
 
-        void save(YusheshuizhunxianData mYusheshuizhunxianData);
+        void save(YusheshuizhunxianData mYusheshuizhunxianData,String dateTime);
     }
 }

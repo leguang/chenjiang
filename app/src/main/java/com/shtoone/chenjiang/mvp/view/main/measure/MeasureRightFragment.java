@@ -179,8 +179,6 @@ public class MeasureRightFragment extends BaseFragment<MeasureContract.Presenter
                                     }
                                 })
                                 .show();
-
-
                         break;
                 }
                 return true;
@@ -403,7 +401,6 @@ public class MeasureRightFragment extends BaseFragment<MeasureContract.Presenter
     }
 
     private void storeData() {
-        mYusheshuizhunxianData.setXiugaishijian(df.format(new Date()));
         mYusheshuizhunxianData.save();
         DataSupport.saveAll(mAdapter.getData());
     }

@@ -18,10 +18,10 @@ public class MeasureRVPAdapter extends BaseQuickAdapter<CezhanData, BaseViewHold
     private static final String TAG = MeasureRVPAdapter.class.getSimpleName();
     private int currentPosition = 0;
     private int measureIndex = 0;
-    private int[] arrayOdd = {0, Constants.b1, Constants.f1, Constants.f2, Constants.b2};
-    private int[] arrayEven = {0, Constants.f1, Constants.b1, Constants.b2, Constants.f2};
-    private int[] arrayAudioEven = {0, Constants.AUDIO_NEXTB, Constants.AUDIO_NEXTB, Constants.AUDIO_NEXTF, 0};
-    private int[] arrayAudioOdd = {0, Constants.AUDIO_NEXTF, Constants.AUDIO_NEXTF, Constants.AUDIO_NEXTB, 0};//对于这个0是否会报错，后面再看
+    private int[] arrayBFFB = {0, Constants.b1, Constants.f1, Constants.f2, Constants.b2};
+    private int[] arrayFBBF = {0, Constants.f1, Constants.b1, Constants.b2, Constants.f2};
+    private int[] arrayAudioFBBF = {0, Constants.AUDIO_NEXTB, Constants.AUDIO_NEXTB, Constants.AUDIO_NEXTF, 0};
+    private int[] arrayAudioBFFB = {0, Constants.AUDIO_NEXTF, Constants.AUDIO_NEXTF, Constants.AUDIO_NEXTB, 0};//对于这个0是否会报错，后面再看
     int[] arraySequence = {0};
     int[] arrayAudio = {0};
 
@@ -98,32 +98,18 @@ public class MeasureRVPAdapter extends BaseQuickAdapter<CezhanData, BaseViewHold
         this.measureIndex = measureIndex;
         CezhanData mCezhanData = mData.get(currentPosition);
 
-        if ((currentPosition + 1) % 2 == 0) {
+        if (mCezhanData.getObserveType().equals(Constants.BFFB)) {
             //偶数站
-            arraySequence = arrayEven;
-            arrayAudio = arrayAudioEven;
+            arraySequence = arrayBFFB;
+            arrayAudio = arrayAudioBFFB;
         } else {
             //奇数站
-            arraySequence = arrayOdd;
-            arrayAudio = arrayAudioOdd;
+            arraySequence = arrayFBBF;
+            arrayAudio = arrayAudioFBBF;
         }
 
         switch (arraySequence[measureIndex]) {
             case Constants.b1:
-
-                //后面根据算法再加声音提示。其散发可以参考两种，一种是如下
-//                if(measureIndex<3){
-//
-//                    switch (arrayAudio[measureIndex+1]) {
-//                        case Constants.f1:
-//                            AudioPlayer.play(Constants.AUDIO_NEXTF);
-//                        case Constants.b1:
-//                            AudioPlayer.play(Constants.AUDIO_NEXTB);
-//                        //**********
-//                    }
-//                }
-
-
                 mCezhanData.setB1hd(result);
                 mCezhanData.setB1r(result);
                 break;
@@ -211,7 +197,7 @@ public class MeasureRVPAdapter extends BaseQuickAdapter<CezhanData, BaseViewHold
 
         CezhanData zhuandianCezhan = new CezhanData();
         zhuandianCezhan.setNumber(currentPosition + 2);
-        zhuandianCezhan.setShuizhunxianID(mYusheshuizhunxianData.getId() + "");
+        zhuandianCezhan.setShuizhunxianID(mYusheshuizhunxianData.getId());
         zhuandianCezhan.setMeasureDirection(currentCezhanData.getMeasureDirection());
         //其实不是这样的，应该根据水准线的观测类型，还要根据奇数站和偶数站的时候不同的前后后前的顺序不一样就会显示不一样,后期再处理。
         if (zhuandianCezhan.getNumber() % 2 == 0) {

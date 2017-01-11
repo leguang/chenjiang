@@ -1,7 +1,5 @@
 package com.shtoone.chenjiang.mvp.view.main.upload;
 
-import android.animation.ObjectAnimator;
-import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -14,37 +12,30 @@ import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.LinearInterpolator;
-import android.widget.AdapterView;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
-import android.widget.ListView;
 
 import com.shtoone.chenjiang.BaseApplication;
 import com.shtoone.chenjiang.R;
 import com.shtoone.chenjiang.common.Constants;
 import com.shtoone.chenjiang.common.DialogHelper;
+import com.shtoone.chenjiang.common.ToastUtils;
 import com.shtoone.chenjiang.mvp.contract.upload.UploadContract;
-import com.shtoone.chenjiang.mvp.model.entity.db.GongdianData;
 import com.shtoone.chenjiang.mvp.model.entity.db.ShuizhunxianData;
+import com.shtoone.chenjiang.mvp.model.entity.db.YusheshuizhunxianData;
 import com.shtoone.chenjiang.mvp.presenter.upload.UploadPresenter;
 import com.shtoone.chenjiang.mvp.view.adapter.Decoration;
-import com.shtoone.chenjiang.mvp.view.adapter.ListDropDownLVAdapter;
 import com.shtoone.chenjiang.mvp.view.adapter.UploadRVAdapter;
 import com.shtoone.chenjiang.mvp.view.adapter.base.OnItemClickListener;
 import com.shtoone.chenjiang.mvp.view.base.BaseFragment;
 import com.shtoone.chenjiang.mvp.view.main.MainActivity;
-import com.shtoone.chenjiang.common.ToastUtils;
 import com.shtoone.chenjiang.widget.PageStateLayout;
 import com.trycatch.mysnackbar.Prompt;
 import com.trycatch.mysnackbar.TSnackbar;
-import com.yyydjk.library.DropDownMenu;
 
 import java.net.ConnectException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import butterknife.BindView;
@@ -60,29 +51,24 @@ public class UploadFragment extends BaseFragment<UploadContract.Presenter> imple
     private static final String TAG = UploadFragment.class.getSimpleName();
     @BindView(R.id.toolbar_toolbar)
     Toolbar toolbar;
-    @BindView(R.id.dropDownMenu)
-    DropDownMenu dropDownMenu;
     @BindView(R.id.cb_check_all_upload_fragment)
     CheckBox cbCheckAll;
     @BindView(R.id.iv_upload_upload_fragment)
     ImageView ivUpload;
     @BindView(R.id.fab)
     FloatingActionButton fab;
-    private View contentView;
-    private RecyclerView recyclerview;
-    private PageStateLayout pagestatelayout;
-    private PtrFrameLayout ptrframelayout;
+    @BindView(R.id.recyclerview)
+    RecyclerView recyclerview;
+    @BindView(R.id.pagestatelayout)
+    PageStateLayout pagestatelayout;
+    @BindView(R.id.ptrframelayout)
+    PtrFrameLayout ptrframelayout;
     private UploadRVAdapter mAdapter;
     private LinearLayoutManager mLinearLayoutManager;
     private int lastVisibleItemPosition;
     private View mFooterLoading, mFooterNotLoading, mFooterError;
     private boolean isLoading;
-    private List<View> popupViews = new ArrayList<>();
-    private ListView gongdianView, measureStatusView, timeTypeView;
-    private String[] arrayHeaders, arrayUploadStatus, arrayTimeType;
-    private List<String> listGongdian = new ArrayList<String>();
-    private ListDropDownLVAdapter gongdianAdapter;
-    private List<ShuizhunxianData> listChecked = new ArrayList<>();
+    private List<YusheshuizhunxianData> listChecked = new ArrayList<>();
     private int pagination = 0;
     private ViewGroup viewGroup;
 
@@ -100,19 +86,11 @@ public class UploadFragment extends BaseFragment<UploadContract.Presenter> imple
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_upload, container, false);
+        viewGroup = (ViewGroup) _mActivity.findViewById(android.R.id.content).getRootView();
         //关闭抽屉菜单，使其无法滑动弹出，避免左划退出fragment时造成滑动冲突。
         ((MainActivity) _mActivity).closeDrawer();
         ButterKnife.bind(this, view);
-        contentView = inflater.inflate(R.layout.recyclerview, null);
-        initView(contentView);
         return attachToSwipeBack(view);
-    }
-
-
-    private void initView(View contentView) {
-        pagestatelayout = (PageStateLayout) contentView.findViewById(R.id.pagestatelayout);
-        ptrframelayout = (PtrFrameLayout) contentView.findViewById(R.id.ptrframelayout);
-        recyclerview = (RecyclerView) contentView.findViewById(R.id.recyclerview);
     }
 
     @Override
@@ -128,63 +106,10 @@ public class UploadFragment extends BaseFragment<UploadContract.Presenter> imple
     }
 
     private void initData() {
-        setDropDownMenu();
         setRecyclerview();
         setLoadMore();
         initPageStateLayout(pagestatelayout);
         initPtrFrameLayout(ptrframelayout);
-    }
-
-    private void setDropDownMenu() {
-        Resources res = getResources();
-        arrayHeaders = res.getStringArray(R.array.headers);
-        arrayUploadStatus = res.getStringArray(R.array.upload_status);
-        arrayTimeType = res.getStringArray(R.array.time_type);
-
-        gongdianView = new ListView(_mActivity);
-        gongdianAdapter = new ListDropDownLVAdapter(_mActivity, listGongdian);
-        gongdianView.setDividerHeight(0);
-        gongdianView.setAdapter(gongdianAdapter);
-        gongdianView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                gongdianAdapter.setCheckItem(position);
-                dropDownMenu.setTabText(position == 0 ? arrayHeaders[0] : listGongdian.get(position));
-                dropDownMenu.closeMenu();
-            }
-        });
-
-        measureStatusView = new ListView(_mActivity);
-        measureStatusView.setDividerHeight(0);
-        final ListDropDownLVAdapter ageAdapter = new ListDropDownLVAdapter(_mActivity, Arrays.asList(arrayUploadStatus));
-        measureStatusView.setAdapter(ageAdapter);
-        measureStatusView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                ageAdapter.setCheckItem(position);
-                dropDownMenu.setTabText(position == 0 ? arrayHeaders[1] : arrayUploadStatus[position]);
-                dropDownMenu.closeMenu();
-            }
-        });
-
-        timeTypeView = new ListView(_mActivity);
-        timeTypeView.setDividerHeight(0);
-        final ListDropDownLVAdapter sexAdapter = new ListDropDownLVAdapter(_mActivity, Arrays.asList(arrayTimeType));
-        timeTypeView.setAdapter(sexAdapter);
-        timeTypeView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                sexAdapter.setCheckItem(position);
-                dropDownMenu.setTabText(position == 0 ? arrayHeaders[2] : arrayTimeType[position]);
-                dropDownMenu.closeMenu();
-            }
-        });
-
-        //工点不一定要在最左边，可以放最右边
-        popupViews.add(gongdianView);
-        popupViews.add(measureStatusView);
-        popupViews.add(timeTypeView);
-        dropDownMenu.setDropDownMenu(Arrays.asList(arrayHeaders), popupViews, contentView);
     }
 
     private void setRecyclerview() {
@@ -276,38 +201,23 @@ public class UploadFragment extends BaseFragment<UploadContract.Presenter> imple
     }
 
     @Override
-    public void responseGongdianData(List<GongdianData> mGongdianData) {
-        if (mGongdianData == null || mGongdianData.size() == 0) {
-            return;
-        }
-
-        listGongdian.clear();
-        if (mGongdianData.size() > 0) {
-            for (GongdianData gongdianData : mGongdianData) {
-                listGongdian.add(gongdianData.getZxlc());
-            }
-        }
-        gongdianAdapter.notifyDataSetChanged();
-    }
-
-    @Override
-    public void responseShuizhunxianData(List<ShuizhunxianData> mShuizhunxianData, int pagination) {
-        if (mShuizhunxianData.size() > 0) {
+    public void responseShuizhunxianData(List<YusheshuizhunxianData> mYusheshuizhunxianData, int pagination) {
+        if (mYusheshuizhunxianData.size() > 0) {
             if (pagination == 0) {
                 //刷明是第一页，或者是刷新,把页码重置为0，代表第一页。
-                if (mShuizhunxianData.size() >= Constants.PAGE_SIZE) {
+                if (mYusheshuizhunxianData.size() >= Constants.PAGE_SIZE) {
                     mAdapter.removeAllFooterView();
                     mAdapter.addFooterView(mFooterLoading);
                 }
                 this.pagination = 0;
                 //重新刷新了，就不需要记录选中状态
                 listChecked.clear();
-                mAdapter.setNewData(mShuizhunxianData);
+                mAdapter.setNewData(mYusheshuizhunxianData);
             } else {
                 if (cbCheckAll.isChecked()) {
-                    listChecked.addAll(mShuizhunxianData);
+                    listChecked.addAll(mYusheshuizhunxianData);
                 }
-                mAdapter.addData(mShuizhunxianData);
+                mAdapter.addData(mYusheshuizhunxianData);
             }
             //靠这个参数控制最后不需要请求数据
             isLoading = false;
@@ -324,7 +234,6 @@ public class UploadFragment extends BaseFragment<UploadContract.Presenter> imple
 
     @Override
     public void onUploaded(int intMessage, String strMessage) {
-        viewGroup = (ViewGroup) _mActivity.findViewById(android.R.id.content).getRootView();
         TSnackbar snackBar = TSnackbar.make(viewGroup, strMessage, TSnackbar.LENGTH_SHORT, TSnackbar.APPEAR_FROM_TOP_TO_DOWN);
         if (intMessage == Constants.UPLAND_SUCCESS) {
             snackBar.setPromptThemBackground(Prompt.SUCCESS);

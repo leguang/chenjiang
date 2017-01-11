@@ -8,6 +8,7 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.shtoone.chenjiang.R;
 import com.shtoone.chenjiang.mvp.model.entity.db.ShuizhunxianData;
+import com.shtoone.chenjiang.mvp.model.entity.db.YusheshuizhunxianData;
 import com.shtoone.chenjiang.mvp.view.adapter.base.OnItemClickListener;
 
 import java.util.List;
@@ -16,29 +17,24 @@ import java.util.List;
  * Author：leguang on 2016/10/9 0009 15:49
  * Email：langmanleguang@qq.com
  */
-public class UploadRVAdapter extends BaseQuickAdapter<ShuizhunxianData, BaseViewHolder> {
-
+public class UploadRVAdapter extends BaseQuickAdapter<YusheshuizhunxianData, BaseViewHolder> {
     private static final String TAG = UploadRVAdapter.class.getSimpleName();
-
-    private List<ShuizhunxianData> listChecked;
+    private List<YusheshuizhunxianData> listChecked;
     private OnCheckedChangeListener mOnCheckedChangeListener;
     private OnItemClickListener mOnItemClickListener;
 
-
-    public UploadRVAdapter(List<ShuizhunxianData> listChecked) {
+    public UploadRVAdapter(List<YusheshuizhunxianData> listChecked) {
         super(R.layout.item_rv_upload_fragment, null);
         this.listChecked = listChecked;
     }
 
     @Override
-    protected void convert(final BaseViewHolder holder, ShuizhunxianData shuizhunxianData) {
+    protected void convert(final BaseViewHolder holder, YusheshuizhunxianData mYusheshuizhunxianData) {
         final int position = holder.getLayoutPosition() - this.getHeaderLayoutCount();
-        holder.setText(R.id.tv_bianhao_item_rv_upload_fragment, shuizhunxianData.getBianhao())
-                .setText(R.id.tv_biaoduan_item_rv_upload_fragment, shuizhunxianData.getDepartName())
-                .setText(R.id.tv_edittime_item_rv_upload_fragment, shuizhunxianData.getEditDate())
-                .setText(R.id.tv_observe_time_item_rv_upload_fragment, shuizhunxianData.getObserveDate())
-                .setText(R.id.tv_route_type_item_rv_upload_fragment, shuizhunxianData.getRouteType())
-                .setText(R.id.tv_observe_type_item_rv_upload_fragment, shuizhunxianData.getObserveType())
+        holder.setText(R.id.tv_bianhao_item_rv_upload_fragment, mYusheshuizhunxianData.getBiaoshi())
+                .setText(R.id.tv_route_type_item_rv_upload_fragment, "路线类型：" + mYusheshuizhunxianData.getRouteType())
+                .setText(R.id.tv_observe_type_item_rv_upload_fragment, "观测类型：" + mYusheshuizhunxianData.getObserveType())
+                .setText(R.id.tv_observe_time_item_rv_upload_fragment, "观测时间：" + mYusheshuizhunxianData.getXiugaishijian())
                 .setChecked(R.id.cb_item_rv_upload_fragment, listChecked.contains(mData.get(position)))
                 .setOnClickListener(R.id.cb_item_rv_upload_fragment, new View.OnClickListener() {
                     @Override
@@ -49,15 +45,6 @@ public class UploadRVAdapter extends BaseQuickAdapter<ShuizhunxianData, BaseView
                         mOnCheckedChangeListener.onCheckedChanged((CompoundButton) holder.getView(R.id.cb_item_rv_upload_fragment), position);
                     }
                 });
-
-
-//                .setOnCheckedChangeListener(R.id.cb_item_rv_upload_fragment, new CompoundButton.OnCheckedChangeListener() {
-//                    @Override
-//                    public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-//                        KLog.e("onCheckedChanged::"+"11111111111111");
-//
-//                    }
-//                });
 
         if (mOnItemClickListener != null) {
             holder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -88,10 +75,4 @@ public class UploadRVAdapter extends BaseQuickAdapter<ShuizhunxianData, BaseView
         }
         notifyDataSetChanged();
     }
-
-//    //之所以要复写，是因为原框架的addData在加完数据之后自动
-//    @Override
-//    public void addData(List<ShuizhunxianData> newData) {
-//        super.addData(newData);
-//    }
 }

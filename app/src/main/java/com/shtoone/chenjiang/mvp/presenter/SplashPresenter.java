@@ -74,42 +74,6 @@ public class SplashPresenter extends BasePresenter<SplashContract.View> implemen
             BaseApplication.mUserInfoBean = new Gson().fromJson(userInfo, UserInfoBean.class);
             getView().go2Main();
         }
-
-        /**
-         * 不需要进行网络验证，所以只需判断本地是否存有用户名和密码即可。
-         */
-//        try {
-//            username = AESCryptUtils.decrypt(Constants.ENCRYPT_KEY, usernameEncrypted);
-//            password = AESCryptUtils.decrypt(Constants.ENCRYPT_KEY, passwordEncrypted);
-//            registerCode = AESCryptUtils.decrypt(Constants.ENCRYPT_KEY, registerCodeEncrypted);
-//        } catch (GeneralSecurityException e) {
-//            e.printStackTrace();
-//            getView().go2LoginOrGuide();
-//            return;
-//        }
-//        KLog.e("username解密:" + username);
-//        KLog.e("password解密:" + password);
-//        KLog.e("registerCode解密:" + registerCode);
-//
-//        HttpHelper.getInstance().initService().login(username, password, Constants.OSTYPE, registerCode).enqueue(new Callback<UserInfoBean>() {
-//            @Override
-//            public void onResponse(Call<UserInfoBean> call, Response<UserInfoBean> response) {
-//                if (response.isSuccessful()) {
-//                    if (response.body().getStatus() == 0) {
-//                        BaseApplication.mUserInfoBean = mUserInfoBean = response.body();
-//                        //进入管理层界面
-//                        getView().go2Main();
-//                    } else {
-//                        getView().go2LoginOrGuide();
-//                    }
-//                }
-//            }
-//
-//            @Override
-//            public void onFailure(Call<UserInfoBean> call, Throwable t) {
-//                getView().go2LoginOrGuide();
-//            }
-//        });
     }
 
     public void checkUpdate() {
@@ -119,10 +83,12 @@ public class SplashPresenter extends BasePresenter<SplashContract.View> implemen
                 if (response.isSuccessful()) {
                     CheckUpdateBean mCheckUpdateBean = response.body();
                     if (mCheckUpdateBean.getStatus() == 0) {
-                        checkLogin();
+
 //                        EventBus.getDefault().postSticky(mCheckUpdateBean.getUpdateInfo());
                     }
+
                 }
+                checkLogin();
             }
 
             @Override

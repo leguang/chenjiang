@@ -17,36 +17,12 @@
         android:textSize="20dp" />
 
     <TextView
-        android:id="@+id/tv_biaoduan_item_rv_upload_fragment"
-        style="@style/UplaodTheme"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/tv_bianhao_item_rv_upload_fragment"
-        android:text="先期标" />
-
-    <TextView
-        android:id="@+id/tv_edittime_item_rv_upload_fragment"
-        style="@style/UplaodTheme"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/tv_biaoduan_item_rv_upload_fragment"
-        android:text="编辑时间：2012-12-22 22:22:22" />
-
-    <TextView
-        android:id="@+id/tv_observe_time_item_rv_upload_fragment"
-        style="@style/UplaodTheme"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/tv_edittime_item_rv_upload_fragment"
-        android:text="观测日期：2012-12-22 22:22:22" />
-
-    <TextView
         android:id="@+id/tv_route_type_item_rv_upload_fragment"
         style="@style/UplaodTheme"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/tv_observe_time_item_rv_upload_fragment"
-        android:text="线路类型：附和" />
+        android:layout_below="@+id/tv_bianhao_item_rv_upload_fragment"
+        android:text="线路类型：" />
 
     <TextView
         android:id="@+id/tv_observe_type_item_rv_upload_fragment"
@@ -54,7 +30,15 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/tv_route_type_item_rv_upload_fragment"
-        android:text="观测类型：aBFFB" />
+        android:text="观测类型：" />
+
+    <TextView
+        android:id="@+id/tv_observe_time_item_rv_upload_fragment"
+        style="@style/UplaodTheme"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_observe_type_item_rv_upload_fragment"
+        android:text="观测日期：" />
 
     <CheckBox
         android:id="@+id/cb_item_rv_upload_fragment"

@@ -2,7 +2,7 @@
 <litepal>
     <dbname value="chenjiang"></dbname>
 
-    <version value="1"></version>
+    <version value="2"></version>
 
     <storage value="external"></storage>
 

@@ -10,7 +10,6 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-
         <android.support.design.widget.AppBarLayout
             android:id="@+id/appbar_toolbar"
             android:layout_width="match_parent"
@@ -47,7 +46,7 @@
 
         </android.support.design.widget.AppBarLayout>
 
-        <com.yyydjk.library.DropDownMenu
+        <!--<com.yyydjk.library.DropDownMenu
             android:id="@+id/dropDownMenu"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -59,7 +58,9 @@
             app:ddmenuUnselectedIcon="@drawable/drop_down_unselected_icon"
             app:ddtextSelectedColor="@color/base_color"
             app:ddtextUnselectedColor="@color/drop_down_unselected"
-            app:ddunderlineColor="@color/gray" />
+            app:ddunderlineColor="@color/gray" />-->
+
+        <include layout="@layout/recyclerview" />
     </LinearLayout>
 
     <android.support.design.widget.FloatingActionButton
