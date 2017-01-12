@@ -7,12 +7,16 @@ import com.shtoone.chenjiang.mvp.model.entity.bean.DuanmianInfoBean;
 import com.shtoone.chenjiang.mvp.model.entity.bean.GongdianInfoBean;
 import com.shtoone.chenjiang.mvp.model.entity.bean.JidianBean;
 import com.shtoone.chenjiang.mvp.model.entity.bean.RegisterBean;
+import com.shtoone.chenjiang.mvp.model.entity.bean.ShuizhunxianBean;
 import com.shtoone.chenjiang.mvp.model.entity.bean.StaffBean;
 import com.shtoone.chenjiang.mvp.model.entity.bean.UserInfoBean;
 import com.shtoone.chenjiang.mvp.model.entity.bean.YusheshuizhunxianInfoBean;
 
+import java.util.List;
+
 import okhttp3.ResponseBody;
 import retrofit2.Call;
+import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.Query;
@@ -61,9 +65,6 @@ public interface ApiService {
     Observable<StaffBean> staffDownload();
 
     //上传水准线
-
     @POST("app.do?originalDataUpload")
-    Call<ResponseBody> upload();
-
-
+    Call<ResponseBody> upload(@Query("original") String shuizhunxianBeen);
 }

@@ -7,10 +7,12 @@ import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 import com.shtoone.chenjiang.R;
 import com.shtoone.chenjiang.mvp.contract.base.BaseContract;
 import com.shtoone.chenjiang.mvp.view.base.BaseLazyFragment;
+import com.shtoone.chenjiang.utils.DensityUtils;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -20,17 +22,16 @@ import me.yokeyword.fragmentation.SupportFragment;
  * Author：leguang on 2016/10/9 0009 15:49
  * Email：langmanleguang@qq.com
  */
-public class GongdianFragment extends BaseLazyFragment {
-
-    private static final String TAG = GongdianFragment.class.getSimpleName();
+public class ShuizhunxianFragment extends BaseLazyFragment {
+    private static final String TAG = ShuizhunxianFragment.class.getSimpleName();
     @BindView(R.id.toolbar_toolbar)
     Toolbar toolbar;
+    @BindView(R.id.ll_shuizhunxian_fragment)
+    LinearLayout ll;
 
-
-    public static GongdianFragment newInstance() {
-        return new GongdianFragment();
+    public static ShuizhunxianFragment newInstance() {
+        return new ShuizhunxianFragment();
     }
-
 
     @Nullable
     @Override
@@ -46,6 +47,7 @@ public class GongdianFragment extends BaseLazyFragment {
         super.onViewCreated(view, savedInstanceState);
         toolbar.setTitle("项目查看");
         initToolbarBackNavigation(toolbar);
+        ll.setPadding(0, 0, 0, DensityUtils.dp2px(_mActivity, 56));
     }
 
     /**
@@ -61,8 +63,8 @@ public class GongdianFragment extends BaseLazyFragment {
     }
 
     private void initData() {
-//        loadRootFragment(R.id.fl_menu_project_fragment, GongdianMenuFragment.newInstance());
-//        replaceLoadRootFragment(R.id.fl_content_project_fragment, GongdianContentFragment.newInstance(), false);
+        loadRootFragment(R.id.fl_menu_shuizhunxian_fragment, ShuizhunxianMenuFragment.newInstance());
+        replaceLoadRootFragment(R.id.fl_content_shuizhunxian_fragment, ShuizhunxianContentFragment.newInstance(), false);
     }
 
 
@@ -73,7 +75,7 @@ public class GongdianFragment extends BaseLazyFragment {
     }
 
     /**
-     * 替换加载内容Fragment
+     * 替换加载 内容Fragment
      *
      * @param fragment
      */
@@ -83,6 +85,4 @@ public class GongdianFragment extends BaseLazyFragment {
             contentFragment.replaceFragment(fragment, false);
         }
     }
-
-
 }

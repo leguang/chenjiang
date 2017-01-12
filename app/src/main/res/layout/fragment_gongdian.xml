@@ -8,18 +8,19 @@
     <include layout="@layout/toolbar" />
 
     <LinearLayout
+        android:id="@+id/ll_shuizhunxian_fragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="horizontal">
 
         <FrameLayout
-            android:id="@+id/fl_menu_project_fragment"
+            android:id="@+id/fl_menu_shuizhunxian_fragment"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1" />
 
         <FrameLayout
-            android:id="@+id/fl_content_project_fragment"
+            android:id="@+id/fl_content_shuizhunxian_fragment"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="2.5" />

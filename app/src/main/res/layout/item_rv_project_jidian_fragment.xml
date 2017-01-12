@@ -9,7 +9,7 @@
     android:paddingRight="10dp">
 
     <TextView
-        android:id="@+id/tv_bianhao_item_rv_project_jisian_fragment"
+        android:id="@+id/tv_bianhao_item_rv_project_jidian_fragment"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:padding="5dp"
@@ -26,14 +26,14 @@
         android:paddingLeft="5dp">
 
         <TextView
-            android:id="@+id/tv_name_item_rv_project_jisian_fragment"
+            android:id="@+id/tv_name_item_rv_project_jidian_fragment"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="名称：" />
 
         <TextView
-            android:id="@+id/tv_xiuzhenghougaochengzhi_item_rv_project_jisian_fragment"
+            android:id="@+id/tv_xiuzhenghougaochengzhi_item_rv_project_jidian_fragment"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -50,14 +50,14 @@
         android:paddingLeft="5dp">
 
         <TextView
-            android:id="@+id/tv_lichengguanhao_item_rv_project_jisian_fragment"
+            android:id="@+id/tv_lichengguanhao_item_rv_project_jidian_fragment"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="里程冠号：" />
 
         <TextView
-            android:id="@+id/tv_lichengzhi_item_rv_project_jisian_fragment"
+            android:id="@+id/tv_lichengzhi_item_rv_project_jidian_fragment"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"

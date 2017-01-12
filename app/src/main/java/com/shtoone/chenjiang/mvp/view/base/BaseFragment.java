@@ -142,7 +142,6 @@ public abstract class BaseFragment<P extends BaseContract.Presenter> extends Swi
     public void start() {
         if (mPresenter != null) {
             mPresenter.start();
-            KLog.e("mPresenter.start();mPresenter.start();mPresenter.start();");
         }
     }
 

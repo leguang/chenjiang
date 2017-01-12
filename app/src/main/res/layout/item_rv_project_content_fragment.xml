@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?android:attr/selectableItemBackground"
+    android:orientation="vertical"
+    android:paddingLeft="15dp"
+    android:paddingRight="15dp"
+    android:paddingTop="5dp">
+
+    <TextView
+        android:id="@+id/tv_observe_time_item_rv_project_content_fragment"
+        style="@style/UplaodTheme"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="2017-01-01"
+        android:textColor="@color/material_green_500"
+        android:textSize="20dp" />
+
+    <TextView
+        android:id="@+id/tv_route_type_item_rv_project_content_fragment"
+        style="@style/UplaodTheme"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="线路类型：" />
+
+    <TextView
+        android:id="@+id/tv_observe_type_item_rv_project_content_fragment"
+        style="@style/UplaodTheme"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="观测类型：" />
+
+</LinearLayout>
+

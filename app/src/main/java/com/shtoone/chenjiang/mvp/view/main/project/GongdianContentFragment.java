@@ -28,8 +28,8 @@ public class GongdianContentFragment extends BaseFragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_gongdian_content, container, false);
-        return view;
+//        View view = inflater.inflate(R.layout.fragment_gongdian_content, container, false);
+        return null;
     }
 
     @Override

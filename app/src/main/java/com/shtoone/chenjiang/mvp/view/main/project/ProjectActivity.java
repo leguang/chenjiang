@@ -33,12 +33,12 @@ public class ProjectActivity extends BaseActivity {
         ButterKnife.bind(this);
 
         if (savedInstanceState == null) {
-            mFragments[0] = GongdianFragment.newInstance();
+            mFragments[0] = ShuizhunxianFragment.newInstance();
             mFragments[1] = StaffFragment.newInstance();
             mFragments[2] = JidianFragment.newInstance();
             loadMultipleRootFragment(R.id.fl_container_project_activity, 0, mFragments[0], mFragments[1], mFragments[2]);
         } else {
-            mFragments[0] = findFragment(GongdianFragment.class);
+            mFragments[0] = findFragment(ShuizhunxianFragment.class);
             mFragments[1] = findFragment(StaffFragment.class);
             mFragments[2] = findFragment(JidianFragment.class);
         }
@@ -57,7 +57,7 @@ public class ProjectActivity extends BaseActivity {
 
     public void initData() {
 
-        AHBottomNavigationItem item1 = new AHBottomNavigationItem(R.string.gongdian, R.drawable.ic_favorites, R.color.white);
+        AHBottomNavigationItem item1 = new AHBottomNavigationItem(R.string.shuizhunxian, R.drawable.ic_statistic, R.color.white);
         AHBottomNavigationItem item2 = new AHBottomNavigationItem(R.string.renyuan, R.drawable.ic_friends, R.color.material_yellow_100);
         AHBottomNavigationItem item3 = new AHBottomNavigationItem(R.string.jidian, R.drawable.ic_nearby, R.color.material_green_100);
         bottomNavigationItems.add(item1);

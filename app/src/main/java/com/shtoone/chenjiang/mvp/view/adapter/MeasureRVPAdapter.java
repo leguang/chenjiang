@@ -10,6 +10,10 @@ import com.shtoone.chenjiang.mvp.model.entity.db.CezhanData;
 import com.shtoone.chenjiang.mvp.model.entity.db.YusheshuizhunxianData;
 import com.socks.library.KLog;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+
 /**
  * Author：leguang on 2016/10/9 0009 15:49
  * Email：langmanleguang@qq.com
@@ -24,9 +28,11 @@ public class MeasureRVPAdapter extends BaseQuickAdapter<CezhanData, BaseViewHold
     private int[] arrayAudioBFFB = {0, Constants.AUDIO_NEXTF, Constants.AUDIO_NEXTF, Constants.AUDIO_NEXTB, 0};//对于这个0是否会报错，后面再看
     int[] arraySequence = {0};
     int[] arrayAudio = {0};
+    private SimpleDateFormat df;
 
     public MeasureRVPAdapter() {
         super(R.layout.item_rvp_measure_right_fragment, null);
+        df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     }
 
     @Override
@@ -88,7 +94,6 @@ public class MeasureRVPAdapter extends BaseQuickAdapter<CezhanData, BaseViewHold
     }
 
     public void measure(int currentPosition, int measureIndex, String result) {
-        KLog.e("measuremeasuremeasuremeasuremeasuremeasuremeasuremeasuremeasuremeasuremeasuremeasuremeasure");
         if (currentPosition > mData.size() - 1) {
             return;
         }
@@ -112,23 +117,25 @@ public class MeasureRVPAdapter extends BaseQuickAdapter<CezhanData, BaseViewHold
             case Constants.b1:
                 mCezhanData.setB1hd(result);
                 mCezhanData.setB1r(result);
+                mCezhanData.setB1time(df.format(Calendar.getInstance().getTime()));
                 break;
             case Constants.b2:
                 mCezhanData.setB2hd(result);
                 mCezhanData.setB2r(result);
+                mCezhanData.setB2time(df.format(Calendar.getInstance().getTime()));
                 break;
             case Constants.f1:
                 mCezhanData.setF1hd(result);
                 mCezhanData.setF1r(result);
+                mCezhanData.setF1time(df.format(Calendar.getInstance().getTime()));
                 break;
             case Constants.f2:
                 mCezhanData.setF2hd(result);
                 mCezhanData.setF2r(result);
+                mCezhanData.setF2time(df.format(Calendar.getInstance().getTime()));
                 break;
         }
-
         //声音的另一种实现,把这个封装起来，方便在计算的时候调用
-
         AudioPlayer.play(arrayAudio[measureIndex]);
         //到第四次获取数据时进行一系列运算。
         if (measureIndex == 4) {
@@ -172,7 +179,6 @@ public class MeasureRVPAdapter extends BaseQuickAdapter<CezhanData, BaseViewHold
         this.measureIndex = 0;
 
         KLog.e("currentPosition::" + currentPosition);
-
 
         //首先清除当前站并修改当前测站的相关值，目的是为了保证当前站被测量过的数据清除后重新开始测量。
         CezhanData currentCezhanData = mData.get(currentPosition);

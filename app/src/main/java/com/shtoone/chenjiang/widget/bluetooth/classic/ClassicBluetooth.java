@@ -386,56 +386,22 @@ public class ClassicBluetooth implements IBluetooth {
             while (mState == STATE_CONNECTED) {
                 KLog.e("进入循环**********");
                 try {
-
                     KLog.e("开始读取流…………………………………………………………");
-                    // Read from the InputStream
                     length = mmInStream.read(buffer);
                     KLog.e("结束读取流…………………………………………………………");
                     final String readMessage = new String(buffer, 0, length);
-
 //                    final String readMessage = new String(buffer, 0, length, "GBK");
-//
 //                    String readMessage1 = new String(readMessage.getBytes("GBK"), "UTF-8");
                     KLog.e(length);
                     KLog.e(readMessage);
-
-                    //**************************************************************************************************************************************
-
-                    DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss", Locale.CHINA);
-
-                    try {
-                        long timestamp = System.currentTimeMillis();
-                        String time = formatter.format(new Date());
-                        String fileName = time + "-" + timestamp + ".log";
-                        if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
-                            String path = Environment.getExternalStorageDirectory().getPath() + "/SHTW/";
-                            Log.d(TAG, "path=" + path);
-                            File dir = new File(path);
-                            if (!dir.exists()) {
-                                dir.mkdirs();
-                            }
-                            FileOutputStream fos = new FileOutputStream(path + fileName);
-                            fos.write(readMessage.getBytes());
-                            fos.close();
-                        }
-                    } catch (Exception e) {
-                        Log.e(TAG, "an error occured while writing file...", e);
-                    }
-
-
-                    //*******************************************************************************************************************************************************
-
-
                     Observable.just(readMessage)
                             .observeOn(AndroidSchedulers.mainThread())
                             .subscribe(new Action1<String>() {
                                 @Override
                                 public void call(String receiveData) {
-                                    KLog.e("currentThreadName::" + Thread.currentThread().getName());
                                     mListener.onDataReceived(readMessage);
                                 }
                             });
-
                 } catch (IOException e) {
                     KLog.e(e);
                     e.printStackTrace();
@@ -445,7 +411,6 @@ public class ClassicBluetooth implements IBluetooth {
                             .subscribe(new Action1<String>() {
                                 @Override
                                 public void call(String s) {
-                                    KLog.e("currentThreadName::" + Thread.currentThread().getName());
                                     mListener.onDisconnected();
                                 }
                             });

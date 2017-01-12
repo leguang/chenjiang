@@ -26,7 +26,7 @@ public class Constants {
     public static final String PATH_APK_CACHE = PATH_DATA + File.separator + "ApkCache";
 
     //基地址
-    public static final String BASE_URL = "http://192.168.11.113:8081/ljcjqms/";
+    public static final String BASE_URL = "http://192.168.11.107:8081/ljcjqms/";
 
     //登录地址
     public static final String LOGIN_URL = BASE_URL + "app.do?AppLogin&userName=%1&userPwd=%2&OSType=2";
@@ -41,7 +41,7 @@ public class Constants {
     public static final String USER_INFO_BEAN = "user_info_bean";
 
     //网络链接超时时间
-    public static final int DEFAULT_TIMEOUT = 3;
+    public static final int DEFAULT_TIMEOUT = 1;
 
     //作为登录的参数，固定这个写法
     public static final String OSTYPE = "2";
@@ -74,6 +74,9 @@ public class Constants {
     public static final int EVENT_SAVE_PARAM = 2;
     //重置二等水准测量规范
     public static final int EVENT_RESET_SECOND_CLASS = 3;
+    //查看水准线历史记录
+    public static final int EVENT_SHUIZHUNXIAN = 4;
+
     //EventBus系列,值是随便取，只要不相同即可。**********************************************************************
 
     //上传模块

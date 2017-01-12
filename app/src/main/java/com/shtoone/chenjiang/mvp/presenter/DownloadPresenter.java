@@ -200,13 +200,6 @@ public class DownloadPresenter extends BasePresenter<DownloadContract.View> impl
                     @Override
                     public Observable<CedianInfoBean.LjcdsBean> call(CedianInfoBean cedianInfoBean) {
                         intSum += cedianInfoBean.getLjcds().size();
-                        KLog.e("intSum::" + intSum);
-
-                        try {
-                            Thread.sleep(2000);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
 
                         return Observable.from(cedianInfoBean.getLjcds());
                     }

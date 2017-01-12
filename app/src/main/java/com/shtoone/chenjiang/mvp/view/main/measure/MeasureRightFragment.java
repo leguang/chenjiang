@@ -69,7 +69,6 @@ public class MeasureRightFragment extends BaseFragment<MeasureContract.Presenter
     private Dialog progressDialog;
     private ViewGroup viewGroup;
     private AlertDialog.Builder deviceListBuilder;
-    private SimpleDateFormat df;
     private AlertDialog pingchaDialog;
 
     public static MeasureRightFragment newInstance(YusheshuizhunxianData mYusheshuizhunxianData) {
@@ -189,7 +188,6 @@ public class MeasureRightFragment extends BaseFragment<MeasureContract.Presenter
     private void initData() {
         mPresenter.requestJidianData();
         mPresenter.requestCezhanData(mYusheshuizhunxianData);
-        df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     }
 
     protected void initRecyclerViewPager(View view) {

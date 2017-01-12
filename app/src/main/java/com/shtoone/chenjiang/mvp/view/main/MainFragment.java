@@ -68,7 +68,6 @@ public class MainFragment extends BaseFragment<MainContract.Presenter> implement
     Toolbar toolbar;
     @BindView(R.id.dropDownMenu)
     DropDownMenu dropDownMenu;
-
     private RecyclerView recyclerview;
     private PageStateLayout pagestatelayout;
     private PtrFrameLayout ptrframelayout;

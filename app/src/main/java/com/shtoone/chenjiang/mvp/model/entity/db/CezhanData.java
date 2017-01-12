@@ -30,6 +30,10 @@ public class CezhanData extends DataSupport {
     private String gaochengzhi;
     private String frdushucha;
     private String brdushucha;
+    private String f1time;
+    private String f2time;
+    private String b1time;
+    private String b2time;
     private long shuizhunxianID;
 
     public long getId() {
@@ -216,6 +220,38 @@ public class CezhanData extends DataSupport {
         this.shuizhunxianID = shuizhunxianID;
     }
 
+    public String getF1time() {
+        return f1time;
+    }
+
+    public void setF1time(String f1time) {
+        this.f1time = f1time;
+    }
+
+    public String getF2time() {
+        return f2time;
+    }
+
+    public void setF2time(String f2time) {
+        this.f2time = f2time;
+    }
+
+    public String getB1time() {
+        return b1time;
+    }
+
+    public void setB1time(String b1time) {
+        this.b1time = b1time;
+    }
+
+    public String getB2time() {
+        return b2time;
+    }
+
+    public void setB2time(String b2time) {
+        this.b2time = b2time;
+    }
+
     public void clean() {
         b1hd = "";
         b2hd = "";
@@ -233,5 +269,9 @@ public class CezhanData extends DataSupport {
         gaochengzhi = "";
         frdushucha = "";
         brdushucha = "";
+        f1time = "";
+        f2time = "";
+        b1time = "";
+        b2time = "";
     }
 }
