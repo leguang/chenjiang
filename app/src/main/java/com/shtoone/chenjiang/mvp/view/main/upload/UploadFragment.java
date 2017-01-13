@@ -34,6 +34,8 @@ import com.shtoone.chenjiang.widget.PageStateLayout;
 import com.trycatch.mysnackbar.Prompt;
 import com.trycatch.mysnackbar.TSnackbar;
 
+import org.litepal.crud.DataSupport;
+
 import java.net.ConnectException;
 import java.util.ArrayList;
 import java.util.List;
@@ -138,7 +140,11 @@ public class UploadFragment extends BaseFragment<UploadContract.Presenter> imple
             @Override
             public void onItemClick(View view, int position) {
                 ToastUtils.showToast(BaseApplication.mContext, position + "");
-                start(CheckMeasureFragment.newInstance());
+                YusheshuizhunxianData mYusheshuizhunxianData = mAdapter.getData().get(position);
+                ShuizhunxianData mShuizhunxianData = DataSupport.where("yusheshuizhunxianID = ? and chuangjianshijian = ? "
+                        , String.valueOf(mYusheshuizhunxianData.getId()), mYusheshuizhunxianData.getXiugaishijian())
+                        .findFirst(ShuizhunxianData.class);
+                start(DetailFragment.newInstance(mShuizhunxianData));
             }
         });
         recyclerview.addItemDecoration(new Decoration(_mActivity, Decoration.VERTICAL_LIST));

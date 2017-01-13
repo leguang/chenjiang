@@ -135,7 +135,7 @@ public class MeasureRVPAdapter extends BaseQuickAdapter<CezhanData, BaseViewHold
                 mCezhanData.setF2time(df.format(Calendar.getInstance().getTime()));
                 break;
         }
-        //声音的另一种实现,把这个封装起来，方便在计算的时候调用
+        //播放提示音
         AudioPlayer.play(arrayAudio[measureIndex]);
         //到第四次获取数据时进行一系列运算。
         if (measureIndex == 4) {
@@ -160,7 +160,6 @@ public class MeasureRVPAdapter extends BaseQuickAdapter<CezhanData, BaseViewHold
 
 //            mCezhanData.setGaocha1(mFormula.gaocha1());
         }
-
         notifyDataSetChanged();
     }
 

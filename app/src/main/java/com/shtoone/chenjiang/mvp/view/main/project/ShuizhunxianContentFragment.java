@@ -26,6 +26,7 @@ import com.shtoone.chenjiang.mvp.view.adapter.Decoration;
 import com.shtoone.chenjiang.mvp.view.adapter.ShuizhunxianContentRVAdapter;
 import com.shtoone.chenjiang.mvp.view.adapter.ShuizhunxianMenuRVAdapter;
 import com.shtoone.chenjiang.mvp.view.base.BaseFragment;
+import com.shtoone.chenjiang.mvp.view.main.upload.DetailFragment;
 import com.shtoone.chenjiang.widget.PageStateLayout;
 import com.socks.library.KLog;
 
@@ -100,6 +101,10 @@ public class ShuizhunxianContentFragment extends BaseFragment<ShuizhunxianConten
             @Override
             public void SimpleOnItemClick(BaseQuickAdapter adapter, View view, int position) {
                 ToastUtils.showToast(_mActivity, Integer.toString(position));
+
+
+                EventBus.getDefault().post(DetailFragment.newInstance(mAdapter.getData().get(position)));
+
 
             }
         });

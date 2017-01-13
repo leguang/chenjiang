@@ -18,6 +18,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_marginBottom="16dp"
+        android:visibility="gone"
         android:layout_marginRight="16dp"
         android:src="@drawable/ic_search_red_300_18dp"
         android:tint="@color/white" />

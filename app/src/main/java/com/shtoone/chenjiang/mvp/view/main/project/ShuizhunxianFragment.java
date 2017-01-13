@@ -16,7 +16,6 @@ import com.shtoone.chenjiang.utils.DensityUtils;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import me.yokeyword.fragmentation.SupportFragment;
 
 /**
  * Author：leguang on 2016/10/9 0009 15:49
@@ -36,7 +35,7 @@ public class ShuizhunxianFragment extends BaseLazyFragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_gongdian, container, false);
+        View view = inflater.inflate(R.layout.fragment_shuizhunxian, container, false);
         ButterKnife.bind(this, view);
         initStateBar(toolbar);
         return view;
@@ -67,22 +66,9 @@ public class ShuizhunxianFragment extends BaseLazyFragment {
         replaceLoadRootFragment(R.id.fl_content_shuizhunxian_fragment, ShuizhunxianContentFragment.newInstance(), false);
     }
 
-
     @NonNull
     @Override
     protected BaseContract.Presenter createPresenter() {
         return null;
-    }
-
-    /**
-     * 替换加载 内容Fragment
-     *
-     * @param fragment
-     */
-    public void switchContentFragment(SupportFragment fragment) {
-        SupportFragment contentFragment = findChildFragment(GongdianContentFragment.class);
-        if (contentFragment != null) {
-            contentFragment.replaceFragment(fragment, false);
-        }
     }
 }

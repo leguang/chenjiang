@@ -210,7 +210,7 @@
 //            @Override
 //            public void onItemClick(View view, int position) {
 //                ToastUtils.showToast(BaseApplication.mContext, position + "");
-//                start(CheckMeasureFragment.newInstance());
+//
 //            }
 //        });
 //        recyclerview.addItemDecoration(new Decoration(_mActivity, Decoration.VERTICAL_LIST));

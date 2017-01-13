@@ -2,11 +2,13 @@ package com.shtoone.chenjiang.mvp.model.entity.db;
 
 import org.litepal.crud.DataSupport;
 
+import java.io.Serializable;
+
 /**
  * Author：leguang on 2017/01/10 0025 10:30
  * Email：langmanleguang@qq.com
  */
-public class ShuizhunxianData extends DataSupport {
+public class ShuizhunxianData extends DataSupport implements Serializable {
     private long id;
     private String biaoshi;
     private String ysszxid;
