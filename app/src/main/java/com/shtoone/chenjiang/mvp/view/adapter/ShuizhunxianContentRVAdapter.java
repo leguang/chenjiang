@@ -7,6 +7,10 @@ import com.shtoone.chenjiang.mvp.model.entity.db.ShuizhunxianData;
 
 import java.util.List;
 
+/**
+ * Author：leguang on 2016/10/9 0009 15:49
+ * Email：langmanleguang@qq.com
+ */
 public class ShuizhunxianContentRVAdapter extends BaseQuickAdapter<ShuizhunxianData, BaseViewHolder> {
     private static final String TAG = ShuizhunxianContentRVAdapter.class.getSimpleName();
 

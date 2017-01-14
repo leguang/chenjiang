@@ -312,7 +312,6 @@ public class MainFragment extends BaseFragment<MainContract.Presenter> implement
 
     @Override
     public void responseShuizhunxianData(List<YusheshuizhunxianData> mYusheshuizhunxianData, int pagination) {
-        KLog.e("mYusheshuizhunxianData.size()::" + mYusheshuizhunxianData.size());
         KLog.e("pagination::" + pagination);
 
         if (mYusheshuizhunxianData.size() > 0) {
@@ -353,8 +352,6 @@ public class MainFragment extends BaseFragment<MainContract.Presenter> implement
 
     @Override
     public void responseGongdianData(List<GongdianData> mGongdianData) {
-        KLog.e("mGongdianData::" + mGongdianData.size());
-
         listGongdian.clear();
         listGongdian.add("全部");
         if (mGongdianData != null && mGongdianData.size() > 0) {

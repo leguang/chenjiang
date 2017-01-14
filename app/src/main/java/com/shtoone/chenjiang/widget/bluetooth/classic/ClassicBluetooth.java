@@ -292,7 +292,9 @@ public class ClassicBluetooth implements IBluetooth {
             mBluetoothAdapter.cancelDiscovery();
             try {
                 KLog.e("开始阻塞的方式进行连接");
-                mmSocket.connect();
+                if (mmSocket != null) {
+                    mmSocket.connect();
+                }
                 KLog.e("结束阻塞的方式进行连接");
             } catch (IOException e) {
                 e.printStackTrace();

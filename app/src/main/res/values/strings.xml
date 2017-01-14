@@ -60,7 +60,7 @@
     <string name="dialog_stop_content">终止操作不可恢复，请问是否继续终止？</string>
     <string name="dialog_select_jidian">请选择基点</string>
     <string name="dialog_select_bluetooth">请选择蓝牙设备</string>
-    <string name="dialog_select_gongdian">请选择工点</string>
+    <string name="dialog_select_cedian">请选择测点</string>
     <string name="dialog_wait">请稍后</string>
     <string name="dialog_measureing">正在读取数据，请耐心等待…</string>
     <string name="dialog_scan">扫描</string>

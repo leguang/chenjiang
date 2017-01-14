@@ -4,12 +4,17 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ObjectAnimator;
 import android.content.res.Resources;
+import android.graphics.Canvas;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -18,6 +23,7 @@ import android.view.ViewGroup;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.Animation;
 import android.view.animation.LinearInterpolator;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -25,15 +31,23 @@ import android.widget.TextView;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.chad.library.adapter.base.BaseViewHolder;
+import com.chad.library.adapter.base.callback.ItemDragAndSwipeCallback;
+import com.chad.library.adapter.base.listener.OnItemClickListener;
+import com.chad.library.adapter.base.listener.OnItemDragListener;
+import com.chad.library.adapter.base.listener.OnItemSwipeListener;
 import com.jaredrummler.materialspinner.MaterialSpinner;
 import com.shtoone.chenjiang.BaseApplication;
 import com.shtoone.chenjiang.R;
 import com.shtoone.chenjiang.common.Constants;
 import com.shtoone.chenjiang.common.DialogHelper;
 import com.shtoone.chenjiang.event.EventData;
-import com.shtoone.chenjiang.mvp.contract.ShuizhunxianContract;
+import com.shtoone.chenjiang.mvp.contract.AddYusheshuizhunxianContract;
 import com.shtoone.chenjiang.mvp.model.entity.db.YusheshuizhunxianData;
-import com.shtoone.chenjiang.mvp.presenter.ShuizhunxianPresenter;
+import com.shtoone.chenjiang.mvp.presenter.AddYusheshuizhunxianPresenter;
+import com.shtoone.chenjiang.mvp.view.adapter.Decoration;
+import com.shtoone.chenjiang.mvp.view.adapter.ItemDragAdapter;
 import com.shtoone.chenjiang.mvp.view.base.BaseFragment;
 import com.shtoone.chenjiang.utils.DensityUtils;
 import com.socks.library.KLog;
@@ -41,9 +55,9 @@ import com.socks.library.KLog;
 import org.greenrobot.eventbus.EventBus;
 
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -53,8 +67,7 @@ import butterknife.OnClick;
  * Author：leguang on 2016/10/9 0009 15:49
  * Email：langmanleguang@qq.com
  */
-public class AddShuizhunxianFragment extends BaseFragment<ShuizhunxianContract.Presenter> implements ShuizhunxianContract.View {
-
+public class AddShuizhunxianFragment extends BaseFragment<AddYusheshuizhunxianContract.Presenter> implements AddYusheshuizhunxianContract.View {
     private static final String TAG = AddShuizhunxianFragment.class.getSimpleName();
     @BindView(R.id.toolbar_toolbar)
     Toolbar toolbar;
@@ -66,10 +79,6 @@ public class AddShuizhunxianFragment extends BaseFragment<ShuizhunxianContract.P
     MaterialSpinner spinnerObserveType;
     @BindView(R.id.tv_biaoduan_add_shuizhunxian_fragment)
     TextView tvBiaoduan;
-    @BindView(R.id.tv_gongdian_add_shuizhunxian_fragment)
-    TextView tvGongdian;
-    @BindView(R.id.tv_jidian_add_shuizhunxian_fragment)
-    TextView tvJidian;
     @BindView(R.id.spinner_weather_add_shuizhunxian_fragment)
     MaterialSpinner spinnerWeather;
     @BindView(R.id.spinner_staff_add_shuizhunxian_fragment)
@@ -82,16 +91,26 @@ public class AddShuizhunxianFragment extends BaseFragment<ShuizhunxianContract.P
     TextView tvDate;
     @BindView(R.id.ll_add_shuizhunxian_fragment)
     LinearLayout ll;
+    @BindView(R.id.recyclerview)
+    RecyclerView mRecyclerView;
+    @BindView(R.id.bt_jidian_addyusheshuizhunxian_fragment)
+    Button btJidian;
+    @BindView(R.id.bt_cedian_addyusheshuizhunxian_fragment)
+    Button btCedian;
     private ImageView ivSave;
     private String[] arrayRouteType;
     private String[] arrayObserveType;
     private String[] arrayWeather;
-    private Integer[] gongdianIndices = new Integer[0];
+    private Integer[] cedianIndices = new Integer[0];
     private Integer[] jidianIndices = new Integer[0];
-    private CharSequence[] arraySelectedGongdian;
-    private CharSequence[] arraySelectedJidian;
-    private MaterialDialog gongdianDialog;
+    private List<CharSequence> selectedJidian;
+    private List<CharSequence> selectedCedian;
     private MaterialDialog jidianDialog;
+    private MaterialDialog cedianDialog;
+    private ViewGroup viewGroup;
+    private ItemDragAdapter mAdapter;
+    private ItemDragAndSwipeCallback mItemDragAndSwipeCallback;
+    private ItemTouchHelper mItemTouchHelper;
 
     public static AddShuizhunxianFragment newInstance() {
         return new AddShuizhunxianFragment();
@@ -99,8 +118,8 @@ public class AddShuizhunxianFragment extends BaseFragment<ShuizhunxianContract.P
 
     @NonNull
     @Override
-    protected ShuizhunxianContract.Presenter createPresenter() {
-        return new ShuizhunxianPresenter(this);
+    protected AddYusheshuizhunxianContract.Presenter createPresenter() {
+        return new AddYusheshuizhunxianPresenter(this);
     }
 
     @Nullable
@@ -123,7 +142,85 @@ public class AddShuizhunxianFragment extends BaseFragment<ShuizhunxianContract.P
         initStateBar(toolbar);
         revealShow();
         initToolbar();
+        initRecyclerView();
         initData();
+        viewGroup = (ViewGroup) _mActivity.findViewById(android.R.id.content).getRootView();
+    }
+
+    private void initRecyclerView() {
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(_mActivity));
+        OnItemDragListener listener = new OnItemDragListener() {
+            @Override
+            public void onItemDragStart(RecyclerView.ViewHolder viewHolder, int pos) {
+                KLog.e(TAG, "drag start");
+                BaseViewHolder holder = ((BaseViewHolder) viewHolder);
+            }
+
+            @Override
+            public void onItemDragMoving(RecyclerView.ViewHolder source, int from, RecyclerView.ViewHolder target, int to) {
+                KLog.e(TAG, "move from: " + source.getAdapterPosition() + " to: " + target.getAdapterPosition());
+            }
+
+            @Override
+            public void onItemDragEnd(RecyclerView.ViewHolder viewHolder, int pos) {
+                KLog.e(TAG, "drag end");
+                BaseViewHolder holder = ((BaseViewHolder) viewHolder);
+                mAdapter.notifyDataSetChanged();
+            }
+        };
+        OnItemSwipeListener onItemSwipeListener = new OnItemSwipeListener() {
+            @Override
+            public void onItemSwipeStart(RecyclerView.ViewHolder viewHolder, int pos) {
+                KLog.e(TAG, "view swiped start: " + pos);
+                BaseViewHolder holder = ((BaseViewHolder) viewHolder);
+            }
+
+            @Override
+            public void clearView(RecyclerView.ViewHolder viewHolder, int pos) {
+                KLog.e(TAG, "View reset: " + pos);
+                BaseViewHolder holder = ((BaseViewHolder) viewHolder);
+                mRecyclerView.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        mAdapter.notifyDataSetChanged();
+                    }
+                },500);
+            }
+
+            @Override
+            public void onItemSwiped(RecyclerView.ViewHolder viewHolder, int pos) {
+                KLog.e(TAG, "View Swiped: " + pos);
+            }
+
+            @Override
+            public void onItemSwipeMoving(Canvas canvas, RecyclerView.ViewHolder viewHolder, float dX, float dY, boolean isCurrentlyActive) {
+                KLog.e(TAG, "onItemSwipeMoving: dX:" + dX + "dY:" + dY);
+                KLog.e(TAG, isCurrentlyActive);
+
+            }
+        };
+
+        mAdapter = new ItemDragAdapter();
+        mItemDragAndSwipeCallback = new ItemDragAndSwipeCallback(mAdapter);
+        mItemTouchHelper = new ItemTouchHelper(mItemDragAndSwipeCallback);
+        mItemTouchHelper.attachToRecyclerView(mRecyclerView);
+
+        //mItemDragAndSwipeCallback.setDragMoveFlags(ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT | ItemTouchHelper.UP | ItemTouchHelper.DOWN);
+        mItemDragAndSwipeCallback.setSwipeMoveFlags(ItemTouchHelper.START | ItemTouchHelper.END);
+        mAdapter.enableSwipeItem();
+        mAdapter.setOnItemSwipeListener(onItemSwipeListener);
+        mAdapter.enableDragItem(mItemTouchHelper);
+        mAdapter.setOnItemDragListener(listener);
+//        mRecyclerView.addItemDecoration(new GridItemDecoration(this ,R.drawable.list_divider));
+        mRecyclerView.addItemDecoration(new Decoration(_mActivity, Decoration.VERTICAL_LIST));
+
+        mRecyclerView.setAdapter(mAdapter);
+        mRecyclerView.addOnItemTouchListener(new OnItemClickListener() {
+            @Override
+            public void onSimpleItemClick(final BaseQuickAdapter adapter, final View view, final int position) {
+
+            }
+        });
     }
 
 
@@ -137,18 +234,6 @@ public class AddShuizhunxianFragment extends BaseFragment<ShuizhunxianContract.P
             public boolean onMenuItemClick(MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.action_save:
-                        ViewGroup viewGroup = (ViewGroup) _mActivity.findViewById(android.R.id.content).getRootView();
-
-                        if (TextUtils.isEmpty(tvGongdian.getText())) {
-                            etTemperature.setBackgroundResource(R.drawable.rect_bg_red_stroke_table);
-                            DialogHelper.warningSnackbar(viewGroup, "工点不能为空", DialogHelper.APPEAR_FROM_TOP_TO_DOWN);
-                            return true;
-                        }
-                        if (TextUtils.isEmpty(tvJidian.getText())) {
-                            etTemperature.setBackgroundResource(R.drawable.rect_bg_red_stroke_table);
-                            DialogHelper.warningSnackbar(viewGroup, "基点不能为空", DialogHelper.APPEAR_FROM_TOP_TO_DOWN);
-                            return true;
-                        }
 
                         if (TextUtils.isEmpty(etTemperature.getText())) {
                             etTemperature.setBackgroundResource(R.drawable.rect_bg_red_stroke_table);
@@ -236,65 +321,19 @@ public class AddShuizhunxianFragment extends BaseFragment<ShuizhunxianContract.P
     }
 
     @Override
-    public void responseData(Map<String, String[]> map) {
-        String[] arrayGongdianName = map.get(Constants.GONGDIAN);
-        String[] arrayJidianName = map.get(Constants.JIDIAN);
-        String[] arrayStaffName = map.get(Constants.STAFF);
-        gongdianDialog = gongdianDialog(arrayGongdianName);
-        jidianDialog = jidianDialog(arrayJidianName);
-        if (arrayStaffName == null) {
-            spinnerStaff.setItems("请先下载人员数据");
-        } else {
-            spinnerStaff.setItems(arrayStaffName);
+    public void responseJidian(String[] arrayJidianName) {
+        if (arrayJidianName.length == 0) {
+            DialogHelper.warningSnackbar(viewGroup, "未找到基点数据", DialogHelper.APPEAR_FROM_TOP_TO_DOWN);
+            return;
         }
-    }
-
-    private MaterialDialog gongdianDialog(String[] arrayGongdianName) {
-        return new MaterialDialog.Builder(_mActivity)
-                .title(R.string.dialog_select_gongdian)
-                .items(arrayGongdianName)
-                .itemsCallbackMultiChoice(gongdianIndices, new MaterialDialog.ListCallbackMultiChoice() {
-                    @Override
-                    public boolean onSelection(MaterialDialog dialog, Integer[] which, CharSequence[] text) {
-                        gongdianIndices = which;
-                        arraySelectedGongdian = text;
-                        StringBuilder sb = new StringBuilder();
-                        for (int i = 0; i < which.length; i++) {
-                            sb.append(text[i]);
-                            if (i != which.length - 1) {
-                                sb.append("/");
-                            }
-                        }
-                        tvGongdian.setText(sb.toString());
-                        return true;
-                    }
-                })
-                .onPositive(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        dialog.dismiss();
-                    }
-                })
-                .onNegative(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        dialog.dismiss();
-                    }
-                })
-                .positiveText(R.string.dialog_positiveText)
-                .negativeText(R.string.dialog_negativeText)
-                .build();
-    }
-
-    private MaterialDialog jidianDialog(String[] arrayJidianName) {
-        return new MaterialDialog.Builder(_mActivity)
+        jidianDialog = new MaterialDialog.Builder(_mActivity)
                 .title(R.string.dialog_select_jidian)
                 .items(arrayJidianName)
                 .itemsCallbackMultiChoice(jidianIndices, new MaterialDialog.ListCallbackMultiChoice() {
                     @Override
                     public boolean onSelection(MaterialDialog dialog, Integer[] which, CharSequence[] text) {
                         jidianIndices = which;
-                        arraySelectedJidian = text;
+                        selectedJidian = Arrays.asList(text);
 
                         StringBuilder sb = new StringBuilder();
                         for (int i = 0; i < which.length; i++) {
@@ -303,7 +342,10 @@ public class AddShuizhunxianFragment extends BaseFragment<ShuizhunxianContract.P
                                 sb.append("/");
                             }
                         }
-                        tvJidian.setText(sb.toString());
+
+
+                        mAdapter.addData(selectedJidian);
+
                         return true;
                     }
                 })
@@ -325,7 +367,47 @@ public class AddShuizhunxianFragment extends BaseFragment<ShuizhunxianContract.P
     }
 
     @Override
-    public void responseStaffData(List<String> mStaffData) {
+    public void responseCedian(String[] arrayCedianName) {
+        if (arrayCedianName.length == 0) {
+            DialogHelper.warningSnackbar(viewGroup, "未找到基点数据", DialogHelper.APPEAR_FROM_TOP_TO_DOWN);
+            return;
+        }
+        cedianDialog = new MaterialDialog.Builder(_mActivity)
+                .title(R.string.dialog_select_cedian)
+                .items(arrayCedianName)
+                .itemsCallbackMultiChoice(cedianIndices, new MaterialDialog.ListCallbackMultiChoice() {
+                    @Override
+                    public boolean onSelection(MaterialDialog dialog, Integer[] which, CharSequence[] text) {
+                        KLog.e("1111111111");
+                        cedianIndices = which;
+                        selectedJidian = Arrays.asList(text);
+                        StringBuilder sb = new StringBuilder();
+                        for (int i = 0; i < which.length; i++) {
+                            sb.append(text[i]);
+                            if (i != which.length - 1) {
+                                sb.append("/");
+                            }
+                        }
+                        KLog.e(sb);
+
+                        return true;
+                    }
+                })
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        dialog.dismiss();
+                    }
+                })
+                .onNegative(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        dialog.dismiss();
+                    }
+                })
+                .positiveText(R.string.dialog_positiveText)
+                .negativeText(R.string.dialog_negativeText)
+                .build();
     }
 
     @Override
@@ -352,7 +434,7 @@ public class AddShuizhunxianFragment extends BaseFragment<ShuizhunxianContract.P
 
     @Override
     public void showError(Throwable t) {
-
+        DialogHelper.errorSnackbar(viewGroup, "查询数据出错", DialogHelper.APPEAR_FROM_TOP_TO_DOWN);
     }
 
     @Override
@@ -422,24 +504,9 @@ public class AddShuizhunxianFragment extends BaseFragment<ShuizhunxianContract.P
                 int cy = intTemp;
                 int w = ll.getWidth();
                 int h = ll.getHeight();
-
-                // 勾股定理 & 进一法
                 int finalRadius = (int) Math.hypot(w, h);
 
                 Animator anim = ViewAnimationUtils.createCircularReveal(ll, cx, cy, 0, finalRadius);
-                anim.addListener(new AnimatorListenerAdapter() {
-                    @Override
-                    public void onAnimationEnd(Animator animation) {
-                        super.onAnimationEnd(animation);
-//                        ll.setVisibility(View.VISIBLE);
-                    }
-
-                    @Override
-                    public void onAnimationStart(Animator animation) {
-                        super.onAnimationStart(animation);
-//                        ll.setVisibility(View.VISIBLE);
-                    }
-                });
                 anim.setInterpolator(new AccelerateDecelerateInterpolator());
                 anim.setDuration(618);
                 anim.start();
@@ -453,17 +520,30 @@ public class AddShuizhunxianFragment extends BaseFragment<ShuizhunxianContract.P
         return super.onBackPressedSupport();
     }
 
-    @OnClick({R.id.tv_gongdian_add_shuizhunxian_fragment, R.id.tv_jidian_add_shuizhunxian_fragment})
+    @OnClick({R.id.bt_jidian_addyusheshuizhunxian_fragment, R.id.bt_cedian_addyusheshuizhunxian_fragment})
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.tv_gongdian_add_shuizhunxian_fragment:
-                gongdianDialog.setSelectedIndices(gongdianIndices);
-                gongdianDialog.show();
-                break;
-            case R.id.tv_jidian_add_shuizhunxian_fragment:
+            case R.id.bt_jidian_addyusheshuizhunxian_fragment:
+                if (jidianDialog == null) {
+                    DialogHelper.warningSnackbar(viewGroup, "未找到基点数据", DialogHelper.APPEAR_FROM_TOP_TO_DOWN);
+                    return;
+                }
                 jidianDialog.setSelectedIndices(jidianIndices);
                 jidianDialog.show();
                 break;
+            case R.id.bt_cedian_addyusheshuizhunxian_fragment:
+
+                for (CharSequence charSequence : mAdapter.getData()) {
+                    KLog.e("charSequence::" + charSequence);
+                }
+
+//                if (cedianDialog == null) {
+//                    DialogHelper.warningSnackbar(viewGroup, "未找到测点数据", DialogHelper.APPEAR_FROM_TOP_TO_DOWN);
+//                    return;
+//                }
+//                cedianDialog.setSelectedIndices(cedianIndices);
+//                cedianDialog.show();
+            break;
         }
     }
 }

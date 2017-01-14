@@ -10,7 +10,10 @@ import com.shtoone.chenjiang.mvp.model.entity.db.GongdianData;
 import com.socks.library.KLog;
 
 import java.util.List;
-
+/**
+ * Author：leguang on 2016/10/9 0009 15:49
+ * Email：langmanleguang@qq.com
+ */
 public class GongdianMenuRVAdapter extends BaseQuickAdapter<GongdianData, BaseViewHolder> {
     private static final String TAG = GongdianMenuRVAdapter.class.getSimpleName();
     private SparseBooleanArray mBooleanArray = new SparseBooleanArray();

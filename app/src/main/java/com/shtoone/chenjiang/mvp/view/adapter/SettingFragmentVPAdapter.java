@@ -9,7 +9,8 @@ import com.shtoone.chenjiang.mvp.view.main.setting.ParamSettingFragment;
 import com.socks.library.KLog;
 
 /**
- * Created by leguang on 2016/6/9 0009.
+ * Author：leguang on 2016/10/9 0009 15:49
+ * Email：langmanleguang@qq.com
  */
 public class SettingFragmentVPAdapter extends FragmentPagerAdapter {
     private static final String TAG = SettingFragmentVPAdapter.class.getSimpleName();

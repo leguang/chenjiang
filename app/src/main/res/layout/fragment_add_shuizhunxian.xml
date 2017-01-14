@@ -11,13 +11,13 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:fadingEdge="none"
         android:scrollbars="none">
 
         <TableLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_margin="5dp"
             android:padding="0.5dp">
 
@@ -106,45 +106,6 @@
                     android:layout_weight="2.5"
                     android:gravity="left|center_vertical"
                     android:paddingLeft="5dp" />
-            </TableRow>
-
-            <TableRow>
-
-                <TextView
-                    style="@style/AddShuizhunxian"
-                    android:layout_weight="1"
-                    android:gravity="right|center_vertical"
-                    android:paddingRight="5dp"
-                    android:text="工点：" />
-
-                <TextView
-                    android:id="@+id/tv_gongdian_add_shuizhunxian_fragment"
-                    style="@style/AddShuizhunxian"
-                    android:layout_weight="2.5"
-                    android:gravity="left|center_vertical"
-                    android:paddingLeft="5dp"
-                    android:singleLine="true" />
-
-            </TableRow>
-
-            <TableRow android:background="@color/material_cyan_50">
-
-
-                <TextView
-                    style="@style/AddShuizhunxian"
-                    android:layout_weight="1"
-                    android:gravity="right|center_vertical"
-                    android:paddingRight="5dp"
-                    android:text="基点：" />
-
-                <TextView
-                    android:id="@+id/tv_jidian_add_shuizhunxian_fragment"
-                    style="@style/AddShuizhunxian"
-                    android:layout_weight="2.5"
-                    android:gravity="left|center_vertical"
-                    android:paddingLeft="5dp"
-                    android:singleLine="true" />
-
             </TableRow>
 
             <TableRow>
@@ -267,7 +228,35 @@
 
             <Space
                 android:layout_width="match_parent"
-                android:layout_height="200dp" />
+                android:layout_height="10dp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/bt_jidian_addyusheshuizhunxian_fragment"
+                    android:layout_width="80dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/jidian" />
+
+                <Space
+                    android:layout_width="0dp"
+                    android:layout_height="10dp"
+                    android:layout_weight="1" />
+
+                <Button
+                    android:id="@+id/bt_cedian_addyusheshuizhunxian_fragment"
+                    android:layout_width="80dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/cedian" />
+            </LinearLayout>
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recyclerview"
+                android:layout_width="match_parent"
+                android:layout_height="600dp" />
 
         </TableLayout>
     </ScrollView>

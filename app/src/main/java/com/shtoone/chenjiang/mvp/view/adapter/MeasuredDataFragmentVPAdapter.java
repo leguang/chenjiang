@@ -8,7 +8,8 @@ import com.shtoone.chenjiang.mvp.view.main.upload.MeasuredOriginalDataFragment;
 import com.shtoone.chenjiang.mvp.view.main.upload.MeasuredResultDataFragment;
 
 /**
- * Created by leguang on 2016/6/9 0009.
+ * Author：leguang on 2016/10/9 0009 15:49
+ * Email：langmanleguang@qq.com
  */
 public class MeasuredDataFragmentVPAdapter extends FragmentPagerAdapter {
     private static final String TAG = MeasuredDataFragmentVPAdapter.class.getSimpleName();

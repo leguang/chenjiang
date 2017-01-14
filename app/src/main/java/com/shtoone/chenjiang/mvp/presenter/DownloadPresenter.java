@@ -285,6 +285,8 @@ public class DownloadPresenter extends BasePresenter<DownloadContract.View> impl
                         mYusheshuizhunxianData.setDepartId(ysszxsBean.getDepartId());
                         mYusheshuizhunxianData.setJidianshu(ysszxsBean.getJidianshu());
                         mYusheshuizhunxianData.setXianluxinxi(ysszxsBean.getXianluxinxi());
+                        mYusheshuizhunxianData.setObserveType("");
+                        mYusheshuizhunxianData.setRouteType("");
                         mYusheshuizhunxianData.setStatus(Constants.status_daibianji);
                         return mYusheshuizhunxianData.save();
                     }

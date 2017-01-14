@@ -60,8 +60,6 @@ public class EditShuizhunxianFragment extends BaseFragment<ShuizhunxianContract.
     MaterialSpinner spinnerRouteType;
     @BindView(R.id.spinner_observe_type_edit_shuizhunxian_fragment)
     MaterialSpinner spinnerObserveType;
-    @BindView(R.id.tv_gongdian_edit_shuizhunxian_fragment)
-    TextView tvGongdian;
     @BindView(R.id.tv_jidian_edit_shuizhunxian_fragment)
     TextView tvJidian;
     @BindView(R.id.spinner_weather_edit_shuizhunxian_fragment)

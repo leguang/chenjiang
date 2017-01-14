@@ -24,33 +24,33 @@
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/tv_bianhao_item_rv_main_fragment"
+            android:id="@+id/tv_name_item_rv_main_fragment"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="编      号：L210000"
+            android:text="先期标"
             android:textColor="@color/base_color"
-            android:textSize="17sp" />
+            android:textSize="15sp" />
 
         <TextView
             android:id="@+id/tv_route_type_item_rv_main_fragment"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="路线类型：附合"
-            android:textSize="16sp" />
+            android:textSize="14sp" />
 
         <TextView
             android:id="@+id/tv_observe_type_item_rv_main_fragment"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="观测类型：aBFFB"
-            android:textSize="16sp" />
+            android:textSize="14sp" />
 
         <TextView
             android:id="@+id/tv_date_item_rv_main_fragment"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="观测日期：2016-10-25"
-            android:textSize="16sp" />
+            android:textSize="14sp" />
     </LinearLayout>
 
     <ImageView

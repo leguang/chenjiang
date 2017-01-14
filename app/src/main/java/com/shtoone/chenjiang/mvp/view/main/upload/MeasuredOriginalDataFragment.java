@@ -95,7 +95,7 @@ public class MeasuredOriginalDataFragment extends BaseFragment<MeasuredOriginalD
 
         recyclerview.addOnItemTouchListener(new OnItemClickListener() {
             @Override
-            public void SimpleOnItemClick(BaseQuickAdapter adapter, View view, int position) {
+            public void onSimpleItemClick(BaseQuickAdapter adapter, View view, int position) {
                 ToastUtils.showToast(_mActivity, Integer.toString(position));
             }
         });

@@ -7,6 +7,10 @@ import com.chad.library.adapter.base.BaseViewHolder;
 import com.shtoone.chenjiang.R;
 import com.shtoone.chenjiang.mvp.model.entity.db.StaffData;
 
+/**
+ * Author：leguang on 2016/10/9 0009 15:49
+ * Email：langmanleguang@qq.com
+ */
 public class StaffRVAdapter extends BaseQuickAdapter<StaffData, BaseViewHolder> {
     private static final String TAG = StaffRVAdapter.class.getSimpleName();
 

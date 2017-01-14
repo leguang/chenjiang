@@ -21,9 +21,9 @@ public class MainFragmentRVAdapter extends BaseQuickAdapter<YusheshuizhunxianDat
     @Override
     protected void convert(BaseViewHolder holder, YusheshuizhunxianData yusheshuizhunxianData) {
         final int position = holder.getLayoutPosition() - this.getHeaderLayoutCount();
-        holder.setText(R.id.tv_bianhao_item_rv_main_fragment, yusheshuizhunxianData.getXianlubianhao())
-                .setText(R.id.tv_route_type_item_rv_main_fragment, yusheshuizhunxianData.getLeixing())
-                .setText(R.id.tv_observe_type_item_rv_main_fragment, yusheshuizhunxianData.getJidianshu())
+        holder.setText(R.id.tv_name_item_rv_main_fragment, yusheshuizhunxianData.getXianlumingcheng())
+                .setText(R.id.tv_route_type_item_rv_main_fragment, "线路类型：" + yusheshuizhunxianData.getRouteType())
+                .setText(R.id.tv_observe_type_item_rv_main_fragment, "观测类型：" + yusheshuizhunxianData.getObserveType())
                 .setText(R.id.tv_date_item_rv_main_fragment, yusheshuizhunxianData.getXiugaishijian())
                 .setOnClickListener(R.id.iv_left_item_rv_main_fragment, new View.OnClickListener() {
                     @Override
