@@ -9,7 +9,7 @@ import android.view.View;
 import android.view.WindowManager;
 
 import com.shtoone.chenjiang.mvp.contract.base.BaseContract;
-import com.shtoone.chenjiang.utils.ActivityManagerUtils;
+import com.shtoone.chenjiang.common.ActivityManager;
 import com.shtoone.chenjiang.utils.NetworkUtils;
 import com.socks.library.KLog;
 import com.umeng.analytics.MobclickAgent;
@@ -49,7 +49,7 @@ public abstract class BaseActivity<P extends BaseContract.Presenter> extends Swi
 
     private void initActivity() {
         //把每一个Activity加入栈中
-        ActivityManagerUtils.getInstance().addActivity(this);
+        ActivityManager.getInstance().addActivity(this);
 
         //一旦启动某个Activity就打印Log，方便找到该类
         KLog.e(getClass().getName());
@@ -100,7 +100,7 @@ public abstract class BaseActivity<P extends BaseContract.Presenter> extends Swi
             mPresenter = null;
         }
         //把每一个Activity弹出栈
-        ActivityManagerUtils.getInstance().removeActivity(this);
+        ActivityManager.getInstance().removeActivity(this);
         super.onDestroy();
     }
 

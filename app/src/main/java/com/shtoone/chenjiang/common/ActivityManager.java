@@ -1,4 +1,4 @@
-package com.shtoone.chenjiang.utils;
+package com.shtoone.chenjiang.common;
 
 import android.app.Activity;
 
@@ -9,12 +9,12 @@ import java.util.Stack;
  * Author：leguang on 2016/10/9 0009 15:49
  * Email：langmanleguang@qq.com
  */
-public class ActivityManagerUtils {
-    private static final String TAG = ActivityManagerUtils.class.getSimpleName();
+public class ActivityManager {
+    private static final String TAG = ActivityManager.class.getSimpleName();
     private static Stack<Activity> activityStack;
-    private static ActivityManagerUtils instance;
+    private static ActivityManager instance;
 
-    private ActivityManagerUtils() {
+    private ActivityManager() {
         if (activityStack == null) {
             activityStack = new Stack<Activity>();
         }
@@ -23,9 +23,9 @@ public class ActivityManagerUtils {
     /**
      * 单一实例
      */
-    public static ActivityManagerUtils getInstance() {
+    public static ActivityManager getInstance() {
         if (instance == null) {
-            instance = new ActivityManagerUtils();
+            instance = new ActivityManager();
         }
         return instance;
     }
