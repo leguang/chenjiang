@@ -150,13 +150,14 @@ public class ShuizhunxianMenuFragment extends BaseFragment<ShuizhunxianMenuContr
     @Override
     public void responseShuizhunxian(List<YusheshuizhunxianData> mShuizhunxianData, int pagination) {
         if (mShuizhunxianData.size() > 0) {
+            pagestatelayout.showContent();
             if (pagination == 0) {
-                //刷明是第一页，或者是刷新,把页码重置为0，代表第一页。
-                if (mShuizhunxianData.size() >= Constants.PAGE_SIZE) {
-                    mAdapter.removeAllFooterView();
+                this.pagination = 0; //刷明是第一页，或者是刷新,把页码重置为0，代表第一页。
+
+                mAdapter.removeAllFooterView();//先remove再add。
+                if (mShuizhunxianData.size() > Constants.PAGE_SIZE) {
                     mAdapter.addFooterView(mFooterLoading);
                 }
-                this.pagination = 0;
                 mCurrentPosition = 0;
                 mAdapter.setNewData(mShuizhunxianData);
                 mAdapter.setItemChecked(0);

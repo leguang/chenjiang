@@ -26,7 +26,7 @@ public class Constants {
     public static final String PATH_APK_CACHE = PATH_DATA + File.separator + "ApkCache";
 
     //基地址
-    public static final String BASE_URL = "http://192.168.11.110:8081/ljcjqms/";
+    public static final String BASE_URL = "http://192.168.11.109:8081/ljcjqms/";
 
     //登录地址
     public static final String LOGIN_URL = BASE_URL + "app.do?AppLogin&userName=%1&userPwd=%2&OSType=2";
@@ -41,7 +41,7 @@ public class Constants {
     public static final String USER_INFO_BEAN = "user_info_bean";
 
     //网络链接超时时间
-    public static final int DEFAULT_TIMEOUT = 1;
+    public static final int DEFAULT_TIMEOUT = 5;
 
     //作为登录的参数，固定这个写法
     public static final String OSTYPE = "2";

@@ -319,11 +319,9 @@ public class MainFragment extends BaseFragment<MainContract.Presenter> implement
             if (pagination == 0) {
                 this.pagination = 0;//说明是第一页，或者是刷新,把页码重置为0，代表第一页。
 
+                mAdapter.removeAllFooterView();
                 if (mYusheshuizhunxianData.size() > Constants.PAGE_SIZE) {
-                    mAdapter.removeAllFooterView();
                     mAdapter.addFooterView(mFooterLoading);
-                } else {
-                    mAdapter.removeAllFooterView();
                 }
                 //重新刷新了，就不需要记录选中状态
                 mAdapter.setNewData(mYusheshuizhunxianData);
