@@ -1,12 +1,20 @@
 package com.shtoone.chenjiang.exception;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Environment;
 import android.os.Looper;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
+
+import com.shtoone.chenjiang.common.ActivityManager;
+import com.shtoone.chenjiang.mvp.view.others.LaunchActivity;
+import com.socks.library.KLog;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -21,13 +29,23 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
+
 /**
- * Author：leguang on 2016/10/9 0009 15:49
- * Email：langmanleguang@qq.com
+ * UncaughtException处理类,当程序发生Uncaught异常的时候,有该类来接管程序,并记录发送错误报告.
+ * public class AndroidUtilsApplication extends Application {
+ * public void onCreate() {
+ * super.onCreate();
+ * //崩溃处理
+ * CrashHandlerUtil crashHandlerUtil = CrashHandlerUtil.getInstance();
+ * crashHandlerUtil.init(this);
+ * crashHandlerUtil.setCrashTip("很抱歉，程序出现异常，即将退出！");
+ * }
+ * }
+ * Created by Administrator
+ * on 2016/5/19.
  */
 @SuppressWarnings("unused")
 public class AppExceptionHandler implements Thread.UncaughtExceptionHandler {
-
     private static final String TAG = AppExceptionHandler.class.getSimpleName();
 
     //系统默认的UncaughtException处理类
@@ -125,7 +143,27 @@ public class AppExceptionHandler implements Thread.UncaughtExceptionHandler {
     }
 
     private void showDialog() {
-
+        final Activity currentActivity = ActivityManager.getInstance().currentActivity();
+        new AlertDialog.Builder(currentActivity)
+                .setTitle("异常")
+                .setMessage("当前应用程序发生异常，请您选择退出应用或重启应用！")
+                .setCancelable(false)
+                .setNegativeButton("重启", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        Intent intent = new Intent(mContext, LaunchActivity.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                        mContext.startActivity(intent);
+                        ActivityManager.getInstance().appExit();
+                        KLog.e("重启");
+                    }
+                })
+                .setPositiveButton("退出", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        ActivityManager.getInstance().appExit();
+                    }
+                }).show();
     }
 
     /**

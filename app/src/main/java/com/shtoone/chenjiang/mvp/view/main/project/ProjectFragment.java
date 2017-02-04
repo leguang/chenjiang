@@ -63,8 +63,8 @@ public class ProjectFragment extends BaseFragment {
 
     public void initData() {
         AHBottomNavigationItem item1 = new AHBottomNavigationItem(R.string.shuizhunxian, R.drawable.ic_statistic, R.color.white);
-        AHBottomNavigationItem item2 = new AHBottomNavigationItem(R.string.renyuan, R.drawable.ic_friends, R.color.material_yellow_100);
-        AHBottomNavigationItem item3 = new AHBottomNavigationItem(R.string.jidian, R.drawable.ic_nearby, R.color.material_green_100);
+        AHBottomNavigationItem item2 = new AHBottomNavigationItem(R.string.renyuan, R.drawable.ic_friends, R.color.white);
+        AHBottomNavigationItem item3 = new AHBottomNavigationItem(R.string.jidian, R.drawable.ic_nearby, R.color.white);
         bottomNavigationItems.add(item1);
         bottomNavigationItems.add(item2);
         bottomNavigationItems.add(item3);

@@ -5,6 +5,7 @@ import android.content.Context;
 import com.github.moduth.blockcanary.BlockCanary;
 import com.shtoone.chenjiang.common.AppContext;
 import com.shtoone.chenjiang.common.Constants;
+import com.shtoone.chenjiang.exception.AppExceptionHandler;
 import com.shtoone.chenjiang.mvp.model.entity.bean.UserInfoBean;
 import com.shtoone.chenjiang.mvp.model.entity.db.ShuizhunxianData;
 import com.shtoone.chenjiang.mvp.model.entity.db.StaffData;
