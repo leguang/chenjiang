@@ -26,7 +26,7 @@ public class Constants {
     public static final String PATH_APK_CACHE = PATH_DATA + File.separator + "ApkCache";
 
     //基地址
-    public static final String BASE_URL = "http://192.168.11.109:8081/ljcjqms/";
+    public static final String BASE_URL = "http://192.168.11.116:8081/ljcjqms/";
 
     //登录地址
     public static final String LOGIN_URL = BASE_URL + "app.do?AppLogin&userName=%1&userPwd=%2&OSType=2";
@@ -52,7 +52,7 @@ public class Constants {
     public static final String ABOUTCOMPANY = "http://en.ccccltd.cn/ccccltd/";
 
     //分页查询
-    public static final int PAGE_SIZE = 20;
+    public static final int PAGE_SIZE = 30;
 
     //下载页面
     public static final String UPDATA_TIME = "updata_time";

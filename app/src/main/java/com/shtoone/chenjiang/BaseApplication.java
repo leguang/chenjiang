@@ -99,21 +99,21 @@ public class BaseApplication extends LitePalApplication {
 //            KLog.e(isis);
 //        }
 //
-        DataSupport.deleteAll(YusheshuizhunxianData.class);
-        for (int i = 0; i < 20; i++) {
-            YusheshuizhunxianData mYusheshuizhunxianData = new YusheshuizhunxianData();
-            mYusheshuizhunxianData.setXianlubianhao("备注" + (i + 1));
-            mYusheshuizhunxianData.setJidianshu("状态" + (i + 1));
-            mYusheshuizhunxianData.setXianluxinxi("jd0,cd1,cd2,cd3,jd1,");
-            mYusheshuizhunxianData.setRouteType("闭合");
-            mYusheshuizhunxianData.setObserveType("BF");
-            mYusheshuizhunxianData.setTemperature("16");
-            mYusheshuizhunxianData.setPressure("700");
-            mYusheshuizhunxianData.setXiugaishijian("2016-11-09");
-            mYusheshuizhunxianData.setStatus(Constants.status_daibianji);
-            boolean isis = mYusheshuizhunxianData.save();
-            KLog.e(isis);
-        }
+//        DataSupport.deleteAll(YusheshuizhunxianData.class);
+//        for (int i = 0; i < 20; i++) {
+//            YusheshuizhunxianData mYusheshuizhunxianData = new YusheshuizhunxianData();
+//            mYusheshuizhunxianData.setXianlubianhao("备注" + (i + 1));
+//            mYusheshuizhunxianData.setJidianshu("状态" + (i + 1));
+//            mYusheshuizhunxianData.setXianluxinxi("jd0,cd1,cd2,cd3,jd1,");
+//            mYusheshuizhunxianData.setRouteType("闭合");
+//            mYusheshuizhunxianData.setObserveType("BF");
+//            mYusheshuizhunxianData.setTemperature("16");
+//            mYusheshuizhunxianData.setPressure("700");
+//            mYusheshuizhunxianData.setXiugaishijian("2016-11-09");
+//            mYusheshuizhunxianData.setStatus(Constants.status_daibianji);
+//            boolean isis = mYusheshuizhunxianData.save();
+//            KLog.e(isis);
+//        }
 //
 //        for (int i = 0; i < 4; i++) {
 //            YusheshuizhunxianData mYusheshuizhunxianData = new YusheshuizhunxianData();

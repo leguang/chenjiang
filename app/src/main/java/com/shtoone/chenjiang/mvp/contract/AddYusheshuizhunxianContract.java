@@ -3,6 +3,8 @@ package com.shtoone.chenjiang.mvp.contract;
 import com.shtoone.chenjiang.mvp.contract.base.BaseContract;
 import com.shtoone.chenjiang.mvp.model.entity.db.YusheshuizhunxianData;
 
+import java.util.List;
+
 
 /**
  * Author：leguang on 2016/10/9 0009 15:49
@@ -14,6 +16,8 @@ public interface AddYusheshuizhunxianContract {
 
         void responseCedian(String[] mCedianData);
 
+        void responseStaff(List<String> mStaffData);
+
         void responseSave(int rowsAffected);
     }
 
@@ -21,6 +25,8 @@ public interface AddYusheshuizhunxianContract {
         void requestJidian();
 
         void requestCedian();
+
+        void requestStaff();
 
         void save(YusheshuizhunxianData mYusheshuizhunxianData, String dateTime);
     }

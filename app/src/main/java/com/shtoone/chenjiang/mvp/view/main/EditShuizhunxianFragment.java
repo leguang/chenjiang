@@ -30,7 +30,7 @@ import com.shtoone.chenjiang.common.DialogHelper;
 import com.shtoone.chenjiang.event.EventData;
 import com.shtoone.chenjiang.mvp.contract.ShuizhunxianContract;
 import com.shtoone.chenjiang.mvp.model.entity.db.YusheshuizhunxianData;
-import com.shtoone.chenjiang.mvp.presenter.ShuizhunxianPresenter;
+import com.shtoone.chenjiang.mvp.presenter.EditShuizhunxianPresenter;
 import com.shtoone.chenjiang.mvp.view.base.BaseFragment;
 import com.shtoone.chenjiang.utils.DensityUtils;
 import com.socks.library.KLog;
@@ -40,7 +40,6 @@ import org.greenrobot.eventbus.EventBus;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -76,6 +75,10 @@ public class EditShuizhunxianFragment extends BaseFragment<ShuizhunxianContract.
     LinearLayout ll;
     @BindView(R.id.tv_cedian_edit_shuizhunxian_fragment)
     TextView tvCedian;
+    @BindView(R.id.tv_jidianshu_edit_shuizhunxian_fragment)
+    TextView tvJidianshu;
+    @BindView(R.id.tv_cedianshu_edit_shuizhunxian_fragment)
+    TextView tvCedianshu;
     private ImageView ivSave;
     private String[] arrayRouteType;
     private String[] arrayObserveType;
@@ -104,7 +107,7 @@ public class EditShuizhunxianFragment extends BaseFragment<ShuizhunxianContract.
     @NonNull
     @Override
     protected ShuizhunxianContract.Presenter createPresenter() {
-        return new ShuizhunxianPresenter(this);
+        return new EditShuizhunxianPresenter(this);
     }
 
     @Nullable
@@ -145,16 +148,30 @@ public class EditShuizhunxianFragment extends BaseFragment<ShuizhunxianContract.
                             etTemperature.setBackgroundResource(R.drawable.rect_bg_red_stroke_table);
                             DialogHelper.warningSnackbar(viewGroup, "温度不能为空", DialogHelper.APPEAR_FROM_TOP_TO_DOWN);
                             return true;
+                        } else {
+                            if (Integer.parseInt(etTemperature.getText().toString()) > 40
+                                    || Integer.parseInt(etTemperature.getText().toString()) < -10) {
+                                etTemperature.setBackgroundResource(R.drawable.rect_bg_red_stroke_table);
+                                DialogHelper.warningSnackbar(viewGroup, "温度值应在-10~40之间", DialogHelper.APPEAR_FROM_TOP_TO_DOWN);
+                                return true;
+                            }
                         }
                         if (TextUtils.isEmpty(etPressure.getText())) {
                             etPressure.setBackgroundResource(R.drawable.rect_bg_red_stroke_table);
                             DialogHelper.warningSnackbar(viewGroup, "气压不能为空", DialogHelper.APPEAR_FROM_TOP_TO_DOWN);
                             return true;
+                        } else {
+                            if (Integer.parseInt(etPressure.getText().toString()) > 1200
+                                    || Integer.parseInt(etPressure.getText().toString()) < 700) {
+                                etPressure.setBackgroundResource(R.drawable.rect_bg_red_stroke_table);
+                                DialogHelper.warningSnackbar(viewGroup, "气压值应在700hPa~1200hPa之间", DialogHelper.APPEAR_FROM_TOP_TO_DOWN);
+                                return true;
+                            }
                         }
                         String strStaff = (String) spinnerStaff.getItems().get(spinnerStaff.getSelectedIndex());
                         if (strStaff.equals("请先下载人员数据")) {
                             spinnerStaff.setBackgroundResource(R.drawable.rect_bg_red_stroke_table);
-                            DialogHelper.warningSnackbar(viewGroup, "司镜人员不能为空", DialogHelper.APPEAR_FROM_TOP_TO_DOWN);
+                            DialogHelper.warningSnackbar(viewGroup, "司镜人员不能为空，请先下载", DialogHelper.APPEAR_FROM_TOP_TO_DOWN);
                             return true;
                         }
                         //恢复原始样式
@@ -195,6 +212,16 @@ public class EditShuizhunxianFragment extends BaseFragment<ShuizhunxianContract.
         } else {
             tvDate.setText(mYusheshuizhunxianData.getXiugaishijian());
         }
+
+        //设置基点数和测点数
+        if (!TextUtils.isEmpty(mYusheshuizhunxianData.getJidianshu())) {
+            tvJidianshu.setText("基点(" + mYusheshuizhunxianData.getJidianshu() + ")：");
+        }
+
+        if (!TextUtils.isEmpty(mYusheshuizhunxianData.getCedianshu())) {
+            tvCedianshu.setText("测点(" + mYusheshuizhunxianData.getCedianshu() + ")：");
+        }
+
         //设置基点和测点
         if (!TextUtils.isEmpty(mYusheshuizhunxianData.getXianluxinxi())) {
             StringBuffer sbJidian = new StringBuffer();
@@ -207,14 +234,18 @@ public class EditShuizhunxianFragment extends BaseFragment<ShuizhunxianContract.
                     sbCedian.append(s + "/");
                 }
             }
-            tvJidian.setText(sbJidian.toString().substring(0, sbJidian.toString().length() - 1));
-            tvCedian.setText(sbCedian.toString().substring(0, sbCedian.toString().length() - 1));
+            if (!TextUtils.isEmpty(sbJidian.toString())) {
+                tvJidian.setText(sbJidian.toString().substring(0, sbJidian.toString().length() - 1));
+            }
+            if (!TextUtils.isEmpty(sbCedian.toString())) {
+                tvCedian.setText(sbCedian.toString().substring(0, sbCedian.toString().length() - 1));
+            }
         }
         etPressure.setText(mYusheshuizhunxianData.getPressure());
         etTemperature.setText(mYusheshuizhunxianData.getTemperature());
 
         //请求司镜人员数据
-        mPresenter.requestStaffData();
+        mPresenter.start();
         Resources res = getResources();
         arrayRouteType = res.getStringArray(R.array.route_type);
         arrayObserveType = res.getStringArray(R.array.observe_type);
@@ -246,10 +277,6 @@ public class EditShuizhunxianFragment extends BaseFragment<ShuizhunxianContract.
                 }
             }
         }
-    }
-
-    @Override
-    public void responseData(Map<String, String[]> map) {
     }
 
     //响应司镜人员数据

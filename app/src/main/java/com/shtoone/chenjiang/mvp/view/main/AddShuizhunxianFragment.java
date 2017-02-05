@@ -184,7 +184,7 @@ public class AddShuizhunxianFragment extends BaseFragment<AddYusheshuizhunxianCo
                     public void run() {
                         mAdapter.notifyDataSetChanged();
                     }
-                },500);
+                }, 500);
             }
 
             @Override
@@ -239,17 +239,32 @@ public class AddShuizhunxianFragment extends BaseFragment<AddYusheshuizhunxianCo
                             etTemperature.setBackgroundResource(R.drawable.rect_bg_red_stroke_table);
                             DialogHelper.warningSnackbar(viewGroup, "温度不能为空", DialogHelper.APPEAR_FROM_TOP_TO_DOWN);
                             return true;
+                        } else {
+                            if (Integer.parseInt(etTemperature.getText().toString()) > 40
+                                    || Integer.parseInt(etTemperature.getText().toString()) < -10) {
+                                etTemperature.setBackgroundResource(R.drawable.rect_bg_red_stroke_table);
+                                DialogHelper.warningSnackbar(viewGroup, "温度值应在-10~40之间", DialogHelper.APPEAR_FROM_TOP_TO_DOWN);
+                                return true;
+                            }
                         }
+
                         if (TextUtils.isEmpty(etPressure.getText())) {
                             etPressure.setBackgroundResource(R.drawable.rect_bg_red_stroke_table);
                             DialogHelper.warningSnackbar(viewGroup, "气压不能为空", DialogHelper.APPEAR_FROM_TOP_TO_DOWN);
                             return true;
+                        } else {
+                            if (Integer.parseInt(etPressure.getText().toString()) > 1200
+                                    || Integer.parseInt(etPressure.getText().toString()) < 700) {
+                                etPressure.setBackgroundResource(R.drawable.rect_bg_red_stroke_table);
+                                DialogHelper.warningSnackbar(viewGroup, "气压值应在700hPa~1200hPa之间", DialogHelper.APPEAR_FROM_TOP_TO_DOWN);
+                                return true;
+                            }
                         }
 
                         String strStaff = (String) spinnerStaff.getItems().get(spinnerStaff.getSelectedIndex());
                         if (strStaff.equals("请先下载人员数据")) {
                             spinnerStaff.setBackgroundResource(R.drawable.rect_bg_red_stroke_table);
-                            DialogHelper.warningSnackbar(viewGroup, "司镜人员不能为空", DialogHelper.APPEAR_FROM_TOP_TO_DOWN);
+                            DialogHelper.warningSnackbar(viewGroup, "司镜人员不能为空，请先下载", DialogHelper.APPEAR_FROM_TOP_TO_DOWN);
                             return true;
                         }
                         //恢复原始样式
@@ -378,7 +393,6 @@ public class AddShuizhunxianFragment extends BaseFragment<AddYusheshuizhunxianCo
                 .itemsCallbackMultiChoice(cedianIndices, new MaterialDialog.ListCallbackMultiChoice() {
                     @Override
                     public boolean onSelection(MaterialDialog dialog, Integer[] which, CharSequence[] text) {
-                        KLog.e("1111111111");
                         cedianIndices = which;
                         selectedJidian = Arrays.asList(text);
                         StringBuilder sb = new StringBuilder();
@@ -388,7 +402,6 @@ public class AddShuizhunxianFragment extends BaseFragment<AddYusheshuizhunxianCo
                                 sb.append("/");
                             }
                         }
-                        KLog.e(sb);
 
                         return true;
                     }
@@ -409,6 +422,17 @@ public class AddShuizhunxianFragment extends BaseFragment<AddYusheshuizhunxianCo
                 .negativeText(R.string.dialog_negativeText)
                 .build();
     }
+
+    //响应司镜人员数据
+    @Override
+    public void responseStaff(List<String> mStaffData) {
+        if (mStaffData == null || mStaffData.size() == 0) {
+            spinnerStaff.setItems("请先下载人员数据");
+        } else {
+            spinnerStaff.setItems(mStaffData);
+        }
+    }
+
 
     @Override
     public void responseSave(int rowsAffected) {
@@ -543,7 +567,7 @@ public class AddShuizhunxianFragment extends BaseFragment<AddYusheshuizhunxianCo
 //                }
 //                cedianDialog.setSelectedIndices(cedianIndices);
 //                cedianDialog.show();
-            break;
+                break;
         }
     }
 }

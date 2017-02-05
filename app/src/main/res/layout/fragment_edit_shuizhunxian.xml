@@ -92,11 +92,12 @@
             <TableRow>
 
                 <TextView
+                    android:id="@+id/tv_jidianshu_edit_shuizhunxian_fragment"
                     style="@style/EditShuizhunxian"
                     android:layout_weight="1"
                     android:gravity="right|center_vertical"
                     android:paddingRight="5dp"
-                    android:text="工作基点：" />
+                    android:text="基点：" />
 
                 <TextView
                     android:id="@+id/tv_jidian_edit_shuizhunxian_fragment"
@@ -110,6 +111,7 @@
             <TableRow android:background="@color/material_cyan_50">
 
                 <TextView
+                    android:id="@+id/tv_cedianshu_edit_shuizhunxian_fragment"
                     style="@style/EditShuizhunxian"
                     android:layout_weight="1"
                     android:gravity="right|center_vertical"
@@ -218,7 +220,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:background="@drawable/rect_bg_stroke_table"
-                        android:inputType="numberDecimal"
+                        android:inputType="numberSigned"
                         android:singleLine="true" />
                 </FrameLayout>
 

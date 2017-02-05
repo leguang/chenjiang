@@ -1,27 +1,20 @@
 package com.shtoone.chenjiang.mvp.presenter;
 
-import com.shtoone.chenjiang.common.Constants;
 import com.shtoone.chenjiang.mvp.contract.AddYusheshuizhunxianContract;
 import com.shtoone.chenjiang.mvp.model.entity.db.CedianData;
-import com.shtoone.chenjiang.mvp.model.entity.db.CezhanData;
-import com.shtoone.chenjiang.mvp.model.entity.db.GongdianData;
 import com.shtoone.chenjiang.mvp.model.entity.db.JidianData;
 import com.shtoone.chenjiang.mvp.model.entity.db.StaffData;
 import com.shtoone.chenjiang.mvp.model.entity.db.YusheshuizhunxianData;
 import com.shtoone.chenjiang.mvp.presenter.base.BasePresenter;
-import com.socks.library.KLog;
 
 import org.litepal.crud.DataSupport;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import rx.Observable;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 
 
@@ -41,6 +34,7 @@ public class AddYusheshuizhunxianPresenter extends BasePresenter<AddYusheshuizhu
     public void start() {
         requestJidian();
         requestCedian();
+        requestStaff();
     }
 
     @Override
@@ -100,6 +94,38 @@ public class AddYusheshuizhunxianPresenter extends BasePresenter<AddYusheshuizhu
                             @Override
                             public void _onNext(String[] strings) {
                                 getView().responseCedian(strings);
+                            }
+                        })
+        );
+    }
+
+    @Override
+    public void requestStaff() {
+        mRxManager.add(Observable.create(new Observable.OnSubscribe<List<String>>() {
+                    @Override
+                    public void call(Subscriber<? super List<String>> subscriber) {
+                        List<StaffData> mStaffData = null;
+                        List<String> listStaffName = null;
+                        try {
+                            mStaffData = DataSupport.findAll(StaffData.class);
+                            if (mStaffData.size() > 0) {
+                                listStaffName = new ArrayList<String>();
+                                for (StaffData staffData : mStaffData) {
+                                    listStaffName.add(staffData.getUserName());
+                                }
+                            }
+                            subscriber.onNext(listStaffName);
+                        } catch (Exception ex) {
+                            subscriber.onError(ex);
+                            getView().showError(ex);
+                        }
+                        subscriber.onCompleted();
+                    }
+                }).subscribeOn(Schedulers.computation())
+                        .observeOn(AndroidSchedulers.mainThread()).subscribe(new RxSubscriber<List<String>>() {
+                            @Override
+                            public void _onNext(List<String> staffDatas) {
+                                getView().responseStaff(staffDatas);
                             }
                         })
         );

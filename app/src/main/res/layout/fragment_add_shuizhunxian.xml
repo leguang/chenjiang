@@ -21,6 +21,29 @@
             android:layout_margin="5dp"
             android:padding="0.5dp">
 
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:background="@color/lightest_gray">
+
+                <View
+                    android:layout_width="8dp"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentStart="true"
+                    android:background="#2fa881" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="50dp"
+                    android:text="@string/base_data"
+                    android:textColor="@color/material_yellow_800"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+            </RelativeLayout>
+
             <TableRow>
 
                 <TextView
@@ -203,7 +226,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:background="@drawable/rect_bg_stroke_table"
-                        android:inputType="numberDecimal"
+                        android:inputType="numberSigned"
                         android:singleLine="true" />
                 </FrameLayout>
 
@@ -226,9 +249,29 @@
                     android:paddingLeft="5dp" />
             </TableRow>
 
-            <Space
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="10dp" />
+                android:layout_height="40dp"
+                android:layout_marginTop="10dp"
+                android:background="@color/lightest_gray">
+
+                <View
+                    android:layout_width="8dp"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentStart="true"
+                    android:background="#2fa881" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="50dp"
+                    android:text="@string/line_info"
+                    android:textColor="@color/material_yellow_800"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+            </RelativeLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"

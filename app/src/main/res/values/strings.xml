@@ -82,4 +82,8 @@
     <string name="cedian">测点</string>
     <string name="fance">返测</string>
     <string name="chongce">重测</string>
+
+    <!--添加水准线模块-->
+    <string name="base_data">基础数据</string>
+    <string name="line_info">线路信息</string>
 </resources>

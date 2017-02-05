@@ -13,7 +13,6 @@ import java.util.Map;
  */
 public interface ShuizhunxianContract {
     interface View extends BaseContract.View {
-        void responseData(Map<String, String[]> map);
 
         void responseStaffData(List<String> mStaffData);
 
