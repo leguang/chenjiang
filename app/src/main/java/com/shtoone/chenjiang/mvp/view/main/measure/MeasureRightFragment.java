@@ -21,7 +21,6 @@ import com.lsjwzh.widget.recyclerviewpager.RecyclerViewPager;
 import com.shtoone.chenjiang.R;
 import com.shtoone.chenjiang.common.AudioPlayer;
 import com.shtoone.chenjiang.common.Constants;
-import com.shtoone.chenjiang.common.DialogHelper;
 import com.shtoone.chenjiang.common.ToastUtils;
 import com.shtoone.chenjiang.mvp.contract.measure.MeasureContract;
 import com.shtoone.chenjiang.mvp.model.entity.db.CezhanData;
@@ -33,8 +32,6 @@ import com.socks.library.KLog;
 
 import org.litepal.crud.DataSupport;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 
 import butterknife.BindView;

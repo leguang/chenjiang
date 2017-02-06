@@ -14,7 +14,6 @@ import com.shtoone.chenjiang.R;
 import com.shtoone.chenjiang.common.Constants;
 import com.shtoone.chenjiang.mvp.contract.base.BaseContract;
 import com.shtoone.chenjiang.mvp.model.entity.db.ShuizhunxianData;
-import com.shtoone.chenjiang.mvp.model.entity.db.YusheshuizhunxianData;
 import com.shtoone.chenjiang.mvp.view.base.BaseFragment;
 
 import butterknife.BindView;
@@ -34,8 +33,8 @@ public class DetailLeftFragment extends BaseFragment {
     TextView tvObserveType;
     @BindView(R.id.tv_biaoduan_measure_left_fragment)
     TextView tvBiaoduan;
-    @BindView(R.id.tv_gongdian_measure_left_fragment)
-    TextView tvGongdian;
+    @BindView(R.id.tv_cedian_measure_left_fragment)
+    TextView tvCedian;
     @BindView(R.id.tv_jidian_measure_left_fragment)
     TextView tvJidian;
     @BindView(R.id.tv_weather_measure_left_fragment)
@@ -54,6 +53,10 @@ public class DetailLeftFragment extends BaseFragment {
     TextView tvXinghao;
     @BindView(R.id.tv_shebeihao_measure_left_fragment)
     TextView tvShebeihao;
+    @BindView(R.id.tv_jidianshu_measure_left_fragment)
+    TextView tvJidianshu;
+    @BindView(R.id.tv_cedianshu_measure_left_fragment)
+    TextView tvCedianshu;
     private ShuizhunxianData mShuizhunxianData;
 
     public static DetailLeftFragment newInstance(ShuizhunxianData mShuizhunxianData) {
@@ -105,7 +108,7 @@ public class DetailLeftFragment extends BaseFragment {
             tvBianhao.setText(mShuizhunxianData.getBiaoshi());
             tvRouteType.setText(mShuizhunxianData.getRouteType());
             tvObserveType.setText(mShuizhunxianData.getObserveType());
-            tvJidian.setText(getJidian());
+
             tvWeather.setText(mShuizhunxianData.getWeather());
             tvStaff.setText(mShuizhunxianData.getStaff());
             tvPressure.setText(mShuizhunxianData.getPressure());
@@ -113,16 +116,34 @@ public class DetailLeftFragment extends BaseFragment {
             tvDate.setText(mShuizhunxianData.getXiugaishijian());
             tvBianhao.setText(mShuizhunxianData.getBiaoshi());
         }
-    }
 
-    private String getJidian() {
-        StringBuffer sbJidian = new StringBuffer();
-        String[] arrayJidianAndCedian = mShuizhunxianData.getXianluxinxi().split(",");
-        for (String s : arrayJidianAndCedian) {
-            if (s.contains("jd")) {
-                sbJidian.append(s + "/");
+        //设置基点数和测点数
+        if (!TextUtils.isEmpty(mShuizhunxianData.getJidianshu())) {
+            tvJidianshu.setText("基点(" + mShuizhunxianData.getJidianshu() + ")：");
+        }
+
+        if (!TextUtils.isEmpty(mShuizhunxianData.getCedianshu())) {
+            tvCedianshu.setText("测点(" + mShuizhunxianData.getCedianshu() + ")：");
+        }
+
+        //设置基点和测点
+        if (!TextUtils.isEmpty(mShuizhunxianData.getXianluxinxi())) {
+            StringBuffer sbJidian = new StringBuffer();
+            StringBuffer sbCedian = new StringBuffer();
+            String[] arrayJidianAndCedian = mShuizhunxianData.getXianluxinxi().split(",");
+            for (String s : arrayJidianAndCedian) {
+                if (s.contains("jd")) {
+                    sbJidian.append(s + "/");
+                } else if (s.contains("cd")) {
+                    sbCedian.append(s + "/");
+                }
+            }
+            if (!TextUtils.isEmpty(sbJidian.toString())) {
+                tvJidian.setText(sbJidian.toString().substring(0, sbJidian.toString().length() - 1));
+            }
+            if (!TextUtils.isEmpty(sbCedian.toString())) {
+                tvCedian.setText(sbCedian.toString().substring(0, sbCedian.toString().length() - 1));
             }
         }
-        return sbJidian.toString().substring(0, sbJidian.toString().length() - 1);
     }
 }

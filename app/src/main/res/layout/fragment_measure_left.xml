@@ -77,17 +77,19 @@
             android:paddingLeft="5dp" />
     </TableRow>
 
+
     <TableRow android:background="@color/material_cyan_50">
 
         <TextView
+            android:id="@+id/tv_jidianshu_measure_left_fragment"
             style="@style/MeasureTable"
             android:layout_weight="1"
             android:gravity="right|center_vertical"
             android:paddingRight="5dp"
-            android:text="工点：" />
+            android:text="基点：" />
 
         <TextView
-            android:id="@+id/tv_gongdian_measure_left_fragment"
+            android:id="@+id/tv_jidian_measure_left_fragment"
             style="@style/MeasureTable"
             android:layout_weight="2.5"
             android:gravity="left|center_vertical"
@@ -98,14 +100,15 @@
     <TableRow>
 
         <TextView
+            android:id="@+id/tv_cedianshu_measure_left_fragment"
             style="@style/MeasureTable"
             android:layout_weight="1"
             android:gravity="right|center_vertical"
             android:paddingRight="5dp"
-            android:text="基点：" />
+            android:text="测点：" />
 
         <TextView
-            android:id="@+id/tv_jidian_measure_left_fragment"
+            android:id="@+id/tv_cedian_measure_left_fragment"
             style="@style/MeasureTable"
             android:layout_weight="2.5"
             android:gravity="left|center_vertical"

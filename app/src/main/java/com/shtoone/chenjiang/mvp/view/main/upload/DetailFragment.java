@@ -118,7 +118,6 @@ public class DetailFragment extends BaseFragment {
         }
     }
 
-
     public void startFragment(SupportFragment toFragment) {
         start(toFragment);
     }
@@ -130,7 +129,6 @@ public class DetailFragment extends BaseFragment {
         }
         return super.onBackPressedSupport();
     }
-
 
     @NonNull
     @Override

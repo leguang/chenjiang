@@ -22,7 +22,6 @@ import com.qiangxi.checkupdatelibrary.dialog.UpdateDialog;
 import com.shtoone.chenjiang.BaseApplication;
 import com.shtoone.chenjiang.R;
 import com.shtoone.chenjiang.common.Constants;
-import com.shtoone.chenjiang.common.DialogHelper;
 import com.shtoone.chenjiang.common.ToastUtils;
 import com.shtoone.chenjiang.event.EventData;
 import com.shtoone.chenjiang.mvp.contract.MainContract;
