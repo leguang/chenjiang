@@ -19,8 +19,8 @@ import java.util.Collection;
  * Author：leguang on 2016/11/11 0011 18:50
  * Email：langmanleguang@qq.com
  */
-public class DialogHelper1 {
-    private static final String TAG = DialogHelper1.class.getSimpleName();
+public class DialogHelper {
+    private static final String TAG = DialogHelper.class.getSimpleName();
 
     private static MaterialDialog.Builder builder;
     private static AlertDialog.Builder mBuilder;
