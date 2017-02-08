@@ -22,6 +22,7 @@ import com.qiangxi.checkupdatelibrary.dialog.UpdateDialog;
 import com.shtoone.chenjiang.BaseApplication;
 import com.shtoone.chenjiang.R;
 import com.shtoone.chenjiang.common.Constants;
+import com.shtoone.chenjiang.common.DialogHelper;
 import com.shtoone.chenjiang.common.ToastUtils;
 import com.shtoone.chenjiang.event.EventData;
 import com.shtoone.chenjiang.mvp.contract.MainContract;
@@ -319,7 +320,7 @@ public class MainFragment extends BaseFragment<MainContract.Presenter> implement
                 this.pagination = 0;//说明是第一页，或者是刷新,把页码重置为0，代表第一页。
 
                 mAdapter.removeAllFooterView();
-                if (mYusheshuizhunxianData.size() > Constants.PAGE_SIZE) {
+                if (mYusheshuizhunxianData.size() >= Constants.PAGE_SIZE) {
                     mAdapter.addFooterView(mFooterLoading);
                 }
                 //重新刷新了，就不需要记录选中状态
@@ -343,6 +344,7 @@ public class MainFragment extends BaseFragment<MainContract.Presenter> implement
                 //此处一定要先清除之前加载的FooterView，否则会报错。
                 mAdapter.removeAllFooterView();
                 mAdapter.addFooterView(mFooterNotLoading);
+                mAdapter.notifyDataSetChanged();//这里必须要notify一下，否则会报错，因为我修改了footer。
             }
         }
     }

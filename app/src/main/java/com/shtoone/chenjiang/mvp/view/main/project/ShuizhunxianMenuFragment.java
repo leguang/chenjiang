@@ -91,7 +91,6 @@ public class ShuizhunxianMenuFragment extends BaseFragment<ShuizhunxianMenuContr
         recyclerview.addOnItemTouchListener(new OnItemClickListener() {
             @Override
             public void onSimpleItemClick(BaseQuickAdapter adapter, View view, int position) {
-                ToastUtils.showToast(_mActivity, Integer.toString(position));
                 showProjectContent(position);
             }
         });
@@ -155,7 +154,7 @@ public class ShuizhunxianMenuFragment extends BaseFragment<ShuizhunxianMenuContr
                 this.pagination = 0; //刷明是第一页，或者是刷新,把页码重置为0，代表第一页。
 
                 mAdapter.removeAllFooterView();//先remove再add。
-                if (mShuizhunxianData.size() > Constants.PAGE_SIZE) {
+                if (mShuizhunxianData.size() >= Constants.PAGE_SIZE) {
                     mAdapter.addFooterView(mFooterLoading);
                 }
                 mCurrentPosition = 0;
@@ -177,6 +176,7 @@ public class ShuizhunxianMenuFragment extends BaseFragment<ShuizhunxianMenuContr
                 //此处一定要先清除之前加载的FooterView，否则会报错。
                 mAdapter.removeAllFooterView();
                 mAdapter.addFooterView(mFooterNotLoading);
+                mAdapter.notifyDataSetChanged();//这里必须要notify一下，否则会报错，因为我修改了footer。
             }
         }
     }

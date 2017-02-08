@@ -14,21 +14,15 @@ import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.shtoone.chenjiang.R;
 import com.shtoone.chenjiang.common.Constants;
 import com.shtoone.chenjiang.common.ToastUtils;
-import com.shtoone.chenjiang.event.EventData;
-import com.shtoone.chenjiang.mvp.contract.base.BaseContract;
 import com.shtoone.chenjiang.mvp.contract.project.ShuizhunxianContentContract;
-import com.shtoone.chenjiang.mvp.contract.project.ShuizhunxianMenuContract;
 import com.shtoone.chenjiang.mvp.model.entity.db.ShuizhunxianData;
 import com.shtoone.chenjiang.mvp.model.entity.db.YusheshuizhunxianData;
-import com.shtoone.chenjiang.mvp.presenter.base.BasePresenter;
 import com.shtoone.chenjiang.mvp.presenter.project.ShuizhunxianContentPresenter;
 import com.shtoone.chenjiang.mvp.view.adapter.Decoration;
 import com.shtoone.chenjiang.mvp.view.adapter.ShuizhunxianContentRVAdapter;
-import com.shtoone.chenjiang.mvp.view.adapter.ShuizhunxianMenuRVAdapter;
 import com.shtoone.chenjiang.mvp.view.base.BaseFragment;
 import com.shtoone.chenjiang.mvp.view.main.upload.DetailFragment;
 import com.shtoone.chenjiang.widget.PageStateLayout;
-import com.socks.library.KLog;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -100,12 +94,8 @@ public class ShuizhunxianContentFragment extends BaseFragment<ShuizhunxianConten
         recyclerview.addOnItemTouchListener(new OnItemClickListener() {
             @Override
             public void onSimpleItemClick(BaseQuickAdapter adapter, View view, int position) {
-                ToastUtils.showToast(_mActivity, Integer.toString(position));
-
 
                 EventBus.getDefault().post(DetailFragment.newInstance(mAdapter.getData().get(position)));
-
-
             }
         });
         recyclerview.addItemDecoration(new Decoration(_mActivity, Decoration.VERTICAL_LIST));
@@ -175,6 +165,7 @@ public class ShuizhunxianContentFragment extends BaseFragment<ShuizhunxianConten
                 //此处一定要先清除之前加载的FooterView，否则会报错。
                 mAdapter.removeAllFooterView();
                 mAdapter.addFooterView(mFooterNotLoading);
+                mAdapter.notifyDataSetChanged();//这里必须要notify一下，否则会报错，因为我修改了footer。
             }
         }
     }

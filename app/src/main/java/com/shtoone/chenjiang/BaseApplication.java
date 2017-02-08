@@ -7,6 +7,8 @@ import com.shtoone.chenjiang.common.AppContext;
 import com.shtoone.chenjiang.common.Constants;
 import com.shtoone.chenjiang.exception.AppExceptionHandler;
 import com.shtoone.chenjiang.mvp.model.entity.bean.UserInfoBean;
+import com.shtoone.chenjiang.mvp.model.entity.db.OriginalData;
+import com.shtoone.chenjiang.mvp.model.entity.db.ResultData;
 import com.shtoone.chenjiang.mvp.model.entity.db.ShuizhunxianData;
 import com.shtoone.chenjiang.mvp.model.entity.db.StaffData;
 import com.shtoone.chenjiang.mvp.model.entity.db.YusheshuizhunxianData;
@@ -98,9 +100,9 @@ public class BaseApplication extends LitePalApplication {
 //            boolean isis = mResultData.save();
 //            KLog.e(isis);
 //        }
-//
+////
 //        DataSupport.deleteAll(YusheshuizhunxianData.class);
-//        for (int i = 0; i < 20; i++) {
+//        for (int i = 0; i < 100; i++) {
 //            YusheshuizhunxianData mYusheshuizhunxianData = new YusheshuizhunxianData();
 //            mYusheshuizhunxianData.setXianlubianhao("备注" + (i + 1));
 //            mYusheshuizhunxianData.setJidianshu("状态" + (i + 1));

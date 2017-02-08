@@ -86,4 +86,9 @@
     <!--添加水准线模块-->
     <string name="base_data">基础数据</string>
     <string name="line_info">线路信息</string>
+
+    <!--详情模块-->
+    <string name="detail_data">详情数据</string>
+    <string name="original_data">原始数据</string>
+    <string name="result_data">成果数据</string>
 </resources>

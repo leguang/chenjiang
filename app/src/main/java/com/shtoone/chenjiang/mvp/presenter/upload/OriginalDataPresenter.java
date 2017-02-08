@@ -1,7 +1,7 @@
 package com.shtoone.chenjiang.mvp.presenter.upload;
 
 import com.shtoone.chenjiang.common.Constants;
-import com.shtoone.chenjiang.mvp.contract.upload.MeasuredOriginalDataContract;
+import com.shtoone.chenjiang.mvp.contract.upload.OriginalDataContract;
 import com.shtoone.chenjiang.mvp.model.entity.db.OriginalData;
 import com.shtoone.chenjiang.mvp.presenter.base.BasePresenter;
 
@@ -18,11 +18,11 @@ import rx.schedulers.Schedulers;
  * Author：leguang on 2016/10/14 0014 13:17
  * Email：langmanleguang@qq.com
  */
-public class MeasuredOriginalDataPresenter extends BasePresenter<MeasuredOriginalDataContract.View> implements MeasuredOriginalDataContract.Presenter {
+public class OriginalDataPresenter extends BasePresenter<OriginalDataContract.View> implements OriginalDataContract.Presenter {
 
-    private static final String TAG = MeasuredOriginalDataPresenter.class.getSimpleName();
+    private static final String TAG = OriginalDataPresenter.class.getSimpleName();
 
-    public MeasuredOriginalDataPresenter(MeasuredOriginalDataContract.View mView) {
+    public OriginalDataPresenter(OriginalDataContract.View mView) {
         super(mView);
     }
 

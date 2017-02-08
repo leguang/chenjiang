@@ -88,7 +88,7 @@ public class BluetoothManager {
         if (!TextUtils.isEmpty(strAddress)) {
             KLog.e("连接:" + strAddress);
             //要延迟连接，因为一进某个页面就打开蓝牙，蓝牙还没完全打开就连接会连接不上。
-            rx.Observable.timer(1000, TimeUnit.MILLISECONDS)
+            rx.Observable.timer(1500, TimeUnit.MILLISECONDS)
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(new Action1<Long>() {
                         @Override

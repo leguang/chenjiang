@@ -52,7 +52,8 @@ public class StaffPresenter extends BasePresenter<StaffContract.View> implements
                         }
                     }
                 }).subscribeOn(Schedulers.computation())
-                        .observeOn(AndroidSchedulers.mainThread()).subscribe(new RxSubscriber<List<StaffData>>() {
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(new RxSubscriber<List<StaffData>>() {
                             @Override
                             public void _onNext(List<StaffData> staffDatas) {
                                 getView().refresh(staffDatas, pagination);

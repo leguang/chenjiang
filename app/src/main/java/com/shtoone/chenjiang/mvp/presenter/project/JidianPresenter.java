@@ -52,7 +52,8 @@ public class JidianPresenter extends BasePresenter<JidianContract.View> implemen
                         }
                     }
                 }).subscribeOn(Schedulers.computation())
-                        .observeOn(AndroidSchedulers.mainThread()).subscribe(new RxSubscriber<List<JidianData>>() {
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(new RxSubscriber<List<JidianData>>() {
                             @Override
                             public void _onNext(List<JidianData> mJidianData) {
                                 getView().refresh(mJidianData, pagination);

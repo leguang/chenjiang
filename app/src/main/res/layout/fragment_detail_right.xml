@@ -1,28 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white">
+    android:background="@color/white"
+    android:orientation="vertical">
 
     <include layout="@layout/toolbar" />
 
-    <com.lsjwzh.widget.recyclerviewpager.RecyclerViewPager
-        android:id="@+id/rvp_check_measure_fragment"
+    <FrameLayout
+        android:id="@+id/fl_container_detail_right_fragment"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:clipToPadding="false" />
+        android:layout_height="0dp"
+        android:layout_weight="1" />
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab_check_measure_fragment"
-        android:layout_width="wrap_content"
+    <com.aurelhubert.ahbottomnavigation.AHBottomNavigation
+        android:id="@+id/bn_detail_right_fragment"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_marginBottom="16dp"
-        android:visibility="gone"
-        android:layout_marginRight="16dp"
-        android:src="@drawable/ic_search_red_300_18dp"
-        android:tint="@color/white" />
-</android.support.design.widget.CoordinatorLayout>
+        android:layout_gravity="bottom" />
+</LinearLayout>
 
 
 

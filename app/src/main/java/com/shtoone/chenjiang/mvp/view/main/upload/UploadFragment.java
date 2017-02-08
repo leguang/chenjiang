@@ -19,6 +19,7 @@ import android.widget.ImageView;
 import com.shtoone.chenjiang.BaseApplication;
 import com.shtoone.chenjiang.R;
 import com.shtoone.chenjiang.common.Constants;
+import com.shtoone.chenjiang.common.DialogHelper;
 import com.shtoone.chenjiang.common.ToastUtils;
 import com.shtoone.chenjiang.mvp.contract.upload.UploadContract;
 import com.shtoone.chenjiang.mvp.model.entity.db.ShuizhunxianData;
@@ -233,6 +234,7 @@ public class UploadFragment extends BaseFragment<UploadContract.Presenter> imple
                 //此处一定要先清除之前加载的FooterView，否则会报错。
                 mAdapter.removeAllFooterView();
                 mAdapter.addFooterView(mFooterNotLoading);
+                mAdapter.notifyDataSetChanged();//这里必须要notify一下，否则会报错，因为我修改了footer。
             }
         }
     }

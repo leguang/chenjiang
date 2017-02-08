@@ -14,14 +14,13 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.shtoone.chenjiang.R;
 import com.shtoone.chenjiang.common.Constants;
-import com.shtoone.chenjiang.mvp.contract.upload.MeasuredOriginalDataContract;
-import com.shtoone.chenjiang.mvp.model.entity.db.OriginalData;
-import com.shtoone.chenjiang.mvp.presenter.upload.MeasuredOriginalDataPresenter;
-import com.shtoone.chenjiang.mvp.view.adapter.MeasuredOriginalDataRVAdapter;
+import com.shtoone.chenjiang.mvp.contract.upload.ResultDataContract;
+import com.shtoone.chenjiang.mvp.model.entity.db.ResultData;
+import com.shtoone.chenjiang.mvp.presenter.upload.ResultDataPresenter;
+import com.shtoone.chenjiang.mvp.view.adapter.ResultDataRVAdapter;
 import com.shtoone.chenjiang.mvp.view.base.BaseFragment;
 import com.shtoone.chenjiang.common.ToastUtils;
 import com.shtoone.chenjiang.widget.PageStateLayout;
-import com.socks.library.KLog;
 
 import java.net.ConnectException;
 import java.util.List;
@@ -35,9 +34,9 @@ import in.srain.cube.views.ptr.PtrFrameLayout;
  * Author：leguang on 2016/10/9 0009 15:49
  * Email：langmanleguang@qq.com
  */
-public class MeasuredOriginalDataFragment extends BaseFragment<MeasuredOriginalDataContract.Presenter> implements MeasuredOriginalDataContract.View {
+public class ResultDataFragment extends BaseFragment<ResultDataContract.Presenter> implements ResultDataContract.View {
 
-    private static final String TAG = MeasuredOriginalDataFragment.class.getSimpleName();
+    private static final String TAG = ResultDataFragment.class.getSimpleName();
     @BindView(R.id.recyclerview)
     RecyclerView recyclerview;
     @BindView(R.id.pagestatelayout)
@@ -46,21 +45,21 @@ public class MeasuredOriginalDataFragment extends BaseFragment<MeasuredOriginalD
     PtrFrameLayout ptrframelayout;
     @BindView(R.id.fab)
     FloatingActionButton fab;
-    private MeasuredOriginalDataRVAdapter mAdapter;
+    private ResultDataRVAdapter mAdapter;
     private LinearLayoutManager mLinearLayoutManager;
     private int lastVisibleItemPosition;
     private View mFooterLoading, mFooterNotLoading, mFooterError;
     private int pagination = 0;
     private boolean isLoading;
 
-    public static MeasuredOriginalDataFragment newInstance() {
-        return new MeasuredOriginalDataFragment();
+    public static ResultDataFragment newInstance() {
+        return new ResultDataFragment();
     }
 
     @NonNull
     @Override
-    protected MeasuredOriginalDataContract.Presenter createPresenter() {
-        return new MeasuredOriginalDataPresenter(this);
+    protected ResultDataContract.Presenter createPresenter() {
+        return new ResultDataPresenter(this);
     }
 
     @Nullable
@@ -68,7 +67,6 @@ public class MeasuredOriginalDataFragment extends BaseFragment<MeasuredOriginalD
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_measured_data_list, container, false);
         ButterKnife.bind(this, view);
-        //这几个view必须在注入view之后，否则(ViewGroup) recyclerview.getParent()会因recyclerview为空而报异常。
         mFooterLoading = getLayoutInflater(savedInstanceState).inflate(R.layout.item_footer_loading, (ViewGroup) recyclerview.getParent(), false);
         mFooterNotLoading = getLayoutInflater(savedInstanceState).inflate(R.layout.item_footer_not_loading, (ViewGroup) recyclerview.getParent(), false);
         mFooterError = getLayoutInflater(savedInstanceState).inflate(R.layout.item_footer_error, (ViewGroup) recyclerview.getParent(), false);
@@ -99,7 +97,7 @@ public class MeasuredOriginalDataFragment extends BaseFragment<MeasuredOriginalD
                 ToastUtils.showToast(_mActivity, Integer.toString(position));
             }
         });
-        mAdapter = new MeasuredOriginalDataRVAdapter();
+        mAdapter = new ResultDataRVAdapter();
         mAdapter.removeAllFooterView();
         recyclerview.setAdapter(mAdapter);
     }
@@ -160,22 +158,17 @@ public class MeasuredOriginalDataFragment extends BaseFragment<MeasuredOriginalD
     }
 
     @Override
-    public void response(List<OriginalData> mOriginalData, int pagination) {
-        KLog.e("mOriginalData::" + mOriginalData.size());
-        if (mOriginalData.size() > 0) {
+    public void response(List<ResultData> mResultData, int pagination) {
+        if (mResultData.size() > 0) {
             if (pagination == 0) {
-                //说明是第一页，或者是刷新,把页码重置为0，代表第一页。
-                if (mOriginalData.size() >= Constants.PAGE_SIZE) {
-                    mAdapter.removeAllFooterView();
+                this.pagination = 0;//说明是第一页，或者是刷新,把页码重置为0，代表第一页。
+                mAdapter.removeAllFooterView();
+                if (mResultData.size() >= Constants.PAGE_SIZE) {
                     mAdapter.addFooterView(mFooterLoading);
                 }
-                this.pagination = 0;
-                mAdapter.setNewData(mOriginalData);
-                KLog.e("setNewData::");
-                //设置一下会重新刷新整个item的位置，即使不是第一个item位置刷新，也会重新刷新定位到第一个。
-                recyclerview.setAdapter(mAdapter);
+                mAdapter.setNewData(mResultData);
             } else {
-                mAdapter.addData(mOriginalData);
+                mAdapter.addData(mResultData);
             }
             //靠这个参数控制最后不需要请求数据
             isLoading = false;
@@ -186,6 +179,7 @@ public class MeasuredOriginalDataFragment extends BaseFragment<MeasuredOriginalD
                 //此处一定要先清除之前加载的FooterView，否则会报错。
                 mAdapter.removeAllFooterView();
                 mAdapter.addFooterView(mFooterNotLoading);
+                mAdapter.notifyDataSetChanged();//这里必须要notify一下，否则会报错，因为我修改了footer。
             }
         }
     }

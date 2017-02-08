@@ -19,6 +19,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.shtoone.chenjiang.R;
+import com.shtoone.chenjiang.common.DialogHelper;
 import com.shtoone.chenjiang.mvp.contract.setting.BluetoothContract;
 import com.shtoone.chenjiang.mvp.presenter.setting.BluetoothPresenter;
 import com.shtoone.chenjiang.mvp.view.base.BaseFragment;

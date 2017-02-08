@@ -108,12 +108,6 @@ public class StaffFragment extends BaseLazyFragment<StaffContract.Presenter> imp
         });
         setAdapter();
         setLoadMore();
-        recyclerview.addOnItemTouchListener(new OnItemClickListener() {
-            @Override
-            public void onSimpleItemClick(BaseQuickAdapter adapter, View view, int position) {
-                ToastUtils.showToast(_mActivity, Integer.toString(position));
-            }
-        });
 
         recyclerview.setAdapter(mAdapter);
         initPageStateLayout(pagestatelayout);
@@ -210,6 +204,7 @@ public class StaffFragment extends BaseLazyFragment<StaffContract.Presenter> imp
                 //此处一定要先清除之前加载的FooterView，否则会报错。
                 mAdapter.removeAllFooterView();
                 mAdapter.addFooterView(mFooterNotLoading);
+                mAdapter.notifyDataSetChanged();//这里必须要notify一下，否则会报错，因为我修改了footer。
             }
         }
     }

@@ -24,9 +24,9 @@ import me.yokeyword.fragmentation_swipeback.SwipeBackActivity;
  */
 public abstract class BaseActivity<P extends BaseContract.Presenter> extends SwipeBackActivity {
 
-    public P mPresenter;
-
     private static final String TAG = BaseActivity.class.getSimpleName();
+
+    public P mPresenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,13 +83,13 @@ public abstract class BaseActivity<P extends BaseContract.Presenter> extends Swi
     @Override
     protected void onResume() {
         super.onResume();
-        MobclickAgent.onResume(this);
+//        MobclickAgent.onResume(this);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        MobclickAgent.onPause(this);
+//        MobclickAgent.onPause(this);
     }
 
     @Override

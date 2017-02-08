@@ -8,10 +8,10 @@ import com.shtoone.chenjiang.mvp.model.entity.db.ResultData;
  * Author：leguang on 2016/10/9 0009 15:49
  * Email：langmanleguang@qq.com
  */
-public class MeasuredResultDataRVAdapter extends BaseQuickAdapter<ResultData, BaseViewHolder> {
-    private static final String TAG = MeasuredResultDataRVAdapter.class.getSimpleName();
+public class ResultDataRVAdapter extends BaseQuickAdapter<ResultData, BaseViewHolder> {
+    private static final String TAG = ResultDataRVAdapter.class.getSimpleName();
 
-    public MeasuredResultDataRVAdapter() {
+    public ResultDataRVAdapter() {
         super(R.layout.item_rv_measured_result_data_fragment, null);
     }
 

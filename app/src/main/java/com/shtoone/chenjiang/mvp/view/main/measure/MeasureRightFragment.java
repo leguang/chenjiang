@@ -21,6 +21,7 @@ import com.lsjwzh.widget.recyclerviewpager.RecyclerViewPager;
 import com.shtoone.chenjiang.R;
 import com.shtoone.chenjiang.common.AudioPlayer;
 import com.shtoone.chenjiang.common.Constants;
+import com.shtoone.chenjiang.common.DialogHelper;
 import com.shtoone.chenjiang.common.ToastUtils;
 import com.shtoone.chenjiang.mvp.contract.measure.MeasureContract;
 import com.shtoone.chenjiang.mvp.model.entity.db.CezhanData;
@@ -46,12 +47,8 @@ public class MeasureRightFragment extends BaseFragment<MeasureContract.Presenter
     private static final String TAG = MeasureRightFragment.class.getSimpleName();
     @BindView(R.id.toolbar_toolbar)
     Toolbar toolbar;
-    @BindView(R.id.bt_jidian_measure_right_fragment)
-    Button btJidian;
     @BindView(R.id.bt_zhuandian_measure_right_fragment)
     Button btZhuandian;
-    @BindView(R.id.bt_cedian_measure_right_fragment)
-    Button btCedian;
     @BindView(R.id.bt_chongce_measure_right_fragment)
     Button btChongce;
     @BindView(R.id.fab)
@@ -214,8 +211,7 @@ public class MeasureRightFragment extends BaseFragment<MeasureContract.Presenter
     public void showLoading() {
     }
 
-    @OnClick({R.id.bt_jidian_measure_right_fragment, R.id.bt_zhuandian_measure_right_fragment,
-            R.id.bt_cedian_measure_right_fragment, R.id.bt_chongce_measure_right_fragment,
+    @OnClick({R.id.bt_zhuandian_measure_right_fragment, R.id.bt_chongce_measure_right_fragment,
             R.id.fab, R.id.tv_connect_measure_right_fragment})
     public void onClick(View view) {
         mRecyclerView.scrollToPosition(mYusheshuizhunxianData.getMeasurePosition());
@@ -229,14 +225,6 @@ public class MeasureRightFragment extends BaseFragment<MeasureContract.Presenter
                 }
                 break;
 
-            case R.id.bt_jidian_measure_right_fragment:
-                DialogHelper.dialogList(_mActivity, 0, R.string.dialog_select_jidian, listJidianBianhao, R.string.dialog_negativeText, 0, new DialogHelper.ListCall() {
-                    @Override
-                    public void onSelection(Dialog dialog, View itemView, int which, CharSequence text) {
-
-                    }
-                });
-                break;
             case R.id.bt_zhuandian_measure_right_fragment:
                 new AlertDialog.Builder(_mActivity)
                         .setIcon(R.drawable.ic_error_outline_red_400_48dp)
@@ -253,9 +241,7 @@ public class MeasureRightFragment extends BaseFragment<MeasureContract.Presenter
                         })
                         .show();
                 break;
-            case R.id.bt_cedian_measure_right_fragment:
 
-                break;
             case R.id.bt_chongce_measure_right_fragment:
                 new AlertDialog.Builder(_mActivity)
                         .setIcon(R.drawable.ic_error_outline_red_400_48dp)

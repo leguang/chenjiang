@@ -14,6 +14,7 @@ import android.widget.RadioGroup;
 
 import com.dd.CircularProgressButton;
 import com.shtoone.chenjiang.R;
+import com.shtoone.chenjiang.common.DialogHelper;
 import com.shtoone.chenjiang.mvp.contract.setting.SettingContract;
 import com.shtoone.chenjiang.mvp.presenter.setting.SettingPresenter;
 import com.shtoone.chenjiang.mvp.view.base.BaseFragment;
