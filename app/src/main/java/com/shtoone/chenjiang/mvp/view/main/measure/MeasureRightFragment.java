@@ -245,8 +245,8 @@ public class MeasureRightFragment extends BaseFragment<MeasureContract.Presenter
             case R.id.bt_chongce_measure_right_fragment:
                 new AlertDialog.Builder(_mActivity)
                         .setIcon(R.drawable.ic_error_outline_red_400_48dp)
-                        .setTitle(R.string.dialog_title_exit)
-                        .setMessage(R.string.dialog_content_exit)
+                        .setTitle(R.string.dialog_title_remeasure)
+                        .setMessage(R.string.dialog_content_remeasure)
                         .setNegativeButton(R.string.dialog_negativeText, null)
                         .setPositiveButton(R.string.dialog_positiveText, new DialogInterface.OnClickListener() {
                             @Override
