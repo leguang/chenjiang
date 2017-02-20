@@ -3,10 +3,12 @@ package com.shtoone.chenjiang.mvp.presenter;
 import com.shtoone.chenjiang.common.Constants;
 import com.shtoone.chenjiang.mvp.contract.ShuizhunxianContract;
 import com.shtoone.chenjiang.mvp.model.entity.db.CezhanData;
+import com.shtoone.chenjiang.mvp.model.entity.db.JidianData;
 import com.shtoone.chenjiang.mvp.model.entity.db.ShuizhunxianData;
 import com.shtoone.chenjiang.mvp.model.entity.db.StaffData;
 import com.shtoone.chenjiang.mvp.model.entity.db.YusheshuizhunxianData;
 import com.shtoone.chenjiang.mvp.presenter.base.BasePresenter;
+import com.socks.library.KLog;
 
 import org.litepal.crud.DataSupport;
 
@@ -85,7 +87,19 @@ public class EditShuizhunxianPresenter extends BasePresenter<ShuizhunxianContrac
                                 mShuizhunxianData.save();
 
                                 //****************以下是生成测站的数据信息***************************
+
                                 String[] arrayJidianAndCedian = mYusheshuizhunxianData.getXianluxinxi().split(",");
+
+
+                                JidianData mStartJidian = DataSupport.where("name = ? ", arrayJidianAndCedian[0])
+                                        .findFirst(JidianData.class);
+
+                                KLog.e("mStartJidian::" + mStartJidian.getChushigaocheng());
+
+                                JidianData mEndJidian = DataSupport.where("name = ? ", arrayJidianAndCedian[arrayJidianAndCedian.length - 1])
+                                        .findFirst(JidianData.class);
+                                KLog.e("mEndJidian::" + mEndJidian.getChushigaocheng());
+
                                 int intNumber = 0;
                                 List<CezhanData> listCezhan = new ArrayList<>();
                                 //生成往测数据
@@ -93,6 +107,10 @@ public class EditShuizhunxianPresenter extends BasePresenter<ShuizhunxianContrac
                                     intNumber++;
                                     CezhanData mCezhanData = new CezhanData();
                                     mCezhanData.setNumber(intNumber);
+                                    if (i == 0) {
+                                        mCezhanData.setFirst(true);
+                                    }
+
                                     mCezhanData.setShuizhunxianID(mShuizhunxianData.getId());
                                     mCezhanData.setMeasureDirection(Constants.wangce);
                                     if (intNumber % 2 == 0) {
@@ -102,6 +120,9 @@ public class EditShuizhunxianPresenter extends BasePresenter<ShuizhunxianContrac
                                     }
                                     mCezhanData.setQianshi(arrayJidianAndCedian[i + 1]);
                                     mCezhanData.setHoushi(arrayJidianAndCedian[i]);
+                                    if (mStartJidian != null) {
+                                        mCezhanData.setChushigaochengzhi(mStartJidian.getChushigaocheng());
+                                    }
                                     listCezhan.add(mCezhanData);
                                 }
                                 //生成返测数据
@@ -109,6 +130,9 @@ public class EditShuizhunxianPresenter extends BasePresenter<ShuizhunxianContrac
                                     intNumber++;
                                     CezhanData mCezhanData = new CezhanData();
                                     mCezhanData.setNumber(intNumber);
+                                    if (i == arrayJidianAndCedian.length - 1) {
+                                        mCezhanData.setFirst(true);
+                                    }
                                     mCezhanData.setShuizhunxianID(mShuizhunxianData.getId());
                                     mCezhanData.setMeasureDirection(Constants.fance);
                                     if (intNumber % 2 == 0) {
@@ -118,10 +142,17 @@ public class EditShuizhunxianPresenter extends BasePresenter<ShuizhunxianContrac
                                     }
                                     mCezhanData.setQianshi(arrayJidianAndCedian[i - 1]);
                                     mCezhanData.setHoushi(arrayJidianAndCedian[i]);
+                                    if (mEndJidian != null) {
+                                        mCezhanData.setChushigaochengzhi(mEndJidian.getChushigaocheng());
+                                    }
                                     listCezhan.add(mCezhanData);
                                 }
                                 DataSupport.deleteAll(CezhanData.class, "shuizhunxianID = ? ", String.valueOf(mShuizhunxianData.getId()));
                                 DataSupport.saveAll(listCezhan);
+
+                                for (CezhanData cezhanData : listCezhan) {
+                                    KLog.e(cezhanData.isFirst());
+                                }
 
                             } else {
                                 mShuizhunxianData = DataSupport.where("yusheshuizhunxianID = ? and chuangjianshijian = ? "

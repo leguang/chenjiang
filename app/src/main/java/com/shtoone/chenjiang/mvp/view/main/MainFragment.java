@@ -221,7 +221,7 @@ public class MainFragment extends BaseFragment<MainContract.Presenter> implement
             public void onLeftClick(View view, final int position) {
                 KLog.e("onLeftClick" + position);
                 DialogHelper.dialog(_mActivity, R.drawable.ic_error_outline_red_400_48dp,
-                        R.string.dialog_title_delete, R.string.dialog_delete_shuizhunxian, R.string.dialog_positiveText,
+                        R.string.dialog_title_delete, R.string.dialog_content_delete_shuizhunxian, R.string.dialog_positiveText,
                         R.string.dialog_negativeText, new DialogHelper.Call() {
                             @Override
                             public void onNegative() {

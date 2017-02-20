@@ -8,7 +8,7 @@ import java.text.DecimalFormat;
 /**
  * Author：leguang on 2016/10/9 0009 15:49
  * Email：langmanleguang@qq.com
- * <p/>
+ * <p>
  * 后视距和：从第1测站开始，到当前测站，所有后视距离累计之和  ∑[(B1HD+B2HD)/2]
  * 前视距和：从第1测站开始，到当前测站，所有前视距离累计之和  ∑[(F1HD+F2HD)/2]
  * 高差1：当前测站第一次后尺读数减前尺读数，也就是图上的 B1R-F1R
@@ -48,15 +48,17 @@ public class Formula {
     }
 
     private void initData(CezhanData mCezhanData) {
-        this.b1hd = Float.parseFloat(mCezhanData.getB1hd());
-        this.b2hd = Float.parseFloat(mCezhanData.getB2hd());
-        this.b1r = Float.parseFloat(mCezhanData.getB1r());
-        this.b2r = Float.parseFloat(mCezhanData.getB2r());
-        this.f1hd = Float.parseFloat(mCezhanData.getF1hd());
-        this.f2hd = Float.parseFloat(mCezhanData.getF2hd());
-        this.f1r = Float.parseFloat(mCezhanData.getF1r());
-        this.f2r = Float.parseFloat(mCezhanData.getF2r());
-
+        try {
+            this.b1hd = Float.parseFloat(mCezhanData.getB1hd());
+            this.b2hd = Float.parseFloat(mCezhanData.getB2hd());
+            this.b1r = Float.parseFloat(mCezhanData.getB1r());
+            this.b2r = Float.parseFloat(mCezhanData.getB2r());
+            this.f1hd = Float.parseFloat(mCezhanData.getF1hd());
+            this.f2hd = Float.parseFloat(mCezhanData.getF2hd());
+            this.f1r = Float.parseFloat(mCezhanData.getF1r());
+            this.f2r = Float.parseFloat(mCezhanData.getF2r());
+        }catch (Exception e){
+        }
         KLog.e("init：：" + b1hd);
         KLog.e("init：：" + b2hd);
         KLog.e("init：：" + b1r);
@@ -93,9 +95,9 @@ public class Formula {
     }
 
     //高程值
-//    public float gaochengzhi() {
-//        return beforeGaoCheng + getCeZhanDifferenceHeighte();
-//    }
+    public String gaochengzhi(float gaochengzhi) {
+        return mDecimalFormat.format(gaochengzhi + ((b1r - f1r + b2r - f2r) / 2));
+    }
 
     //FR读数差
     public String frdushucha() {

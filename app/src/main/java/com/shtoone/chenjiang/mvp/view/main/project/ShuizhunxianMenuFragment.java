@@ -13,7 +13,6 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.shtoone.chenjiang.R;
 import com.shtoone.chenjiang.common.Constants;
-import com.shtoone.chenjiang.common.ToastUtils;
 import com.shtoone.chenjiang.mvp.contract.project.ShuizhunxianMenuContract;
 import com.shtoone.chenjiang.mvp.model.entity.db.YusheshuizhunxianData;
 import com.shtoone.chenjiang.mvp.presenter.project.ShuizhunxianMenuPresenter;
@@ -21,8 +20,6 @@ import com.shtoone.chenjiang.mvp.view.adapter.ShuizhunxianMenuRVAdapter;
 import com.shtoone.chenjiang.mvp.view.base.BaseFragment;
 import com.shtoone.chenjiang.widget.PageStateLayout;
 import com.socks.library.KLog;
-
-import org.greenrobot.eventbus.EventBus;
 
 import java.net.ConnectException;
 import java.util.List;

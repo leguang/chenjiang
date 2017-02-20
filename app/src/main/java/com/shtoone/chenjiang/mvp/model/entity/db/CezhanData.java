@@ -28,12 +28,14 @@ public class CezhanData extends DataSupport {
     private String gaocha2;
     private String cezhangaocha;
     private String gaochengzhi;
+    private String chushigaochengzhi;
     private String frdushucha;
     private String brdushucha;
     private String f1time;
     private String f2time;
     private String b1time;
     private String b2time;
+    private boolean first;
     private long shuizhunxianID;
 
     public long getId() {
@@ -196,6 +198,14 @@ public class CezhanData extends DataSupport {
         this.gaochengzhi = gaochengzhi;
     }
 
+    public String getChushigaochengzhi() {
+        return chushigaochengzhi;
+    }
+
+    public void setChushigaochengzhi(String chushigaochengzhi) {
+        this.chushigaochengzhi = chushigaochengzhi;
+    }
+
     public String getFrdushucha() {
         return frdushucha;
     }
@@ -250,6 +260,14 @@ public class CezhanData extends DataSupport {
 
     public void setB2time(String b2time) {
         this.b2time = b2time;
+    }
+
+    public boolean isFirst() {
+        return first;
+    }
+
+    public void setFirst(boolean first) {
+        this.first = first;
     }
 
     public void clean() {

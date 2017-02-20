@@ -55,6 +55,8 @@ public class BluetoothPresenter extends BasePresenter<BluetoothContract.View> im
 
     @Override
     public void sendData(byte[] data) {
+        KLog.e("333333333333333::"+data.length);
+        KLog.e(new String(data));
         mBluetoothManager.sendData(data);
     }
 

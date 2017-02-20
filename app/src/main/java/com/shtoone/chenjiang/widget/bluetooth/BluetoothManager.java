@@ -1,14 +1,11 @@
 package com.shtoone.chenjiang.widget.bluetooth;
 
 import android.app.Activity;
-import android.app.DatePickerDialog;
 import android.bluetooth.BluetoothDevice;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.database.Observable;
 import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
-import android.util.Log;
 
 import com.shtoone.chenjiang.BaseApplication;
 import com.shtoone.chenjiang.R;
@@ -138,6 +135,8 @@ public class BluetoothManager {
     }
 
     public void sendData(byte[] data) {
+        KLog.e("44444444444::"+data.length);
+        KLog.e(new String(data));
         mBluetooth.sendData(data);
     }
 

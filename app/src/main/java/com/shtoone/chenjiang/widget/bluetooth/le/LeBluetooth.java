@@ -6,6 +6,7 @@ import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothGatt;
 import android.bluetooth.BluetoothGattCallback;
 import android.bluetooth.BluetoothGattCharacteristic;
+import android.bluetooth.BluetoothGattDescriptor;
 import android.bluetooth.BluetoothGattService;
 import android.bluetooth.BluetoothProfile;
 import android.content.Context;
@@ -47,7 +48,8 @@ public class LeBluetooth implements IBluetooth {
     public static final int STATE_CONNECTED = 3;    // now connected to a remote device
     private final Context mContext;
     private int mState;
-    private static final UUID UUID_DEVICE = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
+    private static final UUID UUID_SERVICE = UUID.fromString("00001101-0000-1000-8000-00805f9b34fb");
+    private static final String UUID_BLEGATTCHAR = "00001102-0000-1000-8000-00805f9b34fb";
     public RxManager mRxManager = new RxManager();
     private BluetoothListener mListener;
     private BluetoothAdapter mBluetoothAdapter;
@@ -58,6 +60,7 @@ public class LeBluetooth implements IBluetooth {
     private BluetoothGatt mBluetoothGatt;
     private Handler mHandler = new Handler(Looper.getMainLooper());
     private BluetoothGattCharacteristic mBleGattChar;
+    int number = 0;
 
     public LeBluetooth(Context context) {
         mContext = context;
@@ -229,6 +232,8 @@ public class LeBluetooth implements IBluetooth {
 
     @Override
     public void sendData(byte[] data) {
+        KLog.e(new String(data));
+
         if (mState != STATE_CONNECTED) {
             return;
         }
@@ -236,7 +241,9 @@ public class LeBluetooth implements IBluetooth {
         if (mBluetoothGatt != null && mBleGattChar != null) {
             mBleGattChar.setValue(data);
             boolean isSend = mBluetoothGatt.writeCharacteristic(mBleGattChar);
-            Log.d(TAG, "发送：" + (isSend ? "成功" : "失败"));
+            KLog.e(data.toString());
+            KLog.e(new String(data));
+            Log.e(TAG, "发送：" + (isSend ? "成功" : "失败"));
         }
 
     }
@@ -325,7 +332,7 @@ public class LeBluetooth implements IBluetooth {
                         .filter(new Func1<BluetoothGattCharacteristic, Boolean>() {
                             @Override
                             public Boolean call(BluetoothGattCharacteristic bleGattChar) {
-                                KLog.e("Char::" + bleGattChar.getUuid().toString());
+                                KLog.e("bleGattCharUUID::" + bleGattChar.getUuid().toString());
 //                                return bleGattChar.getUuid().toString().equals(UUID_DEVICE);
                                 return true;
 
@@ -334,31 +341,125 @@ public class LeBluetooth implements IBluetooth {
                         .subscribe(new Action1<BluetoothGattCharacteristic>() {
                             @Override
                             public void call(BluetoothGattCharacteristic bleGattChar) {
-                                KLog.e("Char::" + bleGattChar.getUuid().toString());
+                                KLog.e("最后::" + bleGattChar.getUuid().toString());
+                                if (bleGattChar.getUuid().toString().equals(UUID_BLEGATTCHAR)) {
+                                    gatt.setCharacteristicNotification(bleGattChar, true);//设置开启接受蓝牙数据
 
-                                gatt.setCharacteristicNotification(bleGattChar, true);//设置开启接受蓝牙数据
+
+                                    //明天再遍历一遍看看descriptor有哪些
+                                    //实在不行就都设置
+//                                    BluetoothGattDescriptor descriptor = bleGattChar
+//                                            .getDescriptor(CLIENT_CHARACTERISTIC_CONFIG_DESCRIPTOR_UUID);
+//                                    descriptor.setValue(BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE);
+
+
+                                    List<BluetoothGattDescriptor> descriptors = bleGattChar.getDescriptors();
+                                    for (BluetoothGattDescriptor descriptor : descriptors) {
+
+                                        descriptor.setValue(BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE);
+                                        mBluetoothGatt.writeDescriptor(descriptor);
+                                    }
+
+                                }
                             }
                         });
 
 
             } else if (status == BluetoothGatt.GATT_FAILURE) {
-                KLog.d("failure find services discovered.");
+                KLog.e("failure find services discovered.");
             }
         }
 
+//        @Override
+//        public void onCharacteristicRead(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic, int status) {
+//            super.onCharacteristicRead(gatt, characteristic, status);
+//             String receiveData = new String(characteristic.getValue());
+//            KLog.e("收到蓝牙发来数据：" + receiveData);
+//        }
+
         @Override
         public void onCharacteristicChanged(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic) {
-            KLog.e("onCharacteristicChanged");
-            final String receiveData = new String(characteristic.getValue());
-            KLog.d("收到蓝牙发来数据：" + receiveData);
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    if (mListener != null) {
-                        mListener.onDataReceived(receiveData);
-                    }
-                }
-            });
+            BluetoothGattCharacteristic charat = gatt.getService(UUID.fromString("00001101-0000-1000-8000-00805f9b34fb"))
+                    .getCharacteristic(UUID.fromString("00001102-0000-1000-8000-00805f9b34fb"));
+
+            KLog.e("临时：" + charat.getUuid().toString());
+            KLog.e("临时：" + characteristic.getUuid().toString());
+
+
+            //******************************************
+            if (characteristic.getUuid().toString().equals(UUID_BLEGATTCHAR)) {
+                final String receiveData = new String(characteristic.getValue());
+                KLog.e("收到蓝牙发来数据：" + receiveData);
+            }
+
+
+            int flag = characteristic.getProperties();
+            int format = -1;
+            if ((flag & 0x01) != 0) {
+                format = BluetoothGattCharacteristic.FORMAT_UINT16;
+                Log.e(TAG, "Heart rate format UINT16.");
+            } else {
+                format = BluetoothGattCharacteristic.FORMAT_UINT8;
+                Log.e(TAG, "Heart rate format UINT8.");
+            }
+            final int heartRate = characteristic.getIntValue(format, 1);
+            Log.e(TAG, String.format("Received heart rate: %d", heartRate));
+
+            // For all other profiles, writes the data formatted in HEX.
+            final byte[] data = characteristic.getValue();
+            if (data != null && data.length > 0) {
+                final StringBuilder stringBuilder = new StringBuilder(data.length);
+                for (byte byteChar : data)
+                    stringBuilder.append(String.format("%02X ", byteChar));
+//                    intent.putExtra(EXTRA_DATA, new String(data) + "\n" + stringBuilder.toString());
+            }
+            if (data[0] == 'A') {
+                return;
+            } else {
+
+                Log.i("yq", "data字符串：" + new String(data));
+            }
+
+
+            //*******************
+
+
+            number++;
+            KLog.e("number::" + number);
+//            KLog.e("onCharacteristicChanged");
+//            KLog.e("characteristic.getValue()::" + characteristic.getValue());
+//            KLog.e("characteristic.getValue()::" + characteristic.getValue().toString());
+//            final String receiveData = new String(characteristic.getValue());
+//            KLog.e("收到蓝牙发来数据：" + receiveData);
+//            runOnUiThread(new Runnable() {
+//                @Override
+//                public void run() {
+//                    if (mListener != null) {
+//                        mListener.onDataReceived(receiveData);
+//                    }
+//                }
+//            });
+//
+//            //*****************************************
+//            try {
+//                long timestamp = System.currentTimeMillis();
+//                String fileName = "ble-" + timestamp + ".log";
+//                if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
+//                    String path = Environment.getExternalStorageDirectory().getPath() + "/BLE/";
+//                    Log.d(TAG, "path=" + path);
+//                    File dir = new File(path);
+//                    if (!dir.exists()) {
+//                        dir.mkdirs();
+//                    }
+//                    FileOutputStream fos = new FileOutputStream(path + fileName);
+//                    fos.write(characteristic.getValue());
+//                    fos.close();
+//                }
+//            } catch (Exception e) {
+//                Log.e(TAG, "an error occured while writing file...", e);
+//            }
+//            //**************************************
+
         }
     };
 }

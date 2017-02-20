@@ -381,6 +381,7 @@ public class MeasureRightFragment extends BaseFragment<MeasureContract.Presenter
         super.onDestroy();
     }
 
+    //这部分放到P层去
     private void storeData() {
         mYusheshuizhunxianData.save();
         DataSupport.saveAll(mAdapter.getData());
@@ -407,6 +408,9 @@ public class MeasureRightFragment extends BaseFragment<MeasureContract.Presenter
     }
 
     private void pingchaDialog() {
+        /**
+         * 待平差应该是在   测量完成且数据无异常且合格的情况下设置*******************************************************************************
+         */
         mYusheshuizhunxianData.setStatus(Constants.status_daipingcha);
         if (pingchaDialog == null) {
             pingchaDialog = new AlertDialog.Builder(_mActivity)
@@ -419,7 +423,7 @@ public class MeasureRightFragment extends BaseFragment<MeasureContract.Presenter
                         public void onClick(DialogInterface dialogInterface, int i) {
                             ToastUtils.showToast(_mActivity, "正在进行平差处理，请稍后……");
 
-                            //平差完了之后就是待上传
+                            //平差完了之后就是待上传  平差完之后记得清楚掉转点数这样的过度临时数据
 
                             mYusheshuizhunxianData.setStatus(Constants.status_daishanchu);
                             storeData();

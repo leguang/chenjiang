@@ -13,7 +13,6 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.shtoone.chenjiang.R;
 import com.shtoone.chenjiang.common.Constants;
-import com.shtoone.chenjiang.common.ToastUtils;
 import com.shtoone.chenjiang.mvp.contract.project.ShuizhunxianContentContract;
 import com.shtoone.chenjiang.mvp.model.entity.db.ShuizhunxianData;
 import com.shtoone.chenjiang.mvp.model.entity.db.YusheshuizhunxianData;

@@ -10,8 +10,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.chad.library.adapter.base.BaseQuickAdapter;
-import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.shtoone.chenjiang.R;
 import com.shtoone.chenjiang.common.Constants;
 import com.shtoone.chenjiang.mvp.contract.project.JidianContract;
@@ -19,8 +17,8 @@ import com.shtoone.chenjiang.mvp.model.entity.db.JidianData;
 import com.shtoone.chenjiang.mvp.presenter.project.JidianPresenter;
 import com.shtoone.chenjiang.mvp.view.adapter.JidianRVAdapter;
 import com.shtoone.chenjiang.mvp.view.base.BaseLazyFragment;
+import com.shtoone.chenjiang.mvp.view.main.DownloadFragment;
 import com.shtoone.chenjiang.utils.DensityUtils;
-import com.shtoone.chenjiang.common.ToastUtils;
 import com.shtoone.chenjiang.widget.PageStateLayout;
 
 import java.net.ConnectException;
@@ -196,6 +194,12 @@ public class JidianFragment extends BaseLazyFragment<JidianContract.Presenter> i
             isLoading = false;
         } else {
             if (pagination == 0) {
+                pagestatelayout.setOnRetryClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        start(DownloadFragment.newInstance());
+                    }
+                });
                 pagestatelayout.showEmpty();
             } else {
                 //此处一定要先清除之前加载的FooterView，否则会报错。

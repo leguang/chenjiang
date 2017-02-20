@@ -13,15 +13,11 @@ import com.shtoone.chenjiang.BaseApplication;
 import com.shtoone.chenjiang.R;
 import com.shtoone.chenjiang.common.Constants;
 import com.shtoone.chenjiang.mvp.contract.SplashContract;
-import com.shtoone.chenjiang.mvp.model.entity.db.MeasureSpecificationData;
 import com.shtoone.chenjiang.mvp.presenter.SplashPresenter;
 import com.shtoone.chenjiang.mvp.view.base.BaseFragment;
 import com.shtoone.chenjiang.mvp.view.main.MainActivity;
 import com.shtoone.chenjiang.utils.SharedPreferencesUtils;
 import com.shtoone.chenjiang.widget.CircleTextProgressbar;
-import com.socks.library.KLog;
-
-import org.litepal.crud.DataSupport;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -98,12 +94,12 @@ public class SplashFragment extends BaseFragment<SplashContract.Presenter> imple
             return;
         }
         if (isFirstentry) {
-            start(GuideFragment.newInstance());
-//            _mActivity.startActivity(new Intent(_mActivity, MainActivity.class));
+//            start(GuideFragment.newInstance());
+            _mActivity.startActivity(new Intent(_mActivity, MainActivity.class));
 
         } else {
-            start(LoginFragment.newInstance(Constants.FROM_SPLASH));
-//            _mActivity.startActivity(new Intent(_mActivity, MainActivity.class));
+//            start(LoginFragment.newInstance(Constants.FROM_SPLASH));
+            _mActivity.startActivity(new Intent(_mActivity, MainActivity.class));
         }
     }
 

@@ -39,7 +39,6 @@ import java.net.ConnectException;
 import java.net.SocketTimeoutException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -326,8 +325,8 @@ public class DownloadFragment extends BaseFragment<DownloadContract.Presenter> i
     private void downloadDuanmian() {
         KLog.e("点击开始下载断面……………");
 
-        List<GongdianData> mGongdianData = DataSupport.findAll(GongdianData.class);
-        if (mGongdianData.size() <= 0) {
+        GongdianData mGongdianData = DataSupport.findFirst(GongdianData.class);
+        if (mGongdianData == null) {
             tvDuanmianMessage.setTextColor(Color.RED);
             tvDuanmianMessage.setText("缺少参数：工点ID，请先下载工点信息");
             for (int i = 0; i < arrayTextView.length; i++) {
@@ -354,8 +353,8 @@ public class DownloadFragment extends BaseFragment<DownloadContract.Presenter> i
 
     private void downloadCedian() {
         KLog.e("点击测点下载开始………………………………");
-        List<DuanmianData> mDuanmianData = DataSupport.findAll(DuanmianData.class);
-        if (mDuanmianData.size() <= 0) {
+        DuanmianData mDuanmianData = DataSupport.findFirst(DuanmianData.class);
+        if (mDuanmianData == null) {
             tvCedianMessage.setTextColor(Color.RED);
             tvCedianMessage.setText("缺少参数：断面ID，请先下载断面信息");
             for (int i = 0; i < arrayTextView.length; i++) {

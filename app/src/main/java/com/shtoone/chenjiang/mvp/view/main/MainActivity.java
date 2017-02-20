@@ -2,6 +2,7 @@ package com.shtoone.chenjiang.mvp.view.main;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -9,6 +10,7 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -162,7 +164,20 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                     }
 
                 } else if (id == R.id.relogin) {
-                    go2Login();
+
+                    new AlertDialog.Builder(MainActivity.this)
+                            .setIcon(R.drawable.ic_error_outline_red_400_48dp)
+                            .setTitle(R.string.dialog_title_relogin)
+                            .setMessage(R.string.dialog_content_relogin)
+                            .setNegativeButton(R.string.dialog_negativeText, null)
+                            .setPositiveButton(R.string.dialog_positiveText, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    go2Login();
+                                }
+                            })
+                            .show();
+
                 } else if (id == R.id.about) {
 
                 } else if (id == R.id.version) {

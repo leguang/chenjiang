@@ -7,25 +7,17 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.os.Environment;
+import android.text.TextUtils;
 import android.util.Log;
 
-import com.shtoone.chenjiang.common.Constants;
-import com.shtoone.chenjiang.common.RxManager;
 import com.shtoone.chenjiang.widget.bluetooth.BluetoothListener;
 import com.shtoone.chenjiang.widget.bluetooth.IBluetooth;
 import com.socks.library.KLog;
 
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.Locale;
 import java.util.Set;
 import java.util.UUID;
 
@@ -217,7 +209,7 @@ public class ClassicBluetooth implements IBluetooth {
 
     public boolean isBluetoothAvailable() {
         try {
-            if (mBluetoothAdapter == null || mBluetoothAdapter.getAddress().equals(null))
+            if (mBluetoothAdapter == null || TextUtils.isEmpty(mBluetoothAdapter.getAddress()))
                 return false;
         } catch (NullPointerException e) {
             return false;

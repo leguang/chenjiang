@@ -20,6 +20,7 @@ import android.widget.TextView;
 
 import com.shtoone.chenjiang.R;
 import com.shtoone.chenjiang.common.DialogHelper;
+import com.shtoone.chenjiang.common.ToastUtils;
 import com.shtoone.chenjiang.mvp.contract.setting.BluetoothContract;
 import com.shtoone.chenjiang.mvp.presenter.setting.BluetoothPresenter;
 import com.shtoone.chenjiang.mvp.view.base.BaseFragment;
@@ -64,6 +65,7 @@ public class BluetoothFragment extends BaseFragment<BluetoothContract.Presenter>
     private ArrayAdapter<String> mAdapter;
     private AlertDialog.Builder deviceListBuilder;
     private ViewGroup viewGroup;
+    int number = 0;
 
     public static BluetoothFragment newInstance() {
         return new BluetoothFragment();
@@ -115,10 +117,32 @@ public class BluetoothFragment extends BaseFragment<BluetoothContract.Presenter>
                 break;
 
             case R.id.bt_send1:
-                mPresenter.sendData("GET/I/WI12".getBytes());
+//                byte[] data1 = "GET/I/WI12".getBytes();
+                byte[] data1 = "?0000".getBytes();
+                byte[] newbyte = new byte[data1.length + 2];
+
+                for (int i = 0; i < data1.length; i++) {
+                    newbyte[i] = data1[i];
+                }
+
+                newbyte[data1.length] = 0xD;
+                newbyte[data1.length + 1] = 0xA;
+                mPresenter.sendData(newbyte);
+                KLog.e("11111111111111::" + newbyte.length);
+//                mPresenter.sendData("?0000\r\n".getBytes());
+
                 break;
             case R.id.bt_send2:
-                mPresenter.sendData("GET/M/WI32/WI330\n".getBytes());
+//                KLog.e("?0000\r\n");
+//                mPresenter.sendData("GET/M/WI32/WI330\n".getBytes());
+
+                StringBuilder sb = new StringBuilder("?0000");
+                sb.append("\r\n");
+                byte[] data2 = sb.toString().getBytes();
+                mPresenter.sendData(data2);
+
+                KLog.e("22222222222222::" + data2.length);
+
 
                 break;
         }
@@ -220,10 +244,14 @@ public class BluetoothFragment extends BaseFragment<BluetoothContract.Presenter>
 
     @Override
     public void onDataReceived(String str) {
+        number++;
+        KLog.e("number::" + number);
         KLog.e(str);
         if (str.length() > 0) {
             listResponse.add(0, str);
             mAdapter.notifyDataSetChanged();
         }
+
+        ToastUtils.showToast(_mActivity, str);
     }
 }

@@ -1,5 +1,7 @@
 package com.shtoone.chenjiang.mvp.view.adapter;
 
+import android.text.TextUtils;
+
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.shtoone.chenjiang.R;
@@ -12,7 +14,6 @@ import com.socks.library.KLog;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 
 /**
  * Author：leguang on 2016/10/9 0009 15:49
@@ -145,20 +146,29 @@ public class MeasureRVPAdapter extends BaseQuickAdapter<CezhanData, BaseViewHold
             mCezhanData.setCezhangaocha(mFormula.cezhangaocha());
             mCezhanData.setFrdushucha(mFormula.frdushucha());
             mCezhanData.setBrdushucha(mFormula.brdushucha());
-            float houshijuhe;
-            float qianshijuhe;
-            if (currentPosition == 0) {
-                houshijuhe = 0;
-                qianshijuhe = 0;
-            } else {
+            float houshijuhe = 0;
+            float qianshijuhe = 0;
+            float gaochengzhi = 0;
+            if (currentPosition != 0) {
                 CezhanData preCezhanData = mData.get(currentPosition - 1);
                 houshijuhe = Float.parseFloat(preCezhanData.getHoushijuhe());
                 qianshijuhe = Float.parseFloat(preCezhanData.getQianshijuhe());
             }
+            KLog.e(mCezhanData.getChushigaochengzhi());
+            if (mCezhanData.isFirst()) {
+                if (!TextUtils.isEmpty(mCezhanData.getChushigaochengzhi())) {
+                    KLog.e("1111111111");
+                    gaochengzhi = Float.parseFloat(mCezhanData.getChushigaochengzhi());
+                }
+            } else {
+                KLog.e("2222222222222");
+                CezhanData preCezhanData = mData.get(currentPosition - 1);
+                gaochengzhi = Float.parseFloat(preCezhanData.getGaochengzhi());
+            }
+
             mCezhanData.setHoushijuhe(mFormula.houshijuhe(houshijuhe));
             mCezhanData.setQianshijuhe(mFormula.qianshijuhe(qianshijuhe));
-
-//            mCezhanData.setGaocha1(mFormula.gaocha1());
+            mCezhanData.setGaochengzhi(mFormula.gaochengzhi(gaochengzhi));
         }
         notifyDataSetChanged();
     }

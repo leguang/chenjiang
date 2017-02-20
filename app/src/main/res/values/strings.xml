@@ -55,7 +55,7 @@
     <string name="dialog_clear">清除</string>
     <string name="dialog_title_delete">确定删除吗？</string>
     <string name="dialog_stop_title">确定终止吗？</string>
-    <string name="dialog_delete_shuizhunxian">删除当前水准线后不可恢复，请问是否继续删除？</string>
+    <string name="dialog_content_delete_shuizhunxian">删除当前水准线后不可恢复，请问是否继续删除？</string>
     <string name="dialog_content_delete">删除操作不可恢复，请问是否继续删除？</string>
     <string name="dialog_stop_content">终止操作不可恢复，请问是否继续终止？</string>
     <string name="dialog_select_jidian">请选择基点</string>
@@ -74,6 +74,9 @@
     <string name="dialog_content_pingcha">当前水准线已测量完毕，请问是否进行平差处理？</string>
     <string name="dialog_title_no_pingcha">不能平差</string>
     <string name="dialog_content_no_pingcha">当前水准线未测量完毕，请测量完毕后再进行平差处理。</string>
+    <string name="dialog_title_relogin">确定重新登录吗？</string>
+    <string name="dialog_content_relogin">重新登录请点击择确定，否则请点击取消。</string>
+
 
     <!--测量模块-->
     <string name="zhuandian">转点</string>
