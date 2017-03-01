@@ -111,22 +111,35 @@ public class SplashPresenter extends BasePresenter<SplashContract.View> implemen
         //先删除，保证表里面永远都只有两行数据即可。
         DataSupport.deleteAll(MeasureSpecificationData.class);
         MeasureSpecificationData mStandardData = new MeasureSpecificationData();
-        mStandardData.setQianhoushijuleijicha(6.0f + "");
-        mStandardData.setShixianchangdu(50 + "");
-        mStandardData.setQianhoushijucha(1.5f + "");
-        mStandardData.setLiangcidushucha(0.4f + "");
-        mStandardData.setLiangcigaochazhicha(0.6f + "");
-        mStandardData.setShixiangaodu(0.55f + "");
+        mStandardData.setQianhoushijuleijichamax(6.0f + "");
+        mStandardData.setQianhoushijuleijichamin(0 + "");
+        mStandardData.setShixianchangdumax(50 + "");
+        mStandardData.setShixianchangdumin(3 + "");
+        mStandardData.setQianhoushijuchamax(1.5f + "");
+        mStandardData.setQianhoushijuchamin(0 + "");
+        mStandardData.setLiangcidushuchamax(0.4f + "");
+        mStandardData.setLiangcidushuchamin(0 + "");
+        mStandardData.setLiangcigaochazhichamax(0.6f + "");
+        mStandardData.setLiangcigaochazhichamin(0 + "");
+        mStandardData.setShixiangaodumax(2.8f + "");
+        mStandardData.setShixiangaodumin(0.55f + "");
+
 
         //初始化修改后的标准参考值，一开始的参考值是跟国家二等水准测量标准是一样，后面手动修改的则update。因此只要克隆成一模一样的。
 
         MeasureSpecificationData mCurrentData = new MeasureSpecificationData();
-        mCurrentData.setQianhoushijuleijicha(6.0f + "");
-        mCurrentData.setShixianchangdu(50 + "");
-        mCurrentData.setQianhoushijucha(1.5f + "");
-        mCurrentData.setLiangcidushucha(0.4f + "");
-        mCurrentData.setLiangcigaochazhicha(0.6f + "");
-        mCurrentData.setShixiangaodu(0.55f + "");
+        mCurrentData.setQianhoushijuleijichamax(6.0f + "");
+        mCurrentData.setQianhoushijuleijichamin(0 + "");
+        mCurrentData.setShixianchangdumax(50 + "");
+        mCurrentData.setShixianchangdumin(3 + "");
+        mCurrentData.setQianhoushijuchamax(1.5f + "");
+        mCurrentData.setQianhoushijuchamin(0 + "");
+        mCurrentData.setLiangcidushuchamax(0.4f + "");
+        mCurrentData.setLiangcidushuchamin(0 + "");
+        mCurrentData.setLiangcigaochazhichamax(0.6f + "");
+        mCurrentData.setLiangcigaochazhichamin(0 + "");
+        mCurrentData.setShixiangaodumax(2.8f + "");
+        mCurrentData.setShixiangaodumin(0.55f + "");
 
         if (mStandardData.save() && mCurrentData.save()) {
             SharedPreferencesUtils.put(BaseApplication.mContext, Constants.IS_INITIALIZE, true);

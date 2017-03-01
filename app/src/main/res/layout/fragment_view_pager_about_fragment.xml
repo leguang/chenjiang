@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<in.srain.cube.views.ptr.PtrFrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:cube_ptr="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/ptr_view_pager_about_fragment"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/material_grey_50"
+    cube_ptr:ptr_duration_to_close="200"
+    cube_ptr:ptr_duration_to_close_header="1000"
+    cube_ptr:ptr_keep_header_when_refresh="true"
+    cube_ptr:ptr_pull_to_fresh="false"
+    cube_ptr:ptr_ratio_of_header_height_to_refresh="1.2"
+    cube_ptr:ptr_resistance="1.7">
+
+    <com.shtoone.chenjiang.widget.PageStateLayout
+        android:id="@+id/psl_view_pager_about_fragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:emptyView="@layout/page_state_empty_view"
+        app:errorView="@layout/page_state_error_view"
+        app:loadingView="@layout/page_state_loading_view"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        app:netErrorView="@layout/page_state_net_error_view">
+
+        <WebView
+            android:id="@+id/wv_view_pager_about_fragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
+    </com.shtoone.chenjiang.widget.PageStateLayout>
+
+</in.srain.cube.views.ptr.PtrFrameLayout>
