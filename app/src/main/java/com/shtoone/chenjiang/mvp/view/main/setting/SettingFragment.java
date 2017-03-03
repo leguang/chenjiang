@@ -11,6 +11,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.shtoone.chenjiang.BaseApplication;
 import com.shtoone.chenjiang.R;
 import com.shtoone.chenjiang.common.Constants;
 import com.shtoone.chenjiang.event.EventData;
@@ -18,6 +19,7 @@ import com.shtoone.chenjiang.mvp.contract.base.BaseContract;
 import com.shtoone.chenjiang.mvp.view.adapter.SettingFragmentVPAdapter;
 import com.shtoone.chenjiang.mvp.view.base.BaseFragment;
 import com.shtoone.chenjiang.mvp.view.main.MainActivity;
+import com.shtoone.chenjiang.utils.KeyBoardUtils;
 import com.socks.library.KLog;
 
 import org.greenrobot.eventbus.EventBus;
@@ -84,6 +86,8 @@ public class SettingFragment extends BaseFragment {
                         break;
                     case R.id.action_save_param:
                         EventBus.getDefault().post(new EventData(Constants.EVENT_SAVE_PARAM));
+                        KeyBoardUtils.hideKeybord(toolbar, BaseApplication.mContext);
+
                         break;
                     case R.id.action_reset_param:
                         EventBus.getDefault().post(new EventData(Constants.EVENT_RESET_SECOND_CLASS));
@@ -92,6 +96,19 @@ public class SettingFragment extends BaseFragment {
                 return true;
             }
         });
+    }
+
+    @Override
+    protected void initToolbarBackNavigation(Toolbar toolbar) {
+        toolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                KeyBoardUtils.hideKeybord(v,BaseApplication.mContext);
+                _mActivity.onBackPressedSupport();
+            }
+        });
+
     }
 
     private void initViewPager() {
@@ -131,6 +148,7 @@ public class SettingFragment extends BaseFragment {
         KLog.e("onDestroyView");
         ((MainActivity) _mActivity).openDrawer();
     }
+
 
     @NonNull
     @Override

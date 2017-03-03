@@ -55,6 +55,28 @@
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
 
+
+                <EditText
+                    android:id="@+id/et_qianhoushijuleijicha_parammin_setting_fragment"
+                    android:layout_width="50dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:inputType="numberDecimal"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="m"
+                    android:textColor="@color/base_color"
+                    android:textSize="18sp" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="≤"
+                    android:textColor="@color/base_color"
+                    android:textSize="20sp" />
+
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -70,7 +92,7 @@
                     android:textSize="20sp" />
 
                 <EditText
-                    android:id="@+id/et0_qianhoushijuleijicha_param_setting_fragment"
+                    android:id="@+id/et0_qianhoushijuleijicha_parammax_setting_fragment"
                     android:layout_width="50dp"
                     android:layout_height="wrap_content"
                     android:gravity="center"
@@ -148,10 +170,31 @@
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
 
+                <EditText
+                    android:id="@+id/et_shixianchangdu_parammin_setting_fragment"
+                    android:layout_width="50dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:inputType="numberDecimal"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="m"
+                    android:textColor="@color/base_color"
+                    android:textSize="18sp" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="≤"
+                    android:textColor="@color/base_color"
+                    android:textSize="20sp" />
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:gravity="center"
                     android:text="视线长度"
                     android:textSize="16sp" />
 
@@ -163,7 +206,7 @@
                     android:textSize="20sp" />
 
                 <EditText
-                    android:id="@+id/et1_shixianchangdu_param_setting_fragment"
+                    android:id="@+id/et1_shixianchangdu_parammax_setting_fragment"
                     android:layout_width="50dp"
                     android:layout_height="wrap_content"
                     android:gravity="center"
@@ -216,10 +259,32 @@
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
 
+
+                <EditText
+                    android:id="@+id/et_qianhoushijucha_parammin_setting_fragment"
+                    android:layout_width="50dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:inputType="numberDecimal"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="m"
+                    android:textColor="@color/base_color"
+                    android:textSize="18sp" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="≤"
+                    android:textColor="@color/base_color"
+                    android:textSize="20sp" />
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:gravity="center"
                     android:text="前后视距差"
                     android:textSize="16sp" />
 
@@ -231,7 +296,7 @@
                     android:textSize="20sp" />
 
                 <EditText
-                    android:id="@+id/et2_qianhoushijucha_param_setting_fragment"
+                    android:id="@+id/et2_qianhoushijucha_parammax_setting_fragment"
                     android:layout_width="50dp"
                     android:layout_height="wrap_content"
                     android:gravity="center"
@@ -284,10 +349,121 @@
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
 
+
+                <EditText
+                    android:id="@+id/et_shixiangaodu_parammin_setting_fragment"
+                    android:layout_width="50dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:inputType="numberDecimal"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="m"
+                    android:textColor="@color/base_color"
+                    android:textSize="18sp" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="≤"
+                    android:textColor="@color/base_color"
+                    android:textSize="20sp" />
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="视线高度"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="≤"
+                    android:textColor="@color/base_color"
+                    android:textSize="20sp" />
+
+                <EditText
+                    android:id="@+id/et5_shixiangaodu_parammax_setting_fragment"
+                    android:layout_width="50dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:inputType="numberDecimal"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="m"
+                    android:textColor="@color/base_color"
+                    android:textSize="18sp" />
+            </LinearLayout>
+
+
+            <View
+                android:id="@+id/view5_shixiangaodu_param_setting_fragment"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/red"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/tv5_shixiangaodu_param_setting_fragment"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingLeft="10dp"
+                android:text="某某错误"
+                android:textColor="@color/red"
+                android:textSize="13sp"
+                android:visibility="gone" />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginTop="5dp"
+            android:background="@drawable/rect_bg_param"
+            android:gravity="center_vertical"
+            android:orientation="vertical"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp">
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+
+                <EditText
+                    android:id="@+id/et_liangcidushucha_parammin_setting_fragment"
+                    android:layout_width="50dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:inputType="numberDecimal"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="mm"
+                    android:textColor="@color/base_color"
+                    android:textSize="18sp" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="≤"
+                    android:textColor="@color/base_color"
+                    android:textSize="20sp" />
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
                     android:text="两次读数差"
                     android:textSize="16sp" />
 
@@ -299,7 +475,7 @@
                     android:textSize="20sp" />
 
                 <EditText
-                    android:id="@+id/et3_liangcidushucha_param_setting_fragment"
+                    android:id="@+id/et3_liangcidushucha_parammax_setting_fragment"
                     android:layout_width="50dp"
                     android:layout_height="wrap_content"
                     android:gravity="center"
@@ -352,10 +528,33 @@
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
 
+
+
+                <EditText
+                    android:id="@+id/et_liangcigaochazhicha_parammin_setting_fragment"
+                    android:layout_width="50dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:inputType="numberDecimal"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="mm"
+                    android:textColor="@color/base_color"
+                    android:textSize="18sp" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="≤"
+                    android:textColor="@color/base_color"
+                    android:textSize="20sp" />
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:gravity="center"
                     android:text="两次测量高差之差"
                     android:textSize="16sp" />
 
@@ -367,7 +566,7 @@
                     android:textSize="20sp" />
 
                 <EditText
-                    android:id="@+id/et4_liangcigaochazhicha_param_setting_fragment"
+                    android:id="@+id/et4_liangcigaochazhicha_parammax_setting_fragment"
                     android:layout_width="50dp"
                     android:layout_height="wrap_content"
                     android:gravity="center"
@@ -401,73 +600,7 @@
                 android:visibility="gone" />
         </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp"
-            android:layout_marginTop="5dp"
-            android:background="@drawable/rect_bg_param"
-            android:gravity="center_vertical"
-            android:orientation="vertical"
-            android:paddingLeft="20dp"
-            android:paddingRight="20dp">
 
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="视线高度"
-                    android:textSize="16sp" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="≤"
-                    android:textColor="@color/base_color"
-                    android:textSize="20sp" />
-
-                <EditText
-                    android:id="@+id/et5_shixiangaodu_param_setting_fragment"
-                    android:layout_width="50dp"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:inputType="numberDecimal"
-                    android:textSize="18sp" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="m"
-                    android:textColor="@color/base_color"
-                    android:textSize="18sp" />
-            </LinearLayout>
-
-
-            <View
-                android:id="@+id/view5_shixiangaodu_param_setting_fragment"
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@color/red"
-                android:visibility="gone" />
-
-            <TextView
-                android:id="@+id/tv5_shixiangaodu_param_setting_fragment"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingLeft="10dp"
-                android:text="某某错误"
-                android:textColor="@color/red"
-                android:textSize="13sp"
-                android:visibility="gone" />
-        </LinearLayout>
 
         <!--填充作用-->
         <View

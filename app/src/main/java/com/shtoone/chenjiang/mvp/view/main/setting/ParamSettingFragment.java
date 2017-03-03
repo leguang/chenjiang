@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.shtoone.chenjiang.R;
@@ -37,42 +38,56 @@ import butterknife.ButterKnife;
  */
 public class ParamSettingFragment extends BaseFragment {
     private static final String TAG = ParamSettingFragment.class.getSimpleName();
-    @BindView(R.id.et0_qianhoushijuleijicha_param_setting_fragment)
+    @BindView(R.id.et0_qianhoushijuleijicha_parammax_setting_fragment)
     EditText et0Qianhoushijuleijicha;
     @BindView(R.id.view0_qianhoushijuleijicha_param_setting_fragment)
     View view0Qianhoushijuleijicha;
     @BindView(R.id.tv0_qianhoushijuleijicha_param_setting_fragment)
     TextView tv0Qianhoushijuleijicha;
-    @BindView(R.id.et1_shixianchangdu_param_setting_fragment)
+    @BindView(R.id.et1_shixianchangdu_parammax_setting_fragment)
     EditText et1Shixianchangdu;
     @BindView(R.id.view1_shixianchangdu_param_setting_fragment)
     View view1Shixianchangdu;
     @BindView(R.id.tv1_shixianchangdu_param_setting_fragment)
     TextView tv1Shixianchangdu;
-    @BindView(R.id.et2_qianhoushijucha_param_setting_fragment)
+    @BindView(R.id.et2_qianhoushijucha_parammax_setting_fragment)
     EditText et2Qianhoushijucha;
     @BindView(R.id.view2_qianhoushijucha_param_setting_fragment)
     View view2Qianhoushijucha;
     @BindView(R.id.tv2_qianhoushijucha_param_setting_fragment)
     TextView tv2Qianhoushijucha;
-    @BindView(R.id.et3_liangcidushucha_param_setting_fragment)
+    @BindView(R.id.et3_liangcidushucha_parammax_setting_fragment)
     EditText et3Liangcidushucha;
     @BindView(R.id.view3liangcidushucha_param_setting_fragment)
     View view3liangcidushucha;
     @BindView(R.id.tv3_liangcidushucha_param_setting_fragment)
     TextView tv3Liangcidushucha;
-    @BindView(R.id.et4_liangcigaochazhicha_param_setting_fragment)
+    @BindView(R.id.et4_liangcigaochazhicha_parammax_setting_fragment)
     EditText et4Liangcigaochazhicha;
     @BindView(R.id.view4_liangcigaochazhicha_param_setting_fragment)
     View view4Liangcigaochazhicha;
     @BindView(R.id.tv4_liangcigaochazhicha_param_setting_fragment)
     TextView tv4Liangcigaochazhicha;
-    @BindView(R.id.et5_shixiangaodu_param_setting_fragment)
+    @BindView(R.id.et5_shixiangaodu_parammax_setting_fragment)
     EditText et5Shixiangaodu;
     @BindView(R.id.view5_shixiangaodu_param_setting_fragment)
     View view5Shixiangaodu;
     @BindView(R.id.tv5_shixiangaodu_param_setting_fragment)
     TextView tv5Shixiangaodu;
+    @BindView(R.id.et_shixianchangdu_parammin_setting_fragment)
+    EditText etShixianchangduParammin;
+    @BindView(R.id.et_qianhoushijucha_parammin_setting_fragment)
+    EditText etQianhoushijuchaParammin;
+    @BindView(R.id.et_shixiangaodu_parammin_setting_fragment)
+    EditText etShixiangaoduParammin;
+    @BindView(R.id.et_liangcidushucha_parammin_setting_fragment)
+    EditText etLiangcidushuchaParammin;
+    @BindView(R.id.et_liangcigaochazhicha_parammin_setting_fragment)
+    EditText etLiangcigaochazhichaParammin;
+    @BindView(R.id.et_qianhoushijuleijicha_parammin_setting_fragment)
+    EditText etQianhoushijuleijichaParammin;
+    @BindView(R.id.sv_login_activity)
+    ScrollView svLoginActivity;
     private MeasureSpecificationData mStandardData;
     private MeasureSpecificationData mCurrentData;
     private int intRetry = 0;
@@ -102,7 +117,6 @@ public class ParamSettingFragment extends BaseFragment {
     private void initData() {
         mStandardData = DataSupport.findFirst(MeasureSpecificationData.class);
         mCurrentData = DataSupport.findLast(MeasureSpecificationData.class);
-
         if (mCurrentData == null) {
             DialogHelper.warningSnackbar(rootView, "数据读取失败，请点击重置", DialogHelper.APPEAR_FROM_TOP_TO_DOWN);
             return;
@@ -116,19 +130,38 @@ public class ParamSettingFragment extends BaseFragment {
         listLine.add(view4Liangcigaochazhicha);
         listLine.add(view5Shixiangaodu);
 
-        et0Qianhoushijuleijicha.setText(mCurrentData.getQianhoushijuleijicha());
-        et1Shixianchangdu.setText(mCurrentData.getShixianchangdu());
-        et2Qianhoushijucha.setText(mCurrentData.getQianhoushijucha());
-        et3Liangcidushucha.setText(mCurrentData.getLiangcidushucha());
-        et4Liangcigaochazhicha.setText(mCurrentData.getLiangcigaochazhicha());
-        et5Shixiangaodu.setText(mCurrentData.getShixiangaodu());
+        et0Qianhoushijuleijicha.setText(mCurrentData.getQianhoushijuleijichamax());
+        etQianhoushijuleijichaParammin.setText(mCurrentData.getQianhoushijuleijichamin());
+        et1Shixianchangdu.setText(mCurrentData.getShixianchangdumax());
+        etShixianchangduParammin.setText(mCurrentData.getShixianchangdumin());
+        et2Qianhoushijucha.setText(mCurrentData.getQianhoushijuchamax());
+        etQianhoushijuchaParammin.setText(mCurrentData.getQianhoushijuchamin());
+        et3Liangcidushucha.setText(mCurrentData.getLiangcidushuchamax());
+        etLiangcidushuchaParammin.setText(mCurrentData.getLiangcidushuchamin());
+        et4Liangcigaochazhicha.setText(mCurrentData.getLiangcigaochazhichamax());
+        etLiangcigaochazhichaParammin.setText(mCurrentData.getLiangcigaochazhichamin());
+        et5Shixiangaodu.setText(mCurrentData.getShixiangaodumax());
+        etShixiangaoduParammin.setText(mCurrentData.getShixiangaodumin());
 
         et0Qianhoushijuleijicha.addTextChangedListener(new BaseTextWatcher(tv0Qianhoushijuleijicha, view0Qianhoushijuleijicha, "0", "6"));
+        etQianhoushijuleijichaParammin.addTextChangedListener(new BaseTextWatcher(tv0Qianhoushijuleijicha, view0Qianhoushijuleijicha, "0", "6"));
+
+
         et1Shixianchangdu.addTextChangedListener(new BaseTextWatcher(tv1Shixianchangdu, view1Shixianchangdu, "3", "50"));
+        etShixianchangduParammin.addTextChangedListener(new BaseTextWatcher(tv1Shixianchangdu, view1Shixianchangdu, "3", "50"));
+
         et2Qianhoushijucha.addTextChangedListener(new BaseTextWatcher(tv2Qianhoushijucha, view2Qianhoushijucha, "0", "1.5"));
+        etQianhoushijuchaParammin.addTextChangedListener(new BaseTextWatcher(tv2Qianhoushijucha, view2Qianhoushijucha, "0", "1.5"));
+
         et3Liangcidushucha.addTextChangedListener(new BaseTextWatcher(tv3Liangcidushucha, view3liangcidushucha, "0", "0.4"));
+        etLiangcidushuchaParammin.addTextChangedListener(new BaseTextWatcher(tv3Liangcidushucha, view3liangcidushucha, "0", "0.4"));
+
         et4Liangcigaochazhicha.addTextChangedListener(new BaseTextWatcher(tv4Liangcigaochazhicha, view4Liangcigaochazhicha, "0", "0.6"));
+        etLiangcigaochazhichaParammin.addTextChangedListener(new BaseTextWatcher(tv4Liangcigaochazhicha, view4Liangcigaochazhicha, "0", "0.6"));
+
         et5Shixiangaodu.addTextChangedListener(new BaseTextWatcher(tv5Shixiangaodu, view5Shixiangaodu, "0.55", "2.80"));
+        etShixiangaoduParammin.addTextChangedListener(new BaseTextWatcher(tv5Shixiangaodu, view5Shixiangaodu, "0.55", "2.80"));
+
     }
 
     @NonNull
@@ -154,6 +187,7 @@ public class ParamSettingFragment extends BaseFragment {
     public void onMessageEvent(EventData event) {
         if (event.position == Constants.EVENT_SAVE_PARAM) {
             save();
+
         } else if (event.position == Constants.EVENT_RESET_SECOND_CLASS) {
             reset();
         }
@@ -169,12 +203,24 @@ public class ParamSettingFragment extends BaseFragment {
         }
 
         if (isCanSave) {
-            mCurrentData.setQianhoushijuleijicha(et0Qianhoushijuleijicha.getText().toString().trim());
-            mCurrentData.setShixianchangdu(et1Shixianchangdu.getText().toString().trim());
-            mCurrentData.setQianhoushijucha(et2Qianhoushijucha.getText().toString().trim());
-            mCurrentData.setLiangcidushucha(et3Liangcidushucha.getText().toString().trim());
-            mCurrentData.setLiangcigaochazhicha(et4Liangcigaochazhicha.getText().toString().trim());
-            mCurrentData.setShixiangaodu(et5Shixiangaodu.getText().toString().trim());
+            mCurrentData.setQianhoushijuleijichamax(et0Qianhoushijuleijicha.getText().toString().trim());
+            mCurrentData.setQianhoushijuleijichamin(etQianhoushijuleijichaParammin.getText().toString().trim());
+
+            mCurrentData.setShixianchangdumax(et1Shixianchangdu.getText().toString().trim());
+            mCurrentData.setShixianchangdumin(etShixianchangduParammin.getText().toString().trim());
+
+            mCurrentData.setQianhoushijuchamax(et2Qianhoushijucha.getText().toString().trim());
+            mCurrentData.setQianhoushijuchamin(etQianhoushijuchaParammin.getText().toString().trim());
+
+            mCurrentData.setLiangcidushuchamax(et3Liangcidushucha.getText().toString().trim());
+            mCurrentData.setLiangcidushuchamin(etLiangcidushuchaParammin.getText().toString().trim());
+
+            mCurrentData.setLiangcigaochazhichamax(et4Liangcigaochazhicha.getText().toString().trim());
+            mCurrentData.setLiangcigaochazhichamin(etLiangcigaochazhichaParammin.getText().toString().trim());
+
+            mCurrentData.setShixiangaodumax(et5Shixiangaodu.getText().toString().trim());
+            mCurrentData.setShixiangaodumin(etShixiangaoduParammin.getText().toString().trim());
+
 
             if (mCurrentData.update(mCurrentData.getId()) > 0) {
                 DialogHelper.successSnackbar(rootView, "恭喜，保存成功", DialogHelper.APPEAR_FROM_TOP_TO_DOWN);
@@ -196,29 +242,54 @@ public class ParamSettingFragment extends BaseFragment {
         //先删除，保证表里面永远都只有两行数据即可。
         DataSupport.deleteAll(MeasureSpecificationData.class);
         mStandardData = new MeasureSpecificationData();
-        mStandardData.setQianhoushijuleijicha(6.0f + "");
-        mStandardData.setShixianchangdu(50 + "");
-        mStandardData.setQianhoushijucha(1.5f + "");
-        mStandardData.setLiangcidushucha(0.4f + "");
-        mStandardData.setLiangcigaochazhicha(0.6f + "");
-        mStandardData.setShixiangaodu(0.55f + "");
+        mStandardData.setQianhoushijuleijichamax(6.0f + "");
+        mStandardData.setQianhoushijuleijichamin(0 + "");
+        mStandardData.setShixianchangdumax(50 + "");
+        mStandardData.setShixianchangdumin(3 + "");
+        mStandardData.setQianhoushijuchamax(1.5f + "");
+        mStandardData.setQianhoushijuchamin(0 + "");
+        mStandardData.setLiangcidushuchamax(0.4f + "");
+        mStandardData.setLiangcidushuchamin(0 + "");
+        mStandardData.setLiangcigaochazhichamax(0.6f + "");
+        mStandardData.setLiangcigaochazhichamin(0 + "");
+        mStandardData.setShixiangaodumax(2.8f + "");
+        mStandardData.setShixiangaodumin(0.55f + "");
 
         mCurrentData = new MeasureSpecificationData();
-        mCurrentData.setQianhoushijuleijicha(6.0f + "");
-        mCurrentData.setShixianchangdu(50 + "");
-        mCurrentData.setQianhoushijucha(1.5f + "");
-        mCurrentData.setLiangcidushucha(0.4f + "");
-        mCurrentData.setLiangcigaochazhicha(0.6f + "");
-        mCurrentData.setShixiangaodu(0.55f + "");
+        mCurrentData.setQianhoushijuleijichamax(6.0f + "");
+        mCurrentData.setQianhoushijuleijichamin(0 + "");
+        mCurrentData.setShixianchangdumax(50 + "");
+        mCurrentData.setShixianchangdumin(3 + "");
+        mCurrentData.setQianhoushijuchamax(1.5f + "");
+        mCurrentData.setQianhoushijuchamin(0 + "");
+        mCurrentData.setLiangcidushuchamax(0.4f + "");
+        mCurrentData.setLiangcidushuchamin(0 + "");
+        mCurrentData.setLiangcigaochazhichamax(0.6f + "");
+        mCurrentData.setLiangcigaochazhichamin(0 + "");
+        mCurrentData.setShixiangaodumax(2.8f + "");
+        mCurrentData.setShixiangaodumin(0.55f + "");
 
         if (mStandardData.save() && mCurrentData.save()) {
             DialogHelper.successSnackbar(rootView, "重置成功", DialogHelper.APPEAR_FROM_TOP_TO_DOWN);
-            et0Qianhoushijuleijicha.setText(mStandardData.getQianhoushijuleijicha());
-            et1Shixianchangdu.setText(mStandardData.getShixianchangdu());
-            et2Qianhoushijucha.setText(mStandardData.getQianhoushijucha());
-            et3Liangcidushucha.setText(mStandardData.getLiangcidushucha());
-            et4Liangcigaochazhicha.setText(mStandardData.getLiangcigaochazhicha());
-            et5Shixiangaodu.setText(mStandardData.getShixiangaodu());
+//            et0Qianhoushijuleijicha.setText(mStandardData.getQianhoushijuleijicha());
+//            et1Shixianchangdu.setText(mStandardData.getShixianchangdu());
+//            et2Qianhoushijucha.setText(mStandardData.getQianhoushijucha());
+//            et3Liangcidushucha.setText(mStandardData.getLiangcidushucha());
+//            et4Liangcigaochazhicha.setText(mStandardData.getLiangcigaochazhicha());
+//            et5Shixiangaodu.setText(mStandardData.getShixiangaodu());
+
+            et0Qianhoushijuleijicha.setText(mStandardData.getQianhoushijuleijichamax());
+            etQianhoushijuleijichaParammin.setText(mStandardData.getQianhoushijuleijichamin());
+            et1Shixianchangdu.setText(mStandardData.getShixianchangdumax());
+            etShixianchangduParammin.setText(mStandardData.getShixianchangdumin());
+            et2Qianhoushijucha.setText(mStandardData.getQianhoushijuchamax());
+            etQianhoushijuchaParammin.setText(mStandardData.getQianhoushijuchamin());
+            et3Liangcidushucha.setText(mStandardData.getLiangcidushuchamax());
+            etLiangcidushuchaParammin.setText(mStandardData.getLiangcidushuchamin());
+            et4Liangcigaochazhicha.setText(mStandardData.getLiangcigaochazhichamax());
+            etLiangcigaochazhichaParammin.setText(mStandardData.getLiangcigaochazhichamin());
+            et5Shixiangaodu.setText(mStandardData.getShixiangaodumax());
+            etShixiangaoduParammin.setText(mStandardData.getShixiangaodumin());
 
         } else {
             //递归10层。

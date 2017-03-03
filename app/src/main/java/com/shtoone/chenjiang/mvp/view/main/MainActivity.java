@@ -26,6 +26,7 @@ import com.shtoone.chenjiang.common.Constants;
 import com.shtoone.chenjiang.event.EventData;
 import com.shtoone.chenjiang.mvp.contract.base.BaseContract;
 import com.shtoone.chenjiang.mvp.view.base.BaseActivity;
+import com.shtoone.chenjiang.mvp.view.main.about.AboutFragment;
 import com.shtoone.chenjiang.mvp.view.main.project.ProjectActivity;
 import com.shtoone.chenjiang.mvp.view.main.setting.SettingFragment;
 import com.shtoone.chenjiang.mvp.view.main.upload.UploadFragment;
@@ -179,6 +180,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                             .show();
 
                 } else if (id == R.id.about) {
+                    start(AboutFragment.newInstance());
 
                 } else if (id == R.id.version) {
                     VersionFragment fragment = findFragment(VersionFragment.class);

@@ -26,7 +26,7 @@ public class Constants {
     public static final String PATH_APK_CACHE = PATH_DATA + File.separator + "ApkCache";
 
     //基地址
-    public static final String BASE_URL = "http://192.168.11.113:8081/ljcjqms/";
+    public static final String BASE_URL = "http://192.168.11.111:8081/ljcjqms/";
 
     //登录地址
     public static final String LOGIN_URL = BASE_URL + "app.do?AppLogin&userName=%1&userPwd=%2&OSType=2";
@@ -41,14 +41,18 @@ public class Constants {
     public static final String USER_INFO_BEAN = "user_info_bean";
 
     //网络链接超时时间
-    public static final int DEFAULT_TIMEOUT = 1;
+    public static final int DEFAULT_TIMEOUT = 5;
+
+
+
+    public static final String ABOUTWHAT = "aboutwhat";
 
     //作为登录的参数，固定这个写法
     public static final String OSTYPE = "2";
     public static final String PRESS_AGAIN = "再按一次退出";
     public static final String ENCRYPT_KEY = "leguang";
 
-    public static final String ABOUTAPP = "http://note.youdao.com/share/?id=37e5d8602c49af15d7589d7f91bd548b&type=note";
+    public static final String ABOUTAPP = "http://note.youdao.com/noteshare?id=d7263ee86f1e26ac267f837db25c6d2f";
     public static final String ABOUTCOMPANY = "http://en.ccccltd.cn/ccccltd/";
 
     //分页查询
