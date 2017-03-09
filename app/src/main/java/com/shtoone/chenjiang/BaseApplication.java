@@ -68,6 +68,8 @@ public class BaseApplication extends LitePalApplication {
 //        }
 //
 //
+
+
 //        DataSupport.deleteAll(ShuizhunxianData.class);
 //        for (int i = 0; i < 100; i++) {
 //            ShuizhunxianData f = new ShuizhunxianData();
