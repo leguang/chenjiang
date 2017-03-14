@@ -37,6 +37,7 @@ public class BaseApplication extends LitePalApplication {
         mRefWatcher = LeakCanary.install(this);
         // 在主进程初始化调用哈
         BlockCanary.install(this, new AppContext()).start();
+        
 
 //        DataSupport.deleteAll(GongdianData.class);
 //
