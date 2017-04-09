@@ -20,7 +20,7 @@ public class BaseApplication extends LitePalApplication {
     public static Context mContext;
     public static UserInfoBean mUserInfoBean;
     public static boolean isShowDialog = true;
-    public RefWatcher mRefWatcher;
+    public static RefWatcher mRefWatcher;
 
 
     @Override
@@ -37,7 +37,7 @@ public class BaseApplication extends LitePalApplication {
         mRefWatcher = LeakCanary.install(this);
         // 在主进程初始化调用哈
         BlockCanary.install(this, new AppContext()).start();
-        
+
 
 //        DataSupport.deleteAll(GongdianData.class);
 //

@@ -75,6 +75,9 @@ public abstract class BaseFragment<P extends BaseContract.Presenter> extends Swi
             mPresenter = null;
         }
         super.onDestroy();
+
+        //监听Fragment的内存泄露
+        BaseApplication.mRefWatcher.watch(this);
     }
 
     public void initPtrFrameLayout(final PtrFrameLayout mPtrFrameLayout) {
